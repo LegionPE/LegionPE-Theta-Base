@@ -1,0 +1,27 @@
+# Created by .gitignore support plugin (hsz.mobi)
+### NetBeans template
+nbproject/private
+nbbuild
+dist
+nbdist
+nbactions.xml
+nb-configuration.xml
+
+### PhpStorm files
+.idea
+
+### Build files
+
+
+### Data/Private files
+*dont_stage*
+bin
+
+### System files
+*.bak
+*.tmp
+*.lnk
+*.DS_STORE
+
+### Custom
+**credentials**
