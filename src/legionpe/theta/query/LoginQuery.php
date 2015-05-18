@@ -34,6 +34,7 @@ class LoginQuery extends AsyncQuery{
 			"lastgrind" => self::COL_UNIXTIME,
 			"rank" => self::COL_INT,
 			"warnpts" => self::COL_INT,
+			"lastwarn" => self::COL_UNIXTIME,
 			"tid" => self::COL_INT,
 			"teamrank" => self::COL_INT,
 			"teamjoin" => self::COL_UNIXTIME,

@@ -9,8 +9,11 @@ use legionpe\theta\queue\Queue;
 use legionpe\theta\utils\BaseListener;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
+use shoghicp\FastTransfer\FastTransfer;
 
 abstract class BasePlugin extends PluginBase{
+	/** @var FastTransfer */
+	private $FastTransfer;
 	/** @var BaseListener */
 	private $listener;
 	/** @var SessionEventListener */
@@ -20,6 +23,7 @@ abstract class BasePlugin extends PluginBase{
 	/** @var Session[] */
 	private $sessions = [];
 	public function onEnable(){
+		$this->FastTransfer = $this->getServer()->getPluginManager()->getPlugin("FastTransfer");
 		$this->getServer()->getPluginManager()->registerEvents($this->listener = new BaseListener($this), $this);
 		$class = $this->getSessionListenerClass();
 		$this->getServer()->getPluginManager()->registerEvents($this->sesList = new $class($this), $this);
@@ -47,14 +51,20 @@ abstract class BasePlugin extends PluginBase{
 	/**
 	 * @param Player $player
 	 * @param mixed[]|null $loginData
+	 * @return bool
 	 */
 	public function newSession(Player $player, $loginData = null){
 		if($loginData === null){
 			$task = new NextIdQuery($this, NextIdQuery::USER);
 			$this->queueFor($player->getId(), true, Queue::QUEUE_SESSION)->pushToQueue(new NewSessionRunnable($this, $task, $player->getId()));
-			return;
+			return false;
 		}
-		$this->sessions[$player->getId()] = $this->createSession($player, $loginData);
+		try{
+			$this->sessions[$player->getId()] = $this->createSession($player, $loginData);
+			return true;
+		}catch(\Exception $e){
+			return false;
+		}
 	}
 	public function getSession($player){
 		if(is_string($player)){
@@ -94,5 +104,8 @@ abstract class BasePlugin extends PluginBase{
 	}
 	protected function getSessionListenerClass(){
 		return SessionEventListener::class;
+	}
+	public function transfer(Player $player, $ip, $port, $msg){
+		$this->FastTransfer->transferPlayer($player, $ip, $port, $msg);
 	}
 }
