@@ -25,6 +25,14 @@ abstract class Settings{
 		"infected" => self::CLASS_INFECTED,
 		"classical" => self::CLASS_CLASSICAL,
 	];
+	public static $CLASSES_NAMES = [
+		self::CLASS_HUB => "Hub",
+		self::CLASS_PVP => "Kit PvP",
+		self::CLASS_PARKOUR => "Parkour",
+		self::CLASS_SPLEEF => "Spleef",
+		self::CLASS_INFECTED => "Infected",
+		self::CLASS_CLASSICAL => "Classic PvP"
+	];
 	const CLASS_HUB = 0;
 	const CLASS_PVP = 1;
 	const CLASS_PARKOUR = 2;

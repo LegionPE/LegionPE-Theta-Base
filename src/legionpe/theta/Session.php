@@ -8,7 +8,7 @@ use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
-class Session{
+abstract class Session{
 	/** @var Player */
 	private $player;
 	/** @var mixed[] */
@@ -44,4 +44,5 @@ class Session{
 	public function getEffectiveConseq(){
 		return Settings::getWarnPtsConseq($this->getWarningPoints(), $this->loginData["lastwarn"]);
 	}
+	public abstract function getMain();
 }

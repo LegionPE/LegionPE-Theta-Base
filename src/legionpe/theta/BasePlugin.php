@@ -4,9 +4,13 @@ namespace legionpe\theta;
 
 use legionpe\theta\config\Settings;
 use legionpe\theta\query\NextIdQuery;
+use legionpe\theta\query\ReportStatusQuery;
+use legionpe\theta\query\SearchServerQuery;
 use legionpe\theta\queue\NewSessionRunnable;
 use legionpe\theta\queue\Queue;
+use legionpe\theta\queue\TransferSearchRunnable;
 use legionpe\theta\utils\BaseListener;
+use legionpe\theta\utils\CallbackPluginTask;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use shoghicp\FastTransfer\FastTransfer;
@@ -27,6 +31,10 @@ abstract class BasePlugin extends PluginBase{
 		$this->getServer()->getPluginManager()->registerEvents($this->listener = new BaseListener($this), $this);
 		$class = $this->getSessionListenerClass();
 		$this->getServer()->getPluginManager()->registerEvents($this->sesList = new $class($this), $this);
+		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(
+			new CallbackPluginTask($this, function(BasePlugin $me){
+				new ReportStatusQuery($me, count($me->getServer()->getOnlinePlayers()));
+			}, $this), 40, 40);
 	}
 	public function queueFor($id, $garbage = false, $flag = Queue::QUEUE_GENERAL){
 		$queues =& $this->getQueueByFlag($flag);
@@ -107,5 +115,10 @@ abstract class BasePlugin extends PluginBase{
 	}
 	public function transfer(Player $player, $ip, $port, $msg){
 		$this->FastTransfer->transferPlayer($player, $ip, $port, $msg);
+	}
+	public function transferGame(Player $player, $class){
+		$task = new SearchServerQuery($this, $class);
+		$this->queueFor($player->getId(), true, Queue::QUEUE_SESSION)
+			->pushToQueue(new TransferSearchRunnable($this, $player, $task));
 	}
 }
