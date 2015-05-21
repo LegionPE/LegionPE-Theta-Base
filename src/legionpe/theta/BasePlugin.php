@@ -122,6 +122,8 @@ abstract class BasePlugin extends PluginBase{
 			"authuuid" => $player->getUniqueId(),
 			"coins" => 100.0,
 			"hash" => str_repeat("0", 128),
+			"pwprefix" => "\0",
+			"pwlen" => 0,
 			"registration" => time(),
 			"laston" => time(),
 			"ontime" => 0,

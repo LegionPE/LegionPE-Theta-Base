@@ -43,6 +43,8 @@ class LoginQuery extends AsyncQuery{
 			"authuuid" => self::COL_STRING,
 			"coins" => self::COL_FLOAT,
 			"hash" => self::COL_STRING,
+			"pwprefix" => self::COL_STRING,
+			"pwlen" => self::COL_INT,
 			"registration" => self::COL_UNIXTIME,
 			"laston" => self::COL_UNIXTIME,
 			"ontime" => self::COL_INT,

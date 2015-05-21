@@ -74,6 +74,8 @@ abstract class Session{
 	}
 	public function onCmd(PlayerCommandPreprocessEvent $event){
 		if($this->isRegistering()){
+			$len = strlen($event->getMessage());
+			$one = substr($event->getMessage(), 0, 1);
 			$event->setMessage($hash = self::hash($event->getMessage()));
 			if($this->state === self::STATE_REGISTERING_FIRST){
 				$this->tmpHash = $hash;
@@ -86,6 +88,8 @@ abstract class Session{
 					$this->sendCurlyLines();
 					$this->getPlayer()->sendMessage(TextFormat::DARK_GREEN . "Congratulations! You have created your own account on Legion PE!");
 					$this->setLoginDatum("hash", $hash);
+					$this->setLoginDatum("pwprefix", $one);
+					$this->setLoginDatum("pwlen", $len);
 					$this->state = self::STATE_PLAYING;
 					$this->sendFirstJoinMessages();
 					$this->login(self::AUTH_REG);
