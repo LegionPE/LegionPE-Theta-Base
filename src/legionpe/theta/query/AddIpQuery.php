@@ -16,23 +16,29 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\utils;
+namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
-use pocketmine\scheduler\PluginTask;
 
-class CallbackPluginTask extends PluginTask{
-	/** @var callable */
-	private $callable;
-	/** @var mixed[] */
-	private $args;
-	public function __construct(BasePlugin $plugin, callable $callable, ...$args){
+class AddIpQuery extends AsyncQuery{
+	/** @var string */
+	private $newIp;
+	/** @var int */
+	private $uid;
+	/**
+	 * @param BasePlugin $plugin
+	 * @param string $newIp
+	 * @param int $uid
+	 */
+	public function __construct(BasePlugin $plugin, $newIp, $uid){
 		parent::__construct($plugin);
-		$this->callable = $callable;
-		$this->args = $args;
+		$this->newIp = $newIp;
+		$this->uid = $uid;
 	}
-	public function onRun($t){
-		$c = $this->callable;
-		$c(...$this->args);
+	public function getQuery(){
+		return "INSERT INTO iphist (ip, uid) VALUES ('{$this->esc($this->newIp)}', $this->uid)";
+	}
+	public function getResultType(){
+		return self::TYPE_RAW;
 	}
 }

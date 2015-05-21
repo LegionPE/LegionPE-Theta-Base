@@ -16,23 +16,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\utils;
+namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
-use pocketmine\scheduler\PluginTask;
 
-class CallbackPluginTask extends PluginTask{
-	/** @var callable */
-	private $callable;
-	/** @var mixed[] */
-	private $args;
-	public function __construct(BasePlugin $plugin, callable $callable, ...$args){
+class UpdateUserStatusQuery extends AsyncQuery{
+	/** @var int */
+	private $uid, $status;
+	public function __construct(BasePlugin $plugin, $uid, $status){
 		parent::__construct($plugin);
-		$this->callable = $callable;
-		$this->args = $args;
+		$this->uid = $uid;
+		$this->status = $status;
 	}
-	public function onRun($t){
-		$c = $this->callable;
-		$c(...$this->args);
+	public function getQuery(){
+		return "UPDATE users SET status=$this->status WHERE uid=$this->uid";
+	}
+	public function getResultType(){
+		return self::TYPE_RAW;
 	}
 }

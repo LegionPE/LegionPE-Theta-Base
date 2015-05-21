@@ -16,23 +16,30 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\utils;
+namespace legionpe\theta\queue;
 
 use legionpe\theta\BasePlugin;
-use pocketmine\scheduler\PluginTask;
+use legionpe\theta\Session;
+use pocketmine\Player;
 
-class CallbackPluginTask extends PluginTask{
-	/** @var callable */
-	private $callable;
-	/** @var mixed[] */
-	private $args;
-	public function __construct(BasePlugin $plugin, callable $callable, ...$args){
-		parent::__construct($plugin);
-		$this->callable = $callable;
-		$this->args = $args;
+class WaitSessionCommandRunnable implements Runnable{
+	/** @var BasePlugin */
+	private $plugin;
+	/** @var Player */
+	private $player;
+	/** @var string */
+	private $cmdLine;
+//	/** @var Session|null */
+//	private $session = null;
+	public function __construct(BasePlugin $plugin, Player $player, $cmdLine){
+		$this->plugin = $plugin;
+		$this->player = $player;
+		$this->cmdLine = $cmdLine;
 	}
-	public function onRun($t){
-		$c = $this->callable;
-		$c(...$this->args);
+	public function canRun(){
+		return $this->plugin->getSession($this->player) instanceof Session;
+	}
+	public function run(){
+		$this->plugin->getServer()->dispatchCommand($this->player, $this->cmdLine);
 	}
 }

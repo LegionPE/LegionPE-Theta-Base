@@ -16,23 +16,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\utils;
+namespace legionpe\theta\command;
 
 use legionpe\theta\BasePlugin;
-use pocketmine\scheduler\PluginTask;
+use pocketmine\command\Command;
+use pocketmine\command\PluginIdentifiableCommand;
 
-class CallbackPluginTask extends PluginTask{
-	/** @var callable */
-	private $callable;
-	/** @var mixed[] */
-	private $args;
-	public function __construct(BasePlugin $plugin, callable $callable, ...$args){
-		parent::__construct($plugin);
-		$this->callable = $callable;
-		$this->args = $args;
+abstract class ThetaCommand extends Command implements PluginIdentifiableCommand{
+	/** @var BasePlugin */
+	private $plugin;
+	public function __construct(BasePlugin $plugin, $name, $desc, $usage, $aliases = []){
+		parent::__construct($name, $desc, $usage, (array) $aliases);
+		$this->plugin = $plugin;
 	}
-	public function onRun($t){
-		$c = $this->callable;
-		$c(...$this->args);
+	/**
+	 * @return BasePlugin
+	 */
+	public function getPlugin(){
+		return $this->plugin;
 	}
 }

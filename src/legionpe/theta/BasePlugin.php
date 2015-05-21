@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * LegionPE-Theta
+ * Copyright (C) 2015 PEMapModder
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
 namespace legionpe\theta;
 
 use legionpe\theta\config\Settings;
@@ -74,6 +90,15 @@ abstract class BasePlugin extends PluginBase{
 			return false;
 		}
 	}
+	public function endSession(Player $player){
+		if(isset($this->playerQueues[$player->getId()])){
+			unset($this->playerQueues[$player->getId()]);
+		}
+		if(isset($this->sessions[$player->getId()])){
+			$this->sessions[$player->getId()]->onQuit();
+			unset($this->sessions[$player->getId()]);
+		}
+	}
 	public function getSession($player){
 		if(is_string($player)){
 			$player = $this->getServer()->getPlayer($player);
@@ -91,7 +116,7 @@ abstract class BasePlugin extends PluginBase{
 			"uid" => $uid,
 			"name" => $name,
 			"nicks" => "|$name|",
-			"lastip" => $ip,
+			"lastip" => "",
 			"status" => Settings::STATUS_ONLINE,
 			"lastses" => Settings::$CLASSES_TABLE[Settings::$LOCALIZE_CLASS],
 			"authuuid" => $player->getUniqueId(),
@@ -100,14 +125,16 @@ abstract class BasePlugin extends PluginBase{
 			"registration" => time(),
 			"laston" => time(),
 			"ontime" => 0,
-			"config" => 0,
+			"config" => Settings::CONFIG_AUTH_NONE,
 			"lastgrind" => 0,
 			"rank" => 0,
 			"warnpts" => 0,
 			"tid" => -1,
 			"teamrank" => -1,
 			"teamjoin" => 0,
-			"ignorelist" => ","
+			"ignorelist" => ",",
+			"iphist" => ",$ip,",
+			"isnew" => true
 		];
 	}
 	protected function getSessionListenerClass(){

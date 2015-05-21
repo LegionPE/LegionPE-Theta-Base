@@ -16,23 +16,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\utils;
+namespace legionpe\theta\credentials;
 
-use legionpe\theta\BasePlugin;
-use pocketmine\scheduler\PluginTask;
-
-class CallbackPluginTask extends PluginTask{
-	/** @var callable */
-	private $callable;
-	/** @var mixed[] */
-	private $args;
-	public function __construct(BasePlugin $plugin, callable $callable, ...$args){
-		parent::__construct($plugin);
-		$this->callable = $callable;
-		$this->args = $args;
-	}
-	public function onRun($t){
-		$c = $this->callable;
-		$c(...$this->args);
-	}
+/** @noinspection PhpUndefinedClassInspection */
+class Credentials{
+	/**
+	 * @return \mysqli
+	 */
+	public static function getMysql(){}
+	const MYSQL_HOST = "";
+	const MYSQL_USER = "";
+	const MYSQL_PASS = "";
+	const MYSQL_DATABASE = "";
+	const MYSQL_PORT = "";
+	const IRC_WEBHOOK = "";
+	const IRC_WEBHOOK_NOPREFIX = "";
 }
