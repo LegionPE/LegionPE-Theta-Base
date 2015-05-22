@@ -57,7 +57,7 @@ class SessionEventListener implements Listener{
 		$ses->onCmd($event);
 	}
 	// TODO: lock player if not authenticated
-	function freezePlayers( EntityMoveEvent $event ) {
+	public function freezePlayers( EntityMoveEvent $event ) {
             if($event->getEntity instanceof Player) {
                 $event->setCancelled();
             }
