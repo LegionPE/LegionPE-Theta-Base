@@ -57,6 +57,7 @@ class SessionEventListener implements Listener{
 		$ses->onCmd($event);
 	}
 	// TODO: lock player if not authenticated
+
 	public function onQuit(PlayerQuitEvent $event){
 		$this->main->endSession($event->getPlayer());
 		$event->setQuitMessage("");
