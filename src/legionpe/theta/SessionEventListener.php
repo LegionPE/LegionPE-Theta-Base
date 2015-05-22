@@ -56,12 +56,17 @@ class SessionEventListener implements Listener{
 		}
 		$ses->onCmd($event);
 	}
+	
+	public function onPlayerMove(PlayerMoveEvent $event) {
+		if(!this->plugin->isPlayerAuthenticated($event->getPlayer())){
+			if($event->getPlayer()->hasPermission("need permission here!")) {
+				$event->setCancelled(true);
+				$event->getPlayer()->onGround(true);
+			}
+		}
+	}
+	
 	// TODO: lock player if not authenticated
-	public function freezePlayers( EntityMoveEvent $event ) {
-            if($event->getEntity instanceof Player) {
-                $event->setCancelled();
-            }
-        }
 	public function onQuit(PlayerQuitEvent $event){
 		$this->main->endSession($event->getPlayer());
 		$event->setQuitMessage("");
