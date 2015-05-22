@@ -16,29 +16,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\command;
+namespace legionpe\theta\credentials;
 
-use legionpe\theta\BasePlugin;
-use pocketmine\command\Command;
-use pocketmine\command\CommandMap;
-use pocketmine\command\PluginIdentifiableCommand;
-
-abstract class ThetaCommand extends Command implements PluginIdentifiableCommand{
-	/** @var BasePlugin */
-	private $plugin;
-	public function __construct(BasePlugin $plugin, $name, $desc, $usage, $aliases = []){
-		parent::__construct($name, $desc, $usage, (array) $aliases);
-		$this->plugin = $plugin;
-	}
+/** @noinspection PhpUndefinedClassInspection */
+class Credentials{
 	/**
-	 * @return BasePlugin
+	 * @return \mysqli
 	 */
-	public function getPlugin(){
-		return $this->plugin;
-	}
-	public static function registerAll(BasePlugin $plugin, CommandMap $map){
-		$map->registerAll("l", [
-			new CoinsCommand($plugin),
-		]);
-	}
+	public static function getMysql(){}
+	const MYSQL_HOST = "****";
+	const MYSQL_USER = "****";
+	const MYSQL_PASS = "****";
+	const MYSQL_DATABASE = "****";
+	const MYSQL_PORT = 3306;
+	const IRC_WEBHOOK = "http://n.tkte.ch/h/****/***********?payload=%7BLegionPE+Error%21%7D+";
+	const IRC_WEBHOOK_NOPREFIX = "http://n.tkte.ch/h/****/***********?payload=";
 }

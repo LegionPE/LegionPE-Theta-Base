@@ -16,19 +16,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\credentials;
+namespace legionpe\theta\command;
 
-/** @noinspection PhpUndefinedClassInspection */
-class Credentials{
-	/**
-	 * @return \mysqli
-	 */
-	public static function getMysql(){}
-	const MYSQL_HOST = "";
-	const MYSQL_USER = "";
-	const MYSQL_PASS = "";
-	const MYSQL_DATABASE = "";
-	const MYSQL_PORT = "";
-	const IRC_WEBHOOK = "";
-	const IRC_WEBHOOK_NOPREFIX = "";
+use legionpe\theta\BasePlugin;
+use legionpe\theta\Session;
+use pocketmine\utils\TextFormat;
+
+class CoinsCommand extends SessionCommand{
+	public function __construct(BasePlugin $plugin){
+		parent::__construct($plugin, "coins", "View coins", "/coins");
+	}
+	protected function run(array $args, Session $session){
+		return TextFormat::DARK_GREEN . "You have {$session->getCoins()} coins.";
+	}
 }
