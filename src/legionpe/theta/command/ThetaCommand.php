@@ -36,6 +36,9 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 	public function getPlugin(){
 		return $this->plugin;
 	}
+	public function getSession($player){
+		return $this->getPlugin()->getSession($player);
+	}
 	public static function registerAll(BasePlugin $plugin, CommandMap $map){
 		$map->registerAll("l", [
 			new CoinsCommand($plugin),

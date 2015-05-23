@@ -21,7 +21,21 @@ namespace legionpe\theta;
 use legionpe\theta\config\Settings;
 use legionpe\theta\query\AddIpQuery;
 use legionpe\theta\utils\MUtils;
+use pocketmine\event\block\BlockBreakEvent;
+use pocketmine\event\block\BlockPlaceEvent;
+use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\entity\EntityTeleportEvent;
+use pocketmine\event\inventory\InventoryOpenEvent;
+use pocketmine\event\inventory\InventoryPickupArrowEvent;
+use pocketmine\event\inventory\InventoryPickupItemEvent;
+use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerCommandPreprocessEvent;
+use pocketmine\event\player\PlayerDropItemEvent;
+use pocketmine\event\player\PlayerInteractEvent;
+use pocketmine\event\player\PlayerItemConsumeEvent;
+use pocketmine\event\player\PlayerItemHeldEvent;
+use pocketmine\event\player\PlayerMoveEvent;
+use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
@@ -40,7 +54,8 @@ abstract class Session{
 	const STATE_REGISTERING_FIRST = self::STATE_REGISTERING;
 	const STATE_REGISTERING_SECOND = self::STATE_REGISTERING | 0x01;
 	const STATE_LOGIN = 0x20;
-	const STATE_PLAYING = 0x30;
+	const STATE_UPDATE_HASH = 0x30;
+	const STATE_PLAYING = 0x40;
 	public static $AUTH_METHODS = [
 		self::AUTH_TRANSFER => "transferring",
 		self::AUTH_UUID => "matching unique ID",
@@ -74,9 +89,10 @@ abstract class Session{
 	}
 	public function onCmd(PlayerCommandPreprocessEvent $event){
 		if($this->isRegistering()){
+			$event->setCancelled();
 			$len = strlen($event->getMessage());
 			$one = substr($event->getMessage(), 0, 1);
-			$event->setMessage($hash = self::hash($event->getMessage()));
+			$event->setMessage($hash = self::hash($event->getMessage(), $this->getUid()));
 			if($this->state === self::STATE_REGISTERING_FIRST){
 				$this->tmpHash = $hash;
 				$this->sendCurlyLines();
@@ -100,8 +116,9 @@ abstract class Session{
 					$this->state = self::STATE_REGISTERING_FIRST;
 				}
 			}
+			return false;
 		}elseif($this->isLoggingIn()){
-			$event->setMessage($hash = self::hash($event->getMessage()));
+			$event->setMessage($hash = self::hash($event->getMessage(), $this->getUid()));
 			$this->sendCurlyLines();
 			if($hash === $this->getPasswordHash()){
 				$this->login(self::AUTH_PASS);
@@ -111,9 +128,108 @@ abstract class Session{
 				$this->getPlayer()->sendMessage(TextFormat::YELLOW . "You have " . TextFormat::RED . (5 - $this->getStatePrecise()) . " chance(s) left.");
 				if($this->getStatePrecise() === 5){
 					$this->getPlayer()->kick("Failure to login within 5 attempts");
+					return false;
+				}
+			}
+			return false;
+		}else{
+			$msg = $event->getMessage();
+			$firstChar = $this->getLoginDatum("pwprefix");
+			$len = $this->getLoginDatum("pwlen");
+			$msgLen = strlen($msg);
+			for($offset = 0; ($offset + $len <= $msgLen) and ($pos = strpos($msg, $firstChar, $offset)) !== false; $offset = $pos + 1){
+				$sub = substr($msg, $pos, $len);
+				$hash = $this->hash($sub, $this->getUid());
+				if($hash === $this->getPasswordHash()){
+					$this->getPlayer()->sendMessage(TextFormat::DARK_RED . "NEVER tell anybody your password.");
+					return false;
 				}
 			}
 		}
+		return true;
+	}
+	public function onDamage(/** @noinspection PhpUnusedParameterInspection */ EntityDamageEvent $event){
+		if(!$this->isPlaying()){
+			return false;
+		}
+		return true;
+	}
+	public function onMove(/** @noinspection PhpUnusedParameterInspection */ PlayerMoveEvent $event){
+		if(!$this->isPlaying()){
+			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			return false;
+		}
+		return true;
+	}
+	public function onConsume(/** @noinspection PhpUnusedParameterInspection */ PlayerItemConsumeEvent $event){
+		if(!$this->isPlaying()){
+			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			return false;
+		}
+		return true;
+	}
+	public function onDropItem(/** @noinspection PhpUnusedParameterInspection */ PlayerDropItemEvent $event){
+		if(!$this->isPlaying()){
+			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			return false;
+		}
+		return true;
+	}
+	public function onInteract(/** @noinspection PhpUnusedParameterInspection */ PlayerInteractEvent $event){
+		if(!$this->isPlaying()){
+			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			return false;
+		}
+		return true;
+	}
+	public function onRespawn(/** @noinspection PhpUnusedParameterInspection */ PlayerRespawnEvent $event){
+		if(!$this->isPlaying()){
+			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			return false;
+		}
+		return true;
+	}
+	public function onBreak(/** @noinspection PhpUnusedParameterInspection */ BlockBreakEvent $event){
+		if(!$this->isPlaying()){
+			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			return false;
+		}
+		return true;
+	}
+	public function onPlace(/** @noinspection PhpUnusedParameterInspection */ BlockPlaceEvent $event){
+		if(!$this->isPlaying()){
+			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			return false;
+		}
+		return true;
+	}
+	public function onOpenInv(/** @noinspection PhpUnusedParameterInspection */ InventoryOpenEvent $event){
+		if(!$this->isPlaying()){
+			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			return false;
+		}
+		return true;
+	}
+	public function onPickupItem(/** @noinspection PhpUnusedParameterInspection */ InventoryPickupItemEvent $event){
+		if(!$this->isPlaying()){
+			return false;
+		}
+		return true;
+	}
+	public function onPickupArrow(/** @noinspection PhpUnusedParameterInspection */ InventoryPickupArrowEvent $event){
+		if(!$this->isPlaying()){
+			return false;
+		}
+		return true;
+	}
+	public function onChat(/** @noinspection PhpUnusedParameterInspection */ PlayerChatEvent $event){
+		return true;
+	}
+	public function onHoldItem(/** @noinspection PhpUnusedParameterInspection */ PlayerItemHeldEvent $event){
+		return true;
+	}
+	public function onTeleport(/** @noinspection PhpUnusedParameterInspection */ EntityTeleportEvent $event){
+		return true;
 	}
 	public function onQuit(){
 		$this->saveData();
@@ -180,6 +296,10 @@ abstract class Session{
 	}
 	public function getRank(){
 		return $this->getLoginDatum("rank");
+	}
+	public function isModerator($trial = true){
+		$rank = $this->getRank();
+		return ($rank & Settings::RANK_PERM_MOD) and ($trial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
 	}
 	public function getWarningPoints(){
 		return $this->getLoginDatum("warnpts");
@@ -331,8 +451,11 @@ abstract class Session{
 		return ($suffix === "+") ? "Tester" : "";
 	}
 	private function sendFirstJoinMessages(){
+		$this->getPlayer()->sendMessage(TextFormat::LIGHT_PURPLE . "Welcome to " . TextFormat::ITALIC . TextFormat::DARK_PURPLE . "Legion PE!");
+		$this->getMain()->sendFirstJoinMessages();
 	}
-	public static function hash($password){
-		return bin2hex(hash("sha512", $password . "NaCl", true) ^ hash("whirlpool", "NaCl" . $password, true));
+
+	public static function hash($password, $uid){
+		return bin2hex(hash("sha512", $password . $uid, true) ^ hash("whirlpool", $uid . $password, true));
 	}
 }

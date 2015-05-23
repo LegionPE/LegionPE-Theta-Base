@@ -72,7 +72,7 @@ abstract class SessionCommand extends ThetaCommand{
 	 * @param string $msg
 	 * @return bool
 	 */
-	private function checkPerm(/** @noinspection PhpUnusedParameterInspection */Session $session, &$msg = "You don't have permission to use this command"){
+	protected function checkPerm(/** @noinspection PhpUnusedParameterInspection */Session $session, &$msg = "You don't have permission to use this command"){
 		return true;
 	}
 	protected abstract function run(array $args, Session $session);

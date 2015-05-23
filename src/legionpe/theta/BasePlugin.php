@@ -150,4 +150,5 @@ abstract class BasePlugin extends PluginBase{
 		$this->queueFor($player->getId(), true, Queue::QUEUE_SESSION)
 			->pushToQueue(new TransferSearchRunnable($this, $player, $task));
 	}
+	public abstract function sendFirstJoinMessages();
 }
