@@ -37,4 +37,11 @@ abstract class ModeratorCommand extends ThetaCommand{
 	protected function hasPermission(Session $session){
 		return $session->isModerator();
 	}
+	public function staffBroadcast($msg){
+		foreach($this->getPlugin()->getSessions() as $ses){
+			if($ses->isModerator()){
+				$ses->getPlayer()->sendMessage($msg);
+			}
+		}
+	}
 }

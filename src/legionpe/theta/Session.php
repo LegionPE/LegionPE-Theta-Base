@@ -20,7 +20,11 @@ namespace legionpe\theta;
 
 use legionpe\theta\config\Settings;
 use legionpe\theta\query\AddIpQuery;
+use legionpe\theta\query\NextIdQuery;
+use legionpe\theta\queue\ExecuteWarningRunnable;
+use legionpe\theta\queue\Queue;
 use legionpe\theta\utils\MUtils;
+use pocketmine\command\CommandSender;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -297,9 +301,15 @@ abstract class Session{
 	public function getRank(){
 		return $this->getLoginDatum("rank");
 	}
-	public function isModerator($trial = true){
+	public function isModerator($includeTrial = true){
 		$rank = $this->getRank();
-		return ($rank & Settings::RANK_PERM_MOD) and ($trial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
+		return ($rank & Settings::RANK_PERM_MOD) and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
+	}
+	public function isDonator(){
+		return ($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR);
+	}
+	public function isVIP(){
+		return ($this->getRank() & Settings::RANK_IMPORTANCE_VIP);
 	}
 	public function getWarningPoints(){
 		return $this->getLoginDatum("warnpts");
@@ -309,6 +319,16 @@ abstract class Session{
 	}
 	public function getEffectiveConseq(){
 		return Settings::getWarnPtsConseq($this->getWarningPoints(), $this->getLastWarnTime());
+	}
+	public function addWarningPoints($pts){
+		$this->setLoginDatum("warnpts", $this->getWarningPoints() + $pts);
+		$this->setLoginDatum("lastwarn", time());
+	}
+	public function warn($id, $points, CommandSender $issuer, $msg){
+		$wid = new NextIdQuery($this->getMain(), NextIdQuery::WARNING);
+		$clientId = $this->getPlayer()->getClientId();
+		$this->getMain()->queueFor($this->getPlayer()->getId(), true, Queue::QUEUE_SESSION)
+			->pushToQueue(new ExecuteWarningRunnable($this->getMain(), $wid, $this->getUid(), $clientId, $id, $points, $issuer, $msg));
 	}
 	// TODO team
 	public function getIgnoreList(){

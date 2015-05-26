@@ -16,9 +16,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\command;
+namespace legionpe\theta\command\session;
 
 use legionpe\theta\BasePlugin;
+use legionpe\theta\command\SessionCommand;
 use legionpe\theta\Session;
 use pocketmine\utils\TextFormat;
 

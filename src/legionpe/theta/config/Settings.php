@@ -100,43 +100,8 @@ abstract class Settings{
 	const CONFIG_AUTH_NONE = 5;
 
 	public static function getWarnPtsConseq($pts, $origin = null){
-		if($pts >= 120){
-			return new WarnPtsConseq(0, 7776000, $origin);
-		}
-		if($pts >= 90){
-			return new WarnPtsConseq(0, 5184000, $origin);
-		}
-		if($pts >= 60){
-			return new WarnPtsConseq(0, 3888000, $origin);
-		}
-		if($pts >= 45){
-			return new WarnPtsConseq(0, 2592000, $origin);
-		}
-		if($pts >= 30){
-			return new WarnPtsConseq(0, 604800, $origin);
-		}
-		if($pts >= 25){
-			return new WarnPtsConseq(0, 259200, $origin);
-		}
-		if($pts >= 20){
-			return new WarnPtsConseq(0, 86400, $origin);
-		}
-		if($pts >= 15){
-			return new WarnPtsConseq(3600, 0, $origin);
-		}
-		if($pts >= 10){
-			return new WarnPtsConseq(1800, 0, $origin);
-		}
-		if($pts >= 7){
-			return new WarnPtsConseq(900, 0, $origin);
-		}
-		if($pts >= 4){
-			return new WarnPtsConseq(600, 0, $origin);
-		}
-		if($pts >= 1){
-			return new WarnPtsConseq(300, 0, $origin);
-		}
-		return new WarnPtsConseq;
+		// TODO
+		return new WarnPtsConseq(0, 0, $origin);
 	}
 	public static function getGrindFactor(/** @noinspection PhpUnusedParameterInspection */
 		$rank){

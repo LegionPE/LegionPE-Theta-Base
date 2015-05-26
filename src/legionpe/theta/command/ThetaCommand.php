@@ -19,9 +19,13 @@
 namespace legionpe\theta\command;
 
 use legionpe\theta\BasePlugin;
+use legionpe\theta\command\session\CoinsCommand;
+use legionpe\theta\Session;
 use pocketmine\command\Command;
 use pocketmine\command\CommandMap;
+use pocketmine\command\CommandSender;
 use pocketmine\command\PluginIdentifiableCommand;
+use pocketmine\utils\TextFormat;
 
 abstract class ThetaCommand extends Command implements PluginIdentifiableCommand{
 	/** @var BasePlugin */
@@ -43,5 +47,21 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 		$map->registerAll("l", [
 			new CoinsCommand($plugin),
 		]);
+	}
+	protected function sendUsage($sender){
+		if($sender instanceof Session){
+			$sender = $sender->getPlayer();
+		}
+		if($sender instanceof CommandSender){
+			$sender->sendMessage(TextFormat::RED . "Usage: " . $this->getUsage());
+		}
+	}
+	protected function notOnline($sender){
+		if($sender instanceof Session){
+			$sender = $sender->getPlayer();
+		}
+		if($sender instanceof CommandSender){
+			$sender->sendMessage(TextFormat::RED . "There is no player online by that name.");
+		}
 	}
 }

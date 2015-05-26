@@ -108,6 +108,9 @@ abstract class BasePlugin extends PluginBase{
 		}
 		return isset($this->sessions[$player->getId()]) ? $this->sessions[$player->getId()] : null;
 	}
+	public function getSessions(){
+		return $this->sessions;
+	}
 	protected abstract function createSession(Player $player, array $loginData);
 	public static function getDefaultLoginData($uid, Player $player){
 		$name = $player->getName();
