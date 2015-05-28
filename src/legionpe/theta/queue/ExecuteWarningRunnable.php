@@ -70,7 +70,7 @@ class ExecuteWarningRunnable implements Runnable{
 			$this->issuer = null; // release instance
 			return;
 		}
-		new LogWarningQuery($this->main, $this->wid, $this->uid, $this->clientId, $this->issuer, $this->msg, $this->creation, $this->expiry);
+		new LogWarningQuery($this->main, $this->wid, $this->uid, $this->clientId, $this->issuer, $this->points, $this->msg, $this->creation, $this->expiry);
 		foreach($this->main->getSessions() as $ses){
 			if($ses->getUid() === $this->uid){
 				$ses->addWarningPoints($this->points);

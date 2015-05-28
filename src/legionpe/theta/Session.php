@@ -472,7 +472,7 @@ abstract class Session{
 	}
 	private function sendFirstJoinMessages(){
 		$this->getPlayer()->sendMessage(TextFormat::LIGHT_PURPLE . "Welcome to " . TextFormat::ITALIC . TextFormat::DARK_PURPLE . "Legion PE!");
-		$this->getMain()->sendFirstJoinMessages();
+		$this->getMain()->sendFirstJoinMessages($this->getPlayer());
 	}
 
 	public static function hash($password, $uid){

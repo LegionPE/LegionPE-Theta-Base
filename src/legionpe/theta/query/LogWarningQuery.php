@@ -25,22 +25,25 @@ class LogWarningQuery extends AsyncQuery{
 	private $wid, $uid, $clientId;
 	/** @var string */
 	private $issuerName;
+	/** @var int */
+	private $points;
 	/** @var string */
 	private $msg;
 	/** @var int */
 	private $creation, $expiry;
-	public function __construct(BasePlugin $plugin, $wid, $uid, $clientId, $issuerName, $msg, $creation, $expiry){
+	public function __construct(BasePlugin $plugin, $wid, $uid, $clientId, $issuerName, $points, $msg, $creation, $expiry){
 		parent::__construct($plugin);
 		$this->wid = $wid;
 		$this->uid = $uid;
 		$this->clientId = $clientId;
-		$this->issuerName = $issuerName;
-		$this->msg = $msg;
+		$this->issuerName = $this->esc($issuerName);
+		$this->points = $points;
+		$this->msg = $this->esc($msg);
 		$this->creation = $creation;
 		$this->expiry = $expiry;
 	}
 	public function getQuery(){
-		return "INSERT INTO warnings_logs(wid,uid,clientid,issuer,msg,creation,expiry,agent)VALUES($this->wid,$this->uid,$this->clientId,$this->issuerName,$this->msg,$this->creation,$this->expiry,'eu.legionpvp.theta.mysqli')";
+		return "INSERT INTO warnings_logs(wid,uid,clientid,issuer,pts,msg,creation,expiry,agent)VALUES($this->wid,$this->uid,$this->clientId,$this->issuerName,$this->points,$this->msg,$this->creation,$this->expiry,'eu.legionpvp.theta.mysqli')";
 	}
 	public function getResultType(){
 		return self::TYPE_RAW;

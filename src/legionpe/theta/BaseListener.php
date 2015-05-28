@@ -16,9 +16,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\utils;
+namespace legionpe\theta;
 
-use legionpe\theta\BasePlugin;
 use legionpe\theta\query\LoginQuery;
 use legionpe\theta\queue\LoginRunnable;
 use legionpe\theta\queue\Queue;
@@ -33,7 +32,7 @@ class BaseListener implements Listener{
 	}
 	public function onPreLogin(PlayerPreLoginEvent $event){
 		$player = $event->getPlayer();
-		$login = new LoginQuery($this->main, $player->getName());
+		$login = new LoginQuery($this->main, $player->getName(), $player->getAddress(), $player->getClientId());
 		$this->main->queueFor($player->getId(), true, Queue::QUEUE_SESSION)->pushToQueue(new LoginRunnable($this->main, $login, $player->getId()));
 	}
 }

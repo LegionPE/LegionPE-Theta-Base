@@ -22,12 +22,20 @@ use legionpe\theta\BasePlugin;
 
 class LoginQuery extends AsyncQuery{
 	private $name;
-	public function __construct(BasePlugin $plugin, $name){
-		$this->name = $name;
+	public $totalWarnPts;
+	public function __construct(BasePlugin $plugin, $name, $ip, $clientId){
+		$this->name = $this->esc($name);
+		$this->ip = $this->esc($ip);
+		$this->clientId = $clientId;
 		parent::__construct($plugin);
 	}
+	public function onPreQuery(\mysqli $mysql){
+		$r = $mysql->query("SELECT SUM(pts)AS sum FROM warnings_logs WHERE uid=(SELECT uid FROM users WHERE name=$this->name)or(SELECT COUNT(*)FROM iphist WHERE ip=$this->ip AND uid=warnings_logs.uid)>0 or (clientid=$this->clientId and clientid!=0)");
+		$this->totalWarnPts = $r->fetch_assoc()["sum"];
+		$r->close();
+	}
 	public function getQuery(){
-		return "SELECT *,group_concat((SELECT ip FROM iphist WHERE uid=users.uid) SEPARATOR ',')AS iphist FROM users WHERE name={$this->esc($this->name)}";
+		return "SELECT *,group_concat((SELECT ip FROM iphist WHERE uid=users.uid) SEPARATOR ',')AS iphist FROM users WHERE name=$this->name";
 	}
 	public function getResultType(){
 		return self::TYPE_ASSOC;

@@ -40,6 +40,9 @@ class TransferSearchRunnable implements Runnable{
 		return $this->query->hasResult();
 	}
 	public function run(){
+		if(!$this->player->isOnline()){
+			return;
+		}
 		$result = $this->query->getResult();
 		$name = Settings::$CLASSES_NAMES[$this->query->class];
 		if(!is_array($result)){

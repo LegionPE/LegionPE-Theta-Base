@@ -25,7 +25,6 @@ use legionpe\theta\query\SearchServerQuery;
 use legionpe\theta\queue\NewSessionRunnable;
 use legionpe\theta\queue\Queue;
 use legionpe\theta\queue\TransferSearchRunnable;
-use legionpe\theta\utils\BaseListener;
 use legionpe\theta\utils\CallbackPluginTask;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
@@ -153,5 +152,5 @@ abstract class BasePlugin extends PluginBase{
 		$this->queueFor($player->getId(), true, Queue::QUEUE_SESSION)
 			->pushToQueue(new TransferSearchRunnable($this, $player, $task));
 	}
-	public abstract function sendFirstJoinMessages();
+	public abstract function sendFirstJoinMessages(Player $player);
 }
