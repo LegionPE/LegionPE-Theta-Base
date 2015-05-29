@@ -35,7 +35,7 @@ abstract class Settings{
 	/** @var int[] */
 	public static $CLASSES_TABLE = [
 		"hub" => self::CLASS_HUB,
-		"pvp" => self::CLASS_PVP,
+		"pvp" => self::CLASS_KITPVP,
 		"parkour" => self::CLASS_PARKOUR,
 		"spleef" => self::CLASS_SPLEEF,
 		"infected" => self::CLASS_INFECTED,
@@ -43,18 +43,18 @@ abstract class Settings{
 	];
 	public static $CLASSES_NAMES = [
 		self::CLASS_HUB => "Hub",
-		self::CLASS_PVP => "Kit PvP",
+		self::CLASS_KITPVP => "Kit PvP",
 		self::CLASS_PARKOUR => "Parkour",
 		self::CLASS_SPLEEF => "Spleef",
 		self::CLASS_INFECTED => "Infected",
 		self::CLASS_CLASSICAL => "Classic PvP"
 	];
-	const CLASS_HUB = 0;
-	const CLASS_PVP = 1;
-	const CLASS_PARKOUR = 2;
-	const CLASS_SPLEEF = 3;
-	const CLASS_INFECTED = 4;
-	const CLASS_CLASSICAL = 5;
+	const CLASS_HUB = 1;
+	const CLASS_KITPVP = 2;
+	const CLASS_PARKOUR = 3;
+	const CLASS_SPLEEF = 4;
+	const CLASS_INFECTED = 5;
+	const CLASS_CLASSICAL = 6;
 
 	// ranks of importance (how important the person is, like VERY Important Person) must not exceed 15 according to this, 1 nibble
 	// the first two bits are the two actual permission-affecting nibbles
@@ -156,4 +156,13 @@ Settings::$PROCESS_ID = getmypid();
 Settings::$LOCALIZE_ID = $config->getNested("localize.id");
 Settings::$LOCALIZE_IP = $config->getNested("localize.ip");
 Settings::$LOCALIZE_PORT = $config->getNested("localize.port");
-Settings::$LOCALIZE_CLASS = $config->getNested("localize.class");
+$array = [
+	"hub" => Settings::CLASS_HUB,
+	"pvp" => Settings::CLASS_KITPVP,
+	"kitpvp" => Settings::CLASS_KITPVP,
+	"parkour" => Settings::CLASS_PARKOUR,
+	"spleef" => Settings::CLASS_SPLEEF,
+	"infected" => Settings::CLASS_INFECTED,
+	"classical" => Settings::CLASS_CLASSICAL
+];
+Settings::$LOCALIZE_CLASS = $array[$config->getNested("localize.class")];

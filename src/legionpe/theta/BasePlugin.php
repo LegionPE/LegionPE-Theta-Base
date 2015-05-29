@@ -19,13 +19,14 @@
 namespace legionpe\theta;
 
 use legionpe\theta\config\Settings;
+use legionpe\theta\query\CloseServerQuery;
+use legionpe\theta\query\InitDbQuery;
 use legionpe\theta\query\NextIdQuery;
-use legionpe\theta\query\ReportStatusQuery;
 use legionpe\theta\query\SearchServerQuery;
 use legionpe\theta\queue\NewSessionRunnable;
 use legionpe\theta\queue\Queue;
 use legionpe\theta\queue\TransferSearchRunnable;
-use legionpe\theta\utils\CallbackPluginTask;
+use legionpe\theta\utils\ReportStatusTask;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use shoghicp\FastTransfer\FastTransfer;
@@ -46,10 +47,11 @@ abstract class BasePlugin extends PluginBase{
 		$this->getServer()->getPluginManager()->registerEvents($this->listener = new BaseListener($this), $this);
 		$class = $this->getSessionListenerClass();
 		$this->getServer()->getPluginManager()->registerEvents($this->sesList = new $class($this), $this);
-		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(
-			new CallbackPluginTask($this, function(BasePlugin $me){
-				new ReportStatusQuery($me, count($me->getServer()->getOnlinePlayers()));
-			}, $this), 40, 40);
+		new InitDbQuery($this);
+		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new ReportStatusTask($this), 40, 40);
+	}
+	public function onDisable(){
+		new CloseServerQuery($this);
 	}
 	public function queueFor($id, $garbage = false, $flag = Queue::QUEUE_GENERAL){
 		$queues =& $this->getQueueByFlag($flag);

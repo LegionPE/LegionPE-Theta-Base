@@ -28,7 +28,7 @@ class SearchServerQuery extends AsyncQuery{
 		$this->class = $class;
 	}
 	public function getQuery(){
-		return "SELECT ip,port FROM server_status WHERE unix_timestamp()-last_online < 5 AND class=$this->class ORDER BY online_players ASC LIMIT 1";
+		return "SELECT ip,port FROM server_status WHERE unix_timestamp()-last_online < 5 AND class=$this->class AND online_players < max_players ORDER BY online_players ASC LIMIT 1";
 	}
 	public function getResultType(){
 		return self::TYPE_ASSOC;

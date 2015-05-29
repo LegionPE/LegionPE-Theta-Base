@@ -131,7 +131,6 @@ class SessionEventListener implements Listener{
 	public function onRespawn(PlayerRespawnEvent $event){
 		$session = $this->main->getSession($event->getPlayer());
 		if(!($session instanceof Session)){
-			$event->setCancelled();
 			return;
 		}
 		$session->onRespawn($event);

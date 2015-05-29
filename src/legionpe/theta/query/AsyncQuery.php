@@ -19,6 +19,7 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
+use legionpe\theta\config\Settings;
 use legionpe\theta\credentials\Credentials;
 use pocketmine\scheduler\AsyncTask;
 
@@ -43,9 +44,15 @@ abstract class AsyncQuery extends AsyncTask{
 		$mysql = $this->getConn();
 		$this->onPreQuery($mysql);
 		$result = $mysql->query($query = $this->getQuery());
+		if(Settings::$SYSTEM_IS_TEST and $this->reportDebug()){
+			echo "Executing query: $query", PHP_EOL;
+		}
 		$this->onPostQuery($mysql);
 		if($result === false){
 			$this->setResult(["success" => false, "query" => $query, "error" => $mysql->error]);
+			if(Settings::$SYSTEM_IS_TEST and $this->reportError()){
+				echo "Error executing query: $query", PHP_EOL, $mysql->error, PHP_EOL;
+			}
 			return;
 		}
 		$type = $this->getResultType();
@@ -102,5 +109,11 @@ abstract class AsyncQuery extends AsyncTask{
 	}
 	public function esc($str){
 		return is_string($str) ? "'{$this->getConn()->escape_string($str)}'" : (string) $str;
+	}
+	protected function reportDebug(){
+		return true;
+	}
+	protected function reportError(){
+		return false;
 	}
 }
