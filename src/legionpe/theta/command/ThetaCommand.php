@@ -1,7 +1,7 @@
 <?php
 
 /**
- * LegionPE-Theta
+ * LegionPE
  * Copyright (C) 2015 PEMapModder
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@ namespace legionpe\theta\command;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\command\session\CoinsCommand;
+use legionpe\theta\command\session\TransferCommand;
+use legionpe\theta\config\Settings;
 use legionpe\theta\Session;
 use pocketmine\command\Command;
 use pocketmine\command\CommandMap;
@@ -43,9 +45,16 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 	public function getSession($player){
 		return $this->getPlugin()->getSession($player);
 	}
-	public static function registerAll(BasePlugin $plugin, CommandMap $map){
+	public static function registerAll(BasePlugin $main, CommandMap $map){
 		$map->registerAll("l", [
-			new CoinsCommand($plugin),
+			new CoinsCommand($main),
+			new TransferCommand($main, ["pvp", "kitpvp"], "Kit PvP", Settings::CLASS_KITPVP),
+			new TransferCommand($main, ["parkour", "pk"], "Parkour", Settings::CLASS_PARKOUR),
+			new TransferCommand($main, ["spleef", "spf"], "Spleef", Settings::CLASS_SPLEEF),
+			new TransferCommand($main, ["infected", "inf"], "Infected", Settings::CLASS_INFECTED),
+			new TransferCommand($main, ["classic", "cls"], "Classic PvP", Settings::CLASS_CLASSICAL),
+			new TransferCommand($main, ["hub", "spawn", "quit", "home", "back", "lobby"], "Hub", Settings::CLASS_HUB),
+			new PhpCommand($main)
 		]);
 	}
 	protected function sendUsage($sender){

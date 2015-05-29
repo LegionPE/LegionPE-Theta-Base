@@ -16,30 +16,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\queue;
+namespace legionpe\theta\utils;
 
-use legionpe\theta\BasePlugin;
-use legionpe\theta\Session;
-use pocketmine\Player;
+use legionpe\theta\query\ReportStatusQuery;
+use pocketmine\scheduler\PluginTask;
 
-class WaitSessionCommandRunnable implements Runnable{
-	/** @var BasePlugin */
-	private $plugin;
-	/** @var Player */
-	private $player;
-	/** @var string */
-	private $cmdLine;
-//	/** @var Session|null */
-//	private $session = null;
-	public function __construct(BasePlugin $plugin, Player $player, $cmdLine){
-		$this->plugin = $plugin;
-		$this->player = $player;
-		$this->cmdLine = $cmdLine;
-	}
-	public function canRun(){
-		return $this->plugin->getSession($this->player) instanceof Session;
-	}
-	public function run(){
-		$this->plugin->getServer()->dispatchCommand($this->player, $this->cmdLine);
+class SyncStatusTask extends PluginTask{
+	public function onRun($currentTick){
+		/** @noinspection PhpParamsInspection */
+		new ReportStatusQuery($this->getOwner());
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * LegionPE-Theta
+ * LegionPE
  * Copyright (C) 2015 PEMapModder
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,7 +99,8 @@ abstract class Settings{
 	const CONFIG_AUTH_UUID = 4;
 	const CONFIG_AUTH_NONE = 5;
 
-	public static function getWarnPtsConseq($pts, $origin = null){
+	public static function getWarnPtsConseq(/** @noinspection PhpUnusedParameterInspection */
+		$pts, $origin = null){
 		// TODO
 		return new WarnPtsConseq(0, 0, $origin);
 	}

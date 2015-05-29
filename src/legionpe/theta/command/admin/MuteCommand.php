@@ -16,14 +16,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\utils;
+namespace legionpe\theta\command\admin;
 
-use legionpe\theta\query\ReportStatusQuery;
-use pocketmine\scheduler\PluginTask;
+use pocketmine\command\CommandSender;
 
-class ReportStatusTask extends PluginTask{
-	public function onRun($currentTick){
-		/** @noinspection PhpParamsInspection */
-		new ReportStatusQuery($this->getOwner());
+class MuteCommand extends ModeratorCommand{
+	public function execute(CommandSender $sender, $commandLabel, array $args){
+		// TODO: Implement execute() method.
 	}
 }

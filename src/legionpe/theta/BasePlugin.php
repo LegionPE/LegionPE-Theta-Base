@@ -1,7 +1,7 @@
 <?php
 
 /**
- * LegionPE-Theta
+ * LegionPE
  * Copyright (C) 2015 PEMapModder
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,12 +26,15 @@ use legionpe\theta\query\SearchServerQuery;
 use legionpe\theta\queue\NewSessionRunnable;
 use legionpe\theta\queue\Queue;
 use legionpe\theta\queue\TransferSearchRunnable;
-use legionpe\theta\utils\ReportStatusTask;
+use legionpe\theta\utils\SyncStatusTask;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
+use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 use shoghicp\FastTransfer\FastTransfer;
 
 abstract class BasePlugin extends PluginBase{
+	private static $NAME = null;
 	/** @var FastTransfer */
 	private $FastTransfer;
 	/** @var BaseListener */
@@ -42,13 +45,25 @@ abstract class BasePlugin extends PluginBase{
 	private $queues = [], $playerQueues = [], $teamQueues = [];
 	/** @var Session[] */
 	private $sessions = [];
+	private $totalPlayers, $maxPlayers;
+	/**
+	 * @param Server $server
+	 * @return static
+	 */
+	public static function getInstance(Server $server){
+		return $server->getPluginManager()->getPlugin(self::$NAME);
+	}
+	public function onLoad(){
+		self::$NAME = $this->getName();
+		class_exists(CloseServerQuery::class); // preload to workaround frequent corruption errors due to phar repalced
+	}
 	public function onEnable(){
 		$this->FastTransfer = $this->getServer()->getPluginManager()->getPlugin("FastTransfer");
 		$this->getServer()->getPluginManager()->registerEvents($this->listener = new BaseListener($this), $this);
 		$class = $this->getSessionListenerClass();
 		$this->getServer()->getPluginManager()->registerEvents($this->sesList = new $class($this), $this);
 		new InitDbQuery($this);
-		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new ReportStatusTask($this), 40, 40);
+		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SyncStatusTask($this), 40, 40);
 	}
 	public function onDisable(){
 		new CloseServerQuery($this);
@@ -143,6 +158,9 @@ abstract class BasePlugin extends PluginBase{
 			"isnew" => true
 		];
 	}
+	public function evaluate($code){
+		eval($code);
+	}
 	protected function getSessionListenerClass(){
 		return SessionEventListener::class;
 	}
@@ -154,5 +172,15 @@ abstract class BasePlugin extends PluginBase{
 		$this->queueFor($player->getId(), true, Queue::QUEUE_SESSION)
 			->pushToQueue(new TransferSearchRunnable($this, $player, $task));
 	}
+	public function setPlayerCount($total, $max){
+		$this->totalPlayers = $total;
+		$this->maxPlayers = $max;
+		$this->getServer()->getNetwork()->setName(TextFormat::AQUA . "LegionPE " . TextFormat::GREEN . "PE " . TextFormat::LIGHT_PURPLE . "[$total / $max] " . TextFormat::RED . "{TPS {$this->getServer()->getTicksPerSecond()}}");
+	}
+	public function getPlayersCount(&$total, &$max){
+		$total = $this->totalPlayers;
+		$max = $this->maxPlayers;
+	}
 	public abstract function sendFirstJoinMessages(Player $player);
+	public abstract function query_world();
 }

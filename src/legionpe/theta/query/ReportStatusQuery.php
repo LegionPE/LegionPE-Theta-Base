@@ -1,7 +1,7 @@
 <?php
 
 /**
- * LegionPE-Theta
+ * LegionPE
  * Copyright (C) 2015 PEMapModder
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\config\Settings;
+use pocketmine\Server;
 
 class ReportStatusQuery extends AsyncQuery{
 	private $players;
@@ -27,14 +28,28 @@ class ReportStatusQuery extends AsyncQuery{
 		parent::__construct($plugin);
 		$this->players = count($plugin->getServer()->getOnlinePlayers());
 	}
-	public function getQuery(){
+	public function onPreQuery(\mysqli $mysql){
 		$myid = Settings::$LOCALIZE_ID;
-		return "UPDATE server_status SET last_online=unix_timestamp(),online_players=$this->players WHERE server_id=$myid;";
+		$mysql->query("UPDATE server_status SET last_online=unix_timestamp(),online_players=$this->players WHERE server_id=$myid;");
+	}
+	public function getQuery(){
+		return "SELECT SUM(online_players)AS online,SUM(max_players)AS max FROM server_status WHERE unix_timestamp()-last_online<5";
 	}
 	public function getResultType(){
-		return self::TYPE_RAW;
+		return self::TYPE_ASSOC;
+	}
+	public function getExpectedColumns(){
+		return [
+			"online" => self::COL_INT,
+			"max" => self::COL_INT
+		];
 	}
 	protected function reportDebug(){
 		return false;
+	}
+	public function onCompletion(Server $server){
+		$result = $this->getResult()["result"];
+		$main = BasePlugin::getInstance($server);
+		$main->setPlayerCount($result["online"], $result["max"]);
 	}
 }
