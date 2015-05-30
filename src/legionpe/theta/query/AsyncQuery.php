@@ -37,17 +37,25 @@ abstract class AsyncQuery extends AsyncTask{
 		self::COL_INT => 0,
 		self::COL_FLOAT => 0.0
 	];
+	protected $tmpResult;
 	public function __construct(BasePlugin $plugin){
 		$plugin->getServer()->getScheduler()->scheduleAsyncTask($this);
+		if($this->getResultType() !== self::TYPE_RAW and $this->getExpectedColumns() === null){
+			echo "Fatal: Plugin error. ", static::class . " must override getExpectedColumns(), but it didn't. Committing suicide.";
+			sleep(604800);
+			die;
+		}
 	}
 	public function onRun(){
 		$mysql = $this->getConn();
 		$this->onPreQuery($mysql);
-		$result = $mysql->query($query = $this->getQuery());
+		$this->tmpResult = $mysql->query($query = $this->getQuery());
 		if(Settings::$SYSTEM_IS_TEST and $this->reportDebug()){
 			echo "Executing query: $query", PHP_EOL;
 		}
 		$this->onPostQuery($mysql);
+		$result = $this->tmpResult;
+		unset($this->tmpResult);
 		if($result === false){
 			$this->setResult(["success" => false, "query" => $query, "error" => $mysql->error]);
 			if(Settings::$SYSTEM_IS_TEST and $this->reportError()){
@@ -60,7 +68,12 @@ abstract class AsyncQuery extends AsyncTask{
 			if($type === self::TYPE_ASSOC){
 				$row = $result->fetch_assoc();
 				$result->close();
+				if(!is_array($row)){
+					$this->setResult(["success" => true, "query" => $query, "result" => null, "resulttype" => self::TYPE_RAW]);
+					return;
+				}
 				$this->processRow($row);
+				$this->onAssocFetched($mysql, $row);
 				$this->setResult(["success" => true, "query" => $query, "result" => $row, "resulttype" => self::TYPE_ASSOC]);
 			}elseif($type === self::TYPE_ALL){
 				$set = [];
@@ -105,7 +118,7 @@ abstract class AsyncQuery extends AsyncTask{
 	protected function onPostQuery(\mysqli $mysqli){}
 	public abstract function getResultType();
 	public function getExpectedColumns(){
-		return [];
+		return null;
 	}
 	public function esc($str){
 		return is_string($str) ? "'{$this->getConn()->escape_string($str)}'" : (string) $str;
@@ -115,5 +128,8 @@ abstract class AsyncQuery extends AsyncTask{
 	}
 	protected function reportError(){
 		return false;
+	}
+	protected function onAssocFetched(\mysqli $mysql, array &$row){
+
 	}
 }

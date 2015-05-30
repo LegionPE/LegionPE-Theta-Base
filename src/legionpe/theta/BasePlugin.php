@@ -18,6 +18,7 @@
 
 namespace legionpe\theta;
 
+use legionpe\theta\command\ThetaCommand;
 use legionpe\theta\config\Settings;
 use legionpe\theta\query\CloseServerQuery;
 use legionpe\theta\query\InitDbQuery;
@@ -58,6 +59,7 @@ abstract class BasePlugin extends PluginBase{
 		class_exists(CloseServerQuery::class); // preload to workaround frequent corruption errors due to phar repalced
 	}
 	public function onEnable(){
+		ThetaCommand::registerAll($this, $this->getServer()->getCommandMap());
 		$this->FastTransfer = $this->getServer()->getPluginManager()->getPlugin("FastTransfer");
 		$this->getServer()->getPluginManager()->registerEvents($this->listener = new BaseListener($this), $this);
 		$class = $this->getSessionListenerClass();
@@ -95,6 +97,7 @@ abstract class BasePlugin extends PluginBase{
 	 */
 	public function newSession(Player $player, $loginData = null){
 		if($loginData === null){
+			$player->sendMessage(TextFormat::AQUA . "Welcome to Legion PE! Please wait while we are preparing to register an account for you.");
 			$task = new NextIdQuery($this, NextIdQuery::USER);
 			$this->queueFor($player->getId(), true, Queue::QUEUE_SESSION)->pushToQueue(new NewSessionRunnable($this, $task, $player->getId()));
 			return false;

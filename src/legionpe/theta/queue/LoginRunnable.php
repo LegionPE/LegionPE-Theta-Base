@@ -58,10 +58,12 @@ class LoginRunnable implements Runnable{
 		}
 		/** @var int $resulttype */
 		if($resulttype === AsyncQuery::TYPE_RAW){
+			$this->main->getLogger()->notice("New account pending to register: {$this->login->name}");
 			$loginData = null;
 		}else{
 			/** @var mixed[] $result */
 			$loginData = $result;
+			var_dump($result);
 			$conseq = Settings::getWarnPtsConseq($this->login->totalWarnPts, $loginData["lastwarn"]);
 			if($conseq->banLength > 0){
 				$player->kick(TextFormat::RED . "You are banned.\nYou have accumulated " . TextFormat::DARK_PURPLE . $this->login->totalWarnPts . TextFormat::RED . " warning points,\nand you still have " . TextFormat::BLUE . MUtils::time_secsToString($conseq->banLength) . TextFormat::RED . " before you are unbanned.\n" . TextFormat::AQUA . "Believe this to be a mistake? Contact us with email at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu");

@@ -21,7 +21,7 @@ namespace legionpe\theta\query;
 use legionpe\theta\BasePlugin;
 
 class LoginQuery extends AsyncQuery{
-	private $name;
+	public $name;
 	public $totalWarnPts;
 	public function __construct(BasePlugin $plugin, $name, $ip, $clientId){
 		$this->name = $this->esc($name);
@@ -36,6 +36,12 @@ class LoginQuery extends AsyncQuery{
 	}
 	public function getQuery(){
 		return "SELECT *,group_concat((SELECT ip FROM iphist WHERE uid=users.uid) SEPARATOR ',')AS iphist FROM users WHERE name=$this->name";
+	}
+	protected function onAssocFetched(\mysqli $mysql, array &$row){
+		$uid = $row["uid"];
+		$r = $mysql->query("SELECT group_concat(ip SEPARATOR ',') AS iphist FROM iphist WHERE uid=$uid");
+		$row["iphist"] = $r->fetch_assoc()["iphist"];
+		$r->close();
 	}
 	public function getResultType(){
 		return self::TYPE_ASSOC;

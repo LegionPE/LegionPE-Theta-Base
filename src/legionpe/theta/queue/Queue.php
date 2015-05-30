@@ -35,6 +35,7 @@ class Queue extends PluginTask{
 	private $nextScheduled = false;
 	/** @var bool */
 	private $garbageable;
+	private $flag;
 	/**
 	 * @param BasePlugin $main
 	 * @param $queueId
@@ -47,6 +48,7 @@ class Queue extends PluginTask{
 		parent::__construct($this->main = $main);
 		$this->queueId = $queueId;
 		$this->garbageable = $garbageable;
+		$this->flag = $flag;
 	}
 	public function onRun($t){
 		$this->nextScheduled = false;
@@ -66,8 +68,8 @@ class Queue extends PluginTask{
 				return;
 			}
 		}
-		if($this->garbageable){
-			$this->main->garbage($this->getQueueId());
+		if($this->garbageable and !isset($this->queue[0])){
+			$this->main->garbage($this->getQueueId(), $this->flag);
 		}
 	}
 	public function pushToQueue(Runnable $runnable){
