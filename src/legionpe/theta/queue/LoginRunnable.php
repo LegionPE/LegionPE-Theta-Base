@@ -71,4 +71,9 @@ class LoginRunnable implements Runnable{
 		}
 		$this->main->newSession($player, $loginData);
 	}
+	public function __debugInfo(){
+		return [
+			"sesId" => $this->sesId
+		];
+	}
 }

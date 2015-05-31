@@ -53,4 +53,7 @@ class NextIdQuery extends AsyncQuery{
 		$result = $this->getResult();
 		return $result["type"] === self::TYPE_ASSOC ? $result["result"]["id"] : null;
 	}
+	public function __debugInfo(){
+		return [];
+	}
 }

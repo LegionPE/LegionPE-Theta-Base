@@ -47,6 +47,8 @@ abstract class BasePlugin extends PluginBase{
 	/** @var Session[] */
 	private $sessions = [];
 	private $totalPlayers, $maxPlayers;
+
+	// PluginManager-level stuff
 	/**
 	 * @param Server $server
 	 * @return static
@@ -61,7 +63,8 @@ abstract class BasePlugin extends PluginBase{
 	public function onEnable(){
 		ThetaCommand::registerAll($this, $this->getServer()->getCommandMap());
 		$this->FastTransfer = $this->getServer()->getPluginManager()->getPlugin("FastTransfer");
-		$this->getServer()->getPluginManager()->registerEvents($this->listener = new BaseListener($this), $this);
+		$class = $this->getBasicListener();
+		$this->getServer()->getPluginManager()->registerEvents($this->listener = new $class($this), $this);
 		$class = $this->getSessionListenerClass();
 		$this->getServer()->getPluginManager()->registerEvents($this->sesList = new $class($this), $this);
 		new InitDbQuery($this);
@@ -70,6 +73,11 @@ abstract class BasePlugin extends PluginBase{
 	public function onDisable(){
 		new CloseServerQuery($this);
 	}
+	public function evaluate($code){
+		eval($code);
+	}
+
+	// queues
 	public function queueFor($id, $garbage = false, $flag = Queue::QUEUE_GENERAL){
 		$queues =& $this->getQueueByFlag($flag);
 		if(!isset($queues[$id])){
@@ -78,7 +86,7 @@ abstract class BasePlugin extends PluginBase{
 		}
 		return $queues[$id];
 	}
-	public function garbage($id, $flag = Queue::QUEUE_GENERAL){
+	public function garbageQueue($id, $flag = Queue::QUEUE_GENERAL){
 		unset($this->getQueueByFlag($flag)[$id]);
 	}
 	public function &getQueueByFlag($flag){
@@ -90,16 +98,19 @@ abstract class BasePlugin extends PluginBase{
 		}
 		return $this->queues;
 	}
+
+	// session stuff
 	/**
 	 * @param Player $player
 	 * @param mixed[]|null $loginData
 	 * @return bool
 	 */
 	public function newSession(Player $player, $loginData = null){
+		$this->getLogger()->debug((new \Exception)->getTraceAsString());
 		if($loginData === null){
 			$player->sendMessage(TextFormat::AQUA . "Welcome to Legion PE! Please wait while we are preparing to register an account for you.");
 			$task = new NextIdQuery($this, NextIdQuery::USER);
-			$this->queueFor($player->getId(), true, Queue::QUEUE_SESSION)->pushToQueue(new NewSessionRunnable($this, $task, $player->getId()));
+			$this->queueFor(Queue::GENERAL_ID_FETCH, true)->pushToQueue(new NewSessionRunnable($this, $task, $player->getId()));
 			return false;
 		}
 		try{
@@ -161,12 +172,18 @@ abstract class BasePlugin extends PluginBase{
 			"isnew" => true
 		];
 	}
-	public function evaluate($code){
-		eval($code);
+
+	// overridable implementation classes
+	public function getBasicListener(){
+		return BaseListener::class;
 	}
 	protected function getSessionListenerClass(){
 		return SessionEventListener::class;
 	}
+	public abstract function sendFirstJoinMessages(Player $player);
+	public abstract function query_world();
+
+	// global-level utils functions
 	public function transfer(Player $player, $ip, $port, $msg){
 		$this->FastTransfer->transferPlayer($player, $ip, $port, $msg);
 	}
@@ -184,6 +201,18 @@ abstract class BasePlugin extends PluginBase{
 		$total = $this->totalPlayers;
 		$max = $this->maxPlayers;
 	}
-	public abstract function sendFirstJoinMessages(Player $player);
-	public abstract function query_world();
+
+	// public getters
+	/**
+	 * @return BaseListener
+	 */
+	public function getListener(){
+		return $this->listener;
+	}
+	/**
+	 * @return SessionEventListener
+	 */
+	public function getSesList(){
+		return $this->sesList;
+	}
 }

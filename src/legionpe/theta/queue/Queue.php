@@ -26,6 +26,7 @@ class Queue extends PluginTask{
 	const QUEUE_GENERAL = 0;
 	const QUEUE_SESSION = 1;
 	const QUEUE_TEAM = 2;
+	const GENERAL_ID_FETCH = 1;
 	/** @var BasePlugin */
 	private $main;
 	/** @var int */
@@ -69,12 +70,13 @@ class Queue extends PluginTask{
 			}
 		}
 		if($this->garbageable and !isset($this->queue[0])){
-			$this->main->garbage($this->getQueueId(), $this->flag);
+			$this->main->garbageQueue($this->getQueueId(), $this->flag);
 		}
 	}
 	public function pushToQueue(Runnable $runnable){
 		$this->queue[] = $runnable;
 		$this->scheduleNext();
+		$this->getMain()->getLogger()->debug("Pushed " . get_class($runnable) . " to queue " . $this->flag . "#" . $this->queueId);
 	}
 	protected function scheduleNext(){
 		if($this->nextScheduled){
@@ -94,5 +96,20 @@ class Queue extends PluginTask{
 	 */
 	public function getMain(){
 		return $this->main;
+	}
+	public function __debugInfo(){
+		return [
+			"queueId" => $this->queueId,
+			"queue" => $this->queue,
+			"nextScheduled" => $this->nextScheduled,
+			"garbageable" => $this->garbageable,
+			"flagname" => array_search($this->flag, (new \ReflectionClass($this))->getConstants())
+		];
+	}
+	/**
+	 * @return Runnable[]
+	 */
+	public function getQueue(){
+		return $this->queue;
 	}
 }

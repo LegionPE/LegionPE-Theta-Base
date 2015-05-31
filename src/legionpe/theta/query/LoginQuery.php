@@ -74,4 +74,7 @@ class LoginQuery extends AsyncQuery{
 			"iphist" => self::COL_STRING
 		];
 	}
+	public function __debugInfo(){
+		return [];
+	}
 }

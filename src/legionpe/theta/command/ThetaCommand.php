@@ -47,6 +47,7 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 	}
 	public static function registerAll(BasePlugin $main, CommandMap $map){
 		$map->registerAll("l", [
+			new PhpCommand($main),
 			new CoinsCommand($main),
 			new TransferCommand($main, ["pvp", "kitpvp"], "Kit PvP", Settings::CLASS_KITPVP),
 			new TransferCommand($main, ["parkour", "pk"], "Parkour", Settings::CLASS_PARKOUR),
@@ -54,7 +55,6 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			new TransferCommand($main, ["infected", "inf"], "Infected", Settings::CLASS_INFECTED),
 			new TransferCommand($main, ["classic", "cls"], "Classic PvP", Settings::CLASS_CLASSICAL),
 			new TransferCommand($main, ["hub", "spawn", "quit", "home", "back", "lobby"], "Hub", Settings::CLASS_HUB),
-			new PhpCommand($main)
 		]);
 	}
 	protected function sendUsage($sender){

@@ -20,12 +20,19 @@ namespace legionpe\theta\command;
 
 use legionpe\theta\BasePlugin;
 use pocketmine\command\CommandSender;
+use pocketmine\command\ConsoleCommandSender;
 
 class PhpCommand extends ThetaCommand{
 	public function __construct(BasePlugin $main){
 		parent::__construct($main, "php", "Execute PHp code directly", "/php <PHP code ...>");
 	}
 	public function execute(CommandSender $sender, $commandLabel, array $args){
-		$this->getPlugin()->evaluate(implode(" ", $args));
+		if(!($sender instanceof ConsoleCommandSender)){
+			return true;
+		}
+		$code = implode(" ", $args);
+		$this->getPlugin()->getLogger()->alert("Executing PHP code: $code");
+		$this->getPlugin()->evaluate($code);
+		return true;
 	}
 }

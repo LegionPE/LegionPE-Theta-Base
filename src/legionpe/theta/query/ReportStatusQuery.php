@@ -52,4 +52,7 @@ class ReportStatusQuery extends AsyncQuery{
 		$main = BasePlugin::getInstance($server);
 		$main->setPlayerCount($result["online"], $result["max"]);
 	}
+	public function __debugInfo(){
+		return [];
+	}
 }

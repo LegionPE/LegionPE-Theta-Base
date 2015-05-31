@@ -132,4 +132,7 @@ abstract class AsyncQuery extends AsyncTask{
 	protected function onAssocFetched(\mysqli $mysql, array &$row){
 
 	}
+	public function __debugInfo(){
+		return [];
+	}
 }

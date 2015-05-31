@@ -54,4 +54,9 @@ class TransferSearchRunnable implements Runnable{
 		extract($result);
 		$this->plugin->transfer($this->player, $ip, $port, TextFormat::GREEN . "You are being transferred to $ip:$port ($name server).");
 	}
+	public function __debugInfo(){
+		return [
+			"query" => $this->query
+		];
+	}
 }

@@ -39,4 +39,7 @@ class JoinTriggerRunnable implements Runnable{
 	public function run(){
 		$this->session->onJoin();
 	}
+	public function __debugInfo(){
+		return ["session" => $this->session];
+	}
 }

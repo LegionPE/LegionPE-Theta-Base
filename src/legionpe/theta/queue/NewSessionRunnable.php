@@ -34,6 +34,9 @@ class NewSessionRunnable implements Runnable{
 		$this->sesId = $sesId;
 	}
 	public function canRun(){
+		if($this->query->hasResult()){
+			$this->main->getLogger()->info("Can run!");
+		}
 		return $this->query->hasResult();
 	}
 	public function run(){
@@ -47,5 +50,22 @@ class NewSessionRunnable implements Runnable{
 			return;
 		}
 		$this->main->newSession($player, BasePlugin::getDefaultLoginData($uid, $player));
+	}
+	public function __debugInfo(){
+		return [
+			"sesId" => $this->sesId
+		];
+	}
+	/**
+	 * @return NextIdQuery
+	 */
+	public function getQuery(){
+		return $this->query;
+	}
+	/**
+	 * @return int
+	 */
+	public function getSesId(){
+		return $this->sesId;
 	}
 }
