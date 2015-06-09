@@ -40,6 +40,7 @@ use pocketmine\event\player\PlayerItemConsumeEvent;
 use pocketmine\event\player\PlayerItemHeldEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
+use pocketmine\event\TextContainer;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
@@ -75,8 +76,8 @@ abstract class Session{
 	/** @var int */
 	private $state = self::STATE_LOADING;
 	private $invisibleFrom = [];
-	/** @var string|null */
-	private $tmpHash = null;
+	/** @var string|TextContainer|null */
+	private $tmpHash = null, $curPopup = null;
 	public function __construct(Player $player, $loginData){
 		$this->player = $player;
 		$this->loginData = $loginData;
@@ -84,8 +85,11 @@ abstract class Session{
 			throw new \Exception;
 		}
 	}
+	public function __toString(){
+		return $this->getPlayer()->getName();
+	}
 	public function onJoin(){
-		foreach($this->player->getLevel()->getUsingChunk($this->player->getFloorX() >> 4, $this->player->getFloorZ() >> 4) as $other){
+		foreach($this->player->getLevel()->getChunkPlayers($this->player->getFloorX() >> 4, $this->player->getFloorZ() >> 4) as $other){
 			$other->hidePlayer($this->player);
 			$this->invisibleFrom[$other->getId()] = true;
 		}
@@ -160,56 +164,58 @@ abstract class Session{
 	}
 	public function onMove(/** @noinspection PhpUnusedParameterInspection */ PlayerMoveEvent $event){
 		if(!$this->isPlaying()){
-			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
-			return false;
+			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			$from = $event->getFrom();
+			$to = $event->getTo();
+			return ($from->x === $to->x) and ($from->y === $to->y) and ($from->z === $to->z);
 		}
 		return true;
 	}
 	public function onConsume(/** @noinspection PhpUnusedParameterInspection */ PlayerItemConsumeEvent $event){
 		if(!$this->isPlaying()){
-			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
 			return false;
 		}
 		return true;
 	}
 	public function onDropItem(/** @noinspection PhpUnusedParameterInspection */ PlayerDropItemEvent $event){
 		if(!$this->isPlaying()){
-			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
 			return false;
 		}
 		return true;
 	}
 	public function onInteract(/** @noinspection PhpUnusedParameterInspection */ PlayerInteractEvent $event){
 		if(!$this->isPlaying()){
-			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
 			return false;
 		}
 		return true;
 	}
 	public function onRespawn(/** @noinspection PhpUnusedParameterInspection */ PlayerRespawnEvent $event){
 		if(!$this->isPlaying()){
-			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
 			return false;
 		}
 		return true;
 	}
 	public function onBreak(/** @noinspection PhpUnusedParameterInspection */ BlockBreakEvent $event){
 		if(!$this->isPlaying()){
-			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
 			return false;
 		}
 		return true;
 	}
 	public function onPlace(/** @noinspection PhpUnusedParameterInspection */ BlockPlaceEvent $event){
 		if(!$this->isPlaying()){
-			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
 			return false;
 		}
 		return true;
 	}
 	public function onOpenInv(/** @noinspection PhpUnusedParameterInspection */ InventoryOpenEvent $event){
 		if(!$this->isPlaying()){
-			$this->getPlayer()->sendTip(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
+			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
 			return false;
 		}
 		return true;
@@ -250,6 +256,9 @@ abstract class Session{
 	}
 	public function setLoginDatum($key, $datum){
 		$this->loginData[$key] = $datum;
+	}
+	public function incrLoginDatum($key, $amplitude = 1){
+		$this->loginData[$key] += $amplitude;
 	}
 	public function getUid(){
 		return $this->getLoginDatum("uid");
@@ -306,10 +315,16 @@ abstract class Session{
 		return ($rank & Settings::RANK_PERM_MOD) and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
 	}
 	public function isDonator(){
-		return ($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR);
+		return (bool) ($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR);
+	}
+	public function isDonatorPlus(){
+		return (bool) ($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR_PLUS);
 	}
 	public function isVIP(){
-		return ($this->getRank() & Settings::RANK_IMPORTANCE_VIP);
+		return (bool) ($this->getRank() & Settings::RANK_IMPORTANCE_VIP);
+	}
+	public function isVIPPlus(){
+		return (bool) ($this->getRank() & Settings::RANK_IMPORTANCE_VIP_PLUS);
 	}
 	public function getWarningPoints(){
 		return $this->getLoginDatum("warnpts");
@@ -371,10 +386,25 @@ abstract class Session{
 	public function isPlaying(){
 		return ($this->state & 0xF0) === self::STATE_PLAYING;
 	}
+	public function setMaintainedPopup($popup = null){
+		$this->curPopup = $popup;
+		if($popup !== null){
+			$this->getPlayer()->sendPopup($popup);
+		}
+	}
+	public function getPopup(){
+		return $this->curPopup;
+	}
 
+	/**
+	 * Override this method to do initialization stuff
+	 * @param int $method
+	 */
 	public function login($method){
 		$this->state = self::STATE_PLAYING;
 		$this->getPlayer()->sendMessage("You have been authenticated by " . isset(self::$AUTH_METHODS[$method]) ? self::$AUTH_METHODS[$method] : "an unknown method.");
+		$this->getPlayer()->sendMessage("You are in " . TextFormat::BOLD . TextFormat::AQUA . "Legion PE " . TextFormat::GREEN . Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS] . TextFormat::RESET . TextFormat::WHITE . " at " . TextFormat::BOLD . TextFormat::DARK_AQUA . Settings::$LOCALIZE_IP . ":" . Settings::$LOCALIZE_PORT);
+		$this->setMaintainedPopup();
 	}
 	public function sendCurlyLines($lines = 1, $color = TextFormat::ITALIC . TextFormat::RED){
 		for($i = 0; $i < $lines; $i++){
@@ -384,16 +414,16 @@ abstract class Session{
 	public function recalculateNameTag(){
 		$this->getPlayer()->setNameTag($this->calculateTag());
 	}
-	public function calculateTag(){
+	public function calculateTag($nameColor = TextFormat::WHITE){
 		$rank = $this->calculateRank();
 		if($rank !== ""){
-			$tag = TextFormat::AQUA . "{" . $rank . "}";
+			$tag = TextFormat::AQUA . "{" .  $rank . TextFormat::AQUA . "}";
 		}else{
 			$tag = "";
 		}
 		// TODO team tags
 		// TODO custom tags
-		$tag .= TextFormat::WHITE . $this->getPlayer()->getName();
+		$tag .= $nameColor . $this->getPlayer()->getName();
 		return $tag;
 	}
 
@@ -450,8 +480,8 @@ abstract class Session{
 		}
 		return $ip0[0] === $ip1[0] and $ip0[1] = $ip1[1];
 	}
-	private function saveData(){
-		// TODO implement
+	public function saveData(){
+		// TODO implement SaveQuery with BasePlugin::getSaveQueryImpl() possible
 	}
 	private function calculateRank(){
 		$rank = $this->getRank();
@@ -473,6 +503,11 @@ abstract class Session{
 	private function sendFirstJoinMessages(){
 		$this->getPlayer()->sendMessage(TextFormat::LIGHT_PURPLE . "Welcome to " . TextFormat::ITALIC . TextFormat::DARK_PURPLE . "Legion PE!");
 		$this->getMain()->sendFirstJoinMessages($this->getPlayer());
+	}
+	public function secondTick(){
+		if($this->curPopup !== null){
+			$this->getPlayer()->sendPopup($this->curPopup);
+		}
 	}
 
 	public static function hash($password, $uid){

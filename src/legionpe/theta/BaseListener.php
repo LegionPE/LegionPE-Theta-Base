@@ -18,6 +18,7 @@
 
 namespace legionpe\theta;
 
+use legionpe\theta\config\Settings;
 use legionpe\theta\query\LoginQuery;
 use legionpe\theta\queue\LoginRunnable;
 use legionpe\theta\queue\Queue;
@@ -34,15 +35,24 @@ class BaseListener implements Listener{
 	}
 	public function onPreLogin(PlayerPreLoginEvent $event){
 		$player = $event->getPlayer();
-		$login = new LoginQuery($this->main, $player->getName(), $player->getAddress(), $player->getClientId());
+		/** @var string|LoginQuery $LoginQuery */
+		$LoginQuery = $this->main->getLoginQueryImpl();
+		$login = new $LoginQuery($this->main, $player->getName(), $player->getAddress(), $player->getClientId());
 		$this->main->queueFor($player->getId(), true, Queue::QUEUE_SESSION)->pushToQueue(new LoginRunnable($this->main, $login, $player->getId()));
 	}
 	public function onQueryRegen(QueryRegenerateEvent $event){
 		$event->setWorld($this->main->query_world());
-		$this->main->getPlayersCount($total, $max);
+		$this->main->getPlayersCount($total, $max, $classTotal, $classMax);
 		$event->setPlayerCount($total);
 		$event->setMaxPlayerCount($max);
 		$event->setPlayerList([]);
 		$event->setServerName(TextFormat::clean($this->main->getServer()->getNetwork()->getName()));
+		$extra = $event->getExtraData();
+		$name = strtolower(Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS]);
+		$extra[$name . "_numplayers"] = $classTotal;
+		$extra[$name . "_maxplayers"] = $classMax;
+		$this->addExtras($extra);
+		$event->setExtraData($extra);
 	}
+	protected function addExtras(&$extra){}
 }

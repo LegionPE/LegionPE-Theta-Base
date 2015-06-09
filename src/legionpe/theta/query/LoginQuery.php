@@ -35,7 +35,8 @@ class LoginQuery extends AsyncQuery{
 		$r->close();
 	}
 	public function getQuery(){
-		return "SELECT *,group_concat((SELECT ip FROM iphist WHERE uid=users.uid) SEPARATOR ',')AS iphist FROM users WHERE name=$this->name";
+		// warning: keep the first 7 characters ALWAYS "SELECT "
+		return "SELECT * FROM users WHERE name=$this->name";
 	}
 	protected function onAssocFetched(\mysqli $mysql, array &$row){
 		$uid = $row["uid"];

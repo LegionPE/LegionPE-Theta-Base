@@ -37,7 +37,6 @@ abstract class AsyncQuery extends AsyncTask{
 		self::COL_INT => 0,
 		self::COL_FLOAT => 0.0
 	];
-	protected $tmpResult;
 	public function __construct(BasePlugin $plugin){
 		$plugin->getServer()->getScheduler()->scheduleAsyncTask($this);
 		if($this->getResultType() !== self::TYPE_RAW and $this->getExpectedColumns() === null){
@@ -49,16 +48,14 @@ abstract class AsyncQuery extends AsyncTask{
 	public function onRun(){
 		$mysql = $this->getConn();
 		$this->onPreQuery($mysql);
-		$this->tmpResult = $mysql->query($query = $this->getQuery());
+		$result = $mysql->query($query = $this->getQuery());
 		if(Settings::$SYSTEM_IS_TEST and $this->reportDebug()){
 			echo "Executing query: $query", PHP_EOL;
 		}
 		$this->onPostQuery($mysql);
-		$result = $this->tmpResult;
-		unset($this->tmpResult);
 		if($result === false){
 			$this->setResult(["success" => false, "query" => $query, "error" => $mysql->error]);
-			if(Settings::$SYSTEM_IS_TEST and $this->reportError()){
+			if(/* Settings::$SYSTEM_IS_TEST and */ $this->reportError()){
 				echo "Error executing query: $query", PHP_EOL, $mysql->error, PHP_EOL;
 			}
 			return;

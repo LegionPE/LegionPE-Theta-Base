@@ -22,11 +22,13 @@ use legionpe\theta\command\ThetaCommand;
 use legionpe\theta\config\Settings;
 use legionpe\theta\query\CloseServerQuery;
 use legionpe\theta\query\InitDbQuery;
+use legionpe\theta\query\LoginQuery;
 use legionpe\theta\query\NextIdQuery;
 use legionpe\theta\query\SearchServerQuery;
 use legionpe\theta\queue\NewSessionRunnable;
 use legionpe\theta\queue\Queue;
 use legionpe\theta\queue\TransferSearchRunnable;
+use legionpe\theta\utils\SessionTickTask;
 use legionpe\theta\utils\SyncStatusTask;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
@@ -46,7 +48,11 @@ abstract class BasePlugin extends PluginBase{
 	private $queues = [], $playerQueues = [], $teamQueues = [];
 	/** @var Session[] */
 	private $sessions = [];
-	private $totalPlayers, $maxPlayers;
+	private $totalPlayers, $maxPlayers, $classTotalPlayers, $classMaxPlayers;
+	/** @var string */
+	private $altIp;
+	/** @var int */
+	private $altPort;
 
 	// PluginManager-level stuff
 	/**
@@ -69,6 +75,7 @@ abstract class BasePlugin extends PluginBase{
 		$this->getServer()->getPluginManager()->registerEvents($this->sesList = new $class($this), $this);
 		new InitDbQuery($this);
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SyncStatusTask($this), 40, 40);
+		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SessionTickTask($this), 1, 20);
 	}
 	public function onDisable(){
 		new CloseServerQuery($this);
@@ -106,7 +113,6 @@ abstract class BasePlugin extends PluginBase{
 	 * @return bool
 	 */
 	public function newSession(Player $player, $loginData = null){
-		$this->getLogger()->debug((new \Exception)->getTraceAsString());
 		if($loginData === null){
 			$player->sendMessage(TextFormat::AQUA . "Welcome to Legion PE! Please wait while we are preparing to register an account for you.");
 			$task = new NextIdQuery($this, NextIdQuery::USER);
@@ -151,7 +157,7 @@ abstract class BasePlugin extends PluginBase{
 			"nicks" => "|$name|",
 			"lastip" => "",
 			"status" => Settings::STATUS_ONLINE,
-			"lastses" => Settings::$CLASSES_TABLE[Settings::$LOCALIZE_CLASS],
+			"lastses" => Settings::$LOCALIZE_CLASS,
 			"authuuid" => $player->getUniqueId(),
 			"coins" => 100.0,
 			"hash" => str_repeat("0", 128),
@@ -173,7 +179,7 @@ abstract class BasePlugin extends PluginBase{
 		];
 	}
 
-	// overridable implementation classes
+	// override-able implementation classes
 	public function getBasicListener(){
 		return BaseListener::class;
 	}
@@ -182,6 +188,15 @@ abstract class BasePlugin extends PluginBase{
 	}
 	public abstract function sendFirstJoinMessages(Player $player);
 	public abstract function query_world();
+	public function getLoginQueryImpl(){
+		return LoginQuery::class;
+	}
+	/**
+	 * @return string|null
+	 */
+	protected function getServerNameAppend(){
+		return null;
+	}
 
 	// global-level utils functions
 	public function transfer(Player $player, $ip, $port, $msg){
@@ -192,16 +207,29 @@ abstract class BasePlugin extends PluginBase{
 		$this->queueFor($player->getId(), true, Queue::QUEUE_SESSION)
 			->pushToQueue(new TransferSearchRunnable($this, $player, $task));
 	}
-	public function setPlayerCount($total, $max){
+	public function setPlayerCount($total, $max, $classTotal, $classMax){
 		$this->totalPlayers = $total;
 		$this->maxPlayers = $max;
-		$this->getServer()->getNetwork()->setName(TextFormat::AQUA . "LegionPE " . TextFormat::GREEN . "PE " . TextFormat::LIGHT_PURPLE . "[$total / $max] " . TextFormat::RED . "{TPS {$this->getServer()->getTicksPerSecond()}}");
+		$this->classTotalPlayers = $classTotal;
+		$this->classMaxPlayers = $classMax;
+		$append = $this->getServerNameAppend();
+		$online = count($this->getServer()->getOnlinePlayers());
+		$this->getServer()->getNetwork()->setName(
+			TextFormat::BOLD . TextFormat::AQUA . "LegionPE " .
+			TextFormat::BOLD . TextFormat::GREEN . Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS] .
+			TextFormat::RESET . TextFormat::DARK_AQUA . " [$online/$classTotal/$total/$max]" .
+			(
+				($append === null) ? "" :
+				(TextFormat::RESET . TextFormat::GRAY . " - " . TextFormat::RESET . $append)
+			)
+		);
 	}
-	public function getPlayersCount(&$total, &$max){
+	public function getPlayersCount(&$total, &$max, &$classTotal, &$classMax){
 		$total = $this->totalPlayers;
 		$max = $this->maxPlayers;
+		$classTotal = $this->classTotalPlayers;
+		$classMax = $this->classMaxPlayers;
 	}
-
 	// public getters
 	/**
 	 * @return BaseListener
@@ -214,5 +242,21 @@ abstract class BasePlugin extends PluginBase{
 	 */
 	public function getSesList(){
 		return $this->sesList;
+	}
+	/**
+	 * @param string &$altIp
+	 * @param int &$altPort
+	 */
+	public function getAltServer(&$altIp, &$altPort){
+		$altIp = $this->altIp;
+		$altPort = $this->altPort;
+	}
+	/**
+	 * @param string $altIp
+	 * @param int $altPort
+	 */
+	public function setAltServer($altIp, $altPort){
+		$this->altIp = $altIp;
+		$this->altPort = $altPort;
 	}
 }

@@ -34,13 +34,11 @@ class NewSessionRunnable implements Runnable{
 		$this->sesId = $sesId;
 	}
 	public function canRun(){
-		if($this->query->hasResult()){
-			$this->main->getLogger()->info("Can run!");
-		}
 		return $this->query->hasResult();
 	}
 	public function run(){
-		$uid = $this->query->getResult()["id"];
+		$result = $this->query->getResult();
+		$uid = $result["result"]["id"];
 		foreach($this->main->getServer()->getOnlinePlayers() as $player){
 			if($player->getId() === $this->sesId){
 				break;

@@ -28,17 +28,13 @@ class MUtils{
 	public static function word_toPlural(&$word){
 		if(in_array(substr($word, -1), str_split("osxz"))){
 			$word .= "es";
-		}
-		elseif(in_array(substr($word, -2), ["sh", "ch"])){
+		}elseif(in_array(substr($word, -2), ["sh", "ch"])){
 			$word .= "es";
-		}
-		elseif(substr($word, -1) === "y"){
+		}elseif(substr($word, -1) === "y"){
 			$word = substr($word, 0, -1) . "ies";
-		}
-		elseif(substr($word, -1) === "f"){
+		}elseif(substr($word, -1) === "f"){
 			$word = substr($word, 0, -1) . "ves";
-		}
-		else{
+		}else{
 			$word .= "s";
 		}
 	}
@@ -88,20 +84,17 @@ class MUtils{
 		$time = "";
 		if($hours > 1){
 			$time .= "$hours hours, ";
-		}
-		elseif($hours === 1){
+		}elseif($hours === 1){
 			$time .= "one hour, ";
 		}
 		if($minutes > 1){
 			$time .= "$minutes minutes, ";
-		}
-		elseif($minutes === 1){
+		}elseif($minutes === 1){
 			$time .= "1 minute, ";
 		}
 		if($secs > 1){
 			$time .= "$secs seconds, ";
-		}
-		elseif($secs !== 0){
+		}elseif($secs !== 0){
 			$time .= "$secs second, ";
 		}
 		return substr($time, 0, -2);
@@ -129,8 +122,7 @@ class MUtils{
 			$path = $dir . $file;
 			if(is_dir($path)){
 				self::dir_delete($path);
-			}
-			else{
+			}else{
 				unlink($file);
 			}
 		}

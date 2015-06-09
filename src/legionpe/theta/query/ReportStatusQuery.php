@@ -24,16 +24,35 @@ use pocketmine\Server;
 
 class ReportStatusQuery extends AsyncQuery{
 	private $players;
+	private $class;
+	/** @var string */
+	private $altIp = null;
+	/** @var int */
+	private $altPort = null;
 	public function __construct(BasePlugin $plugin){
 		parent::__construct($plugin);
 		$this->players = count($plugin->getServer()->getOnlinePlayers());
+		$this->class = Settings::$LOCALIZE_CLASS;
 	}
 	public function onPreQuery(\mysqli $mysql){
 		$myid = Settings::$LOCALIZE_ID;
 		$mysql->query("UPDATE server_status SET last_online=unix_timestamp(),online_players=$this->players WHERE server_id=$myid;");
 	}
 	public function getQuery(){
-		return "SELECT SUM(online_players)AS online,SUM(max_players)AS max FROM server_status WHERE unix_timestamp()-last_online<5";
+		return "SELECT SUM(online_players)AS online,SUM(max_players)AS max,(SELECT SUM(online_players)FROM server_status WHERE class=$this->class)AS class_online,(SELECT SUM(max_players)FROM server_status WHERE class=$this->class)AS class_max FROM server_status WHERE unix_timestamp()-last_online<5";
+	}
+	public function onPostQuery(\mysqli $mysql){
+		$r = $mysql->query("SELECT ip,port FROM server_status WHERE class=$this->class ORDER BY max_players-online_players DESC LIMIT 1");
+		if($r === false){
+			echo "Error executing query: $mysql->error" . PHP_EOL;
+			return;
+		}
+		$row = $r->fetch_assoc();
+		$r->close();
+		if(is_array($row)){
+			$this->altIp = $row["ip"];
+			$this->altPort = $row["port"];
+		}
 	}
 	public function getResultType(){
 		return self::TYPE_ASSOC;
@@ -50,7 +69,10 @@ class ReportStatusQuery extends AsyncQuery{
 	public function onCompletion(Server $server){
 		$result = $this->getResult()["result"];
 		$main = BasePlugin::getInstance($server);
-		$main->setPlayerCount($result["online"], $result["max"]);
+		$main->setPlayerCount($result["online"], $result["max"], $result["class_online"], $result["class_max"]);
+		if($this->altIp !== null){
+			$main->setAltServer($this->altIp, $this->altPort);
+		}
 	}
 	public function __debugInfo(){
 		return [];
