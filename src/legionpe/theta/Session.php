@@ -73,6 +73,10 @@ abstract class Session{
 	private $player;
 	/** @var mixed[] */
 	private $loginData;
+	/** @var float */
+	private $coinsOld = 0;
+	/** @var float */
+	private $ontimeSince;
 	/** @var int */
 	private $state = self::STATE_LOADING;
 	private $invisibleFrom = [];
@@ -81,12 +85,14 @@ abstract class Session{
 	public function __construct(Player $player, $loginData){
 		$this->player = $player;
 		$this->loginData = $loginData;
+		$this->coinsOld = $loginData["coins"];
+		$this->ontimeSince = microtime(true);
 		if($this->init() === false){
 			throw new \Exception;
 		}
 	}
 	public function __toString(){
-		return $this->getPlayer()->getName();
+		return $this->getPlayer()->getDisplayName();
 	}
 	public function onJoin(){
 		foreach($this->player->getLevel()->getChunkPlayers($this->player->getFloorX() >> 4, $this->player->getFloorZ() >> 4) as $other){
@@ -285,8 +291,25 @@ abstract class Session{
 		}
 		$this->setCoins($this->getCoins() + $coins);
 	}
+	public function getAndUpdateCoinsDelta(&$coins, &$delta){
+		$coins = $this->getCoins();
+		$delta = $coins - $this->coinsOld;
+		$this->coinsOld = $coins;
+	}
+	public function getAndUpdateOntime(){
+		$now = microtime(true);
+		$result = $now - $this->ontimeSince;
+		$this->ontimeSince = $now;
+		return $result;
+	}
 	public function getPasswordHash(){
 		return $this->getLoginDatum("hash");
+	}
+	public function getPasswordPrefix(){
+		return $this->getLoginDatum("pwprefix");
+	}
+	public function getPasswordLength(){
+		return $this->getLoginDatum("pwlen");
 	}
 	public function getRegisterTime(){
 		return $this->getLoginDatum("registration");
@@ -294,10 +317,18 @@ abstract class Session{
 	public function getLastOnline(){
 		return $this->getLoginDatum("laston");
 	}
+	public function getAllSettings(){
+		return $this->getLoginDatum("config");
+	}
 	public function getAuthSettings(){
 		return $this->getLoginDatum("config") & Settings::CONFIG_SECTOR_AUTH;
 	}
-	// TODO more config getters
+	public function getTagEnabled(){
+		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_TAG_ON);
+	}
+	public function getStatsPublic(){
+		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_STATS_PUBLIC);
+	}
 	public function getLastGrind(){
 		return $this->getLoginDatum("lastgrind");
 	}
@@ -345,7 +376,15 @@ abstract class Session{
 		$this->getMain()->queueFor($this->getPlayer()->getId(), true, Queue::QUEUE_SESSION)
 			->pushToQueue(new ExecuteWarningRunnable($this->getMain(), $wid, $this->getUid(), $clientId, $id, $points, $issuer, $msg));
 	}
-	// TODO team
+	public function getTeamId(){
+		return $this->getLoginDatum("tid");
+	}
+	public function getTeamRank(){
+		return $this->getLoginDatum("teamrank");
+	}
+	public function getTeamJoinTime(){
+		return $this->getLoginDatum("teamjoin");
+	}
 	public function getIgnoreList(){
 		return array_filter(explode(",", $this->getLoginDatum("ignorelist")));
 	}
@@ -480,8 +519,8 @@ abstract class Session{
 		}
 		return $ip0[0] === $ip1[0] and $ip0[1] = $ip1[1];
 	}
-	public function saveData(){
-		// TODO implement SaveQuery with BasePlugin::getSaveQueryImpl() possible
+	public function saveData($newStatus = Settings::STATUS_OFFLINE){
+		$this->getMain()->saveSessionData($this, $newStatus);
 	}
 	private function calculateRank(){
 		$rank = $this->getRank();

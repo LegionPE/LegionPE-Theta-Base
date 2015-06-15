@@ -65,12 +65,25 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			$sender->sendMessage(TextFormat::RED . "Usage: " . $this->getUsage());
 		}
 	}
-	protected function notOnline($sender){
+	protected function notOnline($sender, $name = null){
 		if($sender instanceof Session){
 			$sender = $sender->getPlayer();
 		}
 		if($sender instanceof CommandSender){
-			$sender->sendMessage(TextFormat::RED . "There is no player online by that name.");
+			$sender->sendMessage(TextFormat::RED . "There is no player online with " .
+				($name === null ? "that name" : "the name $name") . ".");
+		}
+		return true;
+	}
+	/**
+	 * Broadcast a message to all moderators (including trial) on the server
+	 * @param string $msg
+	 */
+	protected function broadcastModerator($msg){
+		foreach($this->getPlugin()->getSessions() as $ses){
+			if($ses->isModerator()){
+				$ses->getPlayer()->sendMessage($msg);
+			}
 		}
 	}
 }

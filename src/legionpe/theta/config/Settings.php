@@ -25,12 +25,19 @@ abstract class Settings{
 	const STATUS_ONLINE = 1;
 	const STATUS_TRANSFERRING = 2;
 
+	/** @var int */
 	public static $SYSTEM_MAX_PLAYERS;
+	/** @var bool */
 	public static $SYSTEM_IS_TEST;
+	/** @var int */
 	public static $PROCESS_ID;
+	/** @var int */
 	public static $LOCALIZE_ID;
+	/** @var string */
 	public static $LOCALIZE_IP;
+	/** @var int */
 	public static $LOCALIZE_PORT;
+	/** @var int */
 	public static $LOCALIZE_CLASS;
 	/** @var int[] */
 	public static $CLASSES_TABLE = [
@@ -41,6 +48,7 @@ abstract class Settings{
 		"infected" => self::CLASS_INFECTED,
 		"classical" => self::CLASS_CLASSICAL,
 	];
+	/** @var string[] */
 	public static $CLASSES_NAMES = [
 		self::CLASS_HUB => "Hub",
 		self::CLASS_KITPVP => "Kit PvP",
@@ -90,6 +98,7 @@ abstract class Settings{
 	const RANK_DECOR_YOUTUBER =             0x4000;
 	const RANK_SECTOR_DECOR =               0xC000;
 
+	const CONFIG_DEFAULT_VALUE = self::CONFIG_AUTH_UUID | self::CONFIG_TAG_ON | self::CONFIG_STATS_PUBLIC;
 	const CONFIG_SECTOR_AUTH = 0x0F;
 	/** @deprecated */
 	const CONFIG_AUTH_SUBNET_HISTORY = 0;
@@ -98,6 +107,8 @@ abstract class Settings{
 	const CONFIG_AUTH_IP_LAST = 3;
 	const CONFIG_AUTH_UUID = 4;
 	const CONFIG_AUTH_NONE = 5;
+	const CONFIG_TAG_ON = 0x10;
+	const CONFIG_STATS_PUBLIC = 0x20;
 
 	public static function getWarnPtsConseq(/** @noinspection PhpUnusedParameterInspection */
 		$pts, $origin = null){

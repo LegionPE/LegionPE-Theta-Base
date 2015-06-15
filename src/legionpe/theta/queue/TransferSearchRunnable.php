@@ -40,7 +40,7 @@ class TransferSearchRunnable implements Runnable{
 		return $this->query->hasResult();
 	}
 	public function run(){
-		if(!$this->player->isOnline()){
+		if(!$this->player->isConnected()){
 			return;
 		}
 		$result = $this->query->getResult();
@@ -52,7 +52,7 @@ class TransferSearchRunnable implements Runnable{
 		/** @var string $ip */
 		/** @var int $port */
 		extract($result);
-		$this->plugin->transfer($this->player, $ip, $port, TextFormat::GREEN . "You are being transferred to $ip:$port ($name server).");
+		$this->plugin->transfer($this->player, $ip, $port, TextFormat::GREEN . "You are being transferred to $ip:$port ($name server).", true);
 	}
 	public function __debugInfo(){
 		return [

@@ -24,6 +24,7 @@ use legionpe\theta\query\CloseServerQuery;
 use legionpe\theta\query\InitDbQuery;
 use legionpe\theta\query\LoginQuery;
 use legionpe\theta\query\NextIdQuery;
+use legionpe\theta\query\SaveSinglePlayerQuery;
 use legionpe\theta\query\SearchServerQuery;
 use legionpe\theta\queue\NewSessionRunnable;
 use legionpe\theta\queue\Queue;
@@ -37,6 +38,7 @@ use pocketmine\utils\TextFormat;
 use shoghicp\FastTransfer\FastTransfer;
 
 abstract class BasePlugin extends PluginBase{
+	const EMAIL_UNVERIFIED = "UNVERIFIED";
 	private static $NAME = null;
 	/** @var FastTransfer */
 	private $FastTransfer;
@@ -147,6 +149,9 @@ abstract class BasePlugin extends PluginBase{
 	public function getSessions(){
 		return $this->sessions;
 	}
+	public function saveSessionData(Session $session, $newStatus = Settings::STATUS_OFFLINE){
+		new SaveSinglePlayerQuery($this, $session, $newStatus);
+	}
 	protected abstract function createSession(Player $player, array $loginData);
 	public static function getDefaultLoginData($uid, Player $player){
 		$name = $player->getName();
@@ -166,7 +171,7 @@ abstract class BasePlugin extends PluginBase{
 			"registration" => time(),
 			"laston" => time(),
 			"ontime" => 0,
-			"config" => Settings::CONFIG_AUTH_NONE,
+			"config" => Settings::CONFIG_DEFAULT_VALUE,
 			"lastgrind" => 0,
 			"rank" => 0,
 			"warnpts" => 0,
@@ -175,7 +180,8 @@ abstract class BasePlugin extends PluginBase{
 			"teamjoin" => 0,
 			"ignorelist" => ",",
 			"iphist" => ",$ip,",
-			"isnew" => true
+			"isnew" => true,
+			"email" => self::EMAIL_UNVERIFIED,
 		];
 	}
 
@@ -191,6 +197,9 @@ abstract class BasePlugin extends PluginBase{
 	public function getLoginQueryImpl(){
 		return LoginQuery::class;
 	}
+	public function getSaveSingleQueryImpl(){
+		return SaveSinglePlayerQuery::class;
+	}
 	/**
 	 * @return string|null
 	 */
@@ -199,7 +208,10 @@ abstract class BasePlugin extends PluginBase{
 	}
 
 	// global-level utils functions
-	public function transfer(Player $player, $ip, $port, $msg){
+	public function transfer(Player $player, $ip, $port, $msg, $save = true){
+		if($save and ($session = $this->getSession($player)) instanceof Session){
+			$this->saveSessionData($session, Settings::STATUS_TRANSFERRING);
+		}
 		$this->FastTransfer->transferPlayer($player, $ip, $port, $msg);
 	}
 	public function transferGame(Player $player, $class){

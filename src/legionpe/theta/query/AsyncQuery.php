@@ -117,6 +117,10 @@ abstract class AsyncQuery extends AsyncTask{
 	public function getExpectedColumns(){
 		return null;
 	}
+	/**
+	 * @param string|mixed $str
+	 * @return string
+	 */
 	public function esc($str){
 		return is_string($str) ? "'{$this->getConn()->escape_string($str)}'" : (string) $str;
 	}

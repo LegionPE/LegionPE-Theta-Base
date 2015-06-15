@@ -42,6 +42,7 @@ class LoginQuery extends AsyncQuery{
 		$uid = $row["uid"];
 		$r = $mysql->query("SELECT group_concat(ip SEPARATOR ',') AS iphist FROM iphist WHERE uid=$uid");
 		$row["iphist"] = $r->fetch_assoc()["iphist"];
+		$row["email"] = BasePlugin::EMAIL_UNVERIFIED; // TODO fetch
 		$r->close();
 	}
 	public function getResultType(){
@@ -72,7 +73,6 @@ class LoginQuery extends AsyncQuery{
 			"teamrank" => self::COL_INT,
 			"teamjoin" => self::COL_UNIXTIME,
 			"ignorelist" => self::COL_STRING,
-			"iphist" => self::COL_STRING
 		];
 	}
 	public function __debugInfo(){
