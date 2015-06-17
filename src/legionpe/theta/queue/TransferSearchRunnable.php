@@ -24,6 +24,7 @@ use legionpe\theta\query\SearchServerQuery;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
+/** @deprecated */
 class TransferSearchRunnable implements Runnable{
 	/** @var BasePlugin */
 	private $plugin;
@@ -37,7 +38,7 @@ class TransferSearchRunnable implements Runnable{
 		$this->query = $query;
 	}
 	public function canRun(){
-		return $this->query->hasResult();
+		return $this->query->hasResult(); // TODO DEPRECATION move to onCompletion of SearchServerQuery
 	}
 	public function run(){
 		if(!$this->player->isConnected()){

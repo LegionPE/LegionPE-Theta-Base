@@ -22,6 +22,7 @@ use legionpe\theta\BasePlugin;
 use legionpe\theta\config\Settings;
 use legionpe\theta\credentials\Credentials;
 use pocketmine\scheduler\AsyncTask;
+use pocketmine\utils\Utils;
 
 abstract class AsyncQuery extends AsyncTask{
 	const KEY_MYSQL = "legionpe.theta.query.mysql";
@@ -57,6 +58,8 @@ abstract class AsyncQuery extends AsyncTask{
 			$this->setResult(["success" => false, "query" => $query, "error" => $mysql->error]);
 			if(/* Settings::$SYSTEM_IS_TEST and */ $this->reportError()){
 				echo "Error executing query: $query", PHP_EOL, $mysql->error, PHP_EOL;
+				echo "Reporting error via AsyncQuery thread IRC webhook connection...", PHP_EOL;
+				Utils::getURL(Credentials::IRC_WEBHOOK . urlencode("Failed to execute MySQL query: \"$query\" - Error: $mysql->error - PEMapModder: <-------"), 3);
 			}
 			return;
 		}
@@ -128,7 +131,7 @@ abstract class AsyncQuery extends AsyncTask{
 		return true;
 	}
 	protected function reportError(){
-		return false;
+		return true;
 	}
 	protected function onAssocFetched(\mysqli $mysql, array &$row){
 

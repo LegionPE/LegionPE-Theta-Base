@@ -19,11 +19,17 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
+use legionpe\theta\config\Settings;
+use legionpe\theta\utils\MUtils;
+use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 
-class LoginQuery extends AsyncQuery{
+class LoginDataQuery extends AsyncQuery{
+	public $sesId;
 	public $name;
 	public $totalWarnPts;
-	public function __construct(BasePlugin $plugin, $name, $ip, $clientId){
+	public function __construct(BasePlugin $plugin, $sesId, $name, $ip, $clientId){
+		$this->sesId = $sesId;
 		$this->name = $this->esc($name);
 		$this->ip = $this->esc($ip);
 		$this->clientId = $clientId;
@@ -74,6 +80,37 @@ class LoginQuery extends AsyncQuery{
 			"teamjoin" => self::COL_UNIXTIME,
 			"ignorelist" => self::COL_STRING,
 		];
+	}
+	public function onCompletion(Server $server){
+		$main = BasePlugin::getInstance($server);
+		foreach($main->getServer()->getOnlinePlayers() as $player){
+			if($player->getId() === $this->sesId){
+				break;
+			}
+		}
+		if(!isset($player)){
+			return;
+		}
+		/** @var bool $success */
+		/** @var string $query */
+		extract($this->getResult());
+		if(!$success){
+			$player->close(TextFormat::RED . "Sorry, our server has encountered an internal error when trying to retrieve your data from the database.");
+			return;
+		}
+		/** @var int $resulttype */
+		if($resulttype === AsyncQuery::TYPE_RAW){
+			$main->getLogger()->notice("New account pending to register: {$this->name}");
+			$loginData = null;
+		}else{
+			/** @var mixed[] $result */
+			$loginData = $result;
+			$conseq = Settings::getWarnPtsConseq($this->totalWarnPts, $loginData["lastwarn"]);
+			if($conseq->banLength > 0){
+				$player->kick(TextFormat::RED . "You are banned.\nYou have accumulated " . TextFormat::DARK_PURPLE . $this->totalWarnPts . TextFormat::RED . " warning points,\nand you still have " . TextFormat::BLUE . MUtils::time_secsToString($conseq->banLength) . TextFormat::RED . " before you are unbanned.\n" . TextFormat::AQUA . "Believe this to be a mistake? Contact us with email at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu");
+			}
+		}
+		$main->newSession($player, $loginData);
 	}
 	public function __debugInfo(){
 		return [];

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * LegionPE
+ * Theta
  * Copyright (C) 2015 PEMapModder
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,30 +16,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\queue;
+namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
-use legionpe\theta\query\NextIdQuery;
+use pocketmine\Player;
+use pocketmine\Server;
 
-class NewSessionRunnable implements Runnable{
-	/** @var BasePlugin */
-	private $main;
-	/** @var NextIdQuery */
-	private $query;
-	/** @var int */
+class NewUserQuery extends NextIdQuery{
 	private $sesId;
-	public function __construct(BasePlugin $plugin, NextIdQuery $query, $sesId){
-		$this->main = $plugin;
-		$this->query = $query;
-		$this->sesId = $sesId;
+	public function __construct(BasePlugin $plugin, Player $player){
+		parent::__construct($plugin, self::USER);
+		$this->sesId = $player->getId();
 	}
-	public function canRun(){
-		return $this->query->hasResult();
-	}
-	public function run(){
-		$result = $this->query->getResult();
+	public function onCompletion(Server $server){
+		$main = BasePlugin::getInstance($server);
+		$result = $this->getResult();
 		$uid = $result["result"]["id"];
-		foreach($this->main->getServer()->getOnlinePlayers() as $player){
+		foreach($main->getServer()->getOnlinePlayers() as $player){
 			if($player->getId() === $this->sesId){
 				break;
 			}
@@ -47,23 +40,6 @@ class NewSessionRunnable implements Runnable{
 		if(!isset($player)){
 			return;
 		}
-		$this->main->newSession($player, BasePlugin::getDefaultLoginData($uid, $player));
-	}
-	public function __debugInfo(){
-		return [
-			"sesId" => $this->sesId
-		];
-	}
-	/**
-	 * @return NextIdQuery
-	 */
-	public function getQuery(){
-		return $this->query;
-	}
-	/**
-	 * @return int
-	 */
-	public function getSesId(){
-		return $this->sesId;
+		$main->newSession($player, BasePlugin::getDefaultLoginData($uid, $player));
 	}
 }

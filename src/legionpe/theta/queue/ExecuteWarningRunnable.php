@@ -28,6 +28,7 @@ use legionpe\theta\utils\MUtils;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat;
 
+/** @deprecated */
 class ExecuteWarningRunnable implements Runnable{
 	/** @var BasePlugin */
 	private $main;
@@ -61,7 +62,7 @@ class ExecuteWarningRunnable implements Runnable{
 		$this->expiry = PHP_INT_MAX;
 	}
 	public function canRun(){
-		return $this->wid->hasResult();
+		return $this->wid->hasResult(); // TODO DEPRECATION move to onCompletion of subclass of NextIdQuery
 	}
 	public function run(){
 		$id = $this->wid->getId();

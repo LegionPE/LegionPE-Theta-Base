@@ -19,9 +19,7 @@
 namespace legionpe\theta;
 
 use legionpe\theta\config\Settings;
-use legionpe\theta\query\LoginQuery;
-use legionpe\theta\queue\LoginRunnable;
-use legionpe\theta\queue\Queue;
+use legionpe\theta\query\LoginDataQuery;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerPreLoginEvent;
 use pocketmine\event\server\QueryRegenerateEvent;
@@ -35,10 +33,10 @@ class BaseListener implements Listener{
 	}
 	public function onPreLogin(PlayerPreLoginEvent $event){
 		$player = $event->getPlayer();
-		/** @var string|LoginQuery $LoginQuery */
+		/** @var string|LoginDataQuery $LoginQuery */
 		$LoginQuery = $this->main->getLoginQueryImpl();
-		$login = new $LoginQuery($this->main, $player->getName(), $player->getAddress(), $player->getClientId());
-		$this->main->queueFor($player->getId(), true, Queue::QUEUE_SESSION)->pushToQueue(new LoginRunnable($this->main, $login, $player->getId()));
+		/** @noinspection PhpDeprecationInspection */
+		new $LoginQuery($this->main, $player->getId(), $player->getName(), $player->getAddress(), $player->getClientId());
 	}
 	public function onQueryRegen(QueryRegenerateEvent $event){
 		$event->setWorld($this->main->query_world());

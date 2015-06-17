@@ -67,7 +67,11 @@ class ReportStatusQuery extends AsyncQuery{
 		return false;
 	}
 	public function onCompletion(Server $server){
-		$result = $this->getResult()["result"];
+		$r = $this->getResult();
+		if(!isset($r["result"])){
+			return;
+		}
+		$result = $r["result"];
 		$main = BasePlugin::getInstance($server);
 		$main->setPlayerCount($result["online"], $result["max"], $result["class_online"], $result["class_max"]);
 		if($this->altIp !== null){

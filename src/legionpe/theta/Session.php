@@ -372,6 +372,7 @@ abstract class Session{
 	}
 	public function warn($id, $points, CommandSender $issuer, $msg){
 		$wid = new NextIdQuery($this->getMain(), NextIdQuery::WARNING);
+		/** @noinspection PhpDeprecationInspection */
 		$clientId = $this->getPlayer()->getClientId();
 		$this->getMain()->queueFor($this->getPlayer()->getId(), true, Queue::QUEUE_SESSION)
 			->pushToQueue(new ExecuteWarningRunnable($this->getMain(), $wid, $this->getUid(), $clientId, $id, $points, $issuer, $msg));
@@ -482,7 +483,7 @@ abstract class Session{
 			return;
 		}
 		$method = $this->getAuthSettings();
-		if($method === Settings::CONFIG_AUTH_UUID and $this->getPlayer()->getUniqueId() === $this->getLoginDatum("authuuid")){
+		if($this->getLoginDatum("isnew") and $method === Settings::CONFIG_AUTH_UUID and $this->getPlayer()->getUniqueId() === $this->getLoginDatum("authuuid")){
 			$this->login(self::AUTH_UUID);
 			return;
 		}
@@ -520,7 +521,9 @@ abstract class Session{
 		return $ip0[0] === $ip1[0] and $ip0[1] = $ip1[1];
 	}
 	public function saveData($newStatus = Settings::STATUS_OFFLINE){
-		$this->getMain()->saveSessionData($this, $newStatus);
+		if($this->state === self::STATE_PLAYING){ // don't save if not registered/logged in
+			$this->getMain()->saveSessionData($this, $newStatus);
+		}
 	}
 	private function calculateRank(){
 		$rank = $this->getRank();

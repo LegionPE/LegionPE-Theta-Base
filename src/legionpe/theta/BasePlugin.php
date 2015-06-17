@@ -22,11 +22,10 @@ use legionpe\theta\command\ThetaCommand;
 use legionpe\theta\config\Settings;
 use legionpe\theta\query\CloseServerQuery;
 use legionpe\theta\query\InitDbQuery;
-use legionpe\theta\query\LoginQuery;
-use legionpe\theta\query\NextIdQuery;
+use legionpe\theta\query\LoginDataQuery;
+use legionpe\theta\query\NewUserQuery;
 use legionpe\theta\query\SaveSinglePlayerQuery;
 use legionpe\theta\query\SearchServerQuery;
-use legionpe\theta\queue\NewSessionRunnable;
 use legionpe\theta\queue\Queue;
 use legionpe\theta\queue\TransferSearchRunnable;
 use legionpe\theta\utils\SessionTickTask;
@@ -117,8 +116,7 @@ abstract class BasePlugin extends PluginBase{
 	public function newSession(Player $player, $loginData = null){
 		if($loginData === null){
 			$player->sendMessage(TextFormat::AQUA . "Welcome to Legion PE! Please wait while we are preparing to register an account for you.");
-			$task = new NextIdQuery($this, NextIdQuery::USER);
-			$this->queueFor(Queue::GENERAL_ID_FETCH, true)->pushToQueue(new NewSessionRunnable($this, $task, $player->getId()));
+			new NewUserQuery($this, $player);
 			return false;
 		}
 		try{
@@ -195,7 +193,7 @@ abstract class BasePlugin extends PluginBase{
 	public abstract function sendFirstJoinMessages(Player $player);
 	public abstract function query_world();
 	public function getLoginQueryImpl(){
-		return LoginQuery::class;
+		return LoginDataQuery::class;
 	}
 	public function getSaveSingleQueryImpl(){
 		return SaveSinglePlayerQuery::class;

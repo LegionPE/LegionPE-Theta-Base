@@ -29,6 +29,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 	public function __construct(BasePlugin $plugin, Session $session, $status){
 		parent::__construct($plugin);
 		$this->getColumns($session, $data, $status);
+		var_dump($data);
 		$this->data = serialize($data);
 	}
 	public function getQuery(){
@@ -39,11 +40,12 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 		$cols = [];
 		/** @var string[] $inserts */
 		$inserts = [];
+		var_dump("Data", $data, "Cols", $cols, "Inserts", $inserts);
 		foreach($data as $column => $datum){
+			$cols[] = $column;
 			if(!is_array($datum)){
 				$inserts[] = $this->esc($datum);
 			}elseif(!isset($datum["noinsert"])){
-				$cols[] = $column;
 				$inserts[] = $this->esc($datum["v"]);
 			}
 		}
