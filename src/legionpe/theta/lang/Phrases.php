@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * Theta
+ * Copyright (C) 2015 PEMapModder
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+namespace legionpe\theta\lang;
+
+use pocketmine\utils\TextFormat;
+
+class Phrases{
+	// phrases
+	const LOGIN_AUTH_SUCCESS = "login.auth.success";
+	const LOGIN_AUTH_WHEREAMI = "login.auth.whereami";
+	const LOGIN_REGISTER_PROMPT = "login.register.prompt";
+	const LOGIN_REGISTER_RETYPE = "login.register.retype";
+	const LOGIN_REGISTER_SUCCESS = "login.register.success";
+	const LOGIN_REGISTER_MISMATCH = "login.register.mismatch";
+	const LOGIN_PASS_PROMPT = "login.pass.prompt";
+	const LOGIN_PASS_MISMATCH = "login.pass.mismatch";
+
+	const CHAT_BLOCKED_PASS = "chat.blocked.pass";
+
+	const AUTH_METHOD_TRANSFER = "login.auth.method.transfer";
+	const AUTH_METHOD_UUID = "login.auth.method.uuid";
+	const AUTH_METHOD_IP_LAST = "login.auth.method.ip.last";
+	const AUTH_METHOD_IP_HIST = "login.auth.method.ip.hist";
+	const AUTH_METHOD_PASS = "login.auth.method.pass";
+	const AUTH_METHOD_REG = "login.auth.method.register";
+
+	const CLASS_HUB = "local.class.name.hub";
+	const CLASS_KITPVP = "local.class.name.pvp.kit";
+	const CLASS_PARKOUR = "local.class.name.parkour";
+	const CLASS_SPLEEF = "local.class.name.spleef";
+	const CLASS_INFECTED = "local.class.name.infected";
+	const CLASS_CLASSIC_PVP = "local.class.name.pvp.classic";
+
+	// constant variables
+	const VAR_wait = TextFormat::RED . "… ";
+	const VAR_success = TextFormat::GREEN;
+	const VAR_info = TextFormat::WHITE;
+	const VAR_verbose = "》 " . self::VAR_verbosemid;
+	const VAR_verbosemid = TextFormat::GRAY;
+	const VAR_error = TextFormat::DARK_RED;
+	const VAR_warning = TextFormat::YELLOW;
+	const VAR_notify = TextFormat::LIGHT_PURPLE;
+	const VAR_em = TextFormat::AQUA;
+	const VAR_em2 = TextFormat::BLUE;
+	const VAR_em3 = TextFormat::DARK_BLUE;
+	const VAR_reset = TextFormat::RESET;
+	const VAR_bold = TextFormat::BOLD;
+	const VAR_italic = TextFormat::ITALIC;
+}

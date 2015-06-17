@@ -57,6 +57,15 @@ abstract class Settings{
 		self::CLASS_INFECTED => "Infected",
 		self::CLASS_CLASSICAL => "Classic PvP"
 	];
+	/** @var string[] */
+	public static $CLASSES_NAMES_PHRASES = [
+		self::CLASS_HUB => "local.class.name.hub",
+		self::CLASS_KITPVP => "local.class.name.pvp.kit",
+		self::CLASS_PARKOUR => "local.class.name.parkour",
+		self::CLASS_SPLEEF => "local.class.name.spleef",
+		self::CLASS_INFECTED => "local.class.name.infected",
+		self::CLASS_CLASSICAL => "local.class.name.pvp.classic"
+	];
 	const CLASS_HUB = 1;
 	const CLASS_KITPVP = 2;
 	const CLASS_PARKOUR = 3;
@@ -177,4 +186,7 @@ $array = [
 	"infected" => Settings::CLASS_INFECTED,
 	"classical" => Settings::CLASS_CLASSICAL
 ];
+if(!isset($array[$config->getNested("localize.class")])){
+	throw new \RuntimeException("Invalid class: " . var_export($config->getNested("localize.class"), true));
+}
 Settings::$LOCALIZE_CLASS = $array[$config->getNested("localize.class")];

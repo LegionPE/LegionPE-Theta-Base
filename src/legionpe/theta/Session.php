@@ -19,6 +19,7 @@
 namespace legionpe\theta;
 
 use legionpe\theta\config\Settings;
+use legionpe\theta\lang\Phrases;
 use legionpe\theta\query\AddIpQuery;
 use legionpe\theta\query\NextIdQuery;
 use legionpe\theta\queue\ExecuteWarningRunnable;
@@ -69,6 +70,14 @@ abstract class Session{
 		self::AUTH_PASS => "matching password",
 		self::AUTH_REG => "registering"
 	];
+	public static $AUTH_METHODS_PHRASES = [
+		self::AUTH_TRANSFER => "login.auth.method.transfer",
+		self::AUTH_UUID => "login.auth.method.uuid",
+		self::AUTH_IP_LAST => "login.auth.method.ip.last",
+		self::AUTH_IP_HIST => "login.auth.method.ip.hist",
+		self::AUTH_PASS => "login.auth.method.pass",
+		self::AUTH_REG => "login.auth.method.register"
+	];
 	/** @var Player */
 	private $player;
 	/** @var mixed[] */
@@ -110,13 +119,13 @@ abstract class Session{
 			if($this->state === self::STATE_REGISTERING_FIRST){
 				$this->tmpHash = $hash;
 				$this->sendCurlyLines();
-				$this->getPlayer()->sendMessage(TextFormat::DARK_GREEN . "Thanks! Now please type the password again to confirm it.");
+				$this->send(Phrases::LOGIN_REGISTER_RETYPE);
 				$this->state = self::STATE_REGISTERING_SECOND;
 			}elseif($this->state === self::STATE_REGISTERING_SECOND){
 				$this->sendCurlyLines();
 				if($this->tmpHash === $hash){
 					$this->sendCurlyLines();
-					$this->getPlayer()->sendMessage(TextFormat::DARK_GREEN . "Congratulations! You have created your own account on Legion PE!");
+					$this->send(Phrases::LOGIN_REGISTER_SUCCESS);
 					$this->setLoginDatum("hash", $hash);
 					$this->setLoginDatum("pwprefix", $one);
 					$this->setLoginDatum("pwlen", $len);
@@ -124,8 +133,7 @@ abstract class Session{
 					$this->sendFirstJoinMessages();
 					$this->login(self::AUTH_REG);
 				}else{
-					$this->getPlayer()->sendMessage(TextFormat::RED . "The password doesn't match!");
-					$this->getPlayer()->sendMessage(TextFormat::AQUA . "Please type your password (can be a different one) in chat.");
+					$this->send(Phrases::LOGIN_REGISTER_MISMATCH);
 					$this->tmpHash = null;
 					$this->state = self::STATE_REGISTERING_FIRST;
 				}
@@ -138,8 +146,9 @@ abstract class Session{
 				$this->login(self::AUTH_PASS);
 			}else{
 				$this->state++;
-				$this->getPlayer()->sendMessage(TextFormat::RED . "The password doesn't match our records! Please type in the password you used to register an account on Legion PE with.");
-				$this->getPlayer()->sendMessage(TextFormat::YELLOW . "You have " . TextFormat::RED . (5 - $this->getStatePrecise()) . " chance(s) left.");
+				$chances = "chance";
+				MUtils::word_quantitize($chances, 5 - $this->getStatePrecise());
+				$this->send(Phrases::LOGIN_PASS_MISMATCH, ["chances" => $chances]);
 				if($this->getStatePrecise() === 5){
 					$this->getPlayer()->kick("Failure to login within 5 attempts");
 					return false;
@@ -155,7 +164,7 @@ abstract class Session{
 				$sub = substr($msg, $pos, $len);
 				$hash = $this->hash($sub, $this->getUid());
 				if($hash === $this->getPasswordHash()){
-					$this->getPlayer()->sendMessage(TextFormat::DARK_RED . "NEVER tell anybody your password.");
+					$this->send(Phrases::CHAT_BLOCKED_PASS);
 					return false;
 				}
 			}
@@ -427,9 +436,14 @@ abstract class Session{
 		return ($this->state & 0xF0) === self::STATE_PLAYING;
 	}
 	public function setMaintainedPopup($popup = null){
+		if($this->curPopup === $popup){
+			return;
+		}
 		$this->curPopup = $popup;
 		if($popup !== null){
 			$this->getPlayer()->sendPopup($popup);
+		}else{
+			$this->getPlayer()->sendPopup(" ");
 		}
 	}
 	public function getPopup(){
@@ -442,9 +456,15 @@ abstract class Session{
 	 */
 	public function login($method){
 		$this->state = self::STATE_PLAYING;
-		$this->getPlayer()->sendMessage("You have been authenticated by " . isset(self::$AUTH_METHODS[$method]) ? self::$AUTH_METHODS[$method] : "an unknown method.");
-		$this->getPlayer()->sendMessage("You are in " . TextFormat::BOLD . TextFormat::AQUA . "Legion PE " . TextFormat::GREEN . Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS] . TextFormat::RESET . TextFormat::WHITE . " at " . TextFormat::BOLD . TextFormat::DARK_AQUA . Settings::$LOCALIZE_IP . ":" . Settings::$LOCALIZE_PORT);
+		$this->send(Phrases::LOGIN_AUTH_SUCCESS, ["method" => $this->translate(self::$AUTH_METHODS_PHRASES[$method])]);
+		$this->send(Phrases::LOGIN_AUTH_WHEREAMI, ["class" => $this->translate(Settings::$CLASSES_NAMES_PHRASES[Settings::$LOCALIZE_CLASS]), "ip" => Settings::$LOCALIZE_IP, "port" => (string) Settings::$LOCALIZE_PORT]);
 		$this->setMaintainedPopup();
+	}
+	public function send($phrase, array $vars = []){
+		$this->getPlayer()->sendMessage($this->translate($phrase, $vars));
+	}
+	public function translate($phrase, array $vars = []){
+		return $this->getMain()->getLangs()->get($phrase, $vars, "en"); // TODO custom language
 	}
 	public function sendCurlyLines($lines = 1, $color = TextFormat::ITALIC . TextFormat::RED){
 		for($i = 0; $i < $lines; $i++){
@@ -482,27 +502,30 @@ abstract class Session{
 			$this->login(self::AUTH_TRANSFER);
 			return;
 		}
-		$method = $this->getAuthSettings();
-		if($this->getLoginDatum("isnew") and $method === Settings::CONFIG_AUTH_UUID and $this->getPlayer()->getUniqueId() === $this->getLoginDatum("authuuid")){
-			$this->login(self::AUTH_UUID);
-			return;
+		if($this->getLoginDatum("isnew")){
+			$this->state = self::STATE_REGISTERING;
+		}else{
+			$method = $this->getAuthSettings();
+			if(!$this->getLoginDatum("isnew") and $method === Settings::CONFIG_AUTH_UUID and $this->getPlayer()->getUniqueId() === $this->getLoginDatum("authuuid")){
+				$this->login(self::AUTH_UUID);
+				return;
+			}
+			if($method === Settings::CONFIG_AUTH_IP_LAST and $this->getPlayer()->getAddress() === $this->getLoginDatum("lastip")){
+				$this->login(self::AUTH_IP_LAST);
+				return;
+			}
+			if($method === Settings::CONFIG_AUTH_IP_HISTORY and in_array($this->getPlayer()->getAddress(), $this->getIPHistory())){
+				$this->login(self::AUTH_IP_HIST);
+				return;
+			}
+			if($method === Settings::CONFIG_AUTH_SUBNET_LAST and $this->subnet_matches($this->getPlayer()->getAddress(), $this->getLoginDatum("lastip"))){
+				$this->login(self::AUTH_SUBNET_LAST);
+			}
+			// deprecated: subnet hist
+			$this->state = self::STATE_LOGIN;
 		}
-		if($method === Settings::CONFIG_AUTH_IP_LAST and $this->getPlayer()->getAddress() === $this->getLoginDatum("lastip")){
-			$this->login(self::AUTH_IP_LAST);
-			return;
-		}
-		if($method === Settings::CONFIG_AUTH_IP_HISTORY and in_array($this->getPlayer()->getAddress(), $this->getIPHistory())){
-			$this->login(self::AUTH_IP_HIST);
-			return;
-		}
-		if($method === Settings::CONFIG_AUTH_SUBNET_LAST and $this->subnet_matches($this->getPlayer()->getAddress(), $this->getLoginDatum("lastip"))){
-			$this->login(self::AUTH_SUBNET_LAST);
-		}
-		// deprecated: subnet hist
-		$this->state = $this->isNew() ? self::STATE_REGISTERING : self::STATE_LOGIN;
 		if($this->isLoggingIn()){
-			$this->getPlayer()->sendMessage(TextFormat::AQUA . "Please enter your password to authenticate.");
-			$this->getPlayer()->sendMessage(TextFormat::AQUA . "You previously entered the password when you registered your account.");
+			$this->send(Phrases::LOGIN_PASS_PROMPT);
 		}else{
 			$this->getPlayer()->sendMessage(TextFormat::DARK_BLUE . "Welcome to Legion PE and thanks for joining!");
 			$this->getPlayer()->sendMessage(TextFormat::AQUA . "First of all, let's register an account under your name (" . TextFormat::DARK_PURPLE . strtolower($this->getPlayer()->getName()) . ") to save your data.");

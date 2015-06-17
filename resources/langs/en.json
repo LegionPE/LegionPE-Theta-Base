@@ -1,0 +1,32 @@
+{
+	"meta.short": "eng",
+	"meta.english": "English",
+	"meta.local": "English",
+	"meta.authors": [
+		"PEMapModder"
+	],
+	"login.auth.success": "%success%You have been authenticated by %em%%method%",
+	"login.auth.whereami": "%info%You are in %em1%LegionPE %em2%%class% %em3%(%ip%:%port%)\n%verbose%Give this address to friends to play on this server together!",
+	"login.register.prompt": "%info%Thanks for joining %bold%Legion PE%reset%!\n%info%To protect your account, we are going to create an account for you.\n%notify%Please enter the password you wish to register with, %em%directly into chat.\n%verbose%Passwords are encrypted safely on our secure database. Nobody else, including staff, will be able to decode and read/use it.",
+	"login.register.retype": "%notify%Thanks! Now please type the password again to confirm it.",
+	"login.register.success": "%notify%Congratulations! You have successfully created your %em%own%notify% account on Legion PE!",
+	"login.register.mismatch": "%error%The two passwords aren't the same!\n%notify%Please type a password you like %em%directly%notify% in chat.\n%verbose%Type a totally different password if you want.",
+	"login.pass.prompt": "%notify%Please enter the password you registered directly into chat.",
+	"login.pass.mismatch": "%info%If you didn't register this account, please choose a new name.\n%verbose%If you believe that the owner of this \n%verbose%account is imposing you on purpose,\n%verbose%and would like to take it back, \n%verbose%please email %em2%support@legionpvp.eu%info%.\n%warning%The password you typed in isn't the one you registered with.\n%warning%You have %chances%left before you are kicked.",
+
+	"chat.blocked.pass": "%em%Never%warning% tell %em2%anybody%warning% %em3%(including staff)%warning% your password.",
+
+	"login.auth.method.transfer": "transferring",
+	"login.auth.method.uuid": "matching last UUID",
+	"login.auth.method.ip.last": "matching last IP",
+	"login.auth.method.ip.hist": "matching an IP in the IP history",
+	"login.auth.method.pass": "entering password",
+	"login.auth.method.register": "registering a new account",
+
+	"local.class.name.hub": "Hub",
+	"local.class.name.pvp.kit": "KitPvP",
+	"local.class.name.parkour": "Parkour",
+	"local.class.name.spleef": "Spleef",
+	"local.class.name.infected": "Infected",
+	"local.class.name.pvp.classic": "Classic PvP"
+}

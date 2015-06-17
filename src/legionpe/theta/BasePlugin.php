@@ -20,6 +20,8 @@ namespace legionpe\theta;
 
 use legionpe\theta\command\ThetaCommand;
 use legionpe\theta\config\Settings;
+use legionpe\theta\lang\LanguageManager;
+use legionpe\theta\lang\Phrases;
 use legionpe\theta\query\CloseServerQuery;
 use legionpe\theta\query\InitDbQuery;
 use legionpe\theta\query\LoginDataQuery;
@@ -45,6 +47,8 @@ abstract class BasePlugin extends PluginBase{
 	private $listener;
 	/** @var SessionEventListener */
 	protected $sesList;
+	/** @var LanguageManager */
+	private $langs;
 	/** @var Queue[] */
 	private $queues = [], $playerQueues = [], $teamQueues = [];
 	/** @var Session[] */
@@ -77,12 +81,19 @@ abstract class BasePlugin extends PluginBase{
 		new InitDbQuery($this);
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SyncStatusTask($this), 40, 40);
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SessionTickTask($this), 1, 20);
+		$this->langs = new LanguageManager($this);
 	}
 	public function onDisable(){
 		new CloseServerQuery($this);
 	}
 	public function evaluate($code){
 		eval($code);
+	}
+	public function getResourceContents($path){
+		$handle = $this->getResource($path);
+		$r = stream_get_contents($handle);
+		fclose($handle);
+		return $r;
 	}
 
 	// queues
@@ -115,7 +126,7 @@ abstract class BasePlugin extends PluginBase{
 	 */
 	public function newSession(Player $player, $loginData = null){
 		if($loginData === null){
-			$player->sendMessage(TextFormat::AQUA . "Welcome to Legion PE! Please wait while we are preparing to register an account for you.");
+			$player->sendMessage(Phrases::VAR_wait . "Welcome to Legion PE! Please wait while we are preparing to register an account for you.");
 			new NewUserQuery($this, $player);
 			return false;
 		}
@@ -252,6 +263,9 @@ abstract class BasePlugin extends PluginBase{
 	 */
 	public function getSesList(){
 		return $this->sesList;
+	}
+	public function getLangs(){
+		return $this->langs;
 	}
 	/**
 	 * @param string &$altIp
