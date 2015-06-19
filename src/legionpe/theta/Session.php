@@ -82,6 +82,8 @@ abstract class Session{
 	private $player;
 	/** @var mixed[] */
 	private $loginData;
+	/** @var int */
+	private $joinTime;
 	/** @var float */
 	private $coinsOld = 0;
 	/** @var float */
@@ -94,6 +96,7 @@ abstract class Session{
 	public function __construct(Player $player, $loginData){
 		$this->player = $player;
 		$this->loginData = $loginData;
+		$this->joinTime = time();
 		$this->coinsOld = $loginData["coins"];
 		$this->ontimeSince = microtime(true);
 		if($this->init() === false){
@@ -567,9 +570,12 @@ abstract class Session{
 	private function sendFirstJoinMessages(){
 		$this->getMain()->sendFirstJoinMessages($this->getPlayer());
 	}
-	public function secondTick(){
+	public function halfSecondTick(){
 		if($this->curPopup !== null){
 			$this->getPlayer()->sendPopup($this->curPopup);
+		}
+		if(time() - $this->joinTime > Settings::KICK_PLAYER_TOO_LONG_ONLINE){
+			$this->getPlayer()->kick($this->translate(Phrases::KICK_TOO_LONG_ONLINE));
 		}
 	}
 

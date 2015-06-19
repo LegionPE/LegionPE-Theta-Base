@@ -33,6 +33,7 @@
 	"warning.notification.main": "%notify2%%bold%~~~~~~~~~~ ATTENTION ~~~~~~~~~~\n%em%%issuer%%warning% sent you a warning!\n%verbose%Message:\n%em2%%message%\n%notify%This warning carries %em3%%points%%notify% warning points.\n%info%You now have %em%%totalpoints%%info% warning points in total.",
 	"warning.notification.muted": "%error%You will be muted for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake.",
 	"warning.notification.banned": "%error%You will be banned for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake.",
+	"kick.toolongonline": "You have been online for more than 90 minutes. Take a rest! I bet your device must be pretty hot.",
 
 	"local.class.name.hub": "Hub",
 	"local.class.name.pvp.kit": "KitPvP",

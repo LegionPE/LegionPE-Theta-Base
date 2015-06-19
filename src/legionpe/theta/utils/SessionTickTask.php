@@ -26,7 +26,7 @@ class SessionTickTask extends PluginTask{
 		/** @var BasePlugin $main */
 		$main = $this->getOwner();
 		foreach($main->getSessions() as $ses){
-			$ses->secondTick();
+			$ses->halfSecondTick();
 		}
 	}
 }

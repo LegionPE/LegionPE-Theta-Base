@@ -24,6 +24,7 @@ abstract class Settings{
 	const STATUS_OFFLINE = 0;
 	const STATUS_ONLINE = 1;
 	const STATUS_TRANSFERRING = 2;
+	const KICK_PLAYER_TOO_LONG_ONLINE = 5400;
 
 	/** @var int */
 	public static $SYSTEM_MAX_PLAYERS;

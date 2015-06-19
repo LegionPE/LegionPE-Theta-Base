@@ -44,6 +44,8 @@ class Phrases{
 	const WARNING_MUTED_NOTIFICATION = "warning.notification.muted";
 	const WARNING_BANNED_NOTIFICATION = "warning.notification.banned";
 
+	const KICK_TOO_LONG_ONLINE = "kick.toolongonline";
+
 	const AUTH_METHOD_TRANSFER = "login.auth.method.transfer";
 	const AUTH_METHOD_UUID = "login.auth.method.uuid";
 	const AUTH_METHOD_IP_LAST = "login.auth.method.ip.last";
