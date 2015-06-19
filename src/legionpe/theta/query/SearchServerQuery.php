@@ -23,12 +23,15 @@ use legionpe\theta\BasePlugin;
 class SearchServerQuery extends AsyncQuery{
 	/** @var int */
 	public $class;
-	public function __construct(BasePlugin $plugin, $class){
+	private $checkPlayers;
+	public function __construct(BasePlugin $plugin, $class, $checkPlayers){
 		parent::__construct($plugin);
 		$this->class = $class;
+		$this->checkPlayers = $checkPlayers;
 	}
 	public function getQuery(){
-		return "SELECT ip,port FROM server_status WHERE unix_timestamp()-last_online < 5 AND class=$this->class AND online_players < max_players ORDER BY online_players ASC LIMIT 1";
+		$checkPlayers = $this->checkPlayers ? " AND online_players<max_players" : "";
+		return "SELECT ip,port FROM server_status WHERE unix_timestamp()-last_online < 5 AND class=$this->class$checkPlayers ORDER BY online_players ASC LIMIT 1";
 	}
 	public function getResultType(){
 		return self::TYPE_ASSOC;

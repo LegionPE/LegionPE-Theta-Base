@@ -19,7 +19,6 @@
 namespace legionpe\theta\lang;
 
 use pocketmine\utils\TextFormat;
-
 class Phrases{
 	// phrases
 	const LOGIN_AUTH_SUCCESS = "login.auth.success";
@@ -32,6 +31,18 @@ class Phrases{
 	const LOGIN_PASS_MISMATCH = "login.pass.mismatch";
 
 	const CHAT_BLOCKED_PASS = "chat.blocked.pass";
+	const CHAT_BROADCASTS_ARRAY = "chat.broadcasts";
+
+	const CMD_ERR_NO_PERM = "cmd.error.noperm";
+	const CMD_ERR_WRONG_USE = "cmd.error.wronguse";
+	const CMD_ERR_ABSENT_PLAYER_NAME_UNKNOWN = "cmd.error.absplayer.unknown";
+	const CMD_ERR_ABSENT_PLAYER_NAME_KNOWN = "cmd.error.absplayer.named";
+	const CMD_TRANSFER_ERR_NO_SERVERS = "cmd.transfer.err.noservers";
+	const CMD_TRANSFER_SUCCESS = "cmd.transfer.success";
+
+	const WARNING_RECEIVED_NOTIFICATION = "warning.notification.main";
+	const WARNING_MUTED_NOTIFICATION = "warning.notification.muted";
+	const WARNING_BANNED_NOTIFICATION = "warning.notification.banned";
 
 	const AUTH_METHOD_TRANSFER = "login.auth.method.transfer";
 	const AUTH_METHOD_UUID = "login.auth.method.uuid";
@@ -56,6 +67,7 @@ class Phrases{
 	const VAR_error = TextFormat::DARK_RED;
 	const VAR_warning = TextFormat::YELLOW;
 	const VAR_notify = TextFormat::LIGHT_PURPLE;
+	const VAR_notify2 = TextFormat::GOLD;
 	const VAR_em = TextFormat::AQUA;
 	const VAR_em2 = TextFormat::BLUE;
 	const VAR_em3 = TextFormat::DARK_BLUE;

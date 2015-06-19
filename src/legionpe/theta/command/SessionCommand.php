@@ -18,6 +18,7 @@
 
 namespace legionpe\theta\command;
 
+use legionpe\theta\lang\Phrases;
 use legionpe\theta\Session;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
@@ -41,7 +42,7 @@ abstract class SessionCommand extends ThetaCommand{
 		}
 		$session = $this->getPlugin()->getSession($sender);
 		if(!($session instanceof Session)){
-			$sender->sendMessage(TextFormat::YELLOW . "Please run this command later. We are still preparing your account. Sorry for the inconvenience.");
+			$sender->sendMessage(Phrases::VAR_wait . "Please run this command later. We are still preparing your account. Sorry for the inconvenience.");
 			return false;
 		}
 		if(!$this->checkPerm($session, $msg)){
@@ -61,7 +62,7 @@ abstract class SessionCommand extends ThetaCommand{
 		}
 		$r = $this->run($args, $this->getPlugin()->getSession($session));
 		if($r === false){
-			$sender->sendMessage(TextFormat::RED . "Usage: " . $this->getUsage());
+			$session->send(Phrases::CMD_ERR_WRONG_USE, ["usage" => $this->getUsage()]);
 		}elseif(is_string($r)){
 			$sender->sendMessage($r);
 		}

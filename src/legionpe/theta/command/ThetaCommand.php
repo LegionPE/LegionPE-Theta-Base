@@ -22,11 +22,13 @@ use legionpe\theta\BasePlugin;
 use legionpe\theta\command\session\CoinsCommand;
 use legionpe\theta\command\session\TransferCommand;
 use legionpe\theta\config\Settings;
+use legionpe\theta\lang\Phrases;
 use legionpe\theta\Session;
 use pocketmine\command\Command;
 use pocketmine\command\CommandMap;
 use pocketmine\command\CommandSender;
 use pocketmine\command\PluginIdentifiableCommand;
+use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
 abstract class ThetaCommand extends Command implements PluginIdentifiableCommand{
@@ -58,8 +60,14 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 		]);
 	}
 	protected function sendUsage($sender){
+		if($sender instanceof Player){
+			if(($ses = $this->getSession($sender)) instanceof Session){
+				$sender = $ses;
+			}
+		}
 		if($sender instanceof Session){
-			$sender = $sender->getPlayer();
+			$sender->send(Phrases::CMD_ERR_WRONG_USE, ["usage" => $this->getUsage()]);
+			return;
 		}
 		if($sender instanceof CommandSender){
 			$sender->sendMessage(TextFormat::RED . "Usage: " . $this->getUsage());
@@ -70,19 +78,33 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			$sender = $sender->getPlayer();
 		}
 		if($sender instanceof CommandSender){
-			$sender->sendMessage(TextFormat::RED . "There is no player online with " .
-				($name === null ? "that name" : "the name $name") . ".");
+			if($sender instanceof Player and ($ses = $this->getSession($sender)) instanceof Session){
+				if($name === null){
+					$ses->send(Phrases::CMD_ERR_ABSENT_PLAYER_NAME_UNKNOWN);
+				}else{
+					$ses->send(Phrases::CMD_ERR_ABSENT_PLAYER_NAME_KNOWN, ["player" => $name]);
+				}
+			}else{
+				$sender->sendMessage(TextFormat::RED . "There is no player online with " .
+					($name === null ? "that name" : "the name $name") . ".");
+			}
 		}
 		return true;
 	}
 	/**
 	 * Broadcast a message to all moderators (including trial) on the server
 	 * @param string $msg
+	 * @param bool $translate
+	 * @param array $args
 	 */
-	protected function broadcastModerator($msg){
+	protected function broadcastModerator($msg, $translate = true, $args = []){
 		foreach($this->getPlugin()->getSessions() as $ses){
 			if($ses->isModerator()){
-				$ses->getPlayer()->sendMessage($msg);
+				if($translate){
+					$ses->send($msg, $args);
+				}else{
+					$ses->getPlayer()->sendMessage($msg);
+				}
 			}
 		}
 	}

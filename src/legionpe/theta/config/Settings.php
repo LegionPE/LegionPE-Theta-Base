@@ -184,6 +184,7 @@ $array = [
 	"parkour" => Settings::CLASS_PARKOUR,
 	"spleef" => Settings::CLASS_SPLEEF,
 	"infected" => Settings::CLASS_INFECTED,
+	"classic" => Settings::CLASS_CLASSICAL,
 	"classical" => Settings::CLASS_CLASSICAL
 ];
 if(!isset($array[$config->getNested("localize.class")])){

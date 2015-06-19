@@ -20,7 +20,9 @@ namespace legionpe\theta\queue;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\config\Settings;
+use legionpe\theta\lang\Phrases;
 use legionpe\theta\query\SearchServerQuery;
+use legionpe\theta\Session;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
@@ -47,13 +49,22 @@ class TransferSearchRunnable implements Runnable{
 		$result = $this->query->getResult();
 		$name = Settings::$CLASSES_NAMES[$this->query->class];
 		if(!is_array($result)){
-			$this->player->sendMessage(TextFormat::RED . "Error: no servers for $name are online.");
+			if(($ses = $this->plugin->getSession($this->player)) instanceof Session){
+				$ses->send(Phrases::CMD_TRANSFER_ERR_NO_SERVERS, ["class" => $name]);
+			}else{
+				$this->player->sendMessage(TextFormat::RED . "Error: no servers for $name are online.");
+			}
 			return;
 		}
 		/** @var string $ip */
 		/** @var int $port */
 		extract($result);
-		$this->plugin->transfer($this->player, $ip, $port, TextFormat::GREEN . "You are being transferred to $ip:$port ($name server).", true);
+		if(($ses = $this->plugin->getSession($this->player)) instanceof Session){
+			$ses->send(Phrases::CMD_TRANSFER_SUCCESS, ["class" => $name, "ip" => $ip, "port" => $port]);
+		}else{
+			$this->player->sendMessage(TextFormat::GREEN . "Transferring you to $ip:$port ($name server)...");
+		}
+		$this->plugin->transfer($this->player, $ip, $port, "", true);
 	}
 	public function __debugInfo(){
 		return [

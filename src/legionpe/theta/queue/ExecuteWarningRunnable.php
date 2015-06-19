@@ -20,6 +20,7 @@ namespace legionpe\theta\queue;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\config\Settings;
+use legionpe\theta\lang\Phrases;
 use legionpe\theta\query\IncrementWarningPointsQuery;
 use legionpe\theta\query\LogWarningQuery;
 use legionpe\theta\query\NextIdQuery;
@@ -88,17 +89,20 @@ class ExecuteWarningRunnable implements Runnable{
 		$this->issuer = null; // release instance
 	}
 	private function execWarnOn(Session $ses){
-		$ses->getPlayer()->sendMessage(TextFormat::DARK_RED . "ATTENTION\n" . TextFormat::RED . str_repeat("~", 50));
-		$ses->getPlayer()->sendMessage(TextFormat::RED . "You have received a warning from {$this->issuer->getName()}.");
-		$ses->getPlayer()->sendMessage(TextFormat::RED . "The warning message is as follows:");
-		$ses->getPlayer()->sendMessage(TextFormat::YELLOW . $this->msg);
-		$ses->getPlayer()->sendMessage(TextFormat::RED . "You have received $this->points new warning points with this warning.");
-		$ses->getPlayer()->sendMessage(TextFormat::DARK_AQUA . "You now have {$ses->getWarningPoints()} warning points in your account.");
+		$msg = $ses->translate(Phrases::WARNING_RECEIVED_NOTIFICATION, [
+			"issuer" => $this->issuer->getName(),
+			"message" => $this->msg,
+			"points" => $this->points,
+			"totalpoints" => $ses->getWarningPoints()
+		]);
 		$conseq = Settings::getWarnPtsConseq($ses->getWarningPoints());
 		if($conseq->banLength){
-			$ses->getPlayer()->sendMessage(TextFormat::YELLOW . "You are going to be banned for " . MUtils::time_secsToString($conseq->banLength) . ".");
+			$msg .= $ses->translate(Phrases::WARNING_BANNED_NOTIFICATION, ["length" => MUtils::time_secsToString($conseq->banLength)]);
+			$msg = "\n" . $msg;
+			$ses->getPlayer()->kick($msg, false);
 		}elseif($conseq->muteSecs){
-			$ses->getPlayer()->sendMessage(TextFormat::YELLOW . "You are going to be muted for " . MUtils::time_secsToString($conseq->muteSecs) . ".");
+			$msg .= $ses->translate(Phrases::WARNING_MUTED_NOTIFICATION, ["length" => MUtils::time_secsToString($conseq->muteSecs)]);
+			$ses->getPlayer()->sendMessage($msg);
 			// TODO mute
 		}
 	}

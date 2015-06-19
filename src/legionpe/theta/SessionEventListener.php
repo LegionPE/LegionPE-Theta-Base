@@ -18,6 +18,7 @@
 
 namespace legionpe\theta;
 
+use legionpe\theta\lang\Phrases;
 use legionpe\theta\queue\JoinTriggerRunnable;
 use legionpe\theta\queue\Queue;
 use pocketmine\event\block\BlockBreakEvent;
@@ -39,7 +40,6 @@ use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\Player;
-use pocketmine\utils\TextFormat;
 
 /* extensible */
 class SessionEventListener implements Listener{
@@ -53,7 +53,7 @@ class SessionEventListener implements Listener{
 		$player = $event->getPlayer();
 		$ses = $this->main->getSession($player);
 		if($ses === null){
-			$player->sendMessage(TextFormat::YELLOW . "Please wait a moment while we are preparing your account.");
+			$player->sendMessage(Phrases::VAR_wait . "Please wait a moment while we are preparing your account.");
 			$this->main->queueFor($player->getId(), true, Queue::QUEUE_SESSION)
 				->pushToQueue(new JoinTriggerRunnable($this->main, $player));
 		}else{
@@ -67,7 +67,7 @@ class SessionEventListener implements Listener{
 	public function onCommandPreprocess(PlayerCommandPreprocessEvent $event){
 		$ses = $this->main->getSession($player = $event->getPlayer());
 		if(!($ses instanceof Session)){
-			$player->sendMessage("Please wait. We are still preparing your account. You cannot type anything until your account is ready.");
+			$player->sendMessage(Phrases::VAR_wait . "Please wait. We are still preparing your account. You cannot type anything until your account is ready.");
 			$event->setMessage("");
 			return;
 		}

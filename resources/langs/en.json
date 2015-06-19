@@ -5,8 +5,24 @@
 	"meta.authors": [
 		"PEMapModder"
 	],
+
+	"chat.blocked.pass": "%em%Never%warning% tell %em2%anybody%warning% %em3%(including staff)%warning% your password.",
+	"chat.broadcasts": [
+		"%bold%Donate to get awesome perks at %reset%http://lgpe.co/d",
+		"%bold%Download our Android app at %reset%http://lgpe.co/and",
+		"%bold%Follow us on Twitter! %em%%italic%LegionPE",
+		"%bold%Earn coins by playing the games, and spend coins at the shops at each game!"
+	],
+	"cmd.error.noperm": "%error%You don't have permission to use this command.",
+	"cmd.error.wronguse": "%error%Usage: %usage%",
+	"cmd.error.absplayer.unknwon": "%error%That player is not online on this server.",
+	"cmd.error.absplayer.named": "%error%The player \"%player%\" is not online on this server.",
+	"cmd.transfer.err.noservers": "%error%No servers for %class% have available slots.",
+	"cmd.transfer.success": "%success%Transferring you to %em%%ip%%success%:%em2%%port%%success% (%class% server)...",
+
 	"login.auth.success": "%success%You have been authenticated by %em%%method%",
 	"login.auth.whereami": "%info%You are in %em1%LegionPE %em2%%class% %em3%(%ip%:%port%)\n%verbose%Give this address to friends to play on this server together!",
+	"login.auth.firstjoin.hub": "%em%Walk into a portal%info% or %em2%Choose an item in your inventory%info% to join a game.\n%info%You can also type %em3%/help%info% in chat to check for available commands.",
 	"login.register.prompt": "%info%Thanks for joining %bold%Legion PE%reset%!\n%info%To protect your account, we are going to create an account for you.\n%notify%Please enter the password you wish to register with, %em%directly into chat.\n%verbose%Passwords are encrypted safely on our secure database. Nobody else, including staff, will be able to decode and read/use it.",
 	"login.register.retype": "%notify%Thanks! Now please type the password again to confirm it.",
 	"login.register.success": "%notify%Congratulations! You have successfully created your %em%own%notify% account on Legion PE!",
@@ -14,19 +30,20 @@
 	"login.pass.prompt": "%notify%Please enter the password you registered directly into chat.",
 	"login.pass.mismatch": "%info%If you didn't register this account, please choose a new name.\n%verbose%If you believe that the owner of this \n%verbose%account is imposing you on purpose,\n%verbose%and would like to take it back, \n%verbose%please email %em2%support@legionpvp.eu%info%.\n%warning%The password you typed in isn't the one you registered with.\n%warning%You have %chances%left before you are kicked.",
 
-	"chat.blocked.pass": "%em%Never%warning% tell %em2%anybody%warning% %em3%(including staff)%warning% your password.",
-
-	"login.auth.method.transfer": "transferring",
-	"login.auth.method.uuid": "matching last UUID",
-	"login.auth.method.ip.last": "matching last IP",
-	"login.auth.method.ip.hist": "matching an IP in the IP history",
-	"login.auth.method.pass": "entering password",
-	"login.auth.method.register": "registering a new account",
+	"warning.notification.main": "%notify2%%bold%~~~~~~~~~~ ATTENTION ~~~~~~~~~~\n%em%%issuer%%warning% sent you a warning!\n%verbose%Message:\n%em2%%message%\n%notify%This warning carries %em3%%points%%notify% warning points.\n%info%You now have %em%%totalpoints%%info% warning points in total.",
+	"warning.notification.muted": "%error%You will be muted for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake.",
+	"warning.notification.banned": "%error%You will be banned for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake.",
 
 	"local.class.name.hub": "Hub",
 	"local.class.name.pvp.kit": "KitPvP",
 	"local.class.name.parkour": "Parkour",
 	"local.class.name.spleef": "Spleef",
 	"local.class.name.infected": "Infected",
-	"local.class.name.pvp.classic": "Classic PvP"
+	"local.class.name.pvp.classic": "Classic PvP",
+	"login.auth.method.transfer": "transferring",
+	"login.auth.method.uuid": "matching last UUID",
+	"login.auth.method.ip.last": "matching last IP",
+	"login.auth.method.ip.hist": "matching an IP in the IP history",
+	"login.auth.method.pass": "entering password",
+	"login.auth.method.register": "registering a new account"
 }

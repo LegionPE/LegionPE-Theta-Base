@@ -46,9 +46,12 @@ class LoginDataQuery extends AsyncQuery{
 	}
 	protected function onAssocFetched(\mysqli $mysql, array &$row){
 		$uid = $row["uid"];
-		$r = $mysql->query("SELECT group_concat(ip SEPARATOR ',') AS iphist FROM iphist WHERE uid=$uid");
-		$row["iphist"] = $r->fetch_assoc()["iphist"];
+		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs;");
+		$result = $r->fetch_assoc();
+		$row["iphist"] = $result["iphist"];
+		$row["langs"] = array_filter(explode(",", $result["langs"]));
 		$row["email"] = BasePlugin::EMAIL_UNVERIFIED; // TODO fetch
+		$row["isnew"] = false;
 		$r->close();
 	}
 	public function getResultType(){

@@ -19,6 +19,8 @@
 namespace legionpe\theta\command;
 
 use legionpe\theta\BasePlugin;
+use legionpe\theta\lang\Phrases;
+use legionpe\theta\Session;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
@@ -39,6 +41,14 @@ class GetPositionCommand extends ThetaCommand{
 			}
 			$sender->sendMessage(TextFormat::DARK_AQUA . $player->getName() . TextFormat::GREEN . " is at " . TextFormat::DARK_PURPLE . "$player->x, $player->y, $player->z @ {$player->getLevel()->getName()}");
 		}else{
+			$ses = $this->getSession($sender);
+			if(!($ses instanceof Session)){
+				return true;
+			}
+			if(!$ses->isModerator()){
+				$ses->send(Phrases::CMD_ERR_NO_PERM);
+				return true;
+			}
 			$sender->sendMessage(TextFormat::DARK_AQUA . $sender->getName() . TextFormat::GREEN . " is at " . TextFormat::DARK_PURPLE . "$sender->x, $sender->y, $sender->z @ {$sender->getLevel()->getName()}");
 		}
 		return true;

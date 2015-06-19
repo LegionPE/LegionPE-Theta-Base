@@ -71,6 +71,9 @@ class MUtils{
 		return "0";
 	}
 	public static function time_secsToString($secs){
+		if($secs === 0){
+			return "0 s";
+		}
 		$hours = 0;
 		$minutes = 0;
 		while($secs >= 3600){
@@ -82,20 +85,14 @@ class MUtils{
 			$secs -= 60;
 		}
 		$time = "";
-		if($hours > 1){
-			$time .= "$hours hours, ";
-		}elseif($hours === 1){
-			$time .= "one hour, ";
+		if($hours > 0){
+			$time .= "$hours hr ";
 		}
-		if($minutes > 1){
-			$time .= "$minutes minutes, ";
-		}elseif($minutes === 1){
-			$time .= "1 minute, ";
+		if($minutes > 0){
+			$time .= "$minutes min ";
 		}
-		if($secs > 1){
-			$time .= "$secs seconds, ";
-		}elseif($secs !== 0){
-			$time .= "$secs second, ";
+		if($secs > 0){
+			$time .= "$secs s ";
 		}
 		return substr($time, 0, -2);
 	}

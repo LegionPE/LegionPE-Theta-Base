@@ -125,13 +125,13 @@ abstract class Session{
 				$this->sendCurlyLines();
 				if($this->tmpHash === $hash){
 					$this->sendCurlyLines();
-					$this->send(Phrases::LOGIN_REGISTER_SUCCESS);
 					$this->setLoginDatum("hash", $hash);
 					$this->setLoginDatum("pwprefix", $one);
 					$this->setLoginDatum("pwlen", $len);
 					$this->state = self::STATE_PLAYING;
 					$this->sendFirstJoinMessages();
 					$this->login(self::AUTH_REG);
+					$this->send(Phrases::LOGIN_REGISTER_SUCCESS);
 				}else{
 					$this->send(Phrases::LOGIN_REGISTER_MISMATCH);
 					$this->tmpHash = null;
@@ -527,9 +527,7 @@ abstract class Session{
 		if($this->isLoggingIn()){
 			$this->send(Phrases::LOGIN_PASS_PROMPT);
 		}else{
-			$this->getPlayer()->sendMessage(TextFormat::DARK_BLUE . "Welcome to Legion PE and thanks for joining!");
-			$this->getPlayer()->sendMessage(TextFormat::AQUA . "First of all, let's register an account under your name (" . TextFormat::DARK_PURPLE . strtolower($this->getPlayer()->getName()) . ") to save your data.");
-			$this->getPlayer()->sendMessage(TextFormat::YELLOW . "To protect your account, please think of a secret password you can remember and say it in chat. " . TextFormat::ITALIC . "Other people won't be able to see it.");
+			$this->send(Phrases::LOGIN_REGISTER_PROMPT);
 		}
 	}
 	private function subnet_matches($ip0, $ip1){
@@ -566,7 +564,6 @@ abstract class Session{
 		return ($suffix === "+") ? "Tester" : "";
 	}
 	private function sendFirstJoinMessages(){
-		$this->getPlayer()->sendMessage(TextFormat::LIGHT_PURPLE . "Welcome to " . TextFormat::ITALIC . TextFormat::DARK_PURPLE . "Legion PE!");
 		$this->getMain()->sendFirstJoinMessages($this->getPlayer());
 	}
 	public function secondTick(){
