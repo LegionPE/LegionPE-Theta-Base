@@ -1,9 +1,9 @@
 {
-	"meta.short": "en",
-	"meta.english": "English",
-	"meta.local": "English",
+	"meta.short": "it",
+	"meta.english": "Italian",
+	"meta.local": "Edit this yourself",
 	"meta.authors": [
-		"PEMapModder"
+		"Heromine"
 	],
 
 	"chat.blocked.pass": "%em%Never%warning% tell %em2%anybody%warning% %em3%(including staff)%warning% your password.",
