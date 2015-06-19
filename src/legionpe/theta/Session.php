@@ -300,10 +300,11 @@ abstract class Session{
 		}
 		$this->setCoins($this->getCoins() + $coins);
 	}
-	public function getAndUpdateCoinsDelta(&$coins, &$delta){
+	public function getAndUpdateCoinsDelta(){
 		$coins = $this->getCoins();
 		$delta = $coins - $this->coinsOld;
 		$this->coinsOld = $coins;
+		return $delta;
 	}
 	public function getAndUpdateOntime(){
 		$now = microtime(true);

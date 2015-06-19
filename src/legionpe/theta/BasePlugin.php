@@ -84,6 +84,9 @@ abstract class BasePlugin extends PluginBase{
 		$this->langs = new LanguageManager($this);
 	}
 	public function onDisable(){
+		foreach($this->getServer()->getOnlinePlayers() as $player){
+			$player->kick("Server stop", false);
+		}
 		new CloseServerQuery($this);
 	}
 	public function evaluate($code){
@@ -184,6 +187,7 @@ abstract class BasePlugin extends PluginBase{
 			"lastgrind" => 0,
 			"rank" => 0,
 			"warnpts" => 0,
+			"lastwarn" => 0,
 			"tid" => -1,
 			"teamrank" => -1,
 			"teamjoin" => 0,
@@ -223,8 +227,8 @@ abstract class BasePlugin extends PluginBase{
 		}
 		$this->FastTransfer->transferPlayer($player, $ip, $port, $msg);
 	}
-	public function transferGame(Player $player, $class){
-		$task = new SearchServerQuery($this, $class);
+	public function transferGame(Player $player, $class, $checkPlayers = true){
+		$task = new SearchServerQuery($this, $class, $checkPlayers);
 		$this->queueFor($player->getId(), true, Queue::QUEUE_SESSION)
 			->pushToQueue(new TransferSearchRunnable($this, $player, $task));
 	}

@@ -35,4 +35,7 @@ class PhpCommand extends ThetaCommand{
 		$this->getPlugin()->evaluate($code);
 		return true;
 	}
+	public function testPermissionSilent(CommandSender $sender){
+		return $sender instanceof ConsoleCommandSender;
+	}
 }

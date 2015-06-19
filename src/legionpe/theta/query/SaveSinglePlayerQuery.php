@@ -28,11 +28,11 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 	private $coinsDelta;
 	public function __construct(BasePlugin $plugin, Session $session, $status){
 		parent::__construct($plugin);
-		$this->getColumns($session, $data, $status);
-		var_dump($data);
+		$data = $this->getColumns($session, $status);
 		$this->data = serialize($data);
 	}
 	public function getQuery(){
+		while(!isset($this->data));
 		$query = "INSERT INTO" . " users(";
 		/** @var mixed[][] $data */
 		$data = unserialize($this->data);
@@ -40,7 +40,6 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 		$cols = [];
 		/** @var string[] $inserts */
 		$inserts = [];
-		var_dump("Data", $data, "Cols", $cols, "Inserts", $inserts);
 		foreach($data as $column => $datum){
 			$cols[] = $column;
 			if(!is_array($datum)){
@@ -67,12 +66,13 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 	}
 	/**
 	 * @param Session $s
-	 * @param mixed[][] $data an associative array filled with data of PHP-primitive types with keys as columns
 	 * @param int $status
+	 * @return mixed[][]|mixed[]
 	 */
-	protected function getColumns(Session $s, &$data, $status){
-		$s->getAndUpdateCoinsDelta($coins, $this->coinsDelta);
-		$data = [
+	protected function getColumns(Session $s, $status){
+		$coins = $s->getCoins();
+		$this->coinsDelta = $s->getAndUpdateCoinsDelta();
+		return [
 			"uid" => ["v" => $s->getUid(), "noupdate" => true],
 			"name" => ["v" => strtolower($s->getPlayer()->getName())],
 			"nicks" => "|" . implode("|", $s->getNicks()) . "|",
@@ -86,7 +86,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 			"pwlen" => ["v" => $s->getPasswordLength(), "noupdate" => true],
 			"registration" => ["v" => $s->getRegisterTime(), "noupdate" => true],
 			"laston" => time(),
-			"ontime" => $s->getAndUpdateOntime(),
+			"ontime" => (int) $s->getAndUpdateOntime(),
 			"config" => $s->getAllSettings(),
 			"lastgrind" => $s->getLastGrind(),
 			"rank" => ["v" => $s->getRank(), "noupdate" => true],

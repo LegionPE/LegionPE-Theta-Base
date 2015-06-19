@@ -21,9 +21,9 @@
 	"cmd.transfer.success": "%success%Transferring you to %em%%ip%%success%:%em2%%port%%success% (%class% server)...",
 
 	"login.auth.success": "%success%You have been authenticated by %em%%method%",
-	"login.auth.whereami": "%info%You are in %em1%LegionPE %em2%%class% %em3%(%ip%:%port%)\n%verbose%Give this address to friends to play on this server together!",
+	"login.auth.whereami": "%info%You are in %em%LegionPE %em2%%class% %em3%(%ip%:%port%)\n%verbose%Give this address to friends to play on this server together!",
 	"login.auth.firstjoin.hub": "%em%Walk into a portal%info% or %em2%Choose an item in your inventory%info% to join a game.\n%info%You can also type %em3%/help%info% in chat to check for available commands.",
-	"login.register.prompt": "%info%Thanks for joining %bold%Legion PE%reset%!\n%info%To protect your account, we are going to create an account for you.\n%notify%Please enter the password you wish to register with, %em%directly into chat.\n%verbose%Passwords are encrypted safely on our secure database. Nobody else, including staff, will be able to decode and read/use it.",
+	"login.register.prompt": "%info%Thanks for joining %bold%Legion PE%reset%!\n%info%To protect your account, we are going to create an account for you.\n%notify%Please enter the password you wish to register with, %em%directly into chat.\n%verbose%Passwords are encrypted safely on our secure database.\n%verbose%Nobody else, including staff, will be able to decode and read/use it.\n%warning%You are disallwoed from mentioning your password in chat, so remember not to use a common word as your password.",
 	"login.register.retype": "%notify%Thanks! Now please type the password again to confirm it.",
 	"login.register.success": "%notify%Congratulations! You have successfully created your %em%own%notify% account on Legion PE!",
 	"login.register.mismatch": "%error%The two passwords aren't the same!\n%notify%Please type a password you like %em%directly%notify% in chat.\n%verbose%Type a totally different password if you want.",
