@@ -6,12 +6,12 @@
 		"PEMapModder"
 	],
 
-	"chat.blocked.pass": "%em%Never%warning% tell %em2%anybody%warning% %em3%(including staff)%warning% your password.",
+	"chat.blocked.pass": "%em%永遠不要%warning%告訴%em2%任何其他人%warning%%em3%(包括這伺服器的職員)%warning%你的密碼！",
 	"chat.broadcasts": [
-		"%bold%Donate to get awesome perks at %reset%http://lgpe.co/d",
-		"%bold%Download our Android app at %reset%http://lgpe.co/and",
-		"%bold%Follow us on Twitter! %em%%italic%LegionPE",
-		"%bold%Earn coins by playing the games, and spend coins at the shops at each game!"
+		"%notify%%bold%到 %reset%http://lgpe.co/d%bold%notify% 購買 VIP ，以獨享特殊福利！",
+		"%notify%%bold%下載我們的 Android app ︰ %reset%http://lgpe.co/and",
+		"%notify%%bold%在 Twitter 上跟隨我們︰ %em%%italic%@LegionPE",
+		"%notify%%bold%Earn coins by playing the games, and spend coins at the shops at each game!"
 	],
 	"cmd.error.noperm": "%error%You don't have permission to use this command.",
 	"cmd.error.wronguse": "%error%Usage: %usage%",
