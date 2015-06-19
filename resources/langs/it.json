@@ -6,12 +6,12 @@
 		"Heromine"
 	],
 
-	"chat.blocked.pass": "%em%Non%warning% Dire %em2%Mai a nessunp%warning% %em3%(incluso lo staff)%warning% la tua password.",
+	"chat.blocked.pass": "%em%Non%warning% Dire %em2%Mai a nessuno%warning% %em3%(incluso lo staff)%warning% la tua password.",
 	"chat.broadcasts": [
 		"%notify%bold%Dona per ricevere fantastici vantaggi su %reset%http://lgpe.co/d",
 		"%notify%bold%Scarica la nostra app Android qui a %reset%http://lgpe.co/and",
 		"%notify%bold%Seguici su Twitter! %em%%italic%@LegionPE",
-		"%notify%bold%Gudagna monete giocando nei giochi e spendile nel negozio di ogni gioco!"
+		"%notify%bold%Guadagna monete giocando nei giochi e spendile nel negozio di ogni gioco!"
 	],
 	"cmd.error.noperm": "%error%Non hai il permesso per utilizzare questo comando.",
 	"cmd.error.wronguse": "%error%Utilizzo: %usage%",
@@ -26,14 +26,14 @@
 	"login.register.prompt": "%info%Grazie per essere venuto da %bold%Legion PE%reset%!\n%info%Per proteggere il tuo account, creeremo un account per te.\n%notify%Per favore inserisci la password col quale vuoi registrarti, %em%directly nella chat.\n%verbose%Le Password sono criptate in modo sicuro nel nostro database.\n%verbose%Nessun altro, incluso lo staff, potrà decifrarle e leggerle/usarla.\n%warning%Non hai il permesso di menzionare la tua password nella chat, quindi ricorda di non usare una parola comune come password.",
 	"login.register.retype": "%notify%Grazie! Adesso per favore riscrivi la tua password per confermare.",
 	"login.register.success": "%notify%Congratulazioni! Hai creato con successo il tuo %em%own%notify% account su Legion PE!",
-	"login.register.mismatch": "%error%Le due password non corrisppndono!\n%notify%Per favore inserisci una password che vuoi %em%direttamente%notify% nella chat.\n%verbose%Scrivi una password totalmente diversa se vuoi.",
+	"login.register.mismatch": "%error%Le due password non corrispondono!\n%notify%Per favore inserisci una password che vuoi %em%direttamente%notify% nella chat.\n%verbose%Scrivi una password totalmente diversa se vuoi.",
 	"login.pass.prompt": "%notify%Per favore inserisci la password col quale ti sei registrato direttamente in chat.",
-	"login.pass.mismatch": "%info%Se non hai registrato questa account, per favore scegli un nuovo nome.\n%verbose%Se pensi che il proprietario di questo\n%verbose%account se ne è impossessato di proposito,\n%verbose%e vuoi riaverlo indietro, \n%verbose%per favore inviaci una email %em2%support@legionpvp.eu%info%.\n%warning%La password che hai scritto non è la stessa di quella col quale ti sei registrato.\n%warning%Hai %chances%ancora prima di ricevere un kick.",
+	"login.pass.mismatch": "%info%Se non hai registrato questo account, per favore scegli un nuovo nome.\n%verbose%Se pensi che il proprietario di questo\n%verbose%account se ne sia impossessato di proposito,\n%verbose%e vuoi riaverlo indietro, \n%verbose%per favore inviaci una email %em2%support@legionpvp.eu%info%.\n%warning%La password che hai scritto non è la stessa di quella col quale ti sei registrato.\n%warning%Hai %chances%ancora prima di ricevere un kick.",
 
 	"warning.notification.main": "%notify2%%bold%~~~~~~~~~~ ATTENZIONE ~~~~~~~~~~\n%em%%issuer%%warning% inviato un avviso!\n%verbose%Message:\n%em2%%message%\n%notify%Questo avviso ti porta a %em3%%points%%notify% punti di avviso.\n%info%Adesso hai%em%%totalpoints%%info% punti di avviso in totale.",
 	"warning.notification.muted": "%error%Sarai mutato per%length%\n%info%Invia una email a %em2%support@legionpvp.eu%info% Se credi che questo sia un errore.",
 	"warning.notification.banned": "%error%Sarai Bannato per%length%\n%info%Invia una email a %em2%support@legionpvp.eu%info% Se credi che questo sia un errore.",
-	"kick.toolongonline": "Se stato per più di 90 minuti. Riposati! Scommetto che il tuo dispositivo è piuttosto caldo.",
+	"kick.toolongonline": "Se stato per più di 90 minuti online. Riposati! Scommetto che il tuo dispositivo è piuttosto caldo.",
 
 	"local.class.name.hub": "Hub",
 	"local.class.name.pvp.kit": "KitPvP",
