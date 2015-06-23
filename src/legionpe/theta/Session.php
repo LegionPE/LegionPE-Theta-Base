@@ -42,6 +42,7 @@ use pocketmine\event\player\PlayerItemHeldEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\event\TextContainer;
+use pocketmine\level\sound\FizzSound;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
@@ -297,9 +298,12 @@ abstract class Session{
 	public function setCoins($coins){
 		$this->setLoginDatum("coins", $coins);
 	}
-	public function addCoins($coins, $ignoreGrind = false){
+	public function grantCoins($coins, $ignoreGrind = false, $sound = true){
 		if(!$ignoreGrind and $this->isGrinding()){
 			$coins *= Settings::getGrindFactor($this->getRank());
+		}
+		if($sound){
+			$this->getPlayer()->getLevel()->addSound(new FizzSound($this->getPlayer()), [$this->getPlayer()]);
 		}
 		$this->setCoins($this->getCoins() + $coins);
 	}
