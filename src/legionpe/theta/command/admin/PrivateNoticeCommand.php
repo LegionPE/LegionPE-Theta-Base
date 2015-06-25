@@ -1,7 +1,7 @@
 <?php
 
 /**
- * LegionPE
+ * Theta
  * Copyright (C) 2015 PEMapModder
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +16,32 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\command\session;
+namespace legionpe\theta\command\admin;
 
 use legionpe\theta\BasePlugin;
-use legionpe\theta\command\SessionCommand;
+use legionpe\theta\lang\Phrases;
 use legionpe\theta\Session;
-use pocketmine\utils\TextFormat;
+use pocketmine\command\CommandSender;
 
-class CoinsCommand extends SessionCommand{
-	public function __construct(BasePlugin $plugin){
-		parent::__construct($plugin, "coins", "View coins", "/coins");
+class PrivateNoticeCommand extends ModeratorCommand{
+	public function __construct(BasePlugin $main){
+		parent::__construct($main, "pn", "Send a private notice to a player", "/pn <player> <message ...>");
 	}
-	protected function run(array $args, Session $sender){
-		return TextFormat::DARK_GREEN . "You have {$sender->getCoins()} coins.";
+	public function hasPermsision(Session $session){
+		return $session->isAdmin();
+	}
+	public function execute(CommandSender $sender, $commandLabel, array $args){
+		if(!isset($args[1])){
+			$this->sendUsage($sender);
+			return;
+		}
+		$name = array_shift($args);
+		$ses = $this->getSession($name);
+		if($ses === null){
+			$this->notOnline($sender, $name);
+			return;
+		}
+		$ses->send(Phrases::CMD_PRIV_NOTICE_RECIPIENT, ["msg" => $msg = implode(" ", $args)]);
+		$sender->sendMessage("PN to $ses: $msg");
 	}
 }

@@ -25,9 +25,11 @@ class Phrase{
 		$this->name = $name;
 	}
 	public function setImplementation($lang, $impl){
-		foreach((new \ReflectionClass(Phrases::class))->getConstants() as $name => $value){
-			if(substr($name, 0, 4) === "VAR_"){
-				$impl = str_replace("%" . substr($name, 4) . "%", $value, $impl);
+		if(is_string($impl)){
+			foreach((new \ReflectionClass(Phrases::class))->getConstants() as $name => $value){
+				if(substr($name, 0, 4) === "VAR_"){
+					$impl = str_replace("%" . substr($name, 4) . "%", $value, $impl);
+				}
 			}
 		}
 		$this->impls[$lang] = $impl;
@@ -35,9 +37,12 @@ class Phrase{
 	public function get(array $vars, array $fallbackList){
 		foreach($fallbackList as $lang){
 			if(isset($this->impls[$lang])){
-				return str_replace(array_map(function($name){
-					return "%$name%";
-				}, array_keys($vars)), array_values($vars), $this->impls[$lang]);
+				$impl = $this->impls[$lang];
+				return is_string($impl) ?
+					str_replace(array_map(function($name){
+						return "%$name%";
+					}, array_keys($vars)), array_values($vars), $impl) :
+					$impl;
 			}
 		}
 		return $this->name;

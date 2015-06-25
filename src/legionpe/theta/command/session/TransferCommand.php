@@ -41,11 +41,11 @@ class TransferCommand extends SessionCommand{
 		$this->human = $human;
 		$this->class = $id;
 	}
-	protected function run(array $args, Session $session){
+	protected function run(array $args, Session $sender){
 		if(Settings::$LOCALIZE_CLASS === $this->class){
 			return TextFormat::RED . "You are already in $this->human!";
 		}
-		$this->getPlugin()->transferGame($session->getPlayer(), $this->class);
+		$this->getPlugin()->transferGame($sender->getPlayer(), $this->class);
 		return TextFormat::AQUA . "Finding an available " . MUtils::word_addSingularArticle($this->human) . " server for you...";
 	}
 }

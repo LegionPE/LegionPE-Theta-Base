@@ -5,6 +5,7 @@
 	"meta.authors": [
 		"PEMapModder"
 	],
+	"meta.version": "1.0",
 
 	"chat.blocked.pass": "%em%Never%warning% tell %em2%anybody%warning% %em3%(including staff)%warning% your password.",
 	"chat.broadcasts": [
@@ -17,8 +18,11 @@
 	"cmd.error.wronguse": "%error%Usage: %usage%",
 	"cmd.error.absplayer.unknwon": "%error%That player is not online on this server.",
 	"cmd.error.absplayer.named": "%error%The player \"%player%\" is not online on this server.",
+	"cmd.pm.remindquery": "%notify%Reminder: Use /q next time if you want to %em%talk in chat directly%notify% instead of %em2%typing /w every time%notify%.",
+	"cmd.pn.recipient": "%notify%You have received a private notice from a staff member:\n%msg%",
 	"cmd.transfer.err.noservers": "%error%No servers for %class% have available slots.",
 	"cmd.transfer.success": "%success%Transferring you to %em%%ip%%success%:%em2%%port%%success% (%class% server)...",
+	"cmd.version.msg": "%info%This server uses %em%%pmversion%%info% with %em2%%thetaversion%%info% by %em3%%thetaauthor%%info%. You are using %em%%lang% translation v%langversion%%info% by %em2%%langauthor%%info%.",
 
 	"login.auth.success": "%success%You have been authenticated by %em%%method%",
 	"login.auth.whereami": "%info%You are in %em%LegionPE %em2%%class% %em3%(%ip%:%port%)\n%verbose%Give this address to friends to play on this server together!",

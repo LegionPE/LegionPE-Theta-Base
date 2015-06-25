@@ -21,6 +21,7 @@ namespace legionpe\theta\command;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\Session;
 use pocketmine\command\CommandSender;
+use pocketmine\event\TextContainer;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
@@ -63,7 +64,7 @@ abstract class SessionCommand extends ThetaCommand{
 		$r = $this->run($args, $this->getPlugin()->getSession($session));
 		if($r === false){
 			$session->send(Phrases::CMD_ERR_WRONG_USE, ["usage" => $this->getUsage()]);
-		}elseif(is_string($r)){
+		}elseif(is_string($r) or ($r instanceof TextContainer)){
 			$sender->sendMessage($r);
 		}
 		return true;
@@ -76,5 +77,8 @@ abstract class SessionCommand extends ThetaCommand{
 	protected function checkPerm(/** @noinspection PhpUnusedParameterInspection */Session $session, &$msg = "You don't have permission to use this command"){
 		return true;
 	}
-	protected abstract function run(array $args, Session $session);
+	protected abstract function run(array $args, Session $sender);
+	protected function offline(Session $sender, $name){
+		return $sender->translate(Phrases::CMD_ERR_ABSENT_PLAYER_NAME_KNOWN, ["player" => $name]);
+	}
 }

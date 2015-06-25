@@ -362,6 +362,10 @@ abstract class Session{
 		$rank = $this->getRank();
 		return ($rank & Settings::RANK_PERM_MOD) and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
 	}
+	public function isAdmin($includeTrial = true){
+		$rank = $this->getRank();
+		return ($rank & Settings::RANK_PERM_ADMIN) and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
+	}
 	public function isDonator(){
 		return (bool) ($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR);
 	}

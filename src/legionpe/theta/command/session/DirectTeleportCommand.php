@@ -28,7 +28,7 @@ class DirectTeleportCommand extends SessionCommand{
 	public function __construct(BasePlugin $plugin){
 		parent::__construct($plugin, "dtp", "Alternative LegionPE style teleportation", "/dtp [teleporter = me] <target[-<blocks behind target>]> [-f (force teleport multi-world)]");
 	}
-	protected function run(array $args, Session $session){
+	protected function run(array $args, Session $sender){
 		if(!isset($args[0])){
 			return false;
 		}
@@ -39,7 +39,7 @@ class DirectTeleportCommand extends SessionCommand{
 				return $this->notOnline($f);
 			}
 		}else{
-			$from = $session;
+			$from = $sender;
 		}
 		$arg2 = array_shift($args);
 		if(($pos = strpos($arg2, "-")) !== false){

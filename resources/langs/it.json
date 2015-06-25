@@ -1,10 +1,11 @@
 {
 	"meta.short": "it",
 	"meta.english": "Italian",
-	"meta.local": "Edit this yourself",
+	"meta.local": "Italiano",
 	"meta.authors": [
 		"Heromine"
 	],
+	"meta.version": "1.0",
 
 	"chat.blocked.pass": "%em%Never%warning% tell %em2%anybody%warning% %em3%(including staff)%warning% your password.",
 	"chat.broadcasts": [

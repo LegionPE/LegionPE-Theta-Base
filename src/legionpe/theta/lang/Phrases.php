@@ -19,8 +19,15 @@
 namespace legionpe\theta\lang;
 
 use pocketmine\utils\TextFormat;
+
 class Phrases{
 	// phrases
+	const META_SHORT = "meta.short";
+	const META_ENGLISH = "meta.english";
+	const META_LOCAL = "meta.local";
+	const META_AUTHORS = "meta.authors";
+	const META_VERSION = "meta.version";
+
 	const LOGIN_AUTH_SUCCESS = "login.auth.success";
 	const LOGIN_AUTH_WHEREAMI = "login.auth.whereami";
 	const LOGIN_REGISTER_PROMPT = "login.register.prompt";
@@ -37,8 +44,11 @@ class Phrases{
 	const CMD_ERR_WRONG_USE = "cmd.error.wronguse";
 	const CMD_ERR_ABSENT_PLAYER_NAME_UNKNOWN = "cmd.error.absplayer.unknown";
 	const CMD_ERR_ABSENT_PLAYER_NAME_KNOWN = "cmd.error.absplayer.named";
+	const CMD_PRIV_MSG_REMIND_QUERY = "cmd.pm.remindquery";
+	const CMD_PRIV_NOTICE_RECIPIENT = "cmd.pn.recipient";
 	const CMD_TRANSFER_ERR_NO_SERVERS = "cmd.transfer.err.noservers";
 	const CMD_TRANSFER_SUCCESS = "cmd.transfer.success";
+	const CMD_VERSION_MSG = "cmd.version.msg";
 
 	const WARNING_RECEIVED_NOTIFICATION = "warning.notification.main";
 	const WARNING_MUTED_NOTIFICATION = "warning.notification.muted";
