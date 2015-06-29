@@ -199,7 +199,7 @@ class SessionEventListener implements Listener{
 			$event->setCancelled();
 			return;
 		}
-		if($session->onChat($event) === false){
+		if($session->onChatEvent($event) === false){
 			$event->setCancelled();
 		}
 	}

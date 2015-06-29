@@ -122,10 +122,17 @@ abstract class AsyncQuery extends AsyncTask{
 	}
 	/**
 	 * @param string|mixed $str
+	 * @param bool $bin
 	 * @return string
 	 */
-	public function esc($str){
-		return is_string($str) ? "'{$this->getConn()->escape_string($str)}'" : (string) $str;
+	public function esc($str, $bin = false){
+		if(is_string($str)){
+			if($bin){
+				return "X'" . bin2hex($str) . "'";
+			}
+			return "'" . $this->getConn()->escape_string($str) . "'";
+		}
+		return (string) $str;
 	}
 	protected function reportDebug(){
 		return true;

@@ -45,7 +45,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 			if(!is_array($datum)){
 				$inserts[] = $this->esc($datum);
 			}elseif(!isset($datum["noinsert"])){
-				$inserts[] = $this->esc($datum["v"]);
+				$inserts[] = $this->esc($datum["v"], isset($datum["bin"]));
 			}
 		}
 		$query .= implode(",", $cols);
@@ -56,7 +56,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 			if(!is_array($datum)){
 				$query .= $column . "=" . $this->esc($datum) . ",";
 			}elseif(!isset($datum["noupdate"])){
-				$query .= $column . "=" . $this->esc($datum["v"]) . ",";
+				$query .= $column . "=" . $this->esc($datum["v"], isset($datum["bin"])) . ",";
 			}
 		}
 		return $this->queryFinalProcess(substr($query, 0, -1));
@@ -88,6 +88,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 			"laston" => time(),
 			"ontime" => (int) $s->getAndUpdateOntime(),
 			"config" => $s->getAllSettings(),
+			"skin1" => ["v" => $s->getCurrentFaceSkin(), "bin" => true],
 			"lastgrind" => $s->getLastGrind(),
 			"rank" => ["v" => $s->getRank(), "noupdate" => true],
 			"warnpts" => $s->getWarningPoints(),

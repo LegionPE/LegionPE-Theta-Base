@@ -49,6 +49,8 @@ abstract class BasePlugin extends PluginBase{
 	protected $sesList;
 	/** @var LanguageManager */
 	private $langs;
+	/** @var int[] */
+	private $faceSeeks = [];
 	/** @var Queue[] */
 	private $queues = [], $playerQueues = [], $teamQueues = [];
 	/** @var Session[] */
@@ -58,6 +60,8 @@ abstract class BasePlugin extends PluginBase{
 	private $altIp;
 	/** @var int */
 	private $altPort;
+	/** @var int */
+	private $internalLastChatId = null;
 
 	// PluginManager-level stuff
 	/**
@@ -81,6 +85,7 @@ abstract class BasePlugin extends PluginBase{
 		new InitDbQuery($this);
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SyncStatusTask($this), 40, 40);
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SessionTickTask($this), 1, 20);
+		$this->faceSeeks = json_decode($this->getResourceContents("head.json"));
 		$this->langs = new LanguageManager($this);
 	}
 	public function onDisable(){
@@ -198,15 +203,13 @@ abstract class BasePlugin extends PluginBase{
 		];
 	}
 
-	// override-able implementation classes
+	// override-able implementations/classes
 	public function getBasicListener(){
 		return BaseListener::class;
 	}
 	protected function getSessionListenerClass(){
 		return SessionEventListener::class;
 	}
-	public abstract function sendFirstJoinMessages(Player $player);
-	public abstract function query_world();
 	public function getLoginQueryImpl(){
 		return LoginDataQuery::class;
 	}
@@ -218,6 +221,21 @@ abstract class BasePlugin extends PluginBase{
 	 */
 	protected function getServerNameAppend(){
 		return null;
+	}
+	public abstract function sendFirstJoinMessages(Player $player);
+	public abstract function query_world();
+	public function handleChat(array $row){
+		$this->setInternalLastChatId($row["id"]);
+		$type = $row["type"];
+		$soruce = $row["src"];
+		$message = $row["msg"];
+		$type = $row["type"];
+		$data = $row["json"];
+		switch($type){
+			case ChatType::TEAM_CHAT:
+				$tid = $data["tid"];
+				break;
+		}
 	}
 
 	// global-level utils functions
@@ -255,7 +273,8 @@ abstract class BasePlugin extends PluginBase{
 		$classTotal = $this->classTotalPlayers;
 		$classMax = $this->classMaxPlayers;
 	}
-	// public getters
+
+	// public getters and setters
 	/**
 	 * @return BaseListener
 	 */
@@ -267,6 +286,9 @@ abstract class BasePlugin extends PluginBase{
 	 */
 	public function getSesList(){
 		return $this->sesList;
+	}
+	public function getFaceSeeks(){
+		return $this->faceSeeks;
 	}
 	public function getLangs(){
 		return $this->langs;
@@ -286,5 +308,11 @@ abstract class BasePlugin extends PluginBase{
 	public function setAltServer($altIp, $altPort){
 		$this->altIp = $altIp;
 		$this->altPort = $altPort;
+	}
+	public function getInternalLastChatId(){
+		return $this->internalLastChatId;
+	}
+	public function setInternalLastChatId($id){
+		$this->internalLastChatId = max($id, $this->internalLastChatId);
 	}
 }

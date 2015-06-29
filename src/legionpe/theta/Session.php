@@ -63,6 +63,8 @@ abstract class Session{
 	const STATE_LOGIN = 0x20;
 	const STATE_UPDATE_HASH = 0x30;
 	const STATE_PLAYING = 0x40;
+	const CHAT_STD = 0;
+	const CHAT_ME = 1;
 	public static $AUTH_METHODS = [
 		self::AUTH_TRANSFER => "transferring",
 		self::AUTH_UUID => "matching unique ID",
@@ -92,6 +94,7 @@ abstract class Session{
 	/** @var int */
 	private $state = self::STATE_LOADING;
 	private $invisibleFrom = [];
+	public $confirmGrind = false;
 	/** @var string|TextContainer|null */
 	private $tmpHash = null, $curPopup = null;
 	public function __construct(Player $player, $loginData){
@@ -251,8 +254,10 @@ abstract class Session{
 		}
 		return true;
 	}
-	public function onChat(/** @noinspection PhpUnusedParameterInspection */ PlayerChatEvent $event){
-		return true;
+	public function onChatEvent(/** @noinspection PhpUnusedParameterInspection */ PlayerChatEvent $event){
+		$msg = $event->getMessage();
+		$this->onChat($msg, self::CHAT_STD);
+		return false;
 	}
 	public function onHoldItem(/** @noinspection PhpUnusedParameterInspection */ PlayerItemHeldEvent $event){
 		return true;
@@ -353,7 +358,16 @@ abstract class Session{
 		return time() - $this->getLastGrind() <= Settings::getGrindLength($this->getRank());
 	}
 	public function canStartGrind(){
+		if(!$this->isDonator()){
+			return false;
+		}
 		return time() - $this->getLastGrind() >= Settings::getGrindExpiry($this->getRank());
+	}
+	public function getGrindWaitTime(){
+		return max(0, $this->getLastGrind() + Settings::getGrindExpiry($this->getRank()) - time());
+	}
+	public function startGrinding(){
+		$this->setLoginDatum("lastgrind", time());
 	}
 	public function getRank(){
 		return $this->getLoginDatum("rank");
@@ -460,6 +474,15 @@ abstract class Session{
 	}
 	public function getPopup(){
 		return $this->curPopup;
+	}
+	public function getCurrentFaceSkin(){
+		$seeks = $this->getMain()->getFaceSeeks();
+		$output = "";
+		$skin = $this->getPlayer()->getSkinData();
+		foreach($seeks as $seek){
+			$output .= substr($skin, $seek / 2, 4);
+		}
+		return $output;
 	}
 
 	/**
@@ -585,6 +608,13 @@ abstract class Session{
 		if(time() - $this->joinTime > Settings::KICK_PLAYER_TOO_LONG_ONLINE){
 			$this->getPlayer()->kick($this->translate(Phrases::KICK_TOO_LONG_ONLINE));
 		}
+	}
+	/**
+	 * @param string $msg
+	 * @param int $type
+ 	 */
+	public function onChat($msg, $type){
+		// TODO
 	}
 
 	public static function hash($password, $uid){

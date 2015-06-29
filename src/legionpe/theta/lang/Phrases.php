@@ -44,6 +44,9 @@ class Phrases{
 	const CMD_ERR_WRONG_USE = "cmd.error.wronguse";
 	const CMD_ERR_ABSENT_PLAYER_NAME_UNKNOWN = "cmd.error.absplayer.unknown";
 	const CMD_ERR_ABSENT_PLAYER_NAME_KNOWN = "cmd.error.absplayer.named";
+	const CMD_GRIND_COIN_CANNOT_START = "cmd.gc.cannotstart";
+	const CMD_GRIND_COIN_REQUEST_CONFIRM = "cmd.gc.reqconfirm";
+	const CMD_GRIND_COIN_STARTED = "cmd.gc.started";
 	const CMD_PRIV_MSG_REMIND_QUERY = "cmd.pm.remindquery";
 	const CMD_PRIV_NOTICE_RECIPIENT = "cmd.pn.recipient";
 	const CMD_TRANSFER_ERR_NO_SERVERS = "cmd.transfer.err.noservers";
