@@ -18,6 +18,8 @@
 
 namespace legionpe\theta;
 
+use legionpe\theta\chat\ChannelChatType;
+use legionpe\theta\chat\TeamChatType;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\query\AddIpQuery;
@@ -65,6 +67,9 @@ abstract class Session{
 	const STATE_PLAYING = 0x40;
 	const CHAT_STD = 0;
 	const CHAT_ME = 1;
+	const CHAT_LOCAL = 2;
+	const CHANNEL_LOCAL = "&local";
+	const CHANNEL_TEAM = "&team";
 	public static $AUTH_METHODS = [
 		self::AUTH_TRANSFER => "transferring",
 		self::AUTH_UUID => "matching unique ID",
@@ -95,6 +100,7 @@ abstract class Session{
 	private $state = self::STATE_LOADING;
 	private $invisibleFrom = [];
 	public $confirmGrind = false;
+	public $currentChatState = self::CHANNEL_LOCAL;
 	/** @var string|TextContainer|null */
 	private $tmpHash = null, $curPopup = null;
 	public function __construct(Player $player, $loginData){
@@ -175,6 +181,24 @@ abstract class Session{
 					return false;
 				}
 			}
+			$isLocal = substr($event->getMessage(), 0, 1) !== ".";
+			if($isLocal){
+				$event->setMessage(substr($event->getMessage(), 1));
+			}
+			if($this->currentChatState === self::CHANNEL_TEAM){
+				$data = ["tid" => $this->getTeamId(), "teamName" => $this->getTeamName()];
+				$type = new TeamChatType($this->getMain(), $this->getPlayer()->getDisplayName(), trim($event->getMessage()), $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
+				$type->push();
+				return false;
+			}
+
+			if($this->currentChatState !== self::CHANNEL_LOCAL){
+				$data = ["channel" => $this->currentChatState];
+				$type = new ChannelChatType($this->getMain(), $this->getPlayer()->getDisplayName(), trim($event->getMessage()), $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
+				$type->push();
+				return false;
+			}
+			$this->onChat(trim($event->getMessage()), $isLocal ? self::CHAT_LOCAL : self::CHAT_STD);
 		}
 		return true;
 	}
@@ -351,6 +375,12 @@ abstract class Session{
 	public function getStatsPublic(){
 		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_STATS_PUBLIC);
 	}
+	public function isLocalChatOn(){
+		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_LOCAL_CHAT_ON);
+	}
+	public function isTeamChannelOn(){
+		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_TEAM_CHANNEL_ON);
+	}
 	public function getLastGrind(){
 		return $this->getLoginDatum("lastgrind");
 	}
@@ -392,6 +422,21 @@ abstract class Session{
 	public function isVIPPlus(){
 		return (bool) ($this->getRank() & Settings::RANK_IMPORTANCE_VIP_PLUS);
 	}
+	public function getChatColor(){
+		if($this->isAdmin()){
+			return TextFormat::LIGHT_PURPLE . TextFormat::BOLD;
+		}
+		if($this->isModerator()){
+			return TextFormat::LIGHT_PURPLE;
+		}
+		if($this->isVIP()){
+			return TextFormat::WHITE . TextFormat::BOLD;
+		}
+		if($this->isDonator()){
+			return TextFormat::WHITE;
+		}
+		return TextFormat::GRAY;
+	}
 	public function getWarningPoints(){
 		return $this->getLoginDatum("warnpts");
 	}
@@ -414,6 +459,9 @@ abstract class Session{
 	}
 	public function getTeamId(){
 		return $this->getLoginDatum("tid");
+	}
+	public function getTeamName(){
+		return "TEAM NAME HERE TODO"; // TODO
 	}
 	public function getTeamRank(){
 		return $this->getLoginDatum("teamrank");
@@ -613,8 +661,19 @@ abstract class Session{
 	 * @param string $msg
 	 * @param int $type
  	 */
-	public function onChat($msg, $type){
-		// TODO
+	public function onChat($msg, /** @noinspection PhpUnusedParameterInspection */ $type){
+		$msg = $this->getChatColor() . preg_replace_callback('/@([A-Za-z_]{3,16})/', function($match){
+			if(($player = $this->getMain()->getServer()->getPlayer($match[1])) !== null){
+				return $player->getName() . $this->getChatColor();
+			}
+				return $match[0];
+		}, $msg);
+		foreach($this->getMain()->getSessions() as $ses){
+			// TODO handle $type
+			if($ses->isLocalChatOn()){
+				$ses->getPlayer()->sendMessage($msg);
+			}
+		}
 	}
 
 	public static function hash($password, $uid){

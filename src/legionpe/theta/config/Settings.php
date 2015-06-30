@@ -67,6 +67,7 @@ abstract class Settings{
 		self::CLASS_INFECTED => "local.class.name.infected",
 		self::CLASS_CLASSICAL => "local.class.name.pvp.classic"
 	];
+	const CLASS_ALL = 0;
 	const CLASS_HUB = 1;
 	const CLASS_KITPVP = 2;
 	const CLASS_PARKOUR = 3;
@@ -119,6 +120,8 @@ abstract class Settings{
 	const CONFIG_AUTH_NONE = 5;
 	const CONFIG_TAG_ON = 0x10;
 	const CONFIG_STATS_PUBLIC = 0x20;
+	const CONFIG_TEAM_CHANNEL_ON = 0x40;
+	const CONFIG_LOCAL_CHAT_ON = 0x80;
 
 	public static function getWarnPtsConseq(/** @noinspection PhpUnusedParameterInspection */
 		$pts, $origin = null){

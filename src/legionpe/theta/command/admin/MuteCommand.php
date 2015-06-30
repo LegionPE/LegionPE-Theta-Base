@@ -22,6 +22,9 @@ use pocketmine\command\CommandSender;
 
 class MuteCommand extends ModeratorCommand{
 	public function execute(CommandSender $sender, $commandLabel, array $args){
+		if(!$this->testPermission($sender)){
+			return;
+		}
 		// TODO: Implement execute() method.
 	}
 }

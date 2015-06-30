@@ -16,28 +16,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\query;
+namespace legionpe\theta\utils;
 
-use legionpe\theta\BasePlugin;
+use legionpe\theta\query\SyncChatQuery;
+use pocketmine\scheduler\PluginTask;
 
-class PushChatQuery extends AsyncQuery{
-	private $src;
-	private $msg;
-	private $type;
-	private $class;
-	private $data;
-	public function __construct(BasePlugin $main, $src, $msg, $type, $class, $data = []){
-		parent::__construct($main);
-		$this->src = $src;
-		$this->msg = $msg;
-		$this->type = $type;
-		$this->class = $class;
-		$this->data = json_encode($data);
-	}
-	public function getQuery(){
-		return "INSERT INTO chat(src,msg,type,class,json)VALUES({$this->esc($this->src)},{$this->esc($this->msg)},$this->type,$this->class,{$this->esc($this->data)})";
-	}
-	public function getResultType(){
-		return self::TYPE_RAW;
+class FireSyncChatQueryTask extends PluginTask{
+	public $canFireNext = true;
+	public function onRun($currentTick){
+		if($this->canFireNext){
+			/** @noinspection PhpParamsInspection */
+			new SyncChatQuery($this->getOwner(), $this);
+		}
 	}
 }

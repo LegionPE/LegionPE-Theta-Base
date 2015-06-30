@@ -31,6 +31,9 @@ class PrivateNoticeCommand extends ModeratorCommand{
 		return $session->isAdmin();
 	}
 	public function execute(CommandSender $sender, $commandLabel, array $args){
+		if(!$this->testPermission($sender)){
+			return;
+		}
 		if(!isset($args[1])){
 			$this->sendUsage($sender);
 			return;

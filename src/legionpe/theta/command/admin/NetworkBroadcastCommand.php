@@ -16,9 +16,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta;
+namespace legionpe\theta\command\admin;
 
-class ChatType{
-	const SERVER_BROADCAST = 0;
-	const TEAM_CHAT = 1;
+use legionpe\theta\Session;
+use pocketmine\command\CommandSender;
+
+class NetworkBroadcastCommand extends ModeratorCommand{
+	public function execute(CommandSender $sender, $commandLabel, array $args){
+		if(!$this->testPermission($sender)){
+			return;
+		}
+
+	}
+	protected function hasPermission(Session $session){
+		return $session->isAdmin(false);
+	}
 }

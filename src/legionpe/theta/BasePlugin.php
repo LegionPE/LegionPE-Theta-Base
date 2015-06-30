@@ -18,6 +18,7 @@
 
 namespace legionpe\theta;
 
+use legionpe\theta\chat\ChatType;
 use legionpe\theta\command\ThetaCommand;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\LanguageManager;
@@ -226,16 +227,13 @@ abstract class BasePlugin extends PluginBase{
 	public abstract function query_world();
 	public function handleChat(array $row){
 		$this->setInternalLastChatId($row["id"]);
-		$type = $row["type"];
-		$soruce = $row["src"];
+		$source = $row["src"];
 		$message = $row["msg"];
 		$type = $row["type"];
+		$class = $row["class"];
 		$data = $row["json"];
-		switch($type){
-			case ChatType::TEAM_CHAT:
-				$tid = $data["tid"];
-				break;
-		}
+		$exe = ChatType::get($this, $type, $source, $message, $class, $data);
+		$exe->execute();
 	}
 
 	// global-level utils functions

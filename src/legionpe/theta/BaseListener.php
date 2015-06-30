@@ -23,6 +23,7 @@ use legionpe\theta\query\LoginDataQuery;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerPreLoginEvent;
 use pocketmine\event\server\QueryRegenerateEvent;
+use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
 class BaseListener implements Listener{
@@ -30,9 +31,15 @@ class BaseListener implements Listener{
 	private $main;
 	public function __construct(BasePlugin $main){
 		$this->main = $main;
+		foreach($main->getServer()->getOnlinePlayers() as $player){
+			$this->priv_onPreLogin($player);
+		}
 	}
 	public function onPreLogin(PlayerPreLoginEvent $event){
 		$player = $event->getPlayer();
+		$this->priv_onPreLogin($player);
+	}
+	private function priv_onPreLogin(Player $player){
 		/** @var string|LoginDataQuery $LoginQuery */
 		$LoginQuery = $this->main->getLoginQueryImpl();
 		/** @noinspection PhpDeprecationInspection */
@@ -41,8 +48,8 @@ class BaseListener implements Listener{
 	public function onQueryRegen(QueryRegenerateEvent $event){
 		$event->setWorld($this->main->query_world());
 		$this->main->getPlayersCount($total, $max, $classTotal, $classMax);
-		$event->setPlayerCount($total);
-		$event->setMaxPlayerCount($max);
+		$event->setPlayerCount($classTotal);
+		$event->setMaxPlayerCount($classMax);
 		$event->setPlayerList([]);
 		$event->setServerName(TextFormat::clean($this->main->getServer()->getNetwork()->getName()));
 		$extra = $event->getExtraData();

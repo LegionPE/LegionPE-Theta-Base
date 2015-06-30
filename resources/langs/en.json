@@ -14,6 +14,8 @@
 		"%notify%bold%Follow us on Twitter! %em%%italic%@LegionPE",
 		"%notify%bold%Earn coins by playing the games, and spend coins at the shops at each game!"
 	],
+	"chat.format.team": "%em1%TEAM%symbol%}%source%%symbol%>%msg%",
+
 	"cmd.error.noperm": "%error%You don't have permission to use this command.",
 	"cmd.error.wronguse": "%error%Usage: %usage%",
 	"cmd.error.absplayer.unknwon": "%error%That player is not online on this server.",

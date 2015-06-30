@@ -71,6 +71,9 @@ class WarnCommand extends ModeratorCommand{
 		$this->id = $id;
 	}
 	public function execute(CommandSender $sender, $commandLabel, array $args){
+		if(!$this->testPermission($sender)){
+			return true;
+		}
 		if(!isset($args[0])){
 			$this->sendUsage($sender);
 			return true;

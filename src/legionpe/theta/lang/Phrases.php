@@ -39,6 +39,12 @@ class Phrases{
 
 	const CHAT_BLOCKED_PASS = "chat.blocked.pass";
 	const CHAT_BROADCASTS_ARRAY = "chat.broadcasts";
+	const CHAT_FORMAT_TEAM = "chat.format.team";
+	const CHAT_FORMAT_CHANNEL = "chat.format.channel";
+	const CHAT_FORMAT_LOCAL = "chat.format.local";
+	const CHAT_FORMAT_BROADCAST_NETWORK = "chat.format.broadcast.network";
+	const CHAT_FORMAT_BROADCAST_CLASS = "chat.format.broadcast.class";
+	const CHAT_FORMAT_BROADCAST_LOCAL = "chat.format.broadcast.local";
 
 	const CMD_ERR_NO_PERM = "cmd.error.noperm";
 	const CMD_ERR_WRONG_USE = "cmd.error.wronguse";
@@ -77,6 +83,7 @@ class Phrases{
 	const VAR_wait = TextFormat::RED . "… ";
 	const VAR_success = TextFormat::GREEN;
 	const VAR_info = TextFormat::WHITE;
+	const VAR_symbol = TextFormat::GRAY;
 	const VAR_verbose = "》 " . self::VAR_verbosemid;
 	const VAR_verbosemid = TextFormat::GRAY;
 	const VAR_error = TextFormat::DARK_RED;
