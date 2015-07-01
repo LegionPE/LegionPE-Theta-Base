@@ -7,7 +7,6 @@
 		"PEMapModder"
 	],
 	"meta.version": "1.0",
-
 	"chat.blocked.pass": "%em%永遠不要%warning%告訴%em2%任何其他人%warning%%em3%(包括這伺服器的職員)%warning%你的密碼！",
 	"chat.broadcasts": [
 		"%notify%%bold%到 %reset%http://lgpe.co/d%bold%notify% 購買 VIP ，以獨享特殊福利！",
@@ -21,7 +20,6 @@
 	"cmd.error.absplayer.named": "%error%玩家 \"%player%\" 並不在這個伺服器上。",
 	"cmd.transfer.err.noservers": "%error%No servers for %class% have available slots.",
 	"cmd.transfer.success": "%success%Transferring you to %em%%ip%%success%:%em2%%port%%success% (%class% server)...",
-
 	"login.auth.success": "%success%You have been authenticated by %em%%method%",
 	"login.auth.whereami": "%info%您在 %em%LegionPE %em2%%class% %em3%(%ip%:%port%)\n%verbose%給您的朋友這段地址，就可以一起玩遊戲！",
 	"login.auth.firstjoin.hub": "%em%Walk into a portal%info% or %em2%Choose an item in your inventory%info% to join a game.\n%info%You can also type %em3%/help%info% in chat to check for available commands.",
@@ -31,12 +29,10 @@
 	"login.register.mismatch": "%error%The two passwords aren't the same!\n%notify%Please type a password you like %em%directly%notify% in chat.\n%verbose%Type a totally different password if you want.",
 	"login.pass.prompt": "%notify%Please enter the password you registered directly into chat.",
 	"login.pass.mismatch": "%info%If you didn't register this account, please choose a new name.\n%verbose%If you believe that the owner of this \n%verbose%account is imposing you on purpose,\n%verbose%and would like to take it back, \n%verbose%please email %em2%support@legionpvp.eu%info%.\n%warning%The password you typed in isn't the one you registered with.\n%warning%You have %chances%left before you are kicked.",
-
 	"warning.notification.main": "%notify2%%bold%~~~~~~~~~~ 注意 ~~~~~~~~~~\n%em%%issuer%%warning% 向您發送一個警告！\n%verbose%訊息:\n%em2%%message%\n%notify%This warning carries %em3%%points%%notify% warning points.\n%info%You now have %em%%totalpoints%%info% warning points in total.",
 	"warning.notification.muted": "%error%You will be muted for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake.",
 	"warning.notification.banned": "%error%您將被封鎖， %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake.",
 	"kick.toolongonline": "您已在線超過90分鐘，請稍候再上線！你的裝置需要休息。",
-
 	"local.class.name.hub": "Hub",
 	"local.class.name.pvp.kit": "KitPvP",
 	"local.class.name.parkour": "Parkour",

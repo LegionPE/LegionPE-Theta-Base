@@ -25,10 +25,12 @@ use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 
 class LoginDataQuery extends AsyncQuery{
+	private $main;
 	public $sesId;
 	public $name;
 	public $totalWarnPts;
 	public function __construct(BasePlugin $plugin, $sesId, $name, $ip, $clientId){
+		$this->main = $plugin;
 		$this->sesId = $sesId;
 		$this->name = $this->esc($name);
 		$this->ip = $this->esc($ip);
@@ -42,15 +44,15 @@ class LoginDataQuery extends AsyncQuery{
 	}
 	public function getQuery(){
 		// warning: keep the first 7 characters ALWAYS "SELECT "
-		return "SELECT * FROM users WHERE name=$this->name";
+		return "SELECT uid,name,nicks,lastip,status,lastses,authuuid,coins,hash,newhash,pwprefix,pwlen,registration,laston,ontime,config,lastgrind,rank,warnpts,lastwarn,tid,(SELECT name FROM teams WHERE tid=users.tid)as teamname,teamrank,teamjoin,ignorelist,email,emailkey FROM users WHERE name=$this->name";
 	}
 	protected function onAssocFetched(\mysqli $mysql, array &$row){
 		$uid = $row["uid"];
+		/* group_concat must be done somewhere else because it ALWAYS returns a row. */
 		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs;");
 		$result = $r->fetch_assoc();
 		$row["iphist"] = $result["iphist"];
 		$row["langs"] = array_filter(explode(",", $result["langs"]));
-		$row["email"] = BasePlugin::EMAIL_UNVERIFIED; // TODO fetch
 		$row["isnew"] = false;
 		$r->close();
 	}
@@ -68,6 +70,7 @@ class LoginDataQuery extends AsyncQuery{
 			"authuuid" => self::COL_STRING,
 			"coins" => self::COL_FLOAT,
 			"hash" => self::COL_STRING,
+			"newhash" => self::COL_STRING,
 			"pwprefix" => self::COL_STRING,
 			"pwlen" => self::COL_INT,
 			"registration" => self::COL_UNIXTIME,
@@ -79,13 +82,16 @@ class LoginDataQuery extends AsyncQuery{
 			"warnpts" => self::COL_INT,
 			"lastwarn" => self::COL_UNIXTIME,
 			"tid" => self::COL_INT,
+			"teamname" => self::COL_STRING,
 			"teamrank" => self::COL_INT,
 			"teamjoin" => self::COL_UNIXTIME,
 			"ignorelist" => self::COL_STRING,
+			"email" => self::COL_STRING,
+			"emailkey" => self::COL_STRING,
 		];
 	}
 	public function onCompletion(Server $server){
-		$main = BasePlugin::getInstance($server);
+		$main = $this->main;
 		foreach($main->getServer()->getOnlinePlayers() as $player){
 			if($player->getId() === $this->sesId){
 				break;
@@ -109,7 +115,7 @@ class LoginDataQuery extends AsyncQuery{
 			/** @var mixed[] $result */
 			$loginData = $result;
 			$conseq = Settings::getWarnPtsConseq($this->totalWarnPts, $loginData["lastwarn"]);
-			if($conseq->banLength > 0){
+			if($conseq->banLength > 0) {
 				$player->kick(TextFormat::RED . "You are banned.\nYou have accumulated " . TextFormat::DARK_PURPLE . $this->totalWarnPts . TextFormat::RED . " warning points,\nand you still have " . TextFormat::BLUE . MUtils::time_secsToString($conseq->banLength) . TextFormat::RED . " before you are unbanned.\n" . TextFormat::AQUA . "Believe this to be a mistake? Contact us with email at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu");
 			}
 		}

@@ -40,7 +40,7 @@ use pocketmine\utils\TextFormat;
 use shoghicp\FastTransfer\FastTransfer;
 
 abstract class BasePlugin extends PluginBase{
-	const EMAIL_UNVERIFIED = "UNVERIFIED";
+	const EMAIL_UNVERIFIED = "~NOTSET";
 	private static $NAME = null;
 	/** @var FastTransfer */
 	private $FastTransfer;
