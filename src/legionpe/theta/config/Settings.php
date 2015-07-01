@@ -25,7 +25,60 @@ abstract class Settings{
 	const STATUS_ONLINE = 1;
 	const STATUS_TRANSFERRING = 2;
 	const KICK_PLAYER_TOO_LONG_ONLINE = 5400;
+	const CLASS_ALL = 0;
+	const CLASS_HUB = 1;
+	const CLASS_KITPVP = 2;
+	const CLASS_PARKOUR = 3;
+	const CLASS_SPLEEF = 4;
+	const CLASS_INFECTED = 5;
+	const CLASS_CLASSICAL = 6;
+const RANK_IMPORTANCE_DEFAULT = 0x0000;
+const RANK_IMPORTANCE_TESTER = 0x0001;
+const RANK_IMPORTANCE_DONATOR = 0x0004;
+const RANK_IMPORTANCE_DONATOR_PLUS = 0x0005;
+const RANK_IMPORTANCE_VIP = 0x000C;
+const RANK_IMPORTANCE_VIP_PLUS = 0x000D;
+	const RANK_SECTOR_IMPORTANCE = 0x000F;
+	const RANK_PERM_DEFAULT = 0x0000;
+const RANK_PERM_MOD = 0x0010;
+const RANK_PERM_ADMIN = 0x0030;
 
+	// ranks of importance (how important the person is, like VERY Important Person) must not exceed 15 according to this, 1 nibble
+	// the first two bits are the two actual permission-affecting nibbles
+	const RANK_PERM_OWNER = 0x0070; // 0  , 0000
+	const RANK_PERM_STAFF = 0x00F0; // 1  , 0001
+	/** Permission to be undetected by the auto AFK kicker. */
+	const RANK_PERM_AFK = 0x0100; // 4  , 0100
+	/** Permission to bypass spam (spam detector won't detect at all). SpicyCapacitor ignores this permission and logs anyways. */
+	const RANK_PERM_SPAM = 0x0200; // 5  , 0101
+	/** Permission to edit the world. */
+	const RANK_PERM_WORLD_EDIT = 0x0400; // 12 , 1100
+	/** Permission to execute raw PHP code by `/eval` */
+	const RANK_PERM_DEV = 0x0800; // 13 , 1101
+	const RANK_SECTOR_PERMISSION = 0x00F0;
+	// permissions the rank has, 2 nibbles
+	const RANK_PREC_STD = 0x0000;
+		const RANK_PREC_TRIAL = 0x1000; // 16
+		const RANK_PREC_HEAD = 0x2000; // 48
+		const RANK_SECTOR_PRECISION = 0x3000; // 112
+		/** Here you are, the youtuber rank */
+	const RANK_DECOR_YOUTUBER = 0x4000; // 240
+		const RANK_SECTOR_DECOR = 0xC000; // 256
+		const CONFIG_DEFAULT_VALUE = self::CONFIG_AUTH_UUID | self::CONFIG_TAG_ON | self::CONFIG_STATS_PUBLIC; // 512
+		const CONFIG_SECTOR_AUTH = 0x0F; // 1024
+		/** @deprecated */
+	const CONFIG_AUTH_SUBNET_HISTORY = 0; // 2048
+	const CONFIG_AUTH_SUBNET_LAST = 1;
+	// precise (generally won't affect the program) degree of rank, 2 bits
+	const CONFIG_AUTH_IP_HISTORY = 2;
+	const CONFIG_AUTH_IP_LAST = 3;
+	const CONFIG_AUTH_UUID = 4;
+	const CONFIG_AUTH_NONE = 5;
+	// decorative ranks, which don't actually affect anything, 2 bits
+	const CONFIG_TAG_ON = 0x10;
+	const CONFIG_STATS_PUBLIC = 0x20;
+	const CONFIG_TEAM_CHANNEL_ON = 0x40;
+	const CONFIG_LOCAL_CHAT_ON = 0x80;
 	/** @var int */
 	public static $SYSTEM_MAX_PLAYERS;
 	/** @var bool */
@@ -67,62 +120,6 @@ abstract class Settings{
 		self::CLASS_INFECTED => "local.class.name.infected",
 		self::CLASS_CLASSICAL => "local.class.name.pvp.classic"
 	];
-	const CLASS_ALL = 0;
-	const CLASS_HUB = 1;
-	const CLASS_KITPVP = 2;
-	const CLASS_PARKOUR = 3;
-	const CLASS_SPLEEF = 4;
-	const CLASS_INFECTED = 5;
-	const CLASS_CLASSICAL = 6;
-
-	// ranks of importance (how important the person is, like VERY Important Person) must not exceed 15 according to this, 1 nibble
-	// the first two bits are the two actual permission-affecting nibbles
-	const RANK_IMPORTANCE_DEFAULT =         0x0000; // 0  , 0000
-	const RANK_IMPORTANCE_TESTER =          0x0001; // 1  , 0001
-	const RANK_IMPORTANCE_DONATOR =         0x0004; // 4  , 0100
-	const RANK_IMPORTANCE_DONATOR_PLUS =    0x0005; // 5  , 0101
-	const RANK_IMPORTANCE_VIP =             0x000C; // 12 , 1100
-	const RANK_IMPORTANCE_VIP_PLUS =        0x000D; // 13 , 1101
-	const RANK_SECTOR_IMPORTANCE =          0x000F;
-	// permissions the rank has, 2 nibbles
-	const RANK_PERM_DEFAULT =               0x0000;
-	const RANK_PERM_MOD =                   0x0010; // 16
-	const RANK_PERM_ADMIN =                 0x0030; // 48
-	const RANK_PERM_OWNER =                 0x0070; // 112
-	const RANK_PERM_STAFF =                 0x00F0; // 240
-	/** Permission to be undetected by the auto AFK kicker. */
-	const RANK_PERM_AFK =                   0x0100; // 256
-	/** Permission to bypass spam (spam detector won't detect at all). SpicyCapacitor ignores this permission and logs anyways. */
-	const RANK_PERM_SPAM =                  0x0200; // 512
-	/** Permission to edit the world. */
-	const RANK_PERM_WORLD_EDIT =            0x0400; // 1024
-	/** Permission to execute raw PHP code by `/eval` */
-	const RANK_PERM_DEV =                   0x0800; // 2048
-	const RANK_SECTOR_PERMISSION =          0x00F0;
-	// precise (generally won't affect the program) degree of rank, 2 bits
-	const RANK_PREC_STD =                   0x0000;
-	const RANK_PREC_TRIAL =                 0x1000;
-	const RANK_PREC_HEAD =                  0x2000;
-	const RANK_SECTOR_PRECISION =           0x3000;
-	// decorative ranks, which don't actually affect anything, 2 bits
-	/** Here you are, the youtuber rank */
-	const RANK_DECOR_YOUTUBER =             0x4000;
-	const RANK_SECTOR_DECOR =               0xC000;
-
-	const CONFIG_DEFAULT_VALUE = self::CONFIG_AUTH_UUID | self::CONFIG_TAG_ON | self::CONFIG_STATS_PUBLIC;
-	const CONFIG_SECTOR_AUTH = 0x0F;
-	/** @deprecated */
-	const CONFIG_AUTH_SUBNET_HISTORY = 0;
-	const CONFIG_AUTH_SUBNET_LAST = 1;
-	const CONFIG_AUTH_IP_HISTORY = 2;
-	const CONFIG_AUTH_IP_LAST = 3;
-	const CONFIG_AUTH_UUID = 4;
-	const CONFIG_AUTH_NONE = 5;
-	const CONFIG_TAG_ON = 0x10;
-	const CONFIG_STATS_PUBLIC = 0x20;
-	const CONFIG_TEAM_CHANNEL_ON = 0x40;
-	const CONFIG_LOCAL_CHAT_ON = 0x80;
-
 	public static function getWarnPtsConseq(/** @noinspection PhpUnusedParameterInspection */
 		$pts, $origin = null){
 		// TODO

@@ -202,13 +202,15 @@ abstract class Session{
 		}
 		return true;
 	}
-	public function onDamage(/** @noinspection PhpUnusedParameterInspection */ EntityDamageEvent $event){
+	public function onDamage(/** @noinspection PhpUnusedParameterInspection */
+		EntityDamageEvent $event){
 		if(!$this->isPlaying()){
 			return false;
 		}
 		return true;
 	}
-	public function onMove(/** @noinspection PhpUnusedParameterInspection */ PlayerMoveEvent $event){
+	public function onMove(/** @noinspection PhpUnusedParameterInspection */
+		PlayerMoveEvent $event){
 		if(!$this->isPlaying()){
 			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
 			$from = $event->getFrom();
@@ -217,76 +219,88 @@ abstract class Session{
 		}
 		return true;
 	}
-	public function onConsume(/** @noinspection PhpUnusedParameterInspection */ PlayerItemConsumeEvent $event){
+	public function onConsume(/** @noinspection PhpUnusedParameterInspection */
+		PlayerItemConsumeEvent $event){
 		if(!$this->isPlaying()){
 			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
 			return false;
 		}
 		return true;
 	}
-	public function onDropItem(/** @noinspection PhpUnusedParameterInspection */ PlayerDropItemEvent $event){
+	public function onDropItem(/** @noinspection PhpUnusedParameterInspection */
+		PlayerDropItemEvent $event){
 		if(!$this->isPlaying()){
 			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
 			return false;
 		}
 		return true;
 	}
-	public function onInteract(/** @noinspection PhpUnusedParameterInspection */ PlayerInteractEvent $event){
+	public function onInteract(/** @noinspection PhpUnusedParameterInspection */
+		PlayerInteractEvent $event){
 		if(!$this->isPlaying()){
 			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
 			return false;
 		}
 		return true;
 	}
-	public function onRespawn(/** @noinspection PhpUnusedParameterInspection */ PlayerRespawnEvent $event){
+	public function onRespawn(/** @noinspection PhpUnusedParameterInspection */
+		PlayerRespawnEvent $event){
 		if(!$this->isPlaying()){
 			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
 			return false;
 		}
 		return true;
 	}
-	public function onBreak(/** @noinspection PhpUnusedParameterInspection */ BlockBreakEvent $event){
+	public function onBreak(/** @noinspection PhpUnusedParameterInspection */
+		BlockBreakEvent $event){
 		if(!$this->isPlaying()){
 			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
 			return false;
 		}
 		return true;
 	}
-	public function onPlace(/** @noinspection PhpUnusedParameterInspection */ BlockPlaceEvent $event){
+	public function onPlace(/** @noinspection PhpUnusedParameterInspection */
+		BlockPlaceEvent $event){
 		if(!$this->isPlaying()){
 			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
 			return false;
 		}
 		return true;
 	}
-	public function onOpenInv(/** @noinspection PhpUnusedParameterInspection */ InventoryOpenEvent $event){
+	public function onOpenInv(/** @noinspection PhpUnusedParameterInspection */
+		InventoryOpenEvent $event){
 		if(!$this->isPlaying()){
 			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
 			return false;
 		}
 		return true;
 	}
-	public function onPickupItem(/** @noinspection PhpUnusedParameterInspection */ InventoryPickupItemEvent $event){
+	public function onPickupItem(/** @noinspection PhpUnusedParameterInspection */
+		InventoryPickupItemEvent $event){
 		if(!$this->isPlaying()){
 			return false;
 		}
 		return true;
 	}
-	public function onPickupArrow(/** @noinspection PhpUnusedParameterInspection */ InventoryPickupArrowEvent $event){
+	public function onPickupArrow(/** @noinspection PhpUnusedParameterInspection */
+		InventoryPickupArrowEvent $event){
 		if(!$this->isPlaying()){
 			return false;
 		}
 		return true;
 	}
-	public function onChatEvent(/** @noinspection PhpUnusedParameterInspection */ PlayerChatEvent $event){
+	public function onChatEvent(/** @noinspection PhpUnusedParameterInspection */
+		PlayerChatEvent $event){
 		$msg = $event->getMessage();
 		$this->onChat($msg, self::CHAT_STD);
 		return false;
 	}
-	public function onHoldItem(/** @noinspection PhpUnusedParameterInspection */ PlayerItemHeldEvent $event){
+	public function onHoldItem(/** @noinspection PhpUnusedParameterInspection */
+		PlayerItemHeldEvent $event){
 		return true;
 	}
-	public function onTeleport(/** @noinspection PhpUnusedParameterInspection */ EntityTeleportEvent $event){
+	public function onTeleport(/** @noinspection PhpUnusedParameterInspection */
+		EntityTeleportEvent $event){
 		return true;
 	}
 	public function onQuit(){
@@ -370,16 +384,16 @@ abstract class Session{
 		return $this->getLoginDatum("config") & Settings::CONFIG_SECTOR_AUTH;
 	}
 	public function getTagEnabled(){
-		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_TAG_ON);
+		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_TAG_ON);
 	}
 	public function getStatsPublic(){
-		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_STATS_PUBLIC);
+		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_STATS_PUBLIC);
 	}
 	public function isLocalChatOn(){
-		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_LOCAL_CHAT_ON);
+		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_LOCAL_CHAT_ON);
 	}
 	public function isTeamChannelOn(){
-		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_TEAM_CHANNEL_ON);
+		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_TEAM_CHANNEL_ON);
 	}
 	public function getLastGrind(){
 		return $this->getLoginDatum("lastgrind");
@@ -411,16 +425,16 @@ abstract class Session{
 		return ($rank & Settings::RANK_PERM_ADMIN) and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
 	}
 	public function isDonator(){
-		return (bool) ($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR);
+		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR);
 	}
 	public function isDonatorPlus(){
-		return (bool) ($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR_PLUS);
+		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR_PLUS);
 	}
 	public function isVIP(){
-		return (bool) ($this->getRank() & Settings::RANK_IMPORTANCE_VIP);
+		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_VIP);
 	}
 	public function isVIPPlus(){
-		return (bool) ($this->getRank() & Settings::RANK_IMPORTANCE_VIP_PLUS);
+		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_VIP_PLUS);
 	}
 	public function getChatColor(){
 		if($this->isAdmin()){
@@ -540,7 +554,7 @@ abstract class Session{
 	public function login($method){
 		$this->state = self::STATE_PLAYING;
 		$this->send(Phrases::LOGIN_AUTH_SUCCESS, ["method" => $this->translate(self::$AUTH_METHODS_PHRASES[$method])]);
-		$this->send(Phrases::LOGIN_AUTH_WHEREAMI, ["class" => $this->translate(Settings::$CLASSES_NAMES_PHRASES[Settings::$LOCALIZE_CLASS]), "ip" => Settings::$LOCALIZE_IP, "port" => (string) Settings::$LOCALIZE_PORT]);
+		$this->send(Phrases::LOGIN_AUTH_WHEREAMI, ["class" => $this->translate(Settings::$CLASSES_NAMES_PHRASES[Settings::$LOCALIZE_CLASS]), "ip" => Settings::$LOCALIZE_IP, "port" => (string)Settings::$LOCALIZE_PORT]);
 		$this->setMaintainedPopup();
 	}
 	public function send($phrase, array $vars = []){
@@ -560,7 +574,7 @@ abstract class Session{
 	public function calculateTag($nameColor = TextFormat::WHITE){
 		$rank = $this->calculateRank();
 		if($rank !== ""){
-			$tag = TextFormat::AQUA . "{" .  $rank . TextFormat::AQUA . "}";
+			$tag = TextFormat::AQUA . "{" . $rank . TextFormat::AQUA . "}";
 		}else{
 			$tag = "";
 		}
@@ -632,18 +646,40 @@ abstract class Session{
 	private function calculateRank(){
 		$rank = $this->getRank();
 		$prefix = "";
-		if($rank & 0x1000) $prefix = "Trial ";
-		if($rank & 0x2000) $prefix = "Head ";
-		if($rank & 0x0800) return $prefix . "Dev";
-		if($rank & 0x0080) return $prefix . "HeadOfStaff";
-		if($rank & 0x0040) return $prefix . "Owner";
-		if($rank & 0x0020) return $prefix . "Admin";
-		if($rank & 0x0010) return $prefix . "Mod";
-		if($rank & 0x4000) return "YT";
+		if($rank & 0x1000){
+			$prefix = "Trial ";
+		}
+		if($rank & 0x2000){
+			$prefix = "Head ";
+		}
+		if($rank & 0x0800){
+			return $prefix . "Dev";
+		}
+		if($rank & 0x0080){
+			return $prefix . "HeadOfStaff";
+		}
+		if($rank & 0x0040){
+			return $prefix . "Owner";
+		}
+		if($rank & 0x0020){
+			return $prefix . "Admin";
+		}
+		if($rank & 0x0010){
+			return $prefix . "Mod";
+		}
+		if($rank & 0x4000){
+			return "YT";
+		}
 		$suffix = "";
-		if($rank & 1) $suffix = "+";
-		if(($rank & 0x000C) === 0x000C) return "VIP$suffix";
-		if($rank & 0x0004) return "Donator$suffix";
+		if($rank & 1){
+			$suffix = "+";
+		}
+		if(($rank & 0x000C) === 0x000C){
+			return "VIP$suffix";
+		}
+		if($rank & 0x0004){
+			return "Donator$suffix";
+		}
 		return ($suffix === "+") ? "Tester" : "";
 	}
 	private function sendFirstJoinMessages(){
@@ -660,14 +696,15 @@ abstract class Session{
 	/**
 	 * @param string $msg
 	 * @param int $type
- 	 */
-	public function onChat($msg, /** @noinspection PhpUnusedParameterInspection */ $type){
-		$msg = $this->getChatColor() . preg_replace_callback('/@([A-Za-z_]{3,16})/', function($match){
-			if(($player = $this->getMain()->getServer()->getPlayer($match[1])) !== null){
-				return $player->getName() . $this->getChatColor();
-			}
+	 */
+	public function onChat($msg, /** @noinspection PhpUnusedParameterInspection */
+	                       $type){
+		$msg = $this->getChatColor() . preg_replace_callback('/@([A-Za-z_]{3,16})/', function ($match){
+				if(($player = $this->getMain()->getServer()->getPlayer($match[1])) !== null){
+					return $player->getName() . $this->getChatColor();
+				}
 				return $match[0];
-		}, $msg);
+			}, $msg);
 		foreach($this->getMain()->getSessions() as $ses){
 			// TODO handle $type
 			if($ses->isLocalChatOn()){

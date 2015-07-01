@@ -56,7 +56,9 @@ abstract class AsyncQuery extends AsyncTask{
 		$this->onPostQuery($mysql);
 		if($result === false){
 			$this->setResult(["success" => false, "query" => $query, "error" => $mysql->error]);
-			if(/* Settings::$SYSTEM_IS_TEST and */ $this->reportError()){
+			if(/* Settings::$SYSTEM_IS_TEST and */
+			$this->reportError()
+			){
 				echo "Error executing query: $query", PHP_EOL, $mysql->error, PHP_EOL;
 				echo "Reporting error via AsyncQuery thread IRC webhook connection...", PHP_EOL;
 				Utils::getURL(Credentials::IRC_WEBHOOK . urlencode("Failed to execute MySQL query: \"$query\" - Error: $mysql->error - PEMapModder: <-------"), 3);
@@ -107,15 +109,17 @@ abstract class AsyncQuery extends AsyncTask{
 			if(!isset($r[$column])){
 				$r[$column] = self::$defaultValues[$col];
 			}elseif($col === self::COL_INT){
-				$r[$column] = (int) $r[$column];
+				$r[$column] = (int)$r[$column];
 			}elseif($col === self::COL_FLOAT){
-				$r[$column] = (float) $r[$column];
+				$r[$column] = (float)$r[$column];
 			}
 		}
 	}
-	protected function onPreQuery(\mysqli $mysqli){}
+	protected function onPreQuery(\mysqli $mysqli){
+	}
 	public abstract function getQuery();
-	protected function onPostQuery(\mysqli $mysqli){}
+	protected function onPostQuery(\mysqli $mysqli){
+	}
 	public abstract function getResultType();
 	public function getExpectedColumns(){
 		return null;
@@ -132,7 +136,7 @@ abstract class AsyncQuery extends AsyncTask{
 			}
 			return "'" . $this->getConn()->escape_string($str) . "'";
 		}
-		return (string) $str;
+		return (string)$str;
 	}
 	protected function reportDebug(){
 		return true;
@@ -141,7 +145,6 @@ abstract class AsyncQuery extends AsyncTask{
 		return true;
 	}
 	protected function onAssocFetched(\mysqli $mysql, array &$row){
-
 	}
 	public function __debugInfo(){
 		return [];

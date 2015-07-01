@@ -26,18 +26,6 @@ abstract class ChatType{
 	const TEAM_CHAT = 1;
 	const CONSOLE_MESSAGE = 2;
 	const CHANNEL_CHAT = 3;
-	public static function get(BasePlugin $main, $id, $src, $msg, $class, $data){
-		switch($id){
-			case self::SERVER_BROADCAST:
-				return new ServerBroadcastChatType($main, $src, $msg, $class, $data);
-			case self::TEAM_CHAT:
-				return new TeamChatType($main, $src, $msg, $class, $data);
-			case self::CONSOLE_MESSAGE:
-				return new ConsoleChatType($main, $src, $msg, $class, $data);
-		}
-		return null;
-	}
-
 	/** @var BasePlugin */
 	protected $main;
 	protected $src;
@@ -56,9 +44,20 @@ abstract class ChatType{
 			}
 		}
 	}
+	public static function get(BasePlugin $main, $id, $src, $msg, $class, $data){
+		switch($id){
+			case self::SERVER_BROADCAST:
+				return new ServerBroadcastChatType($main, $src, $msg, $class, $data);
+			case self::TEAM_CHAT:
+				return new TeamChatType($main, $src, $msg, $class, $data);
+			case self::CONSOLE_MESSAGE:
+				return new ConsoleChatType($main, $src, $msg, $class, $data);
+		}
+		return null;
+	}
 	public function push(){
 		new PushChatQuery($this->main, $this->src, $this->msg, $this->getType(), $this->class, $this->data);
 	}
-	public abstract function execute();
 	public abstract function getType();
+	public abstract function execute();
 }

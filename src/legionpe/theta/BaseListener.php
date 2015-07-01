@@ -59,5 +59,6 @@ class BaseListener implements Listener{
 		$this->addExtras($extra);
 		$event->setExtraData($extra);
 	}
-	protected function addExtras(&$extra){}
+	protected function addExtras(&$extra){
+	}
 }

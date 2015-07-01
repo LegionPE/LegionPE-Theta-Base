@@ -26,7 +26,6 @@ class NetworkBroadcastCommand extends ModeratorCommand{
 		if(!$this->testPermission($sender)){
 			return;
 		}
-
 	}
 	protected function hasPermission(Session $session){
 		return $session->isAdmin(false);

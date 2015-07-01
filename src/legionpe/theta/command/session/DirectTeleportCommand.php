@@ -44,7 +44,7 @@ class DirectTeleportCommand extends SessionCommand{
 		$arg2 = array_shift($args);
 		if(($pos = strpos($arg2, "-")) !== false){
 			$toName = substr($arg2, $pos);
-			$distance = -((int) substr($arg2, $pos + 1));
+			$distance = -((int)substr($arg2, $pos + 1));
 		}else{
 			$toName = $arg2;
 			$distance = 0;

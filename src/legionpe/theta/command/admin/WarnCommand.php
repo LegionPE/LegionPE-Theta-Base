@@ -87,7 +87,7 @@ class WarnCommand extends ModeratorCommand{
 		$points = $this->points;
 		$msg = self::$IDS_TO_MESSAGES[$this->id];
 		if(isset($args[0])){
-			$points = (int) array_shift($args);
+			$points = (int)array_shift($args);
 			if(isset($args[0])){
 				$msg = implode(" ", $args);
 			}

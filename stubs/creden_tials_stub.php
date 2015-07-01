@@ -20,10 +20,6 @@ namespace legionpe\theta\credentials;
 
 /** @noinspection PhpUndefinedClassInspection */
 class Credentials{
-	/**
-	 * @return \mysqli
-	 */
-	public static function getMysql(){}
 	const MYSQL_HOST = "****";
 	const MYSQL_USER = "****";
 	const MYSQL_PASS = "****";
@@ -31,4 +27,9 @@ class Credentials{
 	const MYSQL_PORT = 3306;
 	const IRC_WEBHOOK = "http://n.tkte.ch/h/****/***********?payload=%7BLegionPE+Error%21%7D+";
 	const IRC_WEBHOOK_NOPREFIX = "http://n.tkte.ch/h/****/***********?payload=";
+	/**
+	 * @return \mysqli
+	 */
+	public static function getMysql(){
+	}
 }

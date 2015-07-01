@@ -259,10 +259,7 @@ abstract class BasePlugin extends PluginBase{
 			TextFormat::BOLD . TextFormat::AQUA . "LegionPE " .
 			TextFormat::BOLD . TextFormat::GREEN . Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS] .
 			TextFormat::RESET . TextFormat::DARK_AQUA . " [$online/$classTotal/$total/$max]" .
-			(
-				($append === null) ? "" :
-				(TextFormat::RESET . TextFormat::GRAY . " - " . TextFormat::RESET . $append)
-			)
+			(($append === null) ? "" : (TextFormat::RESET . TextFormat::GRAY . " - " . TextFormat::RESET . $append))
 		);
 	}
 	public function getPlayersCount(&$total, &$max, &$classTotal, &$classMax){

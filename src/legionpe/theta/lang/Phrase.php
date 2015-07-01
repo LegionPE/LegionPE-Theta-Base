@@ -39,7 +39,7 @@ class Phrase{
 			if(isset($this->impls[$lang])){
 				$impl = $this->impls[$lang];
 				return is_string($impl) ?
-					str_replace(array_map(function($name){
+					str_replace(array_map(function ($name){
 						return "%$name%";
 					}, array_keys($vars)), array_values($vars), $impl) :
 					$impl;

@@ -19,11 +19,13 @@
 namespace legionpe\theta\utils;
 
 class MUtils{
-	public static function word_startsWithVowel($word){
-		return in_array(strtolower(substr($word, 0, 1)), str_split("aeiou"));
-	}
-	public static function word_addSingularArticle(&$word){
-		$word = (self::word_startsWithVowel($word) ? "an":"a") . " $word";
+	public static function word_quantitize(&$word, $count){
+		if($count > 1){ // not >= 2
+			self::word_toPlural($word);
+			$word = "$count $word";
+		}elseif(substr($word, -1) !== "s"){
+			self::word_addSingularArticle($word);
+		}
 	}
 	public static function word_toPlural(&$word){
 		if(in_array(substr($word, -1), str_split("osxz"))){
@@ -38,14 +40,11 @@ class MUtils{
 			$word .= "s";
 		}
 	}
-	public static function word_quantitize(&$word, $count){
-		if($count > 1){ // not >= 2
-			self::word_toPlural($word);
-			$word = "$count $word";
-		}
-		elseif(substr($word, -1) !== "s"){
-			self::word_addSingularArticle($word);
-		}
+	public static function word_addSingularArticle(&$word){
+		$word = (self::word_startsWithVowel($word) ? "an" : "a") . " $word";
+	}
+	public static function word_startsWithVowel($word){
+		return in_array(strtolower(substr($word, 0, 1)), str_split("aeiou"));
 	}
 	public static function num_getOrdinal($num){
 		$rounded = $num % 100;
@@ -59,7 +58,7 @@ class MUtils{
 		if($unit === 2){
 			return "nd";
 		}
-		return $unit === 3 ? "rd":"th";
+		return $unit === 3 ? "rd" : "th";
 	}
 	public static function num_forceSign($num){
 		if($num > 0){

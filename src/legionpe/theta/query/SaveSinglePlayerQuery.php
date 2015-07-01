@@ -32,7 +32,9 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 		$this->data = serialize($data);
 	}
 	public function getQuery(){
-		while(!isset($this->data));
+		while(!isset($this->data)){
+			;
+		}
 		$query = "INSERT INTO" . " users(";
 		/** @var mixed[][] $data */
 		$data = unserialize($this->data);
@@ -86,7 +88,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 			"pwlen" => ["v" => $s->getPasswordLength(), "noupdate" => true],
 			"registration" => ["v" => $s->getRegisterTime(), "noupdate" => true],
 			"laston" => time(),
-			"ontime" => (int) $s->getAndUpdateOntime(),
+			"ontime" => (int)$s->getAndUpdateOntime(),
 			"config" => $s->getAllSettings(),
 			"skin1" => ["v" => $s->getCurrentFaceSkin(), "bin" => true],
 			"lastgrind" => $s->getLastGrind(),

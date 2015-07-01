@@ -34,14 +34,14 @@ class LanguageManager{
 			}
 		}
 	}
-	public function get($key, $vars, ...$langs){
-		$langs[] = "en";
-		return $this->phrases[$key]->get($vars, $langs);
-	}
 	public function getPhraseObject($key){
 		if(!isset($this->phrases[$key])){
 			$this->phrases[$key] = new Phrase($key);
 		}
 		return $this->phrases[$key];
+	}
+	public function get($key, $vars, ...$langs){
+		$langs[] = "en";
+		return $this->phrases[$key]->get($vars, $langs);
 	}
 }

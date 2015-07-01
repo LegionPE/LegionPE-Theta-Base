@@ -41,7 +41,6 @@ use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\Player;
 
-/* extensible */
 class SessionEventListener implements Listener{
 	/** @var BasePlugin */
 	private $main;
