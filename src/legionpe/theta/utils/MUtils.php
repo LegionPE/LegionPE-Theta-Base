@@ -46,6 +46,11 @@ class MUtils{
 	public static function word_startsWithVowel($word){
 		return in_array(strtolower(substr($word, 0, 1)), str_split("aeiou"));
 	}
+	public static function word_camelToStd(&$word){
+		$word = preg_replace_callback('/(.)([A-Z])/', function ($match){
+			return $match[1] . strtolower($match[2]);
+		}, $word);
+	}
 	public static function num_getOrdinal($num){
 		$rounded = $num % 100;
 		if(3 < $rounded and $rounded < 21){

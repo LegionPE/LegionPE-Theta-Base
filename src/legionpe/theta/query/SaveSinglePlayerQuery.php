@@ -31,6 +31,41 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 		$data = $this->getColumns($session, $status);
 		$this->data = serialize($data);
 	}
+	/**
+	 * @param Session $session
+	 * @param int $status
+	 * @return mixed[][]|mixed[]
+	 */
+	protected function getColumns(Session $session, $status){
+		$coins = $session->getCoins();
+		$this->coinsDelta = $session->getAndUpdateCoinsDelta();
+		return [
+			"uid" => ["v" => $session->getUid(), "noupdate" => true],
+			"name" => ["v" => strtolower($session->getPlayer()->getName())],
+			"nicks" => "|" . implode("|", $session->getNicks()) . "|",
+			"lastip" => $session->getPlayer()->getAddress(),
+			"status" => $status,
+			"lastses" => Settings::$LOCALIZE_CLASS,
+			"authuuid" => $session->getPlayer()->getUniqueId(),
+			"coins" => ["v" => $coins, "noupdate" => true],
+			"hash" => ["v" => $session->getPasswordHash(), "noupdate" => true],
+			"pwprefix" => ["v" => $session->getPasswordPrefix(), "noupdate" => true],
+			"pwlen" => ["v" => $session->getPasswordLength(), "noupdate" => true],
+			"registration" => ["v" => $session->getRegisterTime(), "noupdate" => true],
+			"laston" => time(),
+			"ontime" => (int)$session->getAndUpdateOntime(),
+			"config" => $session->getAllSettings(),
+			"skin1" => ["v" => $session->getCurrentFaceSkin(), "bin" => true],
+			"lastgrind" => $session->getLastGrind(),
+			"rank" => ["v" => $session->getRank(), "noupdate" => true],
+			"warnpts" => $session->getWarningPoints(),
+			"lastwarn" => $session->getLastWarnTime(),
+			"tid" => $session->getTeamId(),
+			"teamrank" => $session->getTeamRank(),
+			"teamjoin" => $session->getTeamJoinTime(),
+			"ignorelist" => "," . implode(",", $session->getIgnoreList()) . ","
+		];
+	}
 	public function getQuery(){
 		while(!isset($this->data)){
 			;
@@ -63,45 +98,10 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 		}
 		return $this->queryFinalProcess(substr($query, 0, -1));
 	}
-	public function getResultType(){
-		return self::TYPE_RAW;
-	}
-	/**
-	 * @param Session $s
-	 * @param int $status
-	 * @return mixed[][]|mixed[]
-	 */
-	protected function getColumns(Session $s, $status){
-		$coins = $s->getCoins();
-		$this->coinsDelta = $s->getAndUpdateCoinsDelta();
-		return [
-			"uid" => ["v" => $s->getUid(), "noupdate" => true],
-			"name" => ["v" => strtolower($s->getPlayer()->getName())],
-			"nicks" => "|" . implode("|", $s->getNicks()) . "|",
-			"lastip" => $s->getPlayer()->getAddress(),
-			"status" => $status,
-			"lastses" => Settings::$LOCALIZE_CLASS,
-			"authuuid" => $s->getPlayer()->getUniqueId(),
-			"coins" => ["v" => $coins, "noupdate" => true],
-			"hash" => ["v" => $s->getPasswordHash(), "noupdate" => true],
-			"pwprefix" => ["v" => $s->getPasswordPrefix(), "noupdate" => true],
-			"pwlen" => ["v" => $s->getPasswordLength(), "noupdate" => true],
-			"registration" => ["v" => $s->getRegisterTime(), "noupdate" => true],
-			"laston" => time(),
-			"ontime" => (int)$s->getAndUpdateOntime(),
-			"config" => $s->getAllSettings(),
-			"skin1" => ["v" => $s->getCurrentFaceSkin(), "bin" => true],
-			"lastgrind" => $s->getLastGrind(),
-			"rank" => ["v" => $s->getRank(), "noupdate" => true],
-			"warnpts" => $s->getWarningPoints(),
-			"lastwarn" => $s->getLastWarnTime(),
-			"tid" => $s->getTeamId(),
-			"teamrank" => $s->getTeamRank(),
-			"teamjoin" => $s->getTeamJoinTime(),
-			"ignorelist" => "," . implode(",", $s->getIgnoreList()) . ","
-		];
-	}
 	protected function queryFinalProcess($query){
 		return $query . ",coins=coins+$this->coinsDelta";
+	}
+	public function getResultType(){
+		return self::TYPE_RAW;
 	}
 }

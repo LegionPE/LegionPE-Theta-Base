@@ -79,6 +79,23 @@ class Phrases{
 	const CLASS_INFECTED = "local.class.name.infected";
 	const CLASS_CLASSIC_PVP = "local.class.name.pvp.classic";
 
+	const PVP_DEATH_GENERIC = "game.pvp.death.generic";
+	const PVP_DEATH_KILLED = "game.pvp.death.killed";
+	const PVP_DEATH_FALL_GENERIC = "game.pvp.death.fall.generic";
+	const PVP_DEATH_FALL_LADDER = "game.pvp.death.fall.ladder";
+	const PVP_DEATH_FALL_VINE = "game.pvp.death.fall.vine";
+	const PVP_DEATH_STATS = "game.pvp.death.stats";
+	const PVP_KILL_GENERIC = "game.pvp.kill.generic";
+	const PVP_KILL_KILLED = "game.pvp.kill.killed";
+	const PVP_KILL_FALL_GENERIC = "game.pvp.kill.fall.generic";
+	const PVP_KILL_FALL_LADDER = "game.pvp.kill.fall.ladder";
+	const PVP_KILL_FALL_VINE = "game.pvp.kill.fall.vine";
+	const PVP_KILL_STATS = "game.pvp.kill.stats";
+	const PVP_ACTION_GENERIC = "game.pvp.action.kill";
+	const PVP_ACTION_ARROW = "game.pvp.action.arrow";
+	const PVP_ACTION_SNOWBALL = "game.pvp.action.snowball";
+	const PVP_ACTION_EGG = "game.pvp.action.egg";
+
 	// constant variables
 	const VAR_wait = TextFormat::RED . "… ";
 	const VAR_success = TextFormat::GREEN;
@@ -91,6 +108,7 @@ class Phrases{
 	const VAR_notify = TextFormat::LIGHT_PURPLE;
 	const VAR_notify2 = TextFormat::GOLD;
 	const VAR_em = TextFormat::AQUA;
+	const VAR_em1 = TextFormat::AQUA;
 	const VAR_em2 = TextFormat::BLUE;
 	const VAR_em3 = TextFormat::DARK_BLUE;
 	const VAR_reset = TextFormat::RESET;

@@ -31,6 +31,7 @@ use pocketmine\event\inventory\InventoryPickupItemEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerCommandPreprocessEvent;
+use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerItemConsumeEvent;
@@ -86,6 +87,13 @@ class SessionEventListener implements Listener{
 				$event->setCancelled();
 			}
 		}
+	}
+	public function onDeath(PlayerDeathEvent $event){
+		$session = $this->main->getSession($event->getEntity());
+		if(!($session instanceof Session)){
+			return;
+		}
+		$session->onDeath($event);
 	}
 	public function onMove(PlayerMoveEvent $event){
 		$session = $this->main->getSession($event->getPlayer());

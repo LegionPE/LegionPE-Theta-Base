@@ -37,6 +37,7 @@ use pocketmine\event\inventory\InventoryPickupArrowEvent;
 use pocketmine\event\inventory\InventoryPickupItemEvent;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerCommandPreprocessEvent;
+use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerDropItemEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerItemConsumeEvent;
@@ -86,10 +87,14 @@ abstract class Session{
 		self::AUTH_PASS => "login.auth.method.pass",
 		self::AUTH_REG => "login.auth.method.register"
 	];
+	public $confirmGrind = false;
+	public $currentChatState = self::CHANNEL_LOCAL;
 	/** @var Player */
 	private $player;
 	/** @var mixed[] */
 	private $loginData;
+	/** @var string */
+	private $inGameName = null;
 	/** @var int */
 	private $joinTime;
 	/** @var float */
@@ -99,8 +104,6 @@ abstract class Session{
 	/** @var int */
 	private $state = self::STATE_LOADING;
 	private $invisibleFrom = [];
-	public $confirmGrind = false;
-	public $currentChatState = self::CHANNEL_LOCAL;
 	/** @var string|TextContainer|null */
 	private $tmpHash = null, $curPopup = null;
 	public function __construct(Player $player, $loginData){
@@ -113,6 +116,33 @@ abstract class Session{
 			throw new \Exception;
 		}
 	}
+	protected function init(){
+		$conseq = $this->getEffectiveConseq();
+		if($conseq->banLength > 0){
+			$left = MUtils::time_secsToString($conseq->banLength);
+			$this->getPlayer()->kick(TextFormat::RED . "You are banned.\nYou have accumulated " . TextFormat::DARK_PURPLE . $this->getWarningPoints() . TextFormat::RED . " warning points,\nand you still have " . TextFormat::BLUE . $left . TextFormat::RED . " before you are unbanned.\n" . TextFormat::AQUA . "Believe this to be a mistake? Email us at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu");
+			return false;
+		}
+		return true;
+	}
+	public function getEffectiveConseq(){
+		return Settings::getWarnPtsConseq($this->getWarningPoints(), $this->getLastWarnTime());
+	}
+	public function getWarningPoints(){
+		return $this->getLoginDatum("warnpts");
+	}
+	public function getLoginDatum($key){
+		return isset($this->loginData[$key]) ? $this->loginData[$key] : null;
+	}
+	public function getLastWarnTime(){
+		return $this->getLoginDatum("lastwarn");
+	}
+	/**
+	 * @return Player
+	 */
+	public function getPlayer(){
+		return $this->player;
+	}
 	public function __toString(){
 		return $this->getPlayer()->getDisplayName();
 	}
@@ -122,6 +152,155 @@ abstract class Session{
 			$this->invisibleFrom[$other->getId()] = true;
 		}
 		$this->prepareLogin();
+	}
+	private function prepareLogin(){
+		$status = $this->getLoginDatum("status");
+		if($status === Settings::STATUS_TRANSFERRING and $this->getPlayer()->getUniqueId() === $this->getLoginDatum("authuuid")){
+			$this->login(self::AUTH_TRANSFER);
+			return;
+		}
+		if($this->getLoginDatum("isnew")){
+			$this->state = self::STATE_REGISTERING;
+		}else{
+			$method = $this->getAuthSettings();
+			if(!$this->getLoginDatum("isnew") and $method === Settings::CONFIG_AUTH_UUID and $this->getPlayer()->getUniqueId() === $this->getLoginDatum("authuuid")){
+				$this->login(self::AUTH_UUID);
+				return;
+			}
+			if($method === Settings::CONFIG_AUTH_IP_LAST and $this->getPlayer()->getAddress() === $this->getLoginDatum("lastip")){
+				$this->login(self::AUTH_IP_LAST);
+				return;
+			}
+			if($method === Settings::CONFIG_AUTH_IP_HISTORY and in_array($this->getPlayer()->getAddress(), $this->getIPHistory())){
+				$this->login(self::AUTH_IP_HIST);
+				return;
+			}
+			if($method === Settings::CONFIG_AUTH_SUBNET_LAST and $this->subnet_matches($this->getPlayer()->getAddress(), $this->getLoginDatum("lastip"))){
+				$this->login(self::AUTH_SUBNET_LAST);
+			}
+			// deprecated: subnet hist
+			$this->state = self::STATE_LOGIN;
+		}
+		if($this->isLoggingIn()){
+			$this->send(Phrases::LOGIN_PASS_PROMPT);
+		}else{
+			$this->send(Phrases::LOGIN_REGISTER_PROMPT);
+		}
+	}
+	/**
+	 * Override this method to do initialization stuff
+	 * @param int $method
+	 */
+	public function login($method){
+		$this->state = self::STATE_PLAYING;
+		$this->send(Phrases::LOGIN_AUTH_SUCCESS, ["method" => $this->translate(self::$AUTH_METHODS_PHRASES[$method])]);
+		$this->send(Phrases::LOGIN_AUTH_WHEREAMI, [
+				"class" => $this->translate(Settings::$CLASSES_NAMES_PHRASES[Settings::$LOCALIZE_CLASS]),
+				"ip" => Settings::$LOCALIZE_IP, "port" => (string)Settings::$LOCALIZE_PORT]
+		);
+		$this->setInGameName($this->calculateNameTag(TextFormat::WHITE));
+		$this->setMaintainedPopup();
+	}
+	public function send($phrase, array $vars = []){
+		$this->getPlayer()->sendMessage($this->translate($phrase, $vars));
+	}
+	public function translate($phrase, array $vars = []){
+		return $this->getMain()->getLangs()->get($phrase, $vars, "en"); // TODO custom language
+	}
+	/**
+	 * @return BasePlugin
+	 */
+	public abstract function getMain();
+	public function calculateNameTag($nameColor = TextFormat::WHITE){
+		$rank = $this->calculateRank();
+		if($rank !== ""){
+			$tag = TextFormat::AQUA . "{" . $rank . TextFormat::AQUA . "}\n";
+		}else{
+			$tag = "";
+		}
+		$teamname = $this->getTeamName();
+		if($teamname){
+			$tag .= TextFormat::LIGHT_PURPLE . "Team " . TextFormat::GOLD . $teamname . "\n";
+		}
+		// TODO custom tags
+		$tag .= $nameColor . $this->getPlayer()->getName();
+		return $tag;
+	}
+	private function calculateRank(){
+		$rank = $this->getRank();
+		$prefix = "";
+		if($rank & 0x1000){
+			$prefix = "Trial ";
+		}
+		if($rank & 0x2000){
+			$prefix = "Head ";
+		}
+		if($rank & 0x0800){
+			return $prefix . "Dev";
+		}
+		if($rank & 0x0080){
+			return $prefix . "HeadOfStaff";
+		}
+		if($rank & 0x0040){
+			return $prefix . "Owner";
+		}
+		if($rank & 0x0020){
+			return $prefix . "Admin";
+		}
+		if($rank & 0x0010){
+			return $prefix . "Mod";
+		}
+		if($rank & 0x4000){
+			return "YT";
+		}
+		$suffix = "";
+		if($rank & 1){
+			$suffix = "+";
+		}
+		if(($rank & 0x000C) === 0x000C){
+			return "VIP$suffix";
+		}
+		if($rank & 0x0004){
+			return "Donator$suffix";
+		}
+		return ($suffix === "+") ? "Tester" : "";
+	}
+	public function getRank(){
+		return $this->getLoginDatum("rank");
+	}
+	public function getTeamName(){
+		return "TEAM NAME HERE TODO"; // TODO
+	}
+	public function setMaintainedPopup($popup = null){
+		if($this->curPopup === $popup){
+			return;
+		}
+		$this->curPopup = $popup;
+		if($popup !== null){
+			$this->getPlayer()->sendPopup($popup);
+		}else{
+			$this->getPlayer()->sendPopup(" ");
+		}
+	}
+	public function getAuthSettings(){
+		return $this->getLoginDatum("config") & Settings::CONFIG_SECTOR_AUTH;
+	}
+	public function getIPHistory(){
+		return array_filter(explode(",", $this->getLoginDatum("iphist")));
+	}
+	private function subnet_matches($ip0, $ip1){
+		if($ip0 === $ip1){
+			return true;
+		}
+		$ip0 = explode(".", $ip0);
+		$ip1 = explode(".", $ip1);
+		if(count($ip0) !== 4 or count($ip1) !== 4){
+			return false;
+		}
+		return $ip0[0] === $ip1[0] and $ip0[1] = $ip1[1];
+	}
+	public function isLoggingIn(){
+		return ($this->state & 0xF0) === self::STATE_LOGIN;
 	}
 	public function onCmd(PlayerCommandPreprocessEvent $event){
 		if($this->isRegistering()){
@@ -202,11 +381,98 @@ abstract class Session{
 		}
 		return true;
 	}
+	public function isRegistering(){
+		return ($this->state & 0xF0) === self::STATE_REGISTERING;
+	}
+	public static function hash($password, $uid){
+		return bin2hex(hash("sha512", $password . $uid, true) ^ hash("whirlpool", $uid . $password, true));
+	}
+	public function getUid(){
+		return $this->getLoginDatum("uid");
+	}
+	public function sendCurlyLines($lines = 1, $color = TextFormat::ITALIC . TextFormat::RED){
+		for($i = 0; $i < $lines; $i++){
+			$this->getPlayer()->sendMessage($color . str_repeat("~", 40));
+		}
+	}
+	public function setLoginDatum($key, $datum){
+		$this->loginData[$key] = $datum;
+	}
+	private function sendFirstJoinMessages(){
+		$this->getMain()->sendFirstJoinMessages($this->getPlayer());
+	}
+	public function getPasswordHash(){
+		return $this->getLoginDatum("hash");
+	}
+	public function getStatePrecise(){
+		return $this->state & 0x0F;
+	}
+	public function getTeamId(){
+		return $this->getLoginDatum("tid");
+	}
+	/**
+	 * @param string $msg
+	 * @param int $type
+	 */
+	public function onChat($msg, /** @noinspection PhpUnusedParameterInspection */
+	                       $type){
+		$msg = $this->getChatColor() . preg_replace_callback('/@([A-Za-z_]{3,16})/', function ($match){
+				if(($player = $this->getMain()->getServer()->getPlayer($match[1])) !== null){
+					return $player->getName() . $this->getChatColor();
+				}
+				return $match[0];
+			}, $msg);
+		foreach($this->getMain()->getSessions() as $ses){
+			// TODO handle $type
+			if($ses->isLocalChatOn()){
+				$ses->getPlayer()->sendMessage($msg);
+			}
+		}
+	}
+	public function getChatColor(){
+		if($this->isAdmin()){
+			return TextFormat::LIGHT_PURPLE . TextFormat::BOLD;
+		}
+		if($this->isModerator()){
+			return TextFormat::LIGHT_PURPLE;
+		}
+		if($this->isVIP()){
+			return TextFormat::WHITE . TextFormat::BOLD;
+		}
+		if($this->isDonator()){
+			return TextFormat::WHITE;
+		}
+		return TextFormat::GRAY;
+	}
+	public function isAdmin($includeTrial = true){
+		$rank = $this->getRank();
+		return ($rank & Settings::RANK_PERM_ADMIN) and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
+	}
+	public function isModerator($includeTrial = true){
+		$rank = $this->getRank();
+		return ($rank & Settings::RANK_PERM_MOD) and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
+	}
+	public function isVIP(){
+		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_VIP);
+	}
+	public function isDonator(){
+		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR);
+	}
+	public function isLocalChatOn(){
+		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_LOCAL_CHAT_ON);
+	}
 	public function onDamage(/** @noinspection PhpUnusedParameterInspection */
 		EntityDamageEvent $event){
 		if(!$this->isPlaying()){
 			return false;
 		}
+		return true;
+	}
+	public function isPlaying(){
+		return ($this->state & 0xF0) === self::STATE_PLAYING;
+	}
+	public function onDeath(/** @noinspection PhpUnusedParameterInspection */
+		PlayerDeathEvent $event){
 		return true;
 	}
 	public function onMove(/** @noinspection PhpUnusedParameterInspection */
@@ -306,40 +572,26 @@ abstract class Session{
 	public function onQuit(){
 		$this->saveData();
 	}
-
-	/**
-	 * @return Player
-	 */
-	public function getPlayer(){
-		return $this->player;
-	}
-	public function getLoginDatum($key){
-		return isset($this->loginData[$key]) ? $this->loginData[$key] : null;
-	}
-	public function setLoginDatum($key, $datum){
-		$this->loginData[$key] = $datum;
+	public function saveData($newStatus = Settings::STATUS_OFFLINE){
+		if($this->state === self::STATE_PLAYING){ // don't save if not registered/logged in
+			$this->getMain()->saveSessionData($this, $newStatus);
+		}
 	}
 	public function incrLoginDatum($key, $amplitude = 1){
 		$this->loginData[$key] += $amplitude;
 	}
-	public function getUid(){
-		return $this->getLoginDatum("uid");
-	}
 	public function getNicks(){
 		return array_filter(explode("|", $this->getLoginDatum("nicks")));
 	}
-	public function getIPHistory(){
-		return array_filter(explode(",", $this->getLoginDatum("iphist")));
+	public function getInGameName(){
+		return $this->inGameName;
+	}
+	public function setInGameName($ign){
+		$this->inGameName = $ign;
 	}
 	public function addIp($ip){
 		$this->setLoginDatum("iphist", $this->getLoginDatum("iphist") . "$ip,");
 		new AddIpQuery($this->getMain(), $ip, $this->getUid());
-	}
-	public function getCoins(){
-		return $this->getLoginDatum("coins");
-	}
-	public function setCoins($coins){
-		$this->setLoginDatum("coins", $coins);
 	}
 	public function grantCoins($coins, $ignoreGrind = false, $sound = true){
 		if(!$ignoreGrind and $this->isGrinding()){
@@ -349,6 +601,18 @@ abstract class Session{
 			$this->getPlayer()->getLevel()->addSound(new FizzSound($this->getPlayer()), [$this->getPlayer()]);
 		}
 		$this->setCoins($this->getCoins() + $coins);
+	}
+	public function isGrinding(){
+		return time() - $this->getLastGrind() <= Settings::getGrindLength($this->getRank());
+	}
+	public function getLastGrind(){
+		return $this->getLoginDatum("lastgrind");
+	}
+	public function setCoins($coins){
+		$this->setLoginDatum("coins", $coins);
+	}
+	public function getCoins(){
+		return $this->getLoginDatum("coins");
 	}
 	public function getAndUpdateCoinsDelta(){
 		$coins = $this->getCoins();
@@ -361,9 +625,6 @@ abstract class Session{
 		$result = $now - $this->ontimeSince;
 		$this->ontimeSince = $now;
 		return $result;
-	}
-	public function getPasswordHash(){
-		return $this->getLoginDatum("hash");
 	}
 	public function getPasswordPrefix(){
 		return $this->getLoginDatum("pwprefix");
@@ -380,26 +641,14 @@ abstract class Session{
 	public function getAllSettings(){
 		return $this->getLoginDatum("config");
 	}
-	public function getAuthSettings(){
-		return $this->getLoginDatum("config") & Settings::CONFIG_SECTOR_AUTH;
-	}
 	public function getTagEnabled(){
 		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_TAG_ON);
 	}
 	public function getStatsPublic(){
 		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_STATS_PUBLIC);
 	}
-	public function isLocalChatOn(){
-		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_LOCAL_CHAT_ON);
-	}
 	public function isTeamChannelOn(){
 		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_TEAM_CHANNEL_ON);
-	}
-	public function getLastGrind(){
-		return $this->getLoginDatum("lastgrind");
-	}
-	public function isGrinding(){
-		return time() - $this->getLastGrind() <= Settings::getGrindLength($this->getRank());
 	}
 	public function canStartGrind(){
 		if(!$this->isDonator()){
@@ -413,52 +662,11 @@ abstract class Session{
 	public function startGrinding(){
 		$this->setLoginDatum("lastgrind", time());
 	}
-	public function getRank(){
-		return $this->getLoginDatum("rank");
-	}
-	public function isModerator($includeTrial = true){
-		$rank = $this->getRank();
-		return ($rank & Settings::RANK_PERM_MOD) and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
-	}
-	public function isAdmin($includeTrial = true){
-		$rank = $this->getRank();
-		return ($rank & Settings::RANK_PERM_ADMIN) and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
-	}
-	public function isDonator(){
-		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR);
-	}
 	public function isDonatorPlus(){
 		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR_PLUS);
 	}
-	public function isVIP(){
-		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_VIP);
-	}
 	public function isVIPPlus(){
 		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_VIP_PLUS);
-	}
-	public function getChatColor(){
-		if($this->isAdmin()){
-			return TextFormat::LIGHT_PURPLE . TextFormat::BOLD;
-		}
-		if($this->isModerator()){
-			return TextFormat::LIGHT_PURPLE;
-		}
-		if($this->isVIP()){
-			return TextFormat::WHITE . TextFormat::BOLD;
-		}
-		if($this->isDonator()){
-			return TextFormat::WHITE;
-		}
-		return TextFormat::GRAY;
-	}
-	public function getWarningPoints(){
-		return $this->getLoginDatum("warnpts");
-	}
-	public function getLastWarnTime(){
-		return $this->getLoginDatum("lastwarn");
-	}
-	public function getEffectiveConseq(){
-		return Settings::getWarnPtsConseq($this->getWarningPoints(), $this->getLastWarnTime());
 	}
 	public function addWarningPoints($pts){
 		$this->setLoginDatum("warnpts", $this->getWarningPoints() + $pts);
@@ -471,12 +679,6 @@ abstract class Session{
 		$this->getMain()->queueFor($this->getPlayer()->getId(), true, Queue::QUEUE_SESSION)
 			->pushToQueue(new ExecuteWarningRunnable($this->getMain(), $wid, $this->getUid(), $clientId, $id, $points, $issuer, $msg));
 	}
-	public function getTeamId(){
-		return $this->getLoginDatum("tid");
-	}
-	public function getTeamName(){
-		return "TEAM NAME HERE TODO"; // TODO
-	}
 	public function getTeamRank(){
 		return $this->getLoginDatum("teamrank");
 	}
@@ -486,15 +688,15 @@ abstract class Session{
 	public function getIgnoreList(){
 		return array_filter(explode(",", $this->getLoginDatum("ignorelist")));
 	}
-	public function isIgnoring($name, &$pos = 0){
-		return ($pos = strpos($name, "," . strtolower($name) . ",")) !== false;
-	}
 	public function ignore($name){
 		if(!$this->isIgnoring($name)){
 			$this->setLoginDatum("ignorelist", $this->getLoginDatum("ignorelist") . strtolower($name) . ",");
 			return true;
 		}
 		return false;
+	}
+	public function isIgnoring($name, &$pos = 0){
+		return ($pos = strpos($name, "," . strtolower($name) . ",")) !== false;
 	}
 	public function unignore($name){
 		if($this->isIgnoring($name, $pos)){
@@ -506,33 +708,6 @@ abstract class Session{
 	}
 	public function isNew(){
 		return isset($this->loginData["isnew"]) and $this->loginData["isnew"] === true;
-	}
-	/**
-	 * @return BasePlugin
-	 */
-	public abstract function getMain();
-	public function getStatePrecise(){
-		return $this->state & 0x0F;
-	}
-	public function isLoggingIn(){
-		return ($this->state & 0xF0) === self::STATE_LOGIN;
-	}
-	public function isRegistering(){
-		return ($this->state & 0xF0) === self::STATE_REGISTERING;
-	}
-	public function isPlaying(){
-		return ($this->state & 0xF0) === self::STATE_PLAYING;
-	}
-	public function setMaintainedPopup($popup = null){
-		if($this->curPopup === $popup){
-			return;
-		}
-		$this->curPopup = $popup;
-		if($popup !== null){
-			$this->getPlayer()->sendPopup($popup);
-		}else{
-			$this->getPlayer()->sendPopup(" ");
-		}
 	}
 	public function getPopup(){
 		return $this->curPopup;
@@ -546,145 +721,6 @@ abstract class Session{
 		}
 		return $output;
 	}
-
-	/**
-	 * Override this method to do initialization stuff
-	 * @param int $method
-	 */
-	public function login($method){
-		$this->state = self::STATE_PLAYING;
-		$this->send(Phrases::LOGIN_AUTH_SUCCESS, ["method" => $this->translate(self::$AUTH_METHODS_PHRASES[$method])]);
-		$this->send(Phrases::LOGIN_AUTH_WHEREAMI, ["class" => $this->translate(Settings::$CLASSES_NAMES_PHRASES[Settings::$LOCALIZE_CLASS]), "ip" => Settings::$LOCALIZE_IP, "port" => (string)Settings::$LOCALIZE_PORT]);
-		$this->setMaintainedPopup();
-	}
-	public function send($phrase, array $vars = []){
-		$this->getPlayer()->sendMessage($this->translate($phrase, $vars));
-	}
-	public function translate($phrase, array $vars = []){
-		return $this->getMain()->getLangs()->get($phrase, $vars, "en"); // TODO custom language
-	}
-	public function sendCurlyLines($lines = 1, $color = TextFormat::ITALIC . TextFormat::RED){
-		for($i = 0; $i < $lines; $i++){
-			$this->getPlayer()->sendMessage($color . str_repeat("~", 40));
-		}
-	}
-	public function recalculateNameTag(){
-		$this->getPlayer()->setNameTag($this->calculateTag());
-	}
-	public function calculateTag($nameColor = TextFormat::WHITE){
-		$rank = $this->calculateRank();
-		if($rank !== ""){
-			$tag = TextFormat::AQUA . "{" . $rank . TextFormat::AQUA . "}";
-		}else{
-			$tag = "";
-		}
-		// TODO team tags
-		// TODO custom tags
-		$tag .= $nameColor . $this->getPlayer()->getName();
-		return $tag;
-	}
-
-	protected function init(){
-		$conseq = $this->getEffectiveConseq();
-		if($conseq->banLength > 0){
-			$left = MUtils::time_secsToString($conseq->banLength);
-			$this->getPlayer()->kick(TextFormat::RED . "You are banned.\nYou have accumulated " . TextFormat::DARK_PURPLE . $this->getWarningPoints() . TextFormat::RED . " warning points,\nand you still have " . TextFormat::BLUE . $left . TextFormat::RED . " before you are unbanned.\n" . TextFormat::AQUA . "Believe this to be a mistake? Email us at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu");
-			return false;
-		}
-		return true;
-	}
-	private function prepareLogin(){
-		$status = $this->getLoginDatum("status");
-		if($status === Settings::STATUS_TRANSFERRING and $this->getPlayer()->getUniqueId() === $this->getLoginDatum("authuuid")){
-			$this->login(self::AUTH_TRANSFER);
-			return;
-		}
-		if($this->getLoginDatum("isnew")){
-			$this->state = self::STATE_REGISTERING;
-		}else{
-			$method = $this->getAuthSettings();
-			if(!$this->getLoginDatum("isnew") and $method === Settings::CONFIG_AUTH_UUID and $this->getPlayer()->getUniqueId() === $this->getLoginDatum("authuuid")){
-				$this->login(self::AUTH_UUID);
-				return;
-			}
-			if($method === Settings::CONFIG_AUTH_IP_LAST and $this->getPlayer()->getAddress() === $this->getLoginDatum("lastip")){
-				$this->login(self::AUTH_IP_LAST);
-				return;
-			}
-			if($method === Settings::CONFIG_AUTH_IP_HISTORY and in_array($this->getPlayer()->getAddress(), $this->getIPHistory())){
-				$this->login(self::AUTH_IP_HIST);
-				return;
-			}
-			if($method === Settings::CONFIG_AUTH_SUBNET_LAST and $this->subnet_matches($this->getPlayer()->getAddress(), $this->getLoginDatum("lastip"))){
-				$this->login(self::AUTH_SUBNET_LAST);
-			}
-			// deprecated: subnet hist
-			$this->state = self::STATE_LOGIN;
-		}
-		if($this->isLoggingIn()){
-			$this->send(Phrases::LOGIN_PASS_PROMPT);
-		}else{
-			$this->send(Phrases::LOGIN_REGISTER_PROMPT);
-		}
-	}
-	private function subnet_matches($ip0, $ip1){
-		if($ip0 === $ip1){
-			return true;
-		}
-		$ip0 = explode(".", $ip0);
-		$ip1 = explode(".", $ip1);
-		if(count($ip0) !== 4 or count($ip1) !== 4){
-			return false;
-		}
-		return $ip0[0] === $ip1[0] and $ip0[1] = $ip1[1];
-	}
-	public function saveData($newStatus = Settings::STATUS_OFFLINE){
-		if($this->state === self::STATE_PLAYING){ // don't save if not registered/logged in
-			$this->getMain()->saveSessionData($this, $newStatus);
-		}
-	}
-	private function calculateRank(){
-		$rank = $this->getRank();
-		$prefix = "";
-		if($rank & 0x1000){
-			$prefix = "Trial ";
-		}
-		if($rank & 0x2000){
-			$prefix = "Head ";
-		}
-		if($rank & 0x0800){
-			return $prefix . "Dev";
-		}
-		if($rank & 0x0080){
-			return $prefix . "HeadOfStaff";
-		}
-		if($rank & 0x0040){
-			return $prefix . "Owner";
-		}
-		if($rank & 0x0020){
-			return $prefix . "Admin";
-		}
-		if($rank & 0x0010){
-			return $prefix . "Mod";
-		}
-		if($rank & 0x4000){
-			return "YT";
-		}
-		$suffix = "";
-		if($rank & 1){
-			$suffix = "+";
-		}
-		if(($rank & 0x000C) === 0x000C){
-			return "VIP$suffix";
-		}
-		if($rank & 0x0004){
-			return "Donator$suffix";
-		}
-		return ($suffix === "+") ? "Tester" : "";
-	}
-	private function sendFirstJoinMessages(){
-		$this->getMain()->sendFirstJoinMessages($this->getPlayer());
-	}
 	public function halfSecondTick(){
 		if($this->curPopup !== null){
 			$this->getPlayer()->sendPopup($this->curPopup);
@@ -692,28 +728,5 @@ abstract class Session{
 		if(time() - $this->joinTime > Settings::KICK_PLAYER_TOO_LONG_ONLINE){
 			$this->getPlayer()->kick($this->translate(Phrases::KICK_TOO_LONG_ONLINE));
 		}
-	}
-	/**
-	 * @param string $msg
-	 * @param int $type
-	 */
-	public function onChat($msg, /** @noinspection PhpUnusedParameterInspection */
-	                       $type){
-		$msg = $this->getChatColor() . preg_replace_callback('/@([A-Za-z_]{3,16})/', function ($match){
-				if(($player = $this->getMain()->getServer()->getPlayer($match[1])) !== null){
-					return $player->getName() . $this->getChatColor();
-				}
-				return $match[0];
-			}, $msg);
-		foreach($this->getMain()->getSessions() as $ses){
-			// TODO handle $type
-			if($ses->isLocalChatOn()){
-				$ses->getPlayer()->sendMessage($msg);
-			}
-		}
-	}
-
-	public static function hash($password, $uid){
-		return bin2hex(hash("sha512", $password . $uid, true) ^ hash("whirlpool", $uid . $password, true));
 	}
 }

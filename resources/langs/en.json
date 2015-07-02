@@ -53,5 +53,20 @@
 	"login.auth.method.ip.last": "matching last IP",
 	"login.auth.method.ip.hist": "matching an IP in the IP history",
 	"login.auth.method.pass": "entering password",
-	"login.auth.method.register": "registering a new account"
+	"login.auth.method.register": "registering a new account",
+	"game.pvp.death.generic": "%error%You died!",
+	"game.pvp.death.killed": "%error%You were %action% by %killer%!",
+	"game.pvp.death.fall.generic": "%error%You were %em%%action% to a deadly fall%error% by %killer%!",
+	"game.pvp.death.fall.ladder": "%error%You were %em%%action% to a deadly fall%error% off %em2%a ladder%error% by %killer%!",
+	"game.pvp.death.fall.vine": "%error%You were %em%%action% to a deadly fall%error% off %em2%vines%error% by %killer%!",
+	"game.pvp.death.stats": "%info%This is your %em%%deaths% death!",
+	"game.pvp.kill.killed": "%success%You %action% %em%%victim%!",
+	"game.pvp.kill.fall.generic": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall!",
+	"game.pvp.kill.fall.ladder": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall%success% from a %em3%ladder!",
+	"game.pvp.kill.fall.vine": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall%success% from a %em3%vine!",
+	"game.pvp.kill.stats": "%info%This is your %em%%kills%%success% kill!",
+	"game.pvp.action.kill": "slained",
+	"game.pvp.action.arrow": "shot",
+	"game.pvp.action.snowball": "snowballed",
+	"game.pvp.action.egg": "egged"
 }
