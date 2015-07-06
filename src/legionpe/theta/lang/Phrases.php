@@ -50,13 +50,29 @@ class Phrases{
 	const CMD_ERR_WRONG_USE = "cmd.error.wronguse";
 	const CMD_ERR_ABSENT_PLAYER_NAME_UNKNOWN = "cmd.error.absplayer.unknown";
 	const CMD_ERR_ABSENT_PLAYER_NAME_KNOWN = "cmd.error.absplayer.named";
+
+	const CMD_FRIEND_ALREADY_INVITED = "cmd.friend.alreadyinvited";
+	const CMD_FRIEND_RAISE_REQUESTED = "cmd.friend.requested.raise";
+	const CMD_FRIEND_REQUEST_REMOVED = "cmd.friend.requested.removed";
+	const CMD_FRIEND_RAISED = "cmd.friend.raised";
+	const CMD_FRIEND_REDUCED = "cmd.friend.reduced";
+	const CMD_FRIEND_MAX = "cmd.friend.max";
+	const CMD_FRIEND_REJECTED = "cmd.friend.rejected";
+	const CMD_FRIEND_CANCELLED = "cmd.friend.cancelled";
+	const CMD_FRIEND_NO_INVITATION = "cmd.friend.noinvite";
+	const CMD_FRIEND_LIST_KEY = "cmd.friend.list.key";
+
 	const CMD_GRIND_COIN_CANNOT_START = "cmd.gc.cannotstart";
 	const CMD_GRIND_COIN_REQUEST_CONFIRM = "cmd.gc.reqconfirm";
 	const CMD_GRIND_COIN_STARTED = "cmd.gc.started";
+
 	const CMD_PRIV_MSG_REMIND_QUERY = "cmd.pm.remindquery";
+
 	const CMD_PRIV_NOTICE_RECIPIENT = "cmd.pn.recipient";
+
 	const CMD_TRANSFER_ERR_NO_SERVERS = "cmd.transfer.err.noservers";
 	const CMD_TRANSFER_SUCCESS = "cmd.transfer.success";
+
 	const CMD_VERSION_MSG = "cmd.version.msg";
 
 	const WARNING_RECEIVED_NOTIFICATION = "warning.notification.main";
@@ -78,6 +94,10 @@ class Phrases{
 	const CLASS_SPLEEF = "local.class.name.spleef";
 	const CLASS_INFECTED = "local.class.name.infected";
 	const CLASS_CLASSIC_PVP = "local.class.name.pvp.classic";
+
+	const FRIEND_ACQUAINTANCE = "friend.type.acquantaince";
+	const FRIEND_GOOD_FRIEND = "friend.type.goodfriend";
+	const FRIEND_BEST_FRIEND = "friend.type.bestfriend";
 
 	const PVP_DEATH_GENERIC = "game.pvp.death.generic";
 	const PVP_DEATH_KILLED = "game.pvp.death.killed";

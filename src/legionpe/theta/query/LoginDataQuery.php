@@ -49,10 +49,17 @@ class LoginDataQuery extends AsyncQuery{
 	protected function onAssocFetched(\mysqli $mysql, array &$row){
 		$uid = $row["uid"];
 		/* group_concat must be done somewhere else because it ALWAYS returns a row. */
-		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs;");
+		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs, (SELECT group_concat(CONCAT(IF(smalluid=$uid, largeuid, smalluid), ':', type) SEPARATOR ',') FROM friends WHERE smalluid=$uid OR largeuid=$uid) AS friends;");
 		$result = $r->fetch_assoc();
-		$row["iphist"] = $result["iphist"];
-		$row["langs"] = array_filter(explode(",", $result["langs"]));
+		$row["iphist"] = isset($result["iphist"]) ? $result["iphist"] : ",";
+		$row["langs"] = isset($result["langs"]) ? array_filter(explode(",", $result["langs"])) : [];
+		$row["friends"] = [];
+		if(isset($result["friends"])){
+			foreach(array_filter(explode(",", $result["friends"])) as $friend){
+				list($other, $type) = explode(":", $friend, 2);
+				$row["friends"][(int) $other] = (int) $type;
+			}
+		}
 		$row["isnew"] = false;
 		$r->close();
 	}

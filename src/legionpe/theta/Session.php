@@ -1,5 +1,7 @@
 <?php
 
+#define $this->getLoginDatum(key) isset($this->loginData[key]) ? $this->loginData[key] : null
+
 /**
  * LegionPE
  * Copyright (C) 2015 PEMapModder
@@ -71,6 +73,20 @@ abstract class Session{
 	const CHAT_LOCAL = 2;
 	const CHANNEL_LOCAL = "&local";
 	const CHANNEL_TEAM = "&team";
+	const FRIEND_BITMASK_REQUEST = 0b11;
+	const FRIEND_REQUEST_BITS = 2;
+	const FRIEND_REQUEST_FROM_SMALL = 0b01;
+	const FRIEND_REQUEST_TO_LARGE = 0b01;
+	const FRIEND_REQUEST_FROM_LARGE = 0b10;
+	const FRIEND_REQUEST_TO_SMALL = 0b10;
+	const FRIEND_LEVEL_NONE = 0;
+	const FRIEND_LEVEL_ACQUAINTANCE = 0b000100;
+	const FRIEND_LEVEL_GOOD_FRIEND  = 0b001000;
+	const FRIEND_LEVEL_BEST_FRIEND  = 0b010000;
+	const FRIEND_LEVEL_MAX = self::FRIEND_LEVEL_BEST_FRIEND;
+	const FRIEND_NO_REQUEST = 0;
+	const FRIEND_IN = 1;
+	const FRIEND_OUT = 2;
 	public static $AUTH_METHODS = [
 		self::AUTH_TRANSFER => "transferring",
 		self::AUTH_UUID => "matching unique ID",
@@ -86,6 +102,11 @@ abstract class Session{
 		self::AUTH_IP_HIST => "login.auth.method.ip.hist",
 		self::AUTH_PASS => "login.auth.method.pass",
 		self::AUTH_REG => "login.auth.method.register"
+	];
+	public static $FRIEND_TYPES = [
+		self::FRIEND_LEVEL_ACQUAINTANCE => Phrases::FRIEND_ACQUAINTANCE,
+		self::FRIEND_LEVEL_GOOD_FRIEND => Phrases::FRIEND_GOOD_FRIEND,
+		self::FRIEND_LEVEL_BEST_FRIEND => Phrases::FRIEND_BEST_FRIEND
 	];
 	public $confirmGrind = false;
 	public $currentChatState = self::CHANNEL_LOCAL;
@@ -708,6 +729,80 @@ abstract class Session{
 	}
 	public function isNew(){
 		return isset($this->loginData["isnew"]) and $this->loginData["isnew"] === true;
+	}
+	public function getLangs(){
+		$array = $this->getLoginDatum("langs");
+		$array[] = "en";
+		return $array;
+	}
+	public function getFriends($level = self::FRIEND_LEVEL_GOOD_FRIEND){
+		$out = [];
+		foreach($this->getLoginDatum("friends") as $uid => $type){
+			if(($type & $level) === $level){
+				$out[] = $uid;
+			}
+		}
+		return $out;
+	}
+	public function getFriendType($uid, &$io, &$toLarge = false, &$all = []){
+		$all = $this->getLoginDatum("friends");
+		$type = isset($all[$uid]) ? $all[$uid] : 0;
+		$toLarge = $uid > $this->getUid();
+		$req = $type & self::FRIEND_BITMASK_REQUEST;
+		if($req === self::FRIEND_REQUEST_TO_LARGE and $toLarge or $req === self::FRIEND_REQUEST_TO_SMALL and !$toLarge){
+			$io = self::FRIEND_OUT;
+		}elseif($req === 0){
+			$io = self::FRIEND_NO_REQUEST;
+		}else{
+			$io = self::FRIEND_IN;
+		}
+		return $type & ~self::FRIEND_BITMASK_REQUEST;
+	}
+	public function inviteIncrease($uid, $targetName, &$vars){
+		$vars = ["target" => $targetName];
+		$currentType = $this->getFriendType($uid, $io, $toLarge, $all);
+		if($io === self::FRIEND_OUT){
+			return Phrases::CMD_FRIEND_ALREADY_INVITED;
+		}
+		if($io === self::FRIEND_IN){
+			$new = $currentType << 1;
+			$all[$uid] = $new;
+			$this->setLoginDatum("friends", $all);
+			// TODO query
+			$vars["newtype"] = $this->translate(self::$FRIEND_TYPES[$new]);
+			return Phrases::CMD_FRIEND_RAISED;
+		}
+		if($currentType === self::FRIEND_LEVEL_MAX){
+			return Phrases::CMD_FRIEND_MAX;
+		}
+		$new = $currentType & ($toLarge ? self::FRIEND_REQUEST_TO_LARGE : self::FRIEND_REQUEST_TO_SMALL);
+		$all[$uid] = $new;
+		$this->setLoginDatum("friends", $all);
+		// TODO query
+		$vars["newtype"] = $this->translate(self::$FRIEND_TYPES[$currentType << 1]);
+		return Phrases::CMD_FRIEND_RAISE_REQUESTED;
+	}
+	public function reduceFriend($uid){
+		$type = $this->getFriendType($uid, $io, $toLarge, $all);
+		if($type === self::FRIEND_LEVEL_NONE){
+			return false;
+		}
+		$new = $type >> 1;
+		if($new === 0){
+			unset($all[$uid]);
+		}else{
+			$all[$uid] = $new;
+		}
+		$this->setLoginDatum("friends", $all);
+		// TODO query
+		return true;
+	}
+	public function rejectFriend($uid){
+		$type = $this->getFriendType($uid, $originalIo, $toLarge, $all);
+		$all[$uid] = $type;
+		$this->setLoginDatum("friends", $all);
+		// TODO query
+		return $originalIo;
 	}
 	public function getPopup(){
 		return $this->curPopup;

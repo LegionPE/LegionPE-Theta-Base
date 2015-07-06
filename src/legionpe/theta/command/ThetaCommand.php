@@ -117,7 +117,12 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 	}
 	protected function notOnline($sender, $name = null){
 		if($sender instanceof Session){
-			$sender = $sender->getPlayer();
+			if($name === null){
+				$sender->send(Phrases::CMD_ERR_ABSENT_PLAYER_NAME_UNKNOWN);
+			}else{
+				$sender->send(Phrases::CMD_ERR_ABSENT_PLAYER_NAME_KNOWN, ["player" => $name]);
+			}
+			return true;
 		}
 		if($sender instanceof CommandSender){
 			if($sender instanceof Player and ($ses = $this->getSession($sender)) instanceof Session){
