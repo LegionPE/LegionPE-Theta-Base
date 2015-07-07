@@ -104,10 +104,13 @@ abstract class BasePlugin extends PluginBase{
 			"isnew" => true,
 			"email" => self::EMAIL_UNVERIFIED,
 		];
-	}
+	} // TODO allow overriding
 	public function onLoad(){
 		self::$NAME = $this->getName();
 		class_exists(CloseServerQuery::class); // preload to workaround frequent corruption errors due to phar repalced
+		if(!is_dir($this->getDataFolder())){
+			mkdir($this->getDataFolder());
+		}
 	}
 	public function onEnable(){
 		ThetaCommand::registerAll($this, $this->getServer()->getCommandMap());

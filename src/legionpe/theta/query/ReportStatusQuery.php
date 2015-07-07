@@ -23,8 +23,8 @@ use legionpe\theta\config\Settings;
 use pocketmine\Server;
 
 class ReportStatusQuery extends AsyncQuery{
-	/** @var BasePlugin */
-	private $main;
+//	/** @var BasePlugin */
+//	private $main;
 	private $players;
 	private $class;
 	/** @var string */
@@ -32,7 +32,8 @@ class ReportStatusQuery extends AsyncQuery{
 	/** @var int */
 	private $altPort = null;
 	public function __construct(BasePlugin $plugin){
-		parent::__construct($this->main = $plugin);
+//		$this->main = $plugin;
+		parent::__construct($plugin);
 		$this->players = count($plugin->getServer()->getOnlinePlayers());
 		$this->class = Settings::$LOCALIZE_CLASS;
 	}
@@ -71,7 +72,8 @@ class ReportStatusQuery extends AsyncQuery{
 			return;
 		}
 		$result = $r["result"];
-		$main = $this->main;
+//		$main = $this->main;
+		$main = BasePlugin::getInstance($server);
 		$main->setPlayerCount($result["online"], $result["max"], $result["class_online"], $result["class_max"]);
 		if($this->altIp !== null){
 			$main->setAltServer($this->altIp, $this->altPort);

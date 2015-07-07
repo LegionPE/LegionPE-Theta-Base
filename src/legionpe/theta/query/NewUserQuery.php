@@ -23,16 +23,17 @@ use pocketmine\Player;
 use pocketmine\Server;
 
 class NewUserQuery extends NextIdQuery{
-	/** @var BasePlugin */
-	private $main;
+//	/** @var BasePlugin */
+//	private $main;
 	/** @var int */
 	private $sesId;
 	public function __construct(BasePlugin $plugin, Player $player){
-		parent::__construct($this->main = $plugin, self::USER);
+		parent::__construct($plugin, self::USER);
 		$this->sesId = $player->getId();
 	}
 	public function onCompletion(Server $server){
-		$main = $this->main;
+//		$main = $this->main;
+		$main = BasePlugin::getInstance($server);
 		$result = $this->getResult();
 		$uid = $result["result"]["id"];
 		foreach($main->getServer()->getOnlinePlayers() as $player){

@@ -381,8 +381,12 @@ abstract class Session{
 					return false;
 				}
 			}
-			$isLocal = substr($event->getMessage(), 0, 1) !== ".";
-			if($isLocal){
+			$firstChar = substr($event->getMessage(), 0, 1);
+			if($firstChar === "/" or $firstChar === "\\"){
+				return true;
+			}
+			$isLocal = $firstChar !== ".";
+			if(!$isLocal){
 				$event->setMessage(substr($event->getMessage(), 1));
 			}
 			if($this->currentChatState === self::CHANNEL_TEAM){
@@ -399,8 +403,8 @@ abstract class Session{
 				return false;
 			}
 			$this->onChat(trim($event->getMessage()), $isLocal ? self::CHAT_LOCAL : self::CHAT_STD);
+			return false;
 		}
-		return true;
 	}
 	public function isRegistering(){
 		return ($this->state & 0xF0) === self::STATE_REGISTERING;
@@ -446,7 +450,7 @@ abstract class Session{
 		foreach($this->getMain()->getSessions() as $ses){
 			// TODO handle $type
 			if($ses->isLocalChatOn()){
-				$ses->getPlayer()->sendMessage($msg);
+				$ses->getPlayer()->sendMessage($this->getPlayer()->getDisplayName() . ">" . TextFormat::WHITE . $msg);
 			}
 		}
 	}

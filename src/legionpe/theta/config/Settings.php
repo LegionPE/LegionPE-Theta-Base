@@ -58,15 +58,15 @@ const RANK_PERM_ADMIN = 0x0030;
 	const RANK_SECTOR_PERMISSION = 0x00F0;
 	// permissions the rank has, 2 nibbles
 	const RANK_PREC_STD = 0x0000;
-		const RANK_PREC_TRIAL = 0x1000; // 16
-		const RANK_PREC_HEAD = 0x2000; // 48
-		const RANK_SECTOR_PRECISION = 0x3000; // 112
-		/** Here you are, the youtuber rank */
+	const RANK_PREC_TRIAL = 0x1000; // 16
+	const RANK_PREC_HEAD = 0x2000; // 48
+	const RANK_SECTOR_PRECISION = 0x3000; // 112
+	/** Here you are, the youtuber rank */
 	const RANK_DECOR_YOUTUBER = 0x4000; // 240
-		const RANK_SECTOR_DECOR = 0xC000; // 256
-		const CONFIG_DEFAULT_VALUE = self::CONFIG_AUTH_UUID | self::CONFIG_TAG_ON | self::CONFIG_STATS_PUBLIC; // 512
-		const CONFIG_SECTOR_AUTH = 0x0F; // 1024
-		/** @deprecated */
+	const RANK_SECTOR_DECOR = 0xC000; // 256
+	const CONFIG_DEFAULT_VALUE = Settings::CONFIG_AUTH_UUID | Settings::CONFIG_LOCAL_CHAT_ON | Settings::CONFIG_TEAM_CHANNEL_ON | Settings::CONFIG_STATS_PUBLIC | Settings::CONFIG_TAG_ON;
+	const CONFIG_SECTOR_AUTH = 0x0F; // 1024
+	/** @deprecated */
 	const CONFIG_AUTH_SUBNET_HISTORY = 0; // 2048
 	const CONFIG_AUTH_SUBNET_LAST = 1;
 	// precise (generally won't affect the program) degree of rank, 2 bits

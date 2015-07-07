@@ -36,6 +36,15 @@ abstract class SessionCommand extends ThetaCommand{
 		}
 		return $this->checkPerm($session);
 	}
+	/**
+	 * @param Session $session
+	 * @param string $msg
+	 * @return bool
+	 */
+	protected function checkPerm(/** @noinspection PhpUnusedParameterInspection */
+		Session $session, &$msg = "You don't have permission to use this command"){
+		return true;
+	}
 	public function testPermission(CommandSender $sender){
 		if(!($sender instanceof Player)){
 			$sender->sendMessage(TextFormat::RED . "Please run this command in-game.");
@@ -61,21 +70,12 @@ abstract class SessionCommand extends ThetaCommand{
 		if(!($session instanceof Session)){
 			return true;
 		}
-		$r = $this->run($args, $this->getPlugin()->getSession($session));
+		$r = $this->run($args, $session);
 		if($r === false){
 			$session->send(Phrases::CMD_ERR_WRONG_USE, ["usage" => $this->getUsage()]);
 		}elseif(is_string($r) or ($r instanceof TextContainer)){
 			$sender->sendMessage($r);
 		}
-		return true;
-	}
-	/**
-	 * @param Session $session
-	 * @param string $msg
-	 * @return bool
-	 */
-	protected function checkPerm(/** @noinspection PhpUnusedParameterInspection */
-		Session $session, &$msg = "You don't have permission to use this command"){
 		return true;
 	}
 	protected abstract function run(array $args, Session $sender);
