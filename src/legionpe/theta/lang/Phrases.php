@@ -116,6 +116,9 @@ class Phrases{
 	const PVP_ACTION_SNOWBALL = "game.pvp.action.snowball";
 	const PVP_ACTION_EGG = "game.pvp.action.egg";
 
+	const PVP_ATTACK_FRIENDS = "game.pvp.attack.friends";
+	const PVP_ATTACK_SPAWN = "game.pvp.attack.spawn";
+
 	// constant variables
 	const VAR_wait = TextFormat::RED . "… ";
 	const VAR_success = TextFormat::GREEN;

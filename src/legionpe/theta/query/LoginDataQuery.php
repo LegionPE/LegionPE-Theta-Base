@@ -20,17 +20,20 @@ namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\config\Settings;
+use legionpe\theta\shops\Purchase;
 use legionpe\theta\utils\MUtils;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 
 class LoginDataQuery extends AsyncQuery{
-	private $main;
 	public $sesId;
 	public $name;
 	public $totalWarnPts;
+	private $main;
+	private $class;
 	public function __construct(BasePlugin $plugin, $sesId, $name, $ip, $clientId){
 		$this->main = $plugin;
+		$this->class = Settings::$LOCALIZE_CLASS;
 		$this->sesId = $sesId;
 		$this->name = $this->esc($name);
 		$this->ip = $this->esc($ip);
@@ -45,23 +48,6 @@ class LoginDataQuery extends AsyncQuery{
 	public function getQuery(){
 		// warning: keep the first 7 characters ALWAYS "SELECT "
 		return "SELECT uid,name,nicks,lastip,status,lastses,authuuid,coins,hash,newhash,pwprefix,pwlen,registration,laston,ontime,config,lastgrind,rank,warnpts,lastwarn,tid,(SELECT name FROM teams WHERE tid=users.tid)as teamname,teamrank,teamjoin,ignorelist,email,emailkey FROM users WHERE name=$this->name";
-	}
-	protected function onAssocFetched(\mysqli $mysql, array &$row){
-		$uid = $row["uid"];
-		/* group_concat must be done somewhere else because it ALWAYS returns a row. */
-		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs, (SELECT group_concat(CONCAT(IF(smalluid=$uid, largeuid, smalluid), ':', type) SEPARATOR ',') FROM friends WHERE smalluid=$uid OR largeuid=$uid) AS friends;");
-		$result = $r->fetch_assoc();
-		$row["iphist"] = isset($result["iphist"]) ? $result["iphist"] : ",";
-		$row["langs"] = isset($result["langs"]) ? array_filter(explode(",", $result["langs"])) : [];
-		$row["friends"] = [];
-		if(isset($result["friends"])){
-			foreach(array_filter(explode(",", $result["friends"])) as $friend){
-				list($other, $type) = explode(":", $friend, 2);
-				$row["friends"][(int) $other] = (int) $type;
-			}
-		}
-		$row["isnew"] = false;
-		$r->close();
 	}
 	public function getResultType(){
 		return self::TYPE_ASSOC;
@@ -130,5 +116,34 @@ class LoginDataQuery extends AsyncQuery{
 	}
 	public function __debugInfo(){
 		return [];
+	}
+	protected function onAssocFetched(\mysqli $mysql, array &$row){
+		$uid = $row["uid"];
+		/* group_concat must be done somewhere else because it ALWAYS returns a row. */
+		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs, (SELECT group_concat(CONCAT(IF(smalluid=$uid, largeuid, smalluid), ':', type) SEPARATOR ',') FROM friends WHERE smalluid=$uid OR largeuid=$uid) AS friends;");
+		$result = $r->fetch_assoc();
+		$row["iphist"] = isset($result["iphist"]) ? $result["iphist"] : ",";
+		$row["langs"] = isset($result["langs"]) ? array_filter(explode(",", $result["langs"])) : [];
+		$row["friends"] = [];
+		if(isset($result["friends"])){
+			foreach(array_filter(explode(",", $result["friends"])) as $friend){
+				list($other, $type) = explode(":", $friend, 2);
+				$row["friends"][(int)$other] = (int)$type;
+			}
+		}
+		$row["isnew"] = false;
+		$r->close();
+		if($this->fetchPurchases()){
+			$r = $mysql->query("SELECT pid, id, amplitude, count, expiry FROM purchases WHERE uid=$uid AND class=$this->class");
+			$purchases = [];
+			while(is_array($row = $r->fetch_assoc())){
+				$purchases[$row["pid"]] = new Purchase($row["pid"], $uid, $this->class, $row["id"], $row["amplitude"], $row["count"], $row["expiry"]);
+			}
+			$r->close();
+			$row["purchases"] = $purchases;
+		}
+	}
+	protected function fetchPurchases(){
+		return false;
 	}
 }

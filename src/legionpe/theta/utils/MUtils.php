@@ -129,4 +129,11 @@ class MUtils{
 		}
 		rmdir($dir);
 	}
+	public static function fillArray(array &$array, $size, $value, $clone = true){
+		for($i = 0; $i < $size; $i++){
+			if(!isset($array[$i])){
+				$array[$i] = (is_object($value) and $clone) ? (clone $value) : $value;
+			}
+		}
+	}
 }

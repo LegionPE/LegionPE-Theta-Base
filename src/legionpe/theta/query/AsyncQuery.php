@@ -46,6 +46,10 @@ abstract class AsyncQuery extends AsyncTask{
 			die;
 		}
 	}
+	public abstract function getResultType();
+	public function getExpectedColumns(){
+		return null;
+	}
 	public function onRun(){
 		$mysql = $this->getConn();
 		$this->onPreQuery($mysql);
@@ -84,7 +88,7 @@ abstract class AsyncQuery extends AsyncTask{
 					$set[] = $row;
 				}
 				$result->close();
-				$this->setResult(["success" => true, "query" => $query, "result" => $row, "resulttype" => self::TYPE_ALL]);
+				$this->setResult(["success" => true, "query" => $query, "result" => $set, "resulttype" => self::TYPE_ALL]);
 			}
 			return;
 		}
@@ -101,6 +105,17 @@ abstract class AsyncQuery extends AsyncTask{
 		}
 		return $mysql;
 	}
+	protected function onPreQuery(\mysqli $mysqli){
+	}
+	public abstract function getQuery();
+	protected function reportDebug(){
+		return true;
+	}
+	protected function onPostQuery(\mysqli $mysqli){
+	}
+	protected function reportError(){
+		return true;
+	}
 	private function processRow(&$r){
 		if(!is_array($r)){
 			return;
@@ -115,14 +130,7 @@ abstract class AsyncQuery extends AsyncTask{
 			}
 		}
 	}
-	protected function onPreQuery(\mysqli $mysqli){
-	}
-	public abstract function getQuery();
-	protected function onPostQuery(\mysqli $mysqli){
-	}
-	public abstract function getResultType();
-	public function getExpectedColumns(){
-		return null;
+	protected function onAssocFetched(\mysqli $mysql, array &$row){
 	}
 	/**
 	 * @param string|mixed $str
@@ -137,14 +145,6 @@ abstract class AsyncQuery extends AsyncTask{
 			return "'" . $this->getConn()->escape_string($str) . "'";
 		}
 		return (string)$str;
-	}
-	protected function reportDebug(){
-		return true;
-	}
-	protected function reportError(){
-		return true;
-	}
-	protected function onAssocFetched(\mysqli $mysql, array &$row){
 	}
 	public function __debugInfo(){
 		return [];

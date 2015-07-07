@@ -100,5 +100,7 @@
 	"game.pvp.action.kill": "slained",
 	"game.pvp.action.arrow": "shot",
 	"game.pvp.action.snowball": "snowballed",
-	"game.pvp.action.egg": "egged"
+	"game.pvp.action.egg": "egged",
+
+	"game.pvp.attack.friends": "%verbose%You may not attack your %type% (%em%%target%)!"
 }

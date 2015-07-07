@@ -1,7 +1,7 @@
 <?php
 
 /**
- * LegionPE
+ * Theta
  * Copyright (C) 2015 PEMapModder
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,42 +19,38 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
+use legionpe\theta\config\Settings;
+use pocketmine\Server;
 
-class NextIdQuery extends AsyncQuery{
-	const TEAM = "tid";
-	const USER = "uid";
-	const WARNING = "wid";
-	const PURCHASE = "pid";
-	/** @var string */
-	private $name;
-	public function __construct(BasePlugin $plugin, $name){
-		parent::__construct($plugin);
-		$this->name = $name;
-	}
-	public function onPreQuery(\mysqli $mysqli){
-		$mysqli->query("LOCK TABLES ids WRITE");
+class DownloadKitQuery extends AsyncQuery{
+	/** @var int */
+	public $uid;
+	/** @var int */
+	public $kitid;
+	public $rows;
+	/** @var int */
+	private $class;
+	public function __construct(BasePlugin $main, $uid, $kitid){
+		parent::__construct($main);
+		$this->uid = $uid;
+		$this->kitid = $kitid;
+		$this->class = Settings::$LOCALIZE_CLASS;
 	}
 	public function getQuery(){
-		return "SELECT value+1 AS id FROM ids WHERE name='$this->name'";
-	}
-	public function onPostQuery(\mysqli $mysqli){
-		$mysqli->query("UPDATE ids SET value=value+1 WHERE name='$this->name'");
-		$mysqli->query("UNLOCK TABLES");
+		return "SELECT slot,name,value FROM kits_slots WHERE uid=$this->uid AND kitid=$this->kitid AND class=$this->class";
 	}
 	public function getResultType(){
-		return self::TYPE_ASSOC;
+		return self::TYPE_ALL;
 	}
 	public function getExpectedColumns(){
-		return ["id" => self::COL_INT];
+		return [
+			"slot" => self::COL_INT,
+			"name" => self::COL_STRING,
+			"value" => self::COL_INT
+		];
 	}
-	/**
-	 * @return int|null
-	 */
-	public function getId(){
+	public function onCompletion(Server $server){
 		$result = $this->getResult();
-		return $result["type"] === self::TYPE_ASSOC ? $result["result"]["id"] : null;
-	}
-	public function __debugInfo(){
-		return [];
+		$this->rows = $result["result"];
 	}
 }

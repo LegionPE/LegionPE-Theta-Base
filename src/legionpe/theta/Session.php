@@ -152,8 +152,8 @@ abstract class Session{
 	public function getWarningPoints(){
 		return $this->getLoginDatum("warnpts");
 	}
-	public function getLoginDatum($key){
-		return isset($this->loginData[$key]) ? $this->loginData[$key] : null;
+	public function getLoginDatum($key, $default = null){
+		return isset($this->loginData[$key]) ? $this->loginData[$key] : $default;
 	}
 	public function getLastWarnTime(){
 		return $this->getLoginDatum("lastwarn");
@@ -744,20 +744,6 @@ abstract class Session{
 		}
 		return $out;
 	}
-	public function getFriendType($uid, &$io, &$toLarge = false, &$all = []){
-		$all = $this->getLoginDatum("friends");
-		$type = isset($all[$uid]) ? $all[$uid] : 0;
-		$toLarge = $uid > $this->getUid();
-		$req = $type & self::FRIEND_BITMASK_REQUEST;
-		if($req === self::FRIEND_REQUEST_TO_LARGE and $toLarge or $req === self::FRIEND_REQUEST_TO_SMALL and !$toLarge){
-			$io = self::FRIEND_OUT;
-		}elseif($req === 0){
-			$io = self::FRIEND_NO_REQUEST;
-		}else{
-			$io = self::FRIEND_IN;
-		}
-		return $type & ~self::FRIEND_BITMASK_REQUEST;
-	}
 	public function inviteIncrease($uid, $targetName, &$vars){
 		$vars = ["target" => $targetName];
 		$currentType = $this->getFriendType($uid, $io, $toLarge, $all);
@@ -782,6 +768,20 @@ abstract class Session{
 		$vars["newtype"] = $this->translate(self::$FRIEND_TYPES[$currentType << 1]);
 		return Phrases::CMD_FRIEND_RAISE_REQUESTED;
 	}
+	public function getFriendType($uid, &$io = 0, &$toLarge = false, &$all = []){
+		$all = $this->getLoginDatum("friends");
+		$type = isset($all[$uid]) ? $all[$uid] : 0;
+		$toLarge = $uid > $this->getUid();
+		$req = $type & self::FRIEND_BITMASK_REQUEST;
+		if($req === self::FRIEND_REQUEST_TO_LARGE and $toLarge or $req === self::FRIEND_REQUEST_TO_SMALL and !$toLarge){
+			$io = self::FRIEND_OUT;
+		}elseif($req === 0){
+			$io = self::FRIEND_NO_REQUEST;
+		}else{
+			$io = self::FRIEND_IN;
+		}
+		return $type & ~self::FRIEND_BITMASK_REQUEST;
+	}
 	public function reduceFriend($uid){
 		$type = $this->getFriendType($uid, $io, $toLarge, $all);
 		if($type === self::FRIEND_LEVEL_NONE){
@@ -803,6 +803,13 @@ abstract class Session{
 		$this->setLoginDatum("friends", $all);
 		// TODO query
 		return $originalIo;
+	}
+	public function getPurchases(){
+		return $this->getLoginDatum("purchases", []);
+	}
+	public function getPurchase($pid){
+		$purchases = $this->getLoginDatum("purchases");
+		return isset($purchases[$pid]) ? $purchases[$pid] : null;
 	}
 	public function getPopup(){
 		return $this->curPopup;

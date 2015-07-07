@@ -1,7 +1,7 @@
 <?php
 
 /**
- * LegionPE
+ * Theta
  * Copyright (C) 2015 PEMapModder
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,42 +19,25 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
+use legionpe\theta\config\Settings;
+use legionpe\theta\shops\KitEntry;
 
-class NextIdQuery extends AsyncQuery{
-	const TEAM = "tid";
-	const USER = "uid";
-	const WARNING = "wid";
-	const PURCHASE = "pid";
+class SetKitEntryQuery extends AsyncQuery{
 	/** @var string */
-	private $name;
-	public function __construct(BasePlugin $plugin, $name){
-		parent::__construct($plugin);
-		$this->name = $name;
-	}
-	public function onPreQuery(\mysqli $mysqli){
-		$mysqli->query("LOCK TABLES ids WRITE");
+	private $query;
+	/**
+	 * @param BasePlugin $main
+	 * @param KitEntry $entry
+	 */
+	public function __construct(BasePlugin $main, KitEntry $entry){
+		parent::__construct($main);
+		$class = Settings::$LOCALIZE_CLASS;
+		$this->query = "UPDATE kits_slots SET name={$this->esc($entry->getName())},value={$entry->getValue()} WHERE uid={$entry->getKit()->uid} AND class=$class AND kitid={$entry->getKit()->kitid} AND slot={$entry->getSlot()}";
 	}
 	public function getQuery(){
-		return "SELECT value+1 AS id FROM ids WHERE name='$this->name'";
-	}
-	public function onPostQuery(\mysqli $mysqli){
-		$mysqli->query("UPDATE ids SET value=value+1 WHERE name='$this->name'");
-		$mysqli->query("UNLOCK TABLES");
+		return $this->query;
 	}
 	public function getResultType(){
-		return self::TYPE_ASSOC;
-	}
-	public function getExpectedColumns(){
-		return ["id" => self::COL_INT];
-	}
-	/**
-	 * @return int|null
-	 */
-	public function getId(){
-		$result = $this->getResult();
-		return $result["type"] === self::TYPE_ASSOC ? $result["result"]["id"] : null;
-	}
-	public function __debugInfo(){
-		return [];
+		return self::TYPE_RAW;
 	}
 }
