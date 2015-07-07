@@ -467,11 +467,11 @@ abstract class Session{
 	}
 	public function isAdmin($includeTrial = true){
 		$rank = $this->getRank();
-		return ($rank & Settings::RANK_PERM_ADMIN) and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
+		return ($rank & Settings::RANK_PERM_ADMIN) === Settings::RANK_PERM_ADMIN and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
 	}
 	public function isModerator($includeTrial = true){
 		$rank = $this->getRank();
-		return ($rank & Settings::RANK_PERM_MOD) and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
+		return ($rank & Settings::RANK_PERM_MOD) === Settings::RANK_PERM_ADMIN and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
 	}
 	public function isVIP(){
 		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_VIP);
@@ -481,6 +481,9 @@ abstract class Session{
 	}
 	public function isLocalChatOn(){
 		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_LOCAL_CHAT_ON);
+	}
+	public function isOwner(){
+		return ($this->getRank() & Settings::RANK_PERM_OWNER) === Settings::RANK_PERM_OWNER;
 	}
 	public function onDamage(/** @noinspection PhpUnusedParameterInspection */
 		EntityDamageEvent $event){
@@ -684,10 +687,10 @@ abstract class Session{
 		$this->setLoginDatum("lastgrind", time());
 	}
 	public function isDonatorPlus(){
-		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR_PLUS);
+		return ($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR_PLUS) === Settings::RANK_IMPORTANCE_DONATOR_PLUS;
 	}
 	public function isVIPPlus(){
-		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_VIP_PLUS);
+		return ($this->getRank() & Settings::RANK_IMPORTANCE_VIP_PLUS) === Settings::RANK_IMPORTANCE_VIP_PLUS;
 	}
 	public function addWarningPoints($pts){
 		$this->setLoginDatum("warnpts", $this->getWarningPoints() + $pts);

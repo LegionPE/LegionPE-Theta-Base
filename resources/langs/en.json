@@ -102,5 +102,6 @@
 	"game.pvp.action.snowball": "snowballed",
 	"game.pvp.action.egg": "egged",
 
-	"game.pvp.attack.friends": "%verbose%You may not attack your %type% (%em%%target%)!"
+	"game.pvp.attack.friends": "%verbose%You may not attack your %type% (%em%%target%)!",
+	"game.pvp.attack.spawn": "%verbose%You may not attack players at spawn!"
 }
