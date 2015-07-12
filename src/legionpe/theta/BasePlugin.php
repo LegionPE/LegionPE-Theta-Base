@@ -31,6 +31,7 @@ use legionpe\theta\query\SaveSinglePlayerQuery;
 use legionpe\theta\query\SearchServerQuery;
 use legionpe\theta\queue\Queue;
 use legionpe\theta\queue\TransferSearchRunnable;
+use legionpe\theta\utils\FireSyncChatQueryTask;
 use legionpe\theta\utils\SessionTickTask;
 use legionpe\theta\utils\SyncStatusTask;
 use pocketmine\Player;
@@ -63,11 +64,13 @@ abstract class BasePlugin extends PluginBase{
 	private $altPort;
 	/** @var int */
 	private $internalLastChatId = null;
+	/** @var FireSyncChatQueryTask */
+	private $syncChatTask;
 
 	// PluginManager-level stuff
 	/**
 	 * @param Server $server
-	 * @return static
+	 * @return BasePlugin
 	 * @deprecated
 	 */
 	public static function getInstance(Server $server){
@@ -128,6 +131,7 @@ abstract class BasePlugin extends PluginBase{
 		new InitDbQuery($this);
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SyncStatusTask($this), 40, 40);
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SessionTickTask($this), 1, 20);
+		$this->getServer()->getScheduler()->scheduleDelayedTask($this->syncChatTask = new FireSyncChatQueryTask($this), 5);
 		$this->faceSeeks = json_decode($this->getResourceContents("head.json"));
 		$this->langs = new LanguageManager($this);
 	}
@@ -237,6 +241,14 @@ abstract class BasePlugin extends PluginBase{
 	public function saveSessionData(Session $session, $newStatus = Settings::STATUS_OFFLINE){
 		new SaveSinglePlayerQuery($this, $session, $newStatus);
 	}
+	public function getSessionByUid($uid){
+		foreach($this->sessions as $ses){
+			if($ses->getUid() === $uid){
+				return $ses;
+			}
+		}
+		return null;
+	}
 	public function transferGame(Player $player, $class, $checkPlayers = true){
 		$task = new SearchServerQuery($this, $class, $checkPlayers);
 		$this->queueFor($player->getId(), true, Queue::QUEUE_SESSION)
@@ -319,5 +331,8 @@ abstract class BasePlugin extends PluginBase{
 	}
 	public function setInternalLastChatId($id){
 		$this->internalLastChatId = max($id, $this->internalLastChatId);
+	}
+	public function getFireSyncChatQueryTask(){
+		return $this->syncChatTask;
 	}
 }

@@ -18,16 +18,14 @@
 
 namespace legionpe\theta\query;
 
+use legionpe\theta\BasePlugin;
 use legionpe\theta\Session;
 use pocketmine\Server;
 
 class SetLabelQuery extends AsyncQuery{
-	/** @var Session */
-	private $session;
 	/** @var int */
 	private $uid, $lid;
 	public function __construct(Session $session, $lid){
-		$this->session = $session;
 		$this->uid = $session->getUid();
 		$this->lid = $lid;
 		parent::__construct($session->getMain());
@@ -39,6 +37,9 @@ class SetLabelQuery extends AsyncQuery{
 		return "UPDATE users SET lid=$this->lid WHERE uid=$this->uid";
 	}
 	public function onCompletion(Server $server){
-		$this->session->recalculateNametag();
+		$ses = BasePlugin::getInstance($server)->getSessionByUid($this->uid);
+		if($ses instanceof Session){
+			$ses->recalculateNametag();
+		}
 	}
 }

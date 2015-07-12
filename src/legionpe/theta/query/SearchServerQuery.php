@@ -23,6 +23,7 @@ use legionpe\theta\BasePlugin;
 class SearchServerQuery extends AsyncQuery{
 	/** @var int */
 	public $class;
+	/** @var bool */
 	private $checkPlayers;
 	public function __construct(BasePlugin $plugin, $class, $checkPlayers){
 		$this->class = $class;

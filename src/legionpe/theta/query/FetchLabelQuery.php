@@ -27,11 +27,11 @@ use pocketmine\Server;
 class FetchLabelQuery extends AsyncQuery{
 	/** @var string */
 	private $name;
-	/** @var Session */
-	private $session;
+	/** @var int */
+	private $uid;
 	public function __construct(BasePlugin $main, $name, Session $session){
 		$this->name = $name;
-		$this->session = $session;
+		$this->uid = $session->getUid();
 		parent::__construct($main);
 	}
 	public function getResultType(){
@@ -41,7 +41,10 @@ class FetchLabelQuery extends AsyncQuery{
 		return "SELECT lid,value,approved FROM labels WHERE lid=$this->name";
 	}
 	public function onCompletion(Server $server){
-		$session = $this->session;
+		$session = BasePlugin::getInstance($server)->getSessionByUid($this->uid);
+		if(!($session instanceof Session)){
+			return;
+		}
 		$result = $this->getResult();
 		if($result["type"] === self::TYPE_ASSOC){
 			if($session->canUseLabel($result["approved"])){

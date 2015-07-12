@@ -29,7 +29,6 @@ class LoginDataQuery extends AsyncQuery{
 	public $sesId;
 	public $name;
 	public $totalWarnPts;
-//	private $main;
 	private $class;
 	public function __construct(BasePlugin $plugin, $sesId, $name, $ip, $clientId){
 		$this->main = $plugin;
@@ -86,7 +85,6 @@ class LoginDataQuery extends AsyncQuery{
 		];
 	}
 	public function onCompletion(Server $server){
-//		$main = $this->main;
 		$main = BasePlugin::getInstance($server);
 		foreach($server->getOnlinePlayers() as $player){
 			if($player->getId() === $this->sesId){

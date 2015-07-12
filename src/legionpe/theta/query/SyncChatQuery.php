@@ -26,11 +26,9 @@ use pocketmine\Server;
 class SyncChatQuery extends AsyncQuery{
 	private $main;
 	private $class;
-	private $task; // TODO
 	private $lastId;
 	public function __construct(BasePlugin $main, FireSyncChatQueryTask $task){
 		$this->class = Settings::$LOCALIZE_CLASS;
-		$this->task = $task;
 		$task->canFireNext = false;
 		$this->lastId = $main->getInternalLastChatId();
 		parent::__construct($this->main = $main);
@@ -53,16 +51,18 @@ class SyncChatQuery extends AsyncQuery{
 		];
 	}
 	public function onCompletion(Server $server){
+		$main = BasePlugin::getInstance($server);
 		$result = $this->getResult();
 		if($this->lastId === null){
-			$this->main->setInternalLastChatId($result["result"]["id"]);
+			$main->setInternalLastChatId($result["result"]["id"]);
 		}elseif($result["resulttype"] === self::TYPE_ALL){
 			$result = $this->getResult()["result"];
 			foreach($result as $row){
 				$row["json"] = json_decode($row["json"], true);
-				$this->main->handleChat($row);
+				$main->handleChat($row);
 			}
 		}
-		$this->task->canFireNext = true;
+		$task = $main->getFireSyncChatQueryTask();
+		$task->canFireNext = true;
 	}
 }
