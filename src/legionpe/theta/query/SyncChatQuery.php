@@ -24,14 +24,13 @@ use legionpe\theta\utils\FireSyncChatQueryTask;
 use pocketmine\Server;
 
 class SyncChatQuery extends AsyncQuery{
-	private $main;
 	private $class;
 	private $lastId;
 	public function __construct(BasePlugin $main, FireSyncChatQueryTask $task){
 		$this->class = Settings::$LOCALIZE_CLASS;
 		$task->canFireNext = false;
 		$this->lastId = $main->getInternalLastChatId();
-		parent::__construct($this->main = $main);
+		parent::__construct($main);
 	}
 	public function getQuery(){
 		return $this->lastId === null ? "SELECT MAX(id)AS id FROM chat" : "SELECT id,unix_timestamp(creation)AS creation,src,msg,type,class,json FROM chat WHERE id>$this->lastId AND (class=0 OR class=$this->class)";
