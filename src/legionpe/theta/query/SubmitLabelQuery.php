@@ -1,7 +1,7 @@
 <?php
 
 /**
- * LegionPE
+ * Theta
  * Copyright (C) 2015 PEMapModder
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,25 +20,14 @@ namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
 
-class AddIpQuery extends AsyncQuery{
+class SubmitLabelQuery extends NextIdQuery{
 	/** @var string */
-	private $newIp;
-	/** @var int */
-	private $uid;
-	/**
-	 * @param BasePlugin $plugin
-	 * @param string $newIp
-	 * @param int $uid
-	 */
-	public function __construct(BasePlugin $plugin, $newIp, $uid){
-		$this->newIp = $newIp;
-		$this->uid = $uid;
-		parent::__construct($plugin);
+	private $value;
+	public function __construct(BasePlugin $main, $value){
+		$this->value = $value;
+		parent::__construct($main, self::LABEL);
 	}
-	public function getQuery(){
-		return "INSERT INTO iphist (ip, uid) VALUES ('{$this->esc($this->newIp)}', $this->uid)";
-	}
-	public function getResultType(){
-		return self::TYPE_RAW;
+	public function onAssocFetched(\mysqli $db, &$row){
+		$db->query("INSERT INTO labels(lid, value)VALUES({$this->getId()}, {$this->esc($this->value)})");
 	}
 }

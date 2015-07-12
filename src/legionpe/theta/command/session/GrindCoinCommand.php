@@ -40,4 +40,11 @@ class GrindCoinCommand extends SessionCommand{
 		$sender->startGrinding();
 		return $sender->translate(Phrases::CMD_GRIND_COIN_STARTED);
 	}
+	protected function checkPerm(Session $session, &$msg){
+		if($session->isDonator()){
+			return true;
+		}
+		$msg = $session->translate(Phrases::CMD_ERR_NO_PERM_DONATE);
+		return false;
+	}
 }

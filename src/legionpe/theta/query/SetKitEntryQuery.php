@@ -30,9 +30,9 @@ class SetKitEntryQuery extends AsyncQuery{
 	 * @param KitEntry $entry
 	 */
 	public function __construct(BasePlugin $main, KitEntry $entry){
-		parent::__construct($main);
 		$class = Settings::$LOCALIZE_CLASS;
 		$this->query = "UPDATE kits_slots SET name={$this->esc($entry->getName())},value={$entry->getValue()} WHERE uid={$entry->getKit()->uid} AND class=$class AND kitid={$entry->getKit()->kitid} AND slot={$entry->getSlot()}";
+		parent::__construct($main);
 	}
 	public function getQuery(){
 		return $this->query;

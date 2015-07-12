@@ -29,6 +29,7 @@ use legionpe\theta\query\NextIdQuery;
 use legionpe\theta\queue\ExecuteWarningRunnable;
 use legionpe\theta\queue\Queue;
 use legionpe\theta\utils\MUtils;
+use pocketmine\block\Block;
 use pocketmine\command\CommandSender;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
@@ -47,6 +48,7 @@ use pocketmine\event\player\PlayerItemHeldEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\event\TextContainer;
+use pocketmine\level\particle\DestroyBlockParticle;
 use pocketmine\level\sound\FizzSound;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
@@ -219,42 +221,52 @@ abstract class Session{
 				"class" => $this->translate(Settings::$CLASSES_NAMES_PHRASES[Settings::$LOCALIZE_CLASS]),
 				"ip" => Settings::$LOCALIZE_IP, "port" => (string)Settings::$LOCALIZE_PORT]
 		);
-		$this->setInGameName($this->calculateNameTag(TextFormat::WHITE));
+		$this->recalculateNametag();
 		$this->setMaintainedPopup();
 	}
 	public function send($phrase, array $vars = []){
 		$this->getPlayer()->sendMessage($this->translate($phrase, $vars));
 	}
 	public function translate($phrase, array $vars = []){
-		return $this->getMain()->getLangs()->get($phrase, $vars, "en"); // TODO custom language
+		return $this->getMain()->getLangs()->get($phrase, $vars, $this->getLangs());
 	}
 	/**
 	 * @return BasePlugin
 	 */
 	public abstract function getMain();
-	public function calculateNameTag($nameColor = TextFormat::WHITE){
+	public function getLangs(){
+		$array = $this->getLoginDatum("langs");
+		$array[] = "en";
+		return $array;
+	}
+	public function recalculateNametag(){
+		$this->setInGameName($plain = $this->calculatePlainName());
+		$this->getPlayer()->setDisplayName($plain);
+		$this->getPlayer()->setNameTag($tag = $this->calculateNameTag());
+		$this->getPlayer()->sendTip($this->translate(Phrases::LOGIN_KNOWN_AS));
+	}
+	public function calculatePlainName($nameColor = TextFormat::WHITE){
 		$rank = $this->calculateRank();
 		if($rank !== ""){
-			$tag = TextFormat::AQUA . "{" . $rank . TextFormat::AQUA . "}\n";
+			$tag = Phrases::VAR_symbol . "{" . $rank . Phrases::VAR_symbol . "}";
 		}else{
 			$tag = "";
 		}
-		$teamname = $this->getTeamName();
-		if($teamname){
-			$tag .= TextFormat::LIGHT_PURPLE . "Team " . TextFormat::GOLD . $teamname . "\n";
+		$lbl = $this->getLabelInUse();
+		if($lbl !== ""){
+			$tag .= Phrases::VAR_symbol . "[" . $lbl . Phrases::VAR_symbol . "]";
 		}
-		// TODO custom tags
 		$tag .= $nameColor . $this->getPlayer()->getName();
 		return $tag;
 	}
 	private function calculateRank(){
 		$rank = $this->getRank();
-		$prefix = "";
+		$prefix = TextFormat::AQUA;
 		if($rank & 0x1000){
-			$prefix = "Trial ";
+			$prefix .= "Trial ";
 		}
 		if($rank & 0x2000){
-			$prefix = "Head ";
+			$prefix .= "Head ";
 		}
 		if($rank & 0x0800){
 			return $prefix . "Dev";
@@ -272,25 +284,85 @@ abstract class Session{
 			return $prefix . "Mod";
 		}
 		if($rank & 0x4000){
-			return "YT";
+			return TextFormat::DARK_AQUA . "YT";
 		}
 		$suffix = "";
 		if($rank & 1){
-			$suffix = "+";
+			$suffix = TextFormat::LIGHT_PURPLE . "+";
 		}
 		if(($rank & 0x000C) === 0x000C){
-			return "VIP$suffix";
+			return TextFormat::GOLD . "VIP$suffix";
 		}
 		if($rank & 0x0004){
-			return "Donator$suffix";
+			return TextFormat::GOLD . "Donator$suffix";
 		}
 		return ($suffix === "+") ? "Tester" : "";
 	}
 	public function getRank(){
 		return $this->getLoginDatum("rank");
 	}
+	/**
+	 * @return string
+	 */
+	public function getLabelInUse(){
+		$approved = $this->getLoginDatum("lblappr");
+		return $this->canUseLabel($approved) ? $this->getLoginDatum("lbl") : "";
+	}
+	public function canUseLabel($approved){
+		if($approved < Settings::LABEL_APPROVED_EVERYONE and !$this->isModerator()){
+			return false;
+		}
+		if($approved === Settings::LABEL_APPROVED_EVERYONE){
+			return true;
+		}
+		if($approved === Settings::LABEL_APPROVED_DONATOR and ($this->isDonator() or $this->isModerator())){
+			return true;
+		}
+		if($approved === Settings::LABEL_APPROVED_VIP and ($this->isVIP() or $this->isModerator())){
+			return true;
+		}
+		if($approved === Settings::LABEL_APPROVED_MOD and $this->isModerator()){
+			return true;
+		}
+		return $this->isAdmin() ? true : false;
+	}
+	public function isModerator($includeTrial = true){
+		$rank = $this->getRank();
+		return ($rank & Settings::RANK_PERM_MOD) === Settings::RANK_PERM_ADMIN and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
+	}
+	public function isDonator(){
+		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR);
+	}
+	public function isVIP(){
+		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_VIP);
+	}
+	public function isAdmin($includeTrial = true){
+		$rank = $this->getRank();
+		return ($rank & Settings::RANK_PERM_ADMIN) === Settings::RANK_PERM_ADMIN and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
+	}
+	public function calculateNameTag($nameColor = TextFormat::WHITE){
+		$tag = "";
+		$teamname = $this->getTeamName();
+		if($teamname){
+			$tag .= TextFormat::DARK_AQUA . "Team " . TextFormat::GOLD . $teamname;
+			$tag .= TextFormat::GREEN . "(" . $this->getTeamRank() . ")\n";
+		}
+		$rank = $this->calculateRank();
+		if($rank !== ""){
+			$tag .= $rank . "\n";
+		}
+		$lbl = $this->getLabelInUse();
+		if($lbl !== ""){
+			$tag .= Phrases::VAR_symbol . "[" . $lbl . Phrases::VAR_symbol . "]";
+		}
+		$tag .= $nameColor . $this->getPlayer()->getName();
+		return $tag;
+	}
 	public function getTeamName(){
 		return "TEAM NAME HERE TODO"; // TODO
+	}
+	public function getTeamRank(){
+		return $this->getLoginDatum("teamrank");
 	}
 	public function setMaintainedPopup($popup = null){
 		if($this->curPopup === $popup){
@@ -439,18 +511,18 @@ abstract class Session{
 	 * @param string $msg
 	 * @param int $type
 	 */
-	public function onChat($msg, /** @noinspection PhpUnusedParameterInspection */
-	                       $type){
-		$msg = $this->getChatColor() . preg_replace_callback('/@([A-Za-z_]{3,16})/', function ($match){
+	public function onChat($msg, $type){
+		$msg = TextFormat::clean($msg);
+		$msg = $this->getChatColor() . preg_replace_callback('/@([A-Za-z_]{2,16})/', function ($match){
 				if(($player = $this->getMain()->getServer()->getPlayer($match[1])) !== null){
-					return $player->getName() . $this->getChatColor();
+					return TextFormat::DARK_AQUA . TextFormat::ITALIC . $player->getName() . TextFormat::RESET . $this->getChatColor();
 				}
-				return $match[0];
+				return TextFormat::ITALIC . $match[0] . $this->getChatColor();
 			}, $msg);
 		foreach($this->getMain()->getSessions() as $ses){
 			// TODO handle $type
-			if($ses->isLocalChatOn()){
-				$ses->getPlayer()->sendMessage($this->getPlayer()->getDisplayName() . ">" . TextFormat::WHITE . $msg);
+			if($ses->isLocalChatOn() and ($type !== self::CHAT_LOCAL or Settings::isLocalChat($ses->getPlayer(), $this->getPlayer()))){
+				$ses->getPlayer()->sendMessage($this->getPlayer()->getDisplayName() . ">" . $this->getChatColor() . $msg);
 			}
 		}
 	}
@@ -468,20 +540,6 @@ abstract class Session{
 			return TextFormat::WHITE;
 		}
 		return TextFormat::GRAY;
-	}
-	public function isAdmin($includeTrial = true){
-		$rank = $this->getRank();
-		return ($rank & Settings::RANK_PERM_ADMIN) === Settings::RANK_PERM_ADMIN and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
-	}
-	public function isModerator($includeTrial = true){
-		$rank = $this->getRank();
-		return ($rank & Settings::RANK_PERM_MOD) === Settings::RANK_PERM_ADMIN and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
-	}
-	public function isVIP(){
-		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_VIP);
-	}
-	public function isDonator(){
-		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR);
 	}
 	public function isLocalChatOn(){
 		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_LOCAL_CHAT_ON);
@@ -621,14 +679,27 @@ abstract class Session{
 		$this->setLoginDatum("iphist", $this->getLoginDatum("iphist") . "$ip,");
 		new AddIpQuery($this->getMain(), $ip, $this->getUid());
 	}
-	public function grantCoins($coins, $ignoreGrind = false, $sound = true){
+	public function grantCoins($coins, $ignoreGrind = false, $effects = true, $bonus = true){
 		if(!$ignoreGrind and $this->isGrinding()){
 			$coins *= Settings::getGrindFactor($this->getRank());
 		}
-		if($sound){
+		if($effects){
 			$this->getPlayer()->getLevel()->addSound(new FizzSound($this->getPlayer()), [$this->getPlayer()]);
+			$this->getPlayer()->getLevel()->addParticle(new DestroyBlockParticle($this->getPlayer(), Block::get(Block::GOLD_BLOCK)), [$this->getPlayer()]);
 		}
 		$this->setCoins($this->getCoins() + $coins);
+		if($bonus){
+			if(mt_rand(0, 99) === 0){
+				$add = mt_rand(25, 50);
+			}elseif(mt_rand(0, 499) === 0){
+				$add = mt_rand(150, 300);
+			}elseif(mt_rand(0, 749) === 0){
+				$add = mt_rand(300, 500);
+			}
+			if(isset($add)){
+				$this->grantCoins($add, false, true, false);
+			}
+		}
 	}
 	public function isGrinding(){
 		return time() - $this->getLastGrind() <= Settings::getGrindLength($this->getRank());
@@ -707,9 +778,6 @@ abstract class Session{
 		$this->getMain()->queueFor($this->getPlayer()->getId(), true, Queue::QUEUE_SESSION)
 			->pushToQueue(new ExecuteWarningRunnable($this->getMain(), $wid, $this->getUid(), $clientId, $id, $points, $issuer, $msg));
 	}
-	public function getTeamRank(){
-		return $this->getLoginDatum("teamrank");
-	}
 	public function getTeamJoinTime(){
 		return $this->getLoginDatum("teamjoin");
 	}
@@ -736,11 +804,6 @@ abstract class Session{
 	}
 	public function isNew(){
 		return isset($this->loginData["isnew"]) and $this->loginData["isnew"] === true;
-	}
-	public function getLangs(){
-		$array = $this->getLoginDatum("langs");
-		$array[] = "en";
-		return $array;
 	}
 	public function getFriends($level = self::FRIEND_LEVEL_GOOD_FRIEND){
 		$out = [];

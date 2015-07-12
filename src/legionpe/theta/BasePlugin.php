@@ -73,7 +73,10 @@ abstract class BasePlugin extends PluginBase{
 	public static function getInstance(Server $server){
 		return $server->getPluginManager()->getPlugin(self::$NAME);
 	}
-	public static function getDefaultLoginData($uid, Player $player){
+	public final static function getDefaultLoginData($uid, Player $player){
+		return static::defaultLoginData($uid, $player);
+	}
+	protected static function defaultLoginData($uid, Player $player){
 		$name = $player->getName();
 		$ip = $player->getAddress();
 		return [
@@ -103,8 +106,11 @@ abstract class BasePlugin extends PluginBase{
 			"iphist" => ",$ip,",
 			"isnew" => true,
 			"email" => self::EMAIL_UNVERIFIED,
+			"friends" => [],
+			"langs" => [],
+			"purchases" => [],
 		];
-	} // TODO allow overriding
+	}
 	public function onLoad(){
 		self::$NAME = $this->getName();
 		class_exists(CloseServerQuery::class); // preload to workaround frequent corruption errors due to phar repalced

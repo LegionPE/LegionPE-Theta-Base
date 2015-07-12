@@ -28,8 +28,8 @@ class NewUserQuery extends NextIdQuery{
 	/** @var int */
 	private $sesId;
 	public function __construct(BasePlugin $plugin, Player $player){
-		parent::__construct($plugin, self::USER);
 		$this->sesId = $player->getId();
+		parent::__construct($plugin, self::USER);
 	}
 	public function onCompletion(Server $server){
 //		$main = $this->main;

@@ -38,11 +38,11 @@ class AddKitQuery extends AsyncQuery{
 	 * @param $kitName
 	 */
 	public function __construct(BasePlugin $main, $uid, $kitid, $kitName){
-		parent::__construct($main);
 		$this->uid = $uid;
 		$this->class = Settings::$LOCALIZE_CLASS;
 		$this->kitid = $kitid;
 		$this->kitName = $kitName;
+		parent::__construct($main);
 	}
 	public function getQuery(){
 		$realSize = Kit::SLOT_SPECIAL_REAL_SIZE;

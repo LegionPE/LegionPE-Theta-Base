@@ -23,7 +23,6 @@ use legionpe\theta\Session;
 use pocketmine\command\CommandSender;
 use pocketmine\event\TextContainer;
 use pocketmine\Player;
-use pocketmine\utils\TextFormat;
 
 abstract class SessionCommand extends ThetaCommand{
 	public function testPermissionSilent(CommandSender $sender){
@@ -42,12 +41,12 @@ abstract class SessionCommand extends ThetaCommand{
 	 * @return bool
 	 */
 	protected function checkPerm(/** @noinspection PhpUnusedParameterInspection */
-		Session $session, &$msg = "You don't have permission to use this command"){
+		Session $session, &$msg = null){
 		return true;
 	}
 	public function testPermission(CommandSender $sender){
 		if(!($sender instanceof Player)){
-			$sender->sendMessage(TextFormat::RED . "Please run this command in-game.");
+			$sender->sendMessage(Phrases::VAR_error . "Please run this command in-game.");
 			return false;
 		}
 		$session = $this->getPlugin()->getSession($sender);
@@ -56,14 +55,14 @@ abstract class SessionCommand extends ThetaCommand{
 			return false;
 		}
 		if(!$this->checkPerm($session, $msg)){
-			$sender->sendMessage(TextFormat::RED . $msg);
+			$sender->sendMessage(Phrases::VAR_error . ($msg === null ? $session->translate(Phrases::CMD_ERR_NO_PERM) : $msg));
 			return false;
 		}
 		return true;
 	}
 	public function execute(CommandSender $sender, $l, array $args){
 		if(!($sender instanceof Player)){
-			$sender->sendMessage(TextFormat::RED . "Please run this command in-game.");
+			$sender->sendMessage(Phrases::VAR_error . "Please run this command in-game.");
 			return true;
 		}
 		$session = $this->getPlugin()->getSession($sender);

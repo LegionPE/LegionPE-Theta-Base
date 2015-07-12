@@ -24,9 +24,9 @@ class UpdateUserStatusQuery extends AsyncQuery{
 	/** @var int */
 	private $uid, $status;
 	public function __construct(BasePlugin $plugin, $uid, $status){
-		parent::__construct($plugin);
 		$this->uid = $uid;
 		$this->status = $status;
+		parent::__construct($plugin);
 	}
 	public function getQuery(){
 		return "UPDATE users SET status=$this->status WHERE uid=$this->uid";

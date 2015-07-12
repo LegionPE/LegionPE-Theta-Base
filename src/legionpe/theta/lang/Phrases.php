@@ -30,12 +30,13 @@ class Phrases{
 
 	const LOGIN_AUTH_SUCCESS = "login.auth.success";
 	const LOGIN_AUTH_WHEREAMI = "login.auth.whereami";
+	const LOGIN_KNOWN_AS = "login.knownas";
+	const LOGIN_PASS_PROMPT = "login.pass.prompt";
+	const LOGIN_PASS_MISMATCH = "login.pass.mismatch";
 	const LOGIN_REGISTER_PROMPT = "login.register.prompt";
 	const LOGIN_REGISTER_RETYPE = "login.register.retype";
 	const LOGIN_REGISTER_SUCCESS = "login.register.success";
 	const LOGIN_REGISTER_MISMATCH = "login.register.mismatch";
-	const LOGIN_PASS_PROMPT = "login.pass.prompt";
-	const LOGIN_PASS_MISMATCH = "login.pass.mismatch";
 
 	const CHAT_BLOCKED_PASS = "chat.blocked.pass";
 	const CHAT_BROADCASTS_ARRAY = "chat.broadcasts";
@@ -47,9 +48,11 @@ class Phrases{
 	const CHAT_FORMAT_BROADCAST_LOCAL = "chat.format.broadcast.local";
 
 	const CMD_ERR_NO_PERM = "cmd.error.noperm";
+	const CMD_ERR_NO_PERM_DONATE = "cmd.error.noperm.donate";
 	const CMD_ERR_WRONG_USE = "cmd.error.wronguse";
 	const CMD_ERR_ABSENT_PLAYER_NAME_UNKNOWN = "cmd.error.absplayer.unknown";
 	const CMD_ERR_ABSENT_PLAYER_NAME_KNOWN = "cmd.error.absplayer.named";
+	const CMD_ERR_LOADING = "cmd.error.loading";
 
 	const CMD_FRIEND_ALREADY_INVITED = "cmd.friend.alreadyinvited";
 	const CMD_FRIEND_RAISE_REQUESTED = "cmd.friend.requested.raise";
@@ -65,6 +68,10 @@ class Phrases{
 	const CMD_GRIND_COIN_CANNOT_START = "cmd.gc.cannotstart";
 	const CMD_GRIND_COIN_REQUEST_CONFIRM = "cmd.gc.reqconfirm";
 	const CMD_GRIND_COIN_STARTED = "cmd.gc.started";
+
+	const CMD_LABEL_VIEW = "cmd.lbl.view";
+	const CMD_LABEL_WAIT_FOR_APPROVAL = "cmd.lbl.approving";
+	const CMD_LABEL_CHANGED = "cmd.lbl.changed";
 
 	const CMD_PRIV_MSG_REMIND_QUERY = "cmd.pm.remindquery";
 

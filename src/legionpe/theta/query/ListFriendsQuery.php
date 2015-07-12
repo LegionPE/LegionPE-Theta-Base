@@ -33,9 +33,9 @@ class ListFriendsQuery extends AsyncQuery{
 	/** @var int */
 	private $uid;
 	public function __construct(BasePlugin $main, Session $session){
-		parent::__construct($this->main = $main);
 		$this->session = $session;
 		$this->uid = $session->getUid();
+		parent::__construct($this->main = $main);
 	}
 	public function getQuery(){
 		return "SELECT type,(SELECT nicks FROM users WHERE uid=tmp.uid)AS nicks FROM(SELECT IF(smalluid=$this->uid,largeuid,smalluid)AS uid,type FROM friends WHERE smalluid=$this->uid OR largeuid=$this->uid)AS tmp";

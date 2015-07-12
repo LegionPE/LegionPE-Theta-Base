@@ -32,7 +32,6 @@ class LogWarningQuery extends AsyncQuery{
 	/** @var int */
 	private $creation, $expiry;
 	public function __construct(BasePlugin $plugin, $wid, $uid, $clientId, $issuerName, $points, $msg, $creation, $expiry){
-		parent::__construct($plugin);
 		$this->wid = $wid;
 		$this->uid = $uid;
 		$this->clientId = $clientId;
@@ -41,6 +40,7 @@ class LogWarningQuery extends AsyncQuery{
 		$this->msg = $this->esc($msg);
 		$this->creation = $creation;
 		$this->expiry = $expiry;
+		parent::__construct($plugin);
 	}
 	public function getQuery(){
 		return "INSERT INTO warnings_logs(wid,uid,clientid,issuer,pts,msg,creation,expiry,agent)VALUES($this->wid,$this->uid,$this->clientId,$this->issuerName,$this->points,$this->msg,$this->creation,$this->expiry,'eu.legionpvp.theta.mysqli')";

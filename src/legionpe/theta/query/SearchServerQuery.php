@@ -25,9 +25,9 @@ class SearchServerQuery extends AsyncQuery{
 	public $class;
 	private $checkPlayers;
 	public function __construct(BasePlugin $plugin, $class, $checkPlayers){
-		parent::__construct($plugin);
 		$this->class = $class;
 		$this->checkPlayers = $checkPlayers;
+		parent::__construct($plugin);
 	}
 	public function getQuery(){
 		$checkPlayers = $this->checkPlayers ? " AND online_players<max_players" : "";

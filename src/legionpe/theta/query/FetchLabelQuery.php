@@ -20,37 +20,36 @@ namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\config\Settings;
+use legionpe\theta\lang\Phrases;
+use legionpe\theta\Session;
 use pocketmine\Server;
 
-class DownloadKitQuery extends AsyncQuery{
-	/** @var int */
-	public $uid;
-	/** @var int */
-	public $kitid;
-	public $rows;
-	/** @var int */
-	private $class;
-	public function __construct(BasePlugin $main, $uid, $kitid){
-		$this->uid = $uid;
-		$this->kitid = $kitid;
-		$this->class = Settings::$LOCALIZE_CLASS;
+class FetchLabelQuery extends AsyncQuery{
+	/** @var string */
+	private $name;
+	/** @var Session */
+	private $session;
+	public function __construct(BasePlugin $main, $name, Session $session){
+		$this->name = $name;
+		$this->session = $session;
 		parent::__construct($main);
 	}
-	public function getQuery(){
-		return "SELECT slot,name,value FROM kits_slots WHERE uid=$this->uid AND kitid=$this->kitid AND class=$this->class";
-	}
 	public function getResultType(){
-		return self::TYPE_ALL;
+		return self::TYPE_ASSOC;
 	}
-	public function getExpectedColumns(){
-		return [
-			"slot" => self::COL_INT,
-			"name" => self::COL_STRING,
-			"value" => self::COL_INT
-		];
+	public function getQuery(){
+		return "SELECT lid,value,approved FROM labels WHERE lid=$this->name";
 	}
 	public function onCompletion(Server $server){
+		$session = $this->session;
 		$result = $this->getResult();
-		$this->rows = $result["result"];
+		if($result["type"] === self::TYPE_ASSOC){
+			if($session->canUseLabel($result["approved"])){
+				$session->setLoginDatum("lbl", $result["value"]);
+				new SetLabelQuery($session, $result["lid"]);
+			}elseif($result["approved"] === Settings::LABEL_APPROVED_NOT){
+				$session->send(Phrases::CMD_LABEL_WAIT_FOR_APPROVAL);
+			}
+		}
 	}
 }

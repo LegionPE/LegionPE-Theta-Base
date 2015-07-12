@@ -32,7 +32,7 @@ class LoginDataQuery extends AsyncQuery{
 //	private $main;
 	private $class;
 	public function __construct(BasePlugin $plugin, $sesId, $name, $ip, $clientId){
-//		$this->main = $plugin;
+		$this->main = $plugin;
 		$this->class = Settings::$LOCALIZE_CLASS;
 		$this->sesId = $sesId;
 		$this->name = $this->esc($name);
@@ -47,7 +47,7 @@ class LoginDataQuery extends AsyncQuery{
 	}
 	public function getQuery(){
 		// warning: keep the first 7 characters ALWAYS "SELECT "
-		return "SELECT uid,name,nicks,lastip,status,lastses,authuuid,coins,hash,newhash,pwprefix,pwlen,registration,laston,ontime,config,lastgrind,rank,warnpts,lastwarn,tid,(SELECT name FROM teams WHERE tid=users.tid)as teamname,teamrank,teamjoin,ignorelist,email,emailkey FROM users WHERE name=$this->name";
+		return "SELECT uid,name,nicks,lastip,status,lastses,authuuid,coins,hash,newhash,pwprefix,pwlen,registration,laston,ontime,config,(SELECT value FROM labels WHERE lid=users.lid)AS lbl,(SELECT approved FROM labels WHERE lid=users.lid)AS lblappr,lastgrind,rank,warnpts,lastwarn,tid,(SELECT name FROM teams WHERE tid=users.tid)as teamname,teamrank,teamjoin,ignorelist,email,emailkey FROM users WHERE name=$this->name";
 	}
 	public function getResultType(){
 		return self::TYPE_ASSOC;
@@ -70,6 +70,8 @@ class LoginDataQuery extends AsyncQuery{
 			"laston" => self::COL_UNIXTIME,
 			"ontime" => self::COL_INT,
 			"config" => self::COL_INT,
+			"lbl" => self::COL_STRING,
+			"lblappr" => self::COL_INT,
 			"lastgrind" => self::COL_UNIXTIME,
 			"rank" => self::COL_INT,
 			"warnpts" => self::COL_INT,
@@ -137,8 +139,8 @@ class LoginDataQuery extends AsyncQuery{
 		if($this->fetchPurchases()){
 			$r = $mysql->query("SELECT pid, id, amplitude, count, expiry FROM purchases WHERE uid=$uid AND class=$this->class");
 			$purchases = [];
-			while(is_array($row = $r->fetch_assoc())){
-				$purchases[$row["pid"]] = new Purchase($row["pid"], $uid, $this->class, $row["id"], $row["amplitude"], $row["count"], $row["expiry"]);
+			while(is_array($result = $r->fetch_assoc())){
+				$purchases[$result["pid"]] = new Purchase($result["pid"], $uid, $this->class, $result["id"], $result["amplitude"], $result["count"], $result["expiry"]);
 			}
 			$r->close();
 			$row["purchases"] = $purchases;

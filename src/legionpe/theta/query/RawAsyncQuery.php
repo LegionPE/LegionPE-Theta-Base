@@ -24,8 +24,8 @@ class RawAsyncQuery extends AsyncQuery{
 	/** @var string */
 	private $query;
 	public function __construct(BasePlugin $main, $query){
-		parent::__construct($main);
 		$this->query = $query;
+		parent::__construct($main);
 	}
 	public function getQuery(){
 		return $this->query;

@@ -27,9 +27,9 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 	private $data;
 	private $coinsDelta;
 	public function __construct(BasePlugin $plugin, Session $session, $status){
-		parent::__construct($plugin);
 		$data = $this->getColumns($session, $status);
 		$this->data = serialize($data);
+		parent::__construct($plugin);
 	}
 	/**
 	 * @param Session $session

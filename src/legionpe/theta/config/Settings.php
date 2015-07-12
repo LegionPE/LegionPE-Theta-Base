@@ -18,6 +18,7 @@
 
 namespace legionpe\theta\config;
 
+use pocketmine\math\Vector3;
 use pocketmine\utils\Config;
 
 abstract class Settings{
@@ -32,16 +33,16 @@ abstract class Settings{
 	const CLASS_SPLEEF = 4;
 	const CLASS_INFECTED = 5;
 	const CLASS_CLASSICAL = 6;
-const RANK_IMPORTANCE_DEFAULT = 0x0000;
-const RANK_IMPORTANCE_TESTER = 0x0001;
-const RANK_IMPORTANCE_DONATOR = 0x0004;
-const RANK_IMPORTANCE_DONATOR_PLUS = 0x0005;
-const RANK_IMPORTANCE_VIP = 0x000C;
-const RANK_IMPORTANCE_VIP_PLUS = 0x000D;
+	const RANK_IMPORTANCE_DEFAULT = 0x0000;
+	const RANK_IMPORTANCE_TESTER = 0x0001;
+	const RANK_IMPORTANCE_DONATOR = 0x0004;
+	const RANK_IMPORTANCE_DONATOR_PLUS = 0x0005;
+	const RANK_IMPORTANCE_VIP = 0x000C;
+	const RANK_IMPORTANCE_VIP_PLUS = 0x000D;
 	const RANK_SECTOR_IMPORTANCE = 0x000F;
 	const RANK_PERM_DEFAULT = 0x0000;
-const RANK_PERM_MOD = 0x0010;
-const RANK_PERM_ADMIN = 0x0030;
+	const RANK_PERM_MOD = 0x0010;
+	const RANK_PERM_ADMIN = 0x0030;
 
 	// ranks of importance (how important the person is, like VERY Important Person) must not exceed 15 according to this, 1 nibble
 	// the first two bits are the two actual permission-affecting nibbles
@@ -61,7 +62,7 @@ const RANK_PERM_ADMIN = 0x0030;
 	const RANK_PREC_TRIAL = 0x1000; // 16
 	const RANK_PREC_HEAD = 0x2000; // 48
 	const RANK_SECTOR_PRECISION = 0x3000; // 112
-	/** Here you are, the youtuber rank */
+	// Here you are, the youtuber rank */
 	const RANK_DECOR_YOUTUBER = 0x4000; // 240
 	const RANK_SECTOR_DECOR = 0xC000; // 256
 	const CONFIG_DEFAULT_VALUE = Settings::CONFIG_AUTH_UUID | Settings::CONFIG_LOCAL_CHAT_ON | Settings::CONFIG_TEAM_CHANNEL_ON | Settings::CONFIG_STATS_PUBLIC | Settings::CONFIG_TAG_ON;
@@ -79,6 +80,26 @@ const RANK_PERM_ADMIN = 0x0030;
 	const CONFIG_STATS_PUBLIC = 0x20;
 	const CONFIG_TEAM_CHANNEL_ON = 0x40;
 	const CONFIG_LOCAL_CHAT_ON = 0x80;
+	const LABEL_APPROVED_NOT = 0;
+	const LABEL_APPROVED_EVERYONE = 1;
+	const LABEL_APPROVED_DONATOR = 2;
+	const LABEL_APPROVED_VIP = 3;
+	const LABEL_APPROVED_MOD = 4;
+	const LABEL_APPROVED_ADMIN = 5;
+	const LABEL_APPROVED_REJECTED = -1;
+	const LABEL_APPROVED_REJECTED_ALT = 32;
+	const TEAM_RANK_JUNIOR = 0;
+	const TEAM_RANK_MEMBER = 1;
+	const TEAM_RANK_SENIOR = 2;
+	const TEAM_RANK_COLEAD = 3;
+	const TEAM_RANK_LEADER = 4;
+	public static $TEAM_RANKS = [
+		self::TEAM_RANK_JUNIOR => "Junior-Member",
+		self::TEAM_RANK_MEMBER => "Member",
+		self::TEAM_RANK_SENIOR => "Senior-Member",
+		self::TEAM_RANK_COLEAD => "Co-Leader",
+		self::TEAM_RANK_LEADER => "Leader",
+	];
 	/** @var int */
 	public static $SYSTEM_MAX_PLAYERS;
 	/** @var bool */
@@ -156,6 +177,14 @@ const RANK_PERM_ADMIN = 0x0030;
 			return 216000;
 		}
 		return PHP_INT_MAX;
+	}
+	/**
+	 * @param Vector3 $from
+	 * @param Vector3 $to
+	 * @return mixed
+	 */
+	public static function isLocalChat($from, $to){
+		return $from->distanceSquared($to) <= 1600;
 	}
 }
 

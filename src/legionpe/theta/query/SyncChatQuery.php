@@ -29,11 +29,11 @@ class SyncChatQuery extends AsyncQuery{
 	private $task; // TODO
 	private $lastId;
 	public function __construct(BasePlugin $main, FireSyncChatQueryTask $task){
-		parent::__construct($this->main = $main);
 		$this->class = Settings::$LOCALIZE_CLASS;
 		$this->task = $task;
 		$task->canFireNext = false;
 		$this->lastId = $main->getInternalLastChatId();
+		parent::__construct($this->main = $main);
 	}
 	public function getQuery(){
 		return $this->lastId === null ? "SELECT MAX(id)AS id FROM chat" : "SELECT id,unix_timestamp(creation)AS creation,src,msg,type,class,json FROM chat WHERE id>$this->lastId AND (class=0 OR class=$this->class)";

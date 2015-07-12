@@ -1,7 +1,7 @@
 <?php
 
 /**
- * LegionPE
+ * Theta
  * Copyright (C) 2015 PEMapModder
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,29 +16,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\query;
+namespace legionpe\theta\utils;
 
-use legionpe\theta\BasePlugin;
+use legionpe\theta\credentials\Credentials;
+use pocketmine\scheduler\AsyncTask;
+use pocketmine\utils\Utils;
 
-class AddIpQuery extends AsyncQuery{
+class PostIRCMessageTask extends AsyncTask{
 	/** @var string */
-	private $newIp;
-	/** @var int */
-	private $uid;
-	/**
-	 * @param BasePlugin $plugin
-	 * @param string $newIp
-	 * @param int $uid
-	 */
-	public function __construct(BasePlugin $plugin, $newIp, $uid){
-		$this->newIp = $newIp;
-		$this->uid = $uid;
-		parent::__construct($plugin);
+	private $msg;
+	public function __construct($msg){
+		$this->msg = $msg;
 	}
-	public function getQuery(){
-		return "INSERT INTO iphist (ip, uid) VALUES ('{$this->esc($this->newIp)}', $this->uid)";
-	}
-	public function getResultType(){
-		return self::TYPE_RAW;
+	public function onRun(){
+		Utils::postURL(Credentials::IRC_WEBHOOK_NOPREFIX . urlencode($this->msg), ["payload" => $this->msg]);
 	}
 }

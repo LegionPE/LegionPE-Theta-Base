@@ -25,11 +25,13 @@ class NextIdQuery extends AsyncQuery{
 	const USER = "uid";
 	const WARNING = "wid";
 	const PURCHASE = "pid";
+	const LABEL = "lid";
 	/** @var string */
 	private $name;
+	private $resultId;
 	public function __construct(BasePlugin $plugin, $name){
-		parent::__construct($plugin);
 		$this->name = $name;
+		parent::__construct($plugin);
 	}
 	public function onPreQuery(\mysqli $mysqli){
 		$mysqli->query("LOCK TABLES ids WRITE");
@@ -51,8 +53,11 @@ class NextIdQuery extends AsyncQuery{
 	 * @return int|null
 	 */
 	public function getId(){
+		if(isset($this->resultId)){
+			return $this->resultId;
+		}
 		$result = $this->getResult();
-		return $result["type"] === self::TYPE_ASSOC ? $result["result"]["id"] : null;
+		return $this->resultId = ($result["type"] === self::TYPE_ASSOC ? $result["result"]["id"] : null);
 	}
 	public function __debugInfo(){
 		return [];

@@ -27,12 +27,12 @@ class PushChatQuery extends AsyncQuery{
 	private $class;
 	private $data;
 	public function __construct(BasePlugin $main, $src, $msg, $type, $class, $data = []){
-		parent::__construct($main);
 		$this->src = $src;
 		$this->msg = $msg;
 		$this->type = $type;
 		$this->class = $class;
 		$this->data = json_encode($data);
+		parent::__construct($main);
 	}
 	public function getQuery(){
 		return "INSERT INTO chat(src,msg,type,class,json)VALUES({$this->esc($this->src)},{$this->esc($this->msg)},$this->type,$this->class,{$this->esc($this->data)})";

@@ -33,6 +33,12 @@ use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
 abstract class ThetaCommand extends Command implements PluginIdentifiableCommand{
+	/** @var BasePlugin */
+	private $plugin;
+	public function __construct(BasePlugin $plugin, $name, $desc, $usage, $aliases = []){
+		parent::__construct($name, $desc, $usage, (array)$aliases);
+		$this->plugin = $plugin;
+	}
 	public static function registerAll(BasePlugin $main, CommandMap $map){
 		foreach(
 			[
@@ -86,20 +92,12 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 		}
 		return false;
 	}
-	/** @var BasePlugin */
-	private $plugin;
-	public function __construct(BasePlugin $plugin, $name, $desc, $usage, $aliases = []){
-		parent::__construct($name, $desc, $usage, (array)$aliases);
-		$this->plugin = $plugin;
-	}
 	/**
+	 * Alias of {@link #getPlugin}
 	 * @return BasePlugin
 	 */
-	public function getPlugin(){
+	public function getMain(){
 		return $this->plugin;
-	}
-	public function getSession($player){
-		return $this->getPlugin()->getSession($player);
 	}
 	protected function sendUsage($sender){
 		if($sender instanceof Player){
@@ -114,6 +112,15 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 		if($sender instanceof CommandSender){
 			$sender->sendMessage(TextFormat::RED . "Usage: " . $this->getUsage());
 		}
+	}
+	public function getSession($player){
+		return $this->getPlugin()->getSession($player);
+	}
+	/**
+	 * @return BasePlugin
+	 */
+	public function getPlugin(){
+		return $this->plugin;
 	}
 	protected function notOnline($sender, $name = null){
 		if($sender instanceof Session){

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * LegionPE
+ * Theta
  * Copyright (C) 2015 PEMapModder
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,27 +18,27 @@
 
 namespace legionpe\theta\query;
 
-use legionpe\theta\BasePlugin;
+use legionpe\theta\Session;
+use pocketmine\Server;
 
-class AddIpQuery extends AsyncQuery{
-	/** @var string */
-	private $newIp;
+class SetLabelQuery extends AsyncQuery{
+	/** @var Session */
+	private $session;
 	/** @var int */
-	private $uid;
-	/**
-	 * @param BasePlugin $plugin
-	 * @param string $newIp
-	 * @param int $uid
-	 */
-	public function __construct(BasePlugin $plugin, $newIp, $uid){
-		$this->newIp = $newIp;
-		$this->uid = $uid;
-		parent::__construct($plugin);
-	}
-	public function getQuery(){
-		return "INSERT INTO iphist (ip, uid) VALUES ('{$this->esc($this->newIp)}', $this->uid)";
+	private $uid, $lid;
+	public function __construct(Session $session, $lid){
+		$this->session = $session;
+		$this->uid = $session->getUid();
+		$this->lid = $lid;
+		parent::__construct($session->getMain());
 	}
 	public function getResultType(){
 		return self::TYPE_RAW;
+	}
+	public function getQuery(){
+		return "UPDATE users SET lid=$this->lid WHERE uid=$this->uid";
+	}
+	public function onCompletion(Server $server){
+		$this->session->recalculateNametag();
 	}
 }

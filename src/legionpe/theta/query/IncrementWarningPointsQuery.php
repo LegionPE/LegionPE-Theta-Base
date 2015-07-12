@@ -24,9 +24,9 @@ class IncrementWarningPointsQuery extends AsyncQuery{
 	/** @var int */
 	private $warnpts, $uid;
 	public function __construct(BasePlugin $main, $warnpts, $uid){
-		parent::__construct($main);
 		$this->warnpts = $warnpts;
 		$this->uid = $uid;
+		parent::__construct($main);
 	}
 	public function getQuery(){
 		return "UPDATE users SET warnpts=warnpts+($this->warnpts) WHERE uid=$this->uid";

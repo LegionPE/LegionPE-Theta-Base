@@ -32,10 +32,10 @@ class ReportStatusQuery extends AsyncQuery{
 	/** @var int */
 	private $altPort = null;
 	public function __construct(BasePlugin $plugin){
-//		$this->main = $plugin;
-		parent::__construct($plugin);
+		$this->main = $plugin;
 		$this->players = count($plugin->getServer()->getOnlinePlayers());
 		$this->class = Settings::$LOCALIZE_CLASS;
+		parent::__construct($plugin);
 	}
 	public function onPreQuery(\mysqli $mysql){
 		$myid = Settings::$LOCALIZE_ID;
