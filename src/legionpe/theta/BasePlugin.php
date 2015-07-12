@@ -131,7 +131,7 @@ abstract class BasePlugin extends PluginBase{
 		new InitDbQuery($this);
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SyncStatusTask($this), 40, 40);
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SessionTickTask($this), 1, 20);
-		$this->getServer()->getScheduler()->scheduleDelayedTask($this->syncChatTask = new FireSyncChatQueryTask($this), 5);
+		$this->getServer()->getScheduler()->scheduleRepeatingTask($this->syncChatTask = new FireSyncChatQueryTask($this), 5);
 		$this->faceSeeks = json_decode($this->getResourceContents("head.json"));
 		$this->langs = new LanguageManager($this);
 	}
