@@ -64,4 +64,7 @@ class SyncChatQuery extends AsyncQuery{
 		$task = $main->getFireSyncChatQueryTask();
 		$task->canFireNext = true;
 	}
+	protected function reportDebug(){
+		return false;
+	}
 }

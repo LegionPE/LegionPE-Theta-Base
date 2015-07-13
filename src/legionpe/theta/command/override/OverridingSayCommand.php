@@ -18,11 +18,11 @@
 
 namespace legionpe\theta\command\override;
 
-use legionpe\theta\command\SessionCommand;
-use legionpe\theta\Session;
+use legionpe\theta\command\admin\ModeratorCommand;
+use pocketmine\command\CommandSender;
 
-class MeCommand extends SessionCommand{
-	protected function run(array $args, Session $sender){
-		$sender->onChat(implode(" ", $args), Session::CHAT_ME);
+class OverridingSayCommand extends ModeratorCommand{
+	public function execute(CommandSender $sender, $commandLabel, array $args){
+		// TODO: Implement execute() method.
 	}
 }

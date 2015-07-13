@@ -40,6 +40,7 @@
 	"cmd.gc.cannotstart": "%error%You need to wait for %time% more before you can start coin grinding again!",
 	"cmd.gc.reqconfirm": "%info%The coins you receive in the coming %length% will be multiplied by %amplitude% times.\n%notify%Execute this command again to activate coins grinding.",
 	"cmd.gc.started": "%success%You have activated coins grinding.",
+	"cmd.gc.advice": "%warning%Note: The advised alias for this command is %em%/cg.",
 
 	"cmd.lbl.view": "%success%You are using/attempting to use tag %em%%label%%success%, which is %em2%%state%",
 	"cmd.lbl.approving": "%error%The desired label is still awaiting for approval from admins.",

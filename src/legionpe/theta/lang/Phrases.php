@@ -68,6 +68,7 @@ class Phrases{
 	const CMD_GRIND_COIN_CANNOT_START = "cmd.gc.cannotstart";
 	const CMD_GRIND_COIN_REQUEST_CONFIRM = "cmd.gc.reqconfirm";
 	const CMD_GRIND_COIN_STARTED = "cmd.gc.started";
+	const CMD_GRIND_COIN_ADVICE = "cmd.gc.advice";
 
 	const CMD_LABEL_VIEW = "cmd.lbl.view";
 	const CMD_LABEL_WAIT_FOR_APPROVAL = "cmd.lbl.approving";

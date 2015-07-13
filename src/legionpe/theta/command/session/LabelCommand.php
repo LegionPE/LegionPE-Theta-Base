@@ -53,7 +53,7 @@ class LabelCommand extends SessionCommand{
 		new FetchLabelQuery($this->getPlugin(), $args[0], $sender);
 		return true;
 	}
-	protected function checkPerm(Session $session, &$msg){
+	protected function checkPerm(Session $session, &$msg = null){
 		if($session->isModerator() or $session->isDonator()){
 			return true;
 		}

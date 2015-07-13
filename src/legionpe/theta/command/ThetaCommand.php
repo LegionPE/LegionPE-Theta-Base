@@ -20,9 +20,18 @@ namespace legionpe\theta\command;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\command\admin\PrivateNoticeCommand;
-use legionpe\theta\command\override\VersionCommand;
+use legionpe\theta\command\override\MBCommand;
+use legionpe\theta\command\override\OverridingMeCommand;
+use legionpe\theta\command\override\OverridingStatusCommand;
+use legionpe\theta\command\override\OverridingVersionCommand;
 use legionpe\theta\command\session\CoinsCommand;
+use legionpe\theta\command\session\ConsoleCommand;
+use legionpe\theta\command\session\DirectTeleportCommand;
+use legionpe\theta\command\session\GrindCoinCommand;
+use legionpe\theta\command\session\LabelCommand;
 use legionpe\theta\command\session\OverridingTellCommand;
+use legionpe\theta\command\session\TransferCommand;
+use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\Session;
 use pocketmine\command\Command;
@@ -65,28 +74,36 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 				"setworldspawn",
 				"tp",
 				"reload",
+				"status"
 			] as $cmd){
 			self::unregisterCommand($map, $cmd);
 		}
 		$map->registerAll("l", [
 			new CoinsCommand($main),
 			new PhpCommand($main),
+			new OverridingStatusCommand($main),
 			new OverridingTellCommand($main),
 			new PrivateNoticeCommand($main),
-			new VersionCommand($main),
-//			new TransferCommand($main, ["pvp", "kitpvp"], "Kit PvP", Settings::CLASS_KITPVP),
-//			new TransferCommand($main, ["parkour", "pk"], "Parkour", Settings::CLASS_PARKOUR),
-//			new TransferCommand($main, ["spleef", "spf"], "Spleef", Settings::CLASS_SPLEEF),
-//			new TransferCommand($main, ["infected", "inf"], "Infected", Settings::CLASS_INFECTED),
-//			new TransferCommand($main, ["classic", "cls"], "Classic PvP", Settings::CLASS_CLASSICAL),
-//			new TransferCommand($main, ["hub", "spawn", "quit", "home", "back", "lobby"], "Hub", Settings::CLASS_HUB),
+			new OverridingVersionCommand($main),
+			new ConsoleCommand($main),
+			new DirectTeleportCommand($main),
+			new GrindCoinCommand($main),
+			new LabelCommand($main),
+			new MBCommand($main),
+			new OverridingMeCommand($main),
+			new GetPositionCommand($main),
+			new TransferCommand($main, ["pvp", "kitpvp"], "Kit PvP", Settings::CLASS_KITPVP),
+			new TransferCommand($main, ["parkour", "pk"], "Parkour", Settings::CLASS_PARKOUR),
+			new TransferCommand($main, ["spleef", "spf"], "Spleef", Settings::CLASS_SPLEEF),
+			new TransferCommand($main, ["infected", "inf"], "Infected", Settings::CLASS_INFECTED),
+			new TransferCommand($main, ["classic", "cls"], "Classic PvP", Settings::CLASS_CLASSICAL),
+			new TransferCommand($main, ["hub", "spawn", "quit", "home", "back", "lobby"], "Hub", Settings::CLASS_HUB),
 		]);
 	}
 	private static function unregisterCommand(CommandMap $map, $name){
 		$cmd = $map->getCommand($name);
 		if($cmd instanceof Command){
 			$cmd->setLabel($name . "_deprecated");
-			$cmd->setAliases([]);
 			$cmd->unregister($map);
 			return true;
 		}

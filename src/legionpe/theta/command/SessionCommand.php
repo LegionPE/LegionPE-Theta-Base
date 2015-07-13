@@ -69,7 +69,7 @@ abstract class SessionCommand extends ThetaCommand{
 		if(!($session instanceof Session)){
 			return true;
 		}
-		$r = $this->run($args, $session);
+		$r = $this->run($args, $session, $l);
 		if($r === false){
 			$session->send(Phrases::CMD_ERR_WRONG_USE, ["usage" => $this->getUsage()]);
 		}elseif(is_string($r) or ($r instanceof TextContainer)){

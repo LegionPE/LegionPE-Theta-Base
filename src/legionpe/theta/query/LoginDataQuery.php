@@ -31,7 +31,6 @@ class LoginDataQuery extends AsyncQuery{
 	public $totalWarnPts;
 	private $class;
 	public function __construct(BasePlugin $plugin, $sesId, $name, $ip, $clientId){
-		$this->main = $plugin;
 		$this->class = Settings::$LOCALIZE_CLASS;
 		$this->sesId = $sesId;
 		$this->name = $this->esc($name);
@@ -121,10 +120,20 @@ class LoginDataQuery extends AsyncQuery{
 	protected function onAssocFetched(\mysqli $mysql, array &$row){
 		$uid = $row["uid"];
 		/* group_concat must be done somewhere else because it ALWAYS returns a row. */
-		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs, (SELECT group_concat(CONCAT(IF(smalluid=$uid, largeuid, smalluid), ':', type) SEPARATOR ',') FROM friends WHERE smalluid=$uid OR largeuid=$uid) AS friends;");
+		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs, (SELECT group_concat(CONCAT(IF(smalluid=$uid, largeuid, smalluid), ':', type) SEPARATOR ',') FROM friends WHERE smalluid=$uid OR largeuid=$uid) AS friends, (SELECT group_concat(CONCAT(channel, ':', sublv) SEPARATOR ',') FROM channels WHERE uid=$uid);");
 		$result = $r->fetch_assoc();
 		$row["iphist"] = isset($result["iphist"]) ? $result["iphist"] : ",";
 		$row["langs"] = isset($result["langs"]) ? array_filter(explode(",", $result["langs"])) : [];
+		if(isset($result["channels"])){
+			$chanData = explode(",", $result["channels"]);
+			$channels = [];
+			foreach($chanData as $chanDatum){
+				list($key, $value) = explode(":", $chanDatum);
+				$channels[$key] = (int)$value;
+			}
+		}else{
+			$row["channels"] = [];
+		}
 		$row["friends"] = [];
 		if(isset($result["friends"])){
 			foreach(array_filter(explode(",", $result["friends"])) as $friend){

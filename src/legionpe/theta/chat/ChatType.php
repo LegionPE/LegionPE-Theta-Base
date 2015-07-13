@@ -52,6 +52,8 @@ abstract class ChatType{
 				return new TeamChatType($main, $src, $msg, $class, $data);
 			case self::CONSOLE_MESSAGE:
 				return new ConsoleChatType($main, $src, $msg, $class, $data);
+			case self::CHANNEL_CHAT:
+				return new ChannelChatType($main, $src, $msg, $class, $data);
 		}
 		return null;
 	}

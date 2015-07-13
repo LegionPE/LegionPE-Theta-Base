@@ -1,6 +1,6 @@
 <?php
 
-#define $this->getLoginDatum(key) isset($this->loginData[key]) ? $this->loginData[key] : null
+#define $this->getLoginDatum(key) (isset($this->loginData[key]) ? $this->loginData[key] : null)
 
 /**
  * LegionPE
@@ -25,7 +25,9 @@ use legionpe\theta\chat\TeamChatType;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\query\AddIpQuery;
+use legionpe\theta\query\JoinChannelQuery;
 use legionpe\theta\query\NextIdQuery;
+use legionpe\theta\query\PartChannelQuery;
 use legionpe\theta\queue\ExecuteWarningRunnable;
 use legionpe\theta\queue\Queue;
 use legionpe\theta\utils\MUtils;
@@ -75,6 +77,9 @@ abstract class Session{
 	const CHAT_LOCAL = 2;
 	const CHANNEL_LOCAL = "&local";
 	const CHANNEL_TEAM = "&team";
+	const CHANNEL_SUB_VERBOSE = 0;
+	const CHANNEL_SUB_NORMAL = 1;
+	const CHANNEL_SUB_ALERT = 2;
 	const FRIEND_BITMASK_REQUEST = 0b11;
 	const FRIEND_REQUEST_BITS = 2;
 	const FRIEND_REQUEST_FROM_SMALL = 0b01;
@@ -223,12 +228,45 @@ abstract class Session{
 		);
 		$this->recalculateNametag();
 		$this->setMaintainedPopup();
+		$att = $this->getPlayer()->addAttachment($this->getMain());
+		$att->setPermission("pocketmine.broadcast.admin", false);
+		$att->setPermission("pocketmine.broadcast.user", true);
+		$att->setPermission("pocketmine.whitelist", false);
+		$att->setPermission("pocketmine.command.ban", false);
+		$att->setPermission("pocketmine.command.unban", false);
+		$att->setPermission("pocketmine.command.op", false);
+		$att->setPermission("pocketmine.command.save", false);
+		$att->setPermission("pocketmine.command.time", $this->isModerator(false));
+		$att->setPermission("pocketmine.command.kill.self", true);
+		$att->setPermission("pocketmine.command.kill.other", false);
+		$att->setPermission("pocketmine.command.me", false);
+		$att->setPermission("pocketmine.command.tell", false);
+		$att->setPermission("pocketmine.command.say", false);
+		$att->setPermission("pocketmine.command.give", $this->isModerator(false));
+		$att->setPermission("pocketmine.command.effect", $this->isModerator(false));
+		$att->setPermission("pocketmine.command.particle", $this->isAdmin(false));
+		$att->setPermission("pocketmine.command.teleport", $this->isModerator(false));
+		$att->setPermission("pocketmine.command.kick", $this->isModerator(false));
+		$att->setPermission("pocketmine.command.stop", $this->isAdmin(false));
+		$att->setPermission("pocketmine.command.list", true);
+		$att->setPermission("pocketmine.command.help", true);
+		$att->setPermission("pocketmine.command.plugins", false);
+		$att->setPermission("pocketmine.command.reload", false);
+		$att->setPermission("pocketmine.command.gamemode", $this->isModerator());
+		$att->setPermission("pocketmine.command.defaultgamemode", false);
+		$att->setPermission("pocketmine.command.seed", false);
+		$att->setPermission("pocketmine.command.status", false);
+		$att->setPermission("pocketmine.command.gc", $this->isAdmin());
+		$att->setPermission("pocketmine.command.timings", $this->isAdmin());
+		$att->setPermission("pocketmine.command.spawnpoint", false);
+		$att->setPermission("pocketmine.command.setworldspawn", $this->isAdmin());
+		$att->setPermission("fasttransfer.command.transfer", $this->isAdmin());
 	}
 	public function send($phrase, array $vars = []){
 		$this->getPlayer()->sendMessage($this->translate($phrase, $vars));
 	}
 	public function translate($phrase, array $vars = []){
-		return $this->getMain()->getLangs()->get($phrase, $vars, $this->getLangs());
+		return $this->getMain()->getLangs()->get($phrase, $vars, ...$this->getLangs());
 	}
 	/**
 	 * @return BasePlugin
@@ -236,14 +274,16 @@ abstract class Session{
 	public abstract function getMain();
 	public function getLangs(){
 		$array = $this->getLoginDatum("langs");
-		$array[] = "en";
+		if(!in_array("en", $array)){
+			$array[] = "en";
+		}
 		return $array;
 	}
 	public function recalculateNametag(){
 		$this->setInGameName($plain = $this->calculatePlainName());
 		$this->getPlayer()->setDisplayName($plain);
 		$this->getPlayer()->setNameTag($tag = $this->calculateNameTag());
-		$this->getPlayer()->sendTip($this->translate(Phrases::LOGIN_KNOWN_AS));
+		$this->getPlayer()->sendTip($this->translate(Phrases::LOGIN_KNOWN_AS, ["tag" => $tag]));
 	}
 	public function calculatePlainName($nameColor = TextFormat::WHITE){
 		$rank = $this->calculateRank();
@@ -359,7 +399,7 @@ abstract class Session{
 		return $tag;
 	}
 	public function getTeamName(){
-		return "TEAM NAME HERE TODO"; // TODO
+		return $this->getLoginDatum("teamname");
 	}
 	public function getTeamRank(){
 		return $this->getLoginDatum("teamrank");
@@ -804,6 +844,32 @@ abstract class Session{
 	}
 	public function isNew(){
 		return isset($this->loginData["isnew"]) and $this->loginData["isnew"] === true;
+	}
+	public function isOnChannel($channel){
+		return isset(array_change_key_case($this->getLoginDatum("channels"), CASE_LOWER)[strtolower($channel)]);
+	}
+	public function joinChannel($channel, $subLevel = self::CHANNEL_SUB_NORMAL){
+		$subs = $this->getChannelSubscriptions();
+		if(isset(array_change_key_case($subs, CASE_LOWER)[strtolower($channel)])){
+			return false;
+		}
+		$subs[$channel] = $subLevel;
+		$this->setLoginDatum("channels", $subs);
+		new JoinChannelQuery($this->getMain(), $this->getUid(), $channel, $subLevel);
+	}
+	public function getChannelSubscriptions(){
+		return $this->getLoginDatum("channels");
+	}
+	public function partChannel($channel){
+		$subs = $this->getChannelSubscriptions();
+		$lowerChans = array_keys(array_change_key_case($subs, CASE_LOWER));
+		$pos = array_search(strtolower($channel), $lowerChans);
+		if($pos !== false){
+			$caseName = array_keys($subs)[$pos];
+			unset($subs[$caseName]);
+			$this->setLoginDatum("channels", $subs);
+			new PartChannelQuery($this->getMain(), $this->getUid(), $caseName);
+		}
 	}
 	public function getFriends($level = self::FRIEND_LEVEL_GOOD_FRIEND){
 		$out = [];

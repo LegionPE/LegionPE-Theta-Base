@@ -39,7 +39,17 @@ class ReportStatusQuery extends AsyncQuery{
 		$mysql->query("UPDATE server_status SET last_online=unix_timestamp(),online_players=$this->players WHERE server_id=$myid;");
 	}
 	public function getQuery(){
-		return "SELECT SUM(online_players)AS online,SUM(max_players)AS max,(SELECT SUM(online_players)FROM server_status WHERE class=$this->class)AS class_online,(SELECT SUM(max_players)FROM server_status WHERE class=$this->class)AS class_max FROM server_status WHERE unix_timestamp()-last_online<5";
+		return "SELECT
+			SUM(online_players)AS online,
+			SUM(max_players)AS max,
+			COUNT(*)AS servers,
+			(SELECT SUM(online_players)FROM server_status WHERE
+				class=$this->class AND unix_timestamp()-last_online<5)AS class_online,
+			(SELECT SUM(max_players)FROM server_status WHERE
+				class=$this->class AND unix_timestamp()-last_online<5)AS class_max,
+			(SELECT COUNT(*)FROM server_status WHERE
+				class=$this->class AND unix_timestamp()-last_online<5)AS class_servers
+			FROM server_status WHERE unix_timestamp()-last_online<5";
 	}
 	public function onPostQuery(\mysqli $mysql){
 		$r = $mysql->query("SELECT ip,port FROM server_status WHERE class=$this->class ORDER BY max_players-online_players DESC LIMIT 1");
@@ -60,7 +70,11 @@ class ReportStatusQuery extends AsyncQuery{
 	public function getExpectedColumns(){
 		return [
 			"online" => self::COL_INT,
-			"max" => self::COL_INT
+			"max" => self::COL_INT,
+			"servers" => self::COL_INT,
+			"class_online" => self::COL_INT,
+			"class_max" => self::COL_INT,
+			"class_servers" => self::COL_INT,
 		];
 	}
 	public function onCompletion(Server $server){
@@ -71,6 +85,7 @@ class ReportStatusQuery extends AsyncQuery{
 		$result = $r["result"];
 		$main = BasePlugin::getInstance($server);
 		$main->setPlayerCount($result["online"], $result["max"], $result["class_online"], $result["class_max"]);
+		$main->setServersCount($result["servers"], $result["class_servers"]);
 		if($this->altIp !== null){
 			$main->setAltServer($this->altIp, $this->altPort);
 		}

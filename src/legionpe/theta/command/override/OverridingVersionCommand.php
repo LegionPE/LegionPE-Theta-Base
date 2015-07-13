@@ -25,7 +25,7 @@ use legionpe\theta\Session;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
 
-class VersionCommand extends ThetaCommand{
+class OverridingVersionCommand extends ThetaCommand{
 	public function __construct(BasePlugin $main){
 		parent::__construct($main, "version", "Shows the server version", "/version", ["ver", "about", "plugins", "about", "pl"]);
 	}

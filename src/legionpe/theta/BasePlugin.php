@@ -57,7 +57,7 @@ abstract class BasePlugin extends PluginBase{
 	private $queues = [], $playerQueues = [], $teamQueues = [];
 	/** @var Session[] */
 	private $sessions = [];
-	private $totalPlayers, $maxPlayers, $classTotalPlayers, $classMaxPlayers;
+	private $totalPlayers, $maxPlayers, $classTotalPlayers, $classMaxPlayers, $servers, $classServers;
 	/** @var string */
 	private $altIp;
 	/** @var int */
@@ -71,7 +71,6 @@ abstract class BasePlugin extends PluginBase{
 	/**
 	 * @param Server $server
 	 * @return BasePlugin
-	 * @deprecated
 	 */
 	public static function getInstance(Server $server){
 		return $server->getPluginManager()->getPlugin(self::$NAME);
@@ -270,11 +269,12 @@ abstract class BasePlugin extends PluginBase{
 		$this->classTotalPlayers = $classTotal;
 		$this->classMaxPlayers = $classMax;
 		$append = $this->getServerNameAppend();
-		$online = count($this->getServer()->getOnlinePlayers());
+		$info = $this->getServer()->getQueryInformation();
+		$info->setMaxPlayerCount($classMax);
+		$info->setPlayerCount($classTotal);
 		$this->getServer()->getNetwork()->setName(
 			TextFormat::BOLD . TextFormat::AQUA . "LegionPE " .
 			TextFormat::BOLD . TextFormat::GREEN . Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS] .
-			TextFormat::RESET . TextFormat::DARK_AQUA . " [$online/$classTotal/$total/$max]" .
 			(($append === null) ? "" : (TextFormat::RESET . TextFormat::GRAY . " - " . TextFormat::RESET . $append))
 		);
 	}
@@ -289,6 +289,14 @@ abstract class BasePlugin extends PluginBase{
 		$max = $this->maxPlayers;
 		$classTotal = $this->classTotalPlayers;
 		$classMax = $this->classMaxPlayers;
+	}
+	public function setServersCount($total, $class){
+		$this->servers = $total;
+		$this->classServers = $class;
+	}
+	public function getServersCount(&$total, &$class){
+		$total = $this->servers;
+		$class = $this->classServers;
 	}
 
 	// public getters and setters
