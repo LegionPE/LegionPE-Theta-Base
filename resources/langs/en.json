@@ -8,6 +8,9 @@
 	"meta.version": "1.0",
 
 	"chat.blocked.pass": "%em%Never%warning% tell %em2%anybody%warning% %em3%(including staff)%warning% your password.",
+	"chat.blocked.toofast": "%warning%LegionPE is not a place for typing speed testing. Type slower.",
+	"chat.blocked.toofreq": "%warning%Don't try to dominate our chat screens!",
+	"chat.blocked.tooshort": "%warning%Every line you type takes up one line in the chat screen of other players. Don't you think you are wasting their screen space? %em%Stop spamming.",
 	"chat.broadcasts": [
 		"%notify%bold%Donate to get awesome perks at %reset%http://lgpe.co/d",
 		"%notify%bold%Download our Android app at %reset%http://lgpe.co/and",

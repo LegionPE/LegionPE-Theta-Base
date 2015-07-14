@@ -21,6 +21,7 @@
 namespace legionpe\theta;
 
 use legionpe\theta\chat\ChannelChatType;
+use legionpe\theta\chat\SpamDetector;
 use legionpe\theta\chat\TeamChatType;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
@@ -129,6 +130,8 @@ abstract class Session{
 	private $coinsOld = 0;
 	/** @var float */
 	private $ontimeSince;
+	/** @var SpamDetector */
+	private $spamDetector;
 	/** @var int */
 	private $state = self::STATE_LOADING;
 	private $invisibleFrom = [];
@@ -151,6 +154,7 @@ abstract class Session{
 			$this->getPlayer()->kick(TextFormat::RED . "You are banned.\nYou have accumulated " . TextFormat::DARK_PURPLE . $this->getWarningPoints() . TextFormat::RED . " warning points,\nand you still have " . TextFormat::BLUE . $left . TextFormat::RED . " before you are unbanned.\n" . TextFormat::AQUA . "Believe this to be a mistake? Email us at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu");
 			return false;
 		}
+		$this->spamDetector = new SpamDetector($this);
 		return true;
 	}
 	public function getEffectiveConseq(){
@@ -228,6 +232,13 @@ abstract class Session{
 		);
 		$this->recalculateNametag();
 		$this->setMaintainedPopup();
+		foreach($this->getMain()->getServer()->getOnlinePlayers() as $other){
+			if(isset($this->invisibleFrom[$other->getId()])){
+				$other->showPlayer($this->getPlayer());
+				unset($this->invisibleFrom[$other->getId()]);
+			}
+		}
+		$this->invisibleFrom = [];
 		$att = $this->getPlayer()->addAttachment($this->getMain());
 		$att->setPermission("pocketmine.broadcast.admin", false);
 		$att->setPermission("pocketmine.broadcast.user", true);
@@ -494,27 +505,40 @@ abstract class Session{
 				}
 			}
 			$firstChar = substr($event->getMessage(), 0, 1);
-			if($firstChar === "/" or $firstChar === "\\"){
+			if($firstChar === "/"){
 				return true;
+			}elseif($firstChar === "\\"){
+				$event->setMessage("/" . substr($event->getMessage(), 1));
 			}
 			$isLocal = $firstChar !== ".";
 			if(!$isLocal){
 				$event->setMessage(substr($event->getMessage(), 1));
 			}
+			$message = trim($event->getMessage());
+			if(!$this->spamDetector->censor($message)){
+				return false;
+			}
 			if($this->currentChatState === self::CHANNEL_TEAM){
-				$data = ["tid" => $this->getTeamId(), "teamName" => $this->getTeamName()];
-				$type = new TeamChatType($this->getMain(), $this->getPlayer()->getDisplayName(), trim($event->getMessage()), $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
+				$data = [
+					"tid" => $this->getTeamId(),
+					"teamName" => $this->getTeamName(),
+					"ign" => $this->getInGameName()
+				];
+				$type = new TeamChatType($this->getMain(), $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
 				$type->push();
 				return false;
 			}
-
 			if($this->currentChatState !== self::CHANNEL_LOCAL){
-				$data = ["channel" => $this->currentChatState];
-				$type = new ChannelChatType($this->getMain(), $this->getPlayer()->getDisplayName(), trim($event->getMessage()), $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
+				$data = [
+					"channel" => $this->currentChatState,
+					"fromClass" => Settings::$LOCALIZE_CLASS,
+					"ign" => $this->getInGameName()
+				];
+				$type = new ChannelChatType($this->getMain(), $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
 				$type->push();
 				return false;
 			}
-			$this->onChat(trim($event->getMessage()), $isLocal ? self::CHAT_LOCAL : self::CHAT_STD);
+			$this->onChat($message, $isLocal ? self::CHAT_LOCAL : self::CHAT_STD);
 			return false;
 		}
 	}
@@ -546,6 +570,12 @@ abstract class Session{
 	}
 	public function getTeamId(){
 		return $this->getLoginDatum("tid");
+	}
+	public function getInGameName(){
+		return $this->inGameName;
+	}
+	public function setInGameName($ign){
+		$this->inGameName = $ign;
 	}
 	/**
 	 * @param string $msg
@@ -709,12 +739,6 @@ abstract class Session{
 	public function getNicks(){
 		return array_filter(explode("|", $this->getLoginDatum("nicks")));
 	}
-	public function getInGameName(){
-		return $this->inGameName;
-	}
-	public function setInGameName($ign){
-		$this->inGameName = $ign;
-	}
 	public function addIp($ip){
 		$this->setLoginDatum("iphist", $this->getLoginDatum("iphist") . "$ip,");
 		new AddIpQuery($this->getMain(), $ip, $this->getUid());
@@ -856,6 +880,7 @@ abstract class Session{
 		$subs[$channel] = $subLevel;
 		$this->setLoginDatum("channels", $subs);
 		new JoinChannelQuery($this->getMain(), $this->getUid(), $channel, $subLevel);
+		return true;
 	}
 	public function getChannelSubscriptions(){
 		return $this->getLoginDatum("channels");
@@ -946,6 +971,12 @@ abstract class Session{
 	public function getPurchase($pid){
 		$purchases = $this->getLoginDatum("purchases");
 		return isset($purchases[$pid]) ? $purchases[$pid] : null;
+	}
+	/**
+	 * @return SpamDetector
+	 */
+	public function getSpamDetector(){
+		return $this->spamDetector;
 	}
 	public function getPopup(){
 		return $this->curPopup;

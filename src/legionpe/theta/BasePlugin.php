@@ -53,6 +53,8 @@ abstract class BasePlugin extends PluginBase{
 	private $langs;
 	/** @var int[] */
 	private $faceSeeks = [];
+	/** @var string[] */
+	private $badWords, $approvedDomains;
 	/** @var Queue[] */
 	private $queues = [], $playerQueues = [], $teamQueues = [];
 	/** @var Session[] */
@@ -132,6 +134,8 @@ abstract class BasePlugin extends PluginBase{
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SessionTickTask($this), 1, 20);
 		$this->getServer()->getScheduler()->scheduleRepeatingTask($this->syncChatTask = new FireSyncChatQueryTask($this), 5);
 		$this->faceSeeks = json_decode($this->getResourceContents("head.json"));
+		$this->badWords = json_decode($this->getResourceContents("words.json"));
+		$this->approvedDomains = json_decode($this->getResourceContents("approvedDomains.json"));
 		$this->langs = new LanguageManager($this);
 	}
 	public function getBasicListener(){
@@ -342,5 +346,14 @@ abstract class BasePlugin extends PluginBase{
 	}
 	public function getFireSyncChatQueryTask(){
 		return $this->syncChatTask;
+	}
+	/**
+	 * @return string[]
+	 */
+	public function getBadWords(){
+		return $this->badWords;
+	}
+	public function getApprovedDomains(){
+		return $this->approvedDomains;
 	}
 }

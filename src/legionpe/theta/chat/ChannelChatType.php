@@ -18,11 +18,18 @@
 
 namespace legionpe\theta\chat;
 
+use legionpe\theta\config\Settings;
+use pocketmine\utils\TextFormat;
+
 class ChannelChatType extends ChatType{
 	protected $channel;
+	protected $fromClass;
+	protected $ign;
 	public function execute(){
 		foreach($this->main->getSessions() as $ses){
-			// TODO check channel
+			if($ses->isOnChannel($this->channel)){
+				$ses->getPlayer()->sendMessage(TextFormat::YELLOW . "#$this->channel " . "$this->ign@" . TextFormat::BLUE . Settings::$CLASSES_NAMES[$this->fromClass] . ": $this->msg");
+			}
 		}
 	}
 	public function getType(){

@@ -39,6 +39,9 @@ class Phrases{
 	const LOGIN_REGISTER_MISMATCH = "login.register.mismatch";
 
 	const CHAT_BLOCKED_PASS = "chat.blocked.pass";
+	const CHAT_BLOCKED_TOO_FAST = "chat.blocked.toofast";
+	const CHAT_BLOCKED_TOO_FREQUENT = "chat.blocked.toofreq";
+	const CHAT_BLOCKED_TOO_SHORT = "chat.blocked.tooshort";
 	const CHAT_BROADCASTS_ARRAY = "chat.broadcasts";
 	const CHAT_FORMAT_TEAM = "chat.format.team";
 	const CHAT_FORMAT_CHANNEL = "chat.format.channel";

@@ -16,7 +16,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-namespace legionpe\theta\command\session;
+namespace legionpe\theta\command\override;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\command\SessionCommand;
@@ -37,11 +37,15 @@ class OverridingTellCommand extends SessionCommand{
 		if(!isset($args[1])){
 			return false;
 		}
+		$message = implode(" ", $args);
+		if(!$sender->getSpamDetector()->censor($message)){
+			return true;
+		}
 		$target = $this->getSession($name = array_shift($args));
 		if($target === null){
 			return $this->offline($sender, $name);
 		}
-		$target->getPlayer()->sendMessage($msg = Phrases::VAR_info . "[" . $sender->getPlayer()->getName() . " > " . $target->getPlayer()->getName() . "] " . Phrases::VAR_info . ($message = implode(" ", $args)));
+		$target->getPlayer()->sendMessage($msg = Phrases::VAR_info . "[" . $sender->getPlayer()->getName() . " > " . $target->getPlayer()->getName() . "] " . Phrases::VAR_info . $message);
 		$sender->getPlayer()->sendMessage($msg);
 		fwrite($this->pmLog, "|from:{$sender->getPlayer()->getName()}|to:{$target->getPlayer()->getName()}|msg:$message|" . PHP_EOL);
 		return $msg;

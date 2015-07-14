@@ -18,24 +18,13 @@
 
 namespace legionpe\theta\chat;
 
-use legionpe\theta\lang\Phrases;
-
-class TeamChatType extends ChatType{
-	protected $tid;
-	protected $teamName;
-	protected $ign;
-	public function execute(){
-		foreach($this->main->getSessions() as $ses){
-			if($ses->getTeamId() === $this->tid){
-				$ses->send(Phrases::CHAT_FORMAT_TEAM, [
-					"source" => $this->ign,
-					"msg" => $this->msg
-				]);
-			}
-		}
-		$this->main->getLogger()->info("{Team $this->teamName}" . $this->msg);
-	}
-	public function getType(){
-		return $this->getType();
+class ChatLogEntry{
+	public $time;
+	public $message;
+	public $length;
+	public function __construct($msg){
+		$this->time = microtime(true);
+		$this->message = $msg;
+		$this->length = strlen($msg);
 	}
 }

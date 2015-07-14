@@ -58,7 +58,11 @@ abstract class ChatType{
 		return null;
 	}
 	public function push(){
+		$this->onPush();
 		new PushChatQuery($this->main, $this->src, $this->msg, $this->getType(), $this->class, $this->data);
+	}
+	protected function onPush(){
+
 	}
 	public abstract function getType();
 	public abstract function execute();
