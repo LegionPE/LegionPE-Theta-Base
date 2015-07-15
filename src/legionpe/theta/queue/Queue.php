@@ -1,19 +1,16 @@
 <?php
 
-/**
- * LegionPE
- * Copyright (C) 2015 PEMapModder
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+/*
+ * LegionPE Theta
+ *
+ * Copyright (C) 2015 PEMapModder and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * @author PEMapModder
  */
 
 namespace legionpe\theta\queue;
@@ -73,10 +70,11 @@ class Queue extends PluginTask{
 			$this->main->garbageQueue($this->getQueueId(), $this->flag);
 		}
 	}
-	public function pushToQueue(Runnable $runnable){
-		$this->queue[] = $runnable;
-		$this->scheduleNext();
-		$this->getMain()->getLogger()->debug("Pushed " . get_class($runnable) . " to queue " . $this->flag . "#" . $this->queueId);
+	/**
+	 * @return BasePlugin
+	 */
+	public function getMain(){
+		return $this->main;
 	}
 	protected function scheduleNext(){
 		if($this->nextScheduled){
@@ -91,11 +89,10 @@ class Queue extends PluginTask{
 	public function getQueueId(){
 		return $this->queueId;
 	}
-	/**
-	 * @return BasePlugin
-	 */
-	public function getMain(){
-		return $this->main;
+	public function pushToQueue(Runnable $runnable){
+		$this->queue[] = $runnable;
+		$this->scheduleNext();
+		$this->getMain()->getLogger()->debug("Pushed " . get_class($runnable) . " to queue " . $this->flag . "#" . $this->queueId);
 	}
 	public function __debugInfo(){
 		return [
