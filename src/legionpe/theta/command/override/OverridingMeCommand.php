@@ -27,6 +27,9 @@ class OverridingMeCommand extends SessionCommand{
 		parent::__construct($main, "me", "Chat", "/me <message>");
 	}
 	protected function run(array $args, Session $sender){
-		$sender->onChat(implode(" ", $args), Session::CHAT_ME);
+		$msg = implode(" ", $args);
+		if($sender->getSpamDetector()->censor($msg)){
+			$sender->onChat($msg, Session::CHAT_ME);
+		}
 	}
 }

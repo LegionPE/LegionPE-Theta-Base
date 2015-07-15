@@ -18,6 +18,7 @@ namespace legionpe\theta\command;
 use legionpe\theta\BasePlugin;
 use legionpe\theta\command\admin\PrivateNoticeCommand;
 use legionpe\theta\command\override\MBCommand;
+use legionpe\theta\command\override\OverridingKillCommand;
 use legionpe\theta\command\override\OverridingMeCommand;
 use legionpe\theta\command\override\OverridingStatusCommand;
 use legionpe\theta\command\override\OverridingTellCommand;
@@ -71,13 +72,15 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 				"setworldspawn",
 				"tp",
 				"reload",
-				"status"
+				"status",
+				"kill"
 			] as $cmd){
 			self::unregisterCommand($map, $cmd);
 		}
 		$map->registerAll("l", [
 			new CoinsCommand($main),
 			new PhpCommand($main),
+			new OverridingKillCommand($main, "kill", "Commit suicide", "/kill", ["suicide"]),
 			new OverridingStatusCommand($main),
 			new OverridingTellCommand($main),
 			new PrivateNoticeCommand($main),

@@ -41,6 +41,27 @@ abstract class SessionCommand extends ThetaCommand{
 		Session $session, &$msg = null){
 		return true;
 	}
+	public function execute(CommandSender $sender, $l, array $args){
+		if(!($sender instanceof Player)){
+			$sender->sendMessage(Phrases::VAR_error . "Please run this command in-game.");
+			return true;
+		}
+		if(!$this->testPermission($sender)){
+			return false;
+		}
+		$session = $this->getPlugin()->getSession($sender);
+		if(!($session instanceof Session)){
+			return true;
+		}
+		/** @noinspection PhpMethodParametersCountMismatchInspection */
+		$r = $this->run($args, $session, $l);
+		if($r === false){
+			$session->send(Phrases::CMD_ERR_WRONG_USE, ["usage" => $this->getUsage()]);
+		}elseif(is_string($r) or ($r instanceof TextContainer)){
+			$sender->sendMessage($r);
+		}
+		return true;
+	}
 	public function testPermission(CommandSender $sender){
 		if(!($sender instanceof Player)){
 			$sender->sendMessage(Phrases::VAR_error . "Please run this command in-game.");
@@ -54,24 +75,6 @@ abstract class SessionCommand extends ThetaCommand{
 		if(!$this->checkPerm($session, $msg)){
 			$sender->sendMessage(Phrases::VAR_error . ($msg === null ? $session->translate(Phrases::CMD_ERR_NO_PERM) : $msg));
 			return false;
-		}
-		return true;
-	}
-	public function execute(CommandSender $sender, $l, array $args){
-		if(!($sender instanceof Player)){
-			$sender->sendMessage(Phrases::VAR_error . "Please run this command in-game.");
-			return true;
-		}
-		$session = $this->getPlugin()->getSession($sender);
-		if(!($session instanceof Session)){
-			return true;
-		}
-		/** @noinspection PhpMethodParametersCountMismatchInspection */
-		$r = $this->run($args, $session, $l);
-		if($r === false){
-			$session->send(Phrases::CMD_ERR_WRONG_USE, ["usage" => $this->getUsage()]);
-		}elseif(is_string($r) or ($r instanceof TextContainer)){
-			$sender->sendMessage($r);
 		}
 		return true;
 	}

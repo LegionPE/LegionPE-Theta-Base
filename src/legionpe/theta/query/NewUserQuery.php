@@ -23,8 +23,6 @@ use pocketmine\Player;
 use pocketmine\Server;
 
 class NewUserQuery extends NextIdQuery{
-//	/** @var BasePlugin */
-//	private $main;
 	/** @var int */
 	private $sesId;
 	public function __construct(BasePlugin $plugin, Player $player){
@@ -32,7 +30,6 @@ class NewUserQuery extends NextIdQuery{
 		parent::__construct($plugin, self::USER);
 	}
 	public function onCompletion(Server $server){
-//		$main = $this->main;
 		$main = BasePlugin::getInstance($server);
 		$result = $this->getResult();
 		$uid = $result["result"]["id"];

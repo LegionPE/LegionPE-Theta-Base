@@ -64,9 +64,6 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 		];
 	}
 	public function getQuery(){
-		while(!isset($this->data)){
-			;
-		}
 		$query = "INSERT INTO" . " users(";
 		/** @var mixed[][] $data */
 		$data = unserialize($this->data);

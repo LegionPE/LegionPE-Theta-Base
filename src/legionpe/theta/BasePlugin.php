@@ -40,6 +40,7 @@ use shoghicp\FastTransfer\FastTransfer;
 abstract class BasePlugin extends PluginBase{
 	const EMAIL_UNVERIFIED = "~NOTSET";
 	private static $NAME = null;
+	private static $CLASS = null;
 	/** @var SessionEventListener */
 	protected $sesList;
 	/** @var FastTransfer */
@@ -75,7 +76,9 @@ abstract class BasePlugin extends PluginBase{
 		return $server->getPluginManager()->getPlugin(self::$NAME);
 	}
 	public final static function getDefaultLoginData($uid, Player $player){
-		return static::defaultLoginData($uid, $player);
+		/** @var static $BasePlugin */
+		$BasePlugin = self::$CLASS;
+		return $BasePlugin::defaultLoginData($uid, $player);
 	}
 	protected static function defaultLoginData($uid, Player $player){
 		$name = $player->getName();
@@ -114,6 +117,7 @@ abstract class BasePlugin extends PluginBase{
 	}
 	public function onLoad(){
 		self::$NAME = $this->getName();
+		self::$CLASS = static::class;
 		class_exists(CloseServerQuery::class); // preload to workaround frequent corruption errors due to phar repalced
 		if(!is_dir($this->getDataFolder())){
 			mkdir($this->getDataFolder());
@@ -141,8 +145,6 @@ abstract class BasePlugin extends PluginBase{
 	protected function getSessionListenerClass(){
 		return SessionEventListener::class;
 	}
-
-	// queues
 	public function getResourceContents($path){
 		$handle = $this->getResource($path);
 		$r = stream_get_contents($handle);
@@ -159,7 +161,7 @@ abstract class BasePlugin extends PluginBase{
 		eval($code);
 	}
 
-	// session stuff
+	// queues
 	public function garbageQueue($id, $flag = Queue::QUEUE_GENERAL){
 		unset($this->getQueueByFlag($flag)[$id]);
 	}
@@ -190,6 +192,8 @@ abstract class BasePlugin extends PluginBase{
 			return false;
 		}
 	}
+
+	// session stuff
 	protected abstract function createSession(Player $player, array $loginData);
 	public function endSession(Player $player){
 		if(isset($this->playerQueues[$player->getId()])){
@@ -206,12 +210,9 @@ abstract class BasePlugin extends PluginBase{
 	public function getLoginQueryImpl(){
 		return LoginDataQuery::class;
 	}
+	public abstract function sendFirstJoinMessages(Player $player);
 
 	// override-able implementations/classes
-	public function getSaveSingleQueryImpl(){
-		return SaveSinglePlayerQuery::class;
-	}
-	public abstract function sendFirstJoinMessages(Player $player);
 	public abstract function query_world();
 	public function handleChat(array $row){
 		$this->setInternalLastChatId($row["id"]);
@@ -239,7 +240,11 @@ abstract class BasePlugin extends PluginBase{
 		return isset($this->sessions[$player->getId()]) ? $this->sessions[$player->getId()] : null;
 	}
 	public function saveSessionData(Session $session, $newStatus = Settings::STATUS_OFFLINE){
-		new SaveSinglePlayerQuery($this, $session, $newStatus);
+		$SaveSinglePlayerQuery = $this->getSaveSingleQueryImpl();
+		new $SaveSinglePlayerQuery($this, $session, $newStatus);
+	}
+	public function getSaveSingleQueryImpl(){
+		return SaveSinglePlayerQuery::class;
 	}
 	public function getSessionByUid($uid){
 		foreach($this->sessions as $ses){
@@ -254,8 +259,6 @@ abstract class BasePlugin extends PluginBase{
 		$this->queueFor($player->getId(), true, Queue::QUEUE_SESSION)
 			->pushToQueue(new TransferSearchRunnable($this, $player, $task));
 	}
-
-	// global-level utils functions
 	public function queueFor($id, $garbage = false, $flag = Queue::QUEUE_GENERAL){
 		$queues =& $this->getQueueByFlag($flag);
 		if(!isset($queues[$id])){
@@ -264,6 +267,8 @@ abstract class BasePlugin extends PluginBase{
 		}
 		return $queues[$id];
 	}
+
+	// global-level utils functions
 	public function setPlayerCount($total, $max, $classTotal, $classMax){
 		$this->totalPlayers = $total;
 		$this->maxPlayers = $max;

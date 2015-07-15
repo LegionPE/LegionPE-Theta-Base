@@ -39,13 +39,13 @@ class SpamDetector{
 		}
 		$this->detectAds($message);
 		if(count($this->chatLog) < 5){
-			return false;
+			return true;
 		}
 		$lengthSum = 0;
 		foreach($this->chatLog as $log){
 			$lengthSum += $log->length;
 		}
-		if($lengthSum < 15){
+		if($lengthSum < 10){
 			$this->session->send(Phrases::CHAT_BLOCKED_TOO_SHORT);
 			return false;
 		}

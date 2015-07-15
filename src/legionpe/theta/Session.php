@@ -48,9 +48,10 @@ use pocketmine\event\player\PlayerItemHeldEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\event\TextContainer;
-use pocketmine\level\particle\DestroyBlockParticle;
+use pocketmine\level\particle\TerrainParticle;
 use pocketmine\level\sound\FizzSound;
 use pocketmine\Player;
+use pocketmine\utils\Random;
 use pocketmine\utils\TextFormat;
 
 abstract class Session{
@@ -245,6 +246,7 @@ abstract class Session{
 		$att->setPermission("pocketmine.command.op", false);
 		$att->setPermission("pocketmine.command.save", false);
 		$att->setPermission("pocketmine.command.time", $this->isModerator(false));
+		$att->setPermission("pocketmine.command.kill", false);
 		$att->setPermission("pocketmine.command.kill.self", true);
 		$att->setPermission("pocketmine.command.kill.other", false);
 		$att->setPermission("pocketmine.command.me", false);
@@ -443,11 +445,20 @@ abstract class Session{
 	public function isLoggingIn(){
 		return ($this->state & 0xF0) === self::STATE_LOGIN;
 	}
+	public function isSpammer(){
+		return $this->getRank() & Settings::RANK_PERM_SPAM;
+	}
+	public function isBuilder(){
+		return false;
+//		return $this->getRank() & Settings::RANK_PERM_WORLD_EDIT;
+	}
+	public function isDeveloper(){
+		return $this->getRank() & Settings::RANK_PERM_DEV;
+	}
 	public function onCmd(PlayerCommandPreprocessEvent $event){
 		if($this->isRegistering()){
 			$event->setCancelled();
 			$len = strlen($event->getMessage());
-			$one = substr($event->getMessage(), 0, 1);
 			$event->setMessage($hash = self::hash($event->getMessage(), $this->getUid()));
 			if($this->state === self::STATE_REGISTERING_FIRST){
 				$this->tmpHash = $hash;
@@ -459,7 +470,7 @@ abstract class Session{
 				if($this->tmpHash === $hash){
 					$this->sendCurlyLines();
 					$this->setLoginDatum("hash", $hash);
-					$this->setLoginDatum("pwprefix", $one);
+					$this->setLoginDatum("pwprefix", "~");
 					$this->setLoginDatum("pwlen", $len);
 					$this->state = self::STATE_PLAYING;
 					$this->sendFirstJoinMessages();
@@ -490,13 +501,14 @@ abstract class Session{
 			return false;
 		}else{
 			$msg = $event->getMessage();
-			$firstChar = $this->getLoginDatum("pwprefix");
 			$len = $this->getLoginDatum("pwlen");
 			$msgLen = strlen($msg);
-			for($offset = 0; ($offset + $len <= $msgLen) and ($pos = strpos($msg, $firstChar, $offset)) !== false; $offset = $pos + 1){
-				$sub = substr($msg, $pos, $len);
-				$hash = $this->hash($sub, $this->getUid());
-				if($hash === $this->getPasswordHash()){
+			for($i = 0; $i < $msgLen; $i++){
+				$substr = substr($msg, $i, $len);
+				if(strlen($substr) < $len){
+					break;
+				}
+				if($this->getPasswordHash() === $this->hash($substr, $this->getUid())){
 					$this->send(Phrases::CHAT_BLOCKED_PASS);
 					return false;
 				}
@@ -584,12 +596,13 @@ abstract class Session{
 				if(($player = $this->getMain()->getServer()->getPlayer($match[1])) !== null){
 					return TextFormat::DARK_AQUA . TextFormat::ITALIC . $player->getName() . TextFormat::RESET . $this->getChatColor();
 				}
-				return TextFormat::ITALIC . $match[0] . $this->getChatColor();
+				return TextFormat::ITALIC . TextFormat::GRAY . $match[0] . TextFormat::RESET . $this->getChatColor();
 			}, $msg);
 		foreach($this->getMain()->getSessions() as $ses){
 			// TODO handle $type
 			if($ses->isLocalChatOn() and ($type !== self::CHAT_LOCAL or Settings::isLocalChat($ses->getPlayer(), $this->getPlayer()))){
 				$ses->getPlayer()->sendMessage($this->getPlayer()->getDisplayName() . ">" . $this->getChatColor() . $msg);
+			}else{
 			}
 		}
 	}
@@ -609,7 +622,7 @@ abstract class Session{
 		return TextFormat::GRAY;
 	}
 	public function isLocalChatOn(){
-		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_LOCAL_CHAT_ON);
+		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_LOCAL_CHAT_ON) and $this->state === self::STATE_PLAYING;
 	}
 	public function isOwner(){
 		return ($this->getRank() & Settings::RANK_PERM_OWNER) === Settings::RANK_PERM_OWNER;
@@ -746,7 +759,22 @@ abstract class Session{
 		}
 		if($effects){
 			$this->getPlayer()->getLevel()->addSound(new FizzSound($this->getPlayer()), [$this->getPlayer()]);
-			$this->getPlayer()->getLevel()->addParticle(new DestroyBlockParticle($this->getPlayer(), Block::get(Block::GOLD_BLOCK)), [$this->getPlayer()]);
+			$random = new Random(time() + $coins);
+			$player = $this->getPlayer();
+			$particle = new TerrainParticle($player, Block::get(Block::GOLD_BLOCK));
+			$level = $player->getLevel();
+			$recipients = [$player];
+			for($i = 0; $i < 500; $i++){
+				$x = $random->nextSignedFloat();
+				$y = $random->nextSignedFloat();
+				$z = $random->nextSignedFloat();
+				$particle->setComponents(
+					$player->x + $x,
+					$player->y + $y,
+					$player->z + $z
+				);
+				$level->addParticle($particle, $recipients);
+			}
 		}
 		$this->setCoins($this->getCoins() + $coins);
 		if($bonus){

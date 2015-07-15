@@ -38,7 +38,7 @@ class ConsoleCommand extends SessionCommand{
 			$msg = substr($msg, 1);
 			$local = false;
 		}
-		$type = new ConsoleChatType($sender->getMain(), $sender->getInGameName(), $msg, $local ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, []);
+		$type = new ConsoleChatType($sender->getMain(), $sender->getInGameName(), $msg, $local ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, ["ip" => Settings::$LOCALIZE_IP, "port" => Settings::$LOCALIZE_PORT]);
 		$type->push();
 		return true;
 	}
