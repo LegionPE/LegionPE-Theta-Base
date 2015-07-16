@@ -16,15 +16,22 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
+use legionpe\theta\config\Settings;
+use legionpe\theta\lang\Phrases;
+use pocketmine\Player;
+use pocketmine\Server;
 
-class SearchServerQuery extends AsyncQuery{
+class TransferServerQuery extends AsyncQuery{
 	/** @var int */
 	public $class;
 	/** @var bool */
 	private $checkPlayers;
-	public function __construct(BasePlugin $plugin, $class, $checkPlayers){
+	/** @var string */
+	private $exactName;
+	public function __construct(BasePlugin $plugin, $class, $checkPlayers, $exactName){
 		$this->class = $class;
 		$this->checkPlayers = $checkPlayers;
+		$this->exactName = $exactName;
 		parent::__construct($plugin);
 	}
 	public function getQuery(){
@@ -39,5 +46,21 @@ class SearchServerQuery extends AsyncQuery{
 			"ip" => self::COL_STRING,
 			"port" => self::COL_INT
 		];
+	}
+	public function onCompletion(Server $server){
+		$player = $server->getPlayerExact($this->exactName);
+		if($player instanceof Player){
+			$result = $this->getResult();
+			if($result["resulttype"] === self::TYPE_ASSOC){
+				$row = $result["result"];
+				/** @var string $ip */
+				/** @var int $port */
+				extract($row);
+				$main = BasePlugin::getInstance($server);
+				$main->transfer($player, $ip, $port, Phrases::VAR_success . "Transferring you to a " . Settings::$CLASSES_NAMES[$this->class] . " server.");
+			}else{
+				$player->sendMessage(Phrases::VAR_error . "No " . Settings::$CLASSES_NAMES[$this->class] . " servers available!");
+			}
+		}
 	}
 }

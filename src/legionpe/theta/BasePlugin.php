@@ -25,9 +25,8 @@ use legionpe\theta\query\InitDbQuery;
 use legionpe\theta\query\LoginDataQuery;
 use legionpe\theta\query\NewUserQuery;
 use legionpe\theta\query\SaveSinglePlayerQuery;
-use legionpe\theta\query\SearchServerQuery;
+use legionpe\theta\query\TransferServerQuery;
 use legionpe\theta\queue\Queue;
-use legionpe\theta\queue\TransferSearchRunnable;
 use legionpe\theta\utils\FireSyncChatQueryTask;
 use legionpe\theta\utils\SessionTickTask;
 use legionpe\theta\utils\SyncStatusTask;
@@ -240,6 +239,9 @@ abstract class BasePlugin extends PluginBase{
 		return isset($this->sessions[$player->getId()]) ? $this->sessions[$player->getId()] : null;
 	}
 	public function saveSessionData(Session $session, $newStatus = Settings::STATUS_OFFLINE){
+		if($newStatus === Settings::STATUS_TRANSFERRING){
+			$session->setState(Session::STATE_TRANSFERRING);
+		}
 		$SaveSinglePlayerQuery = $this->getSaveSingleQueryImpl();
 		new $SaveSinglePlayerQuery($this, $session, $newStatus);
 	}
@@ -255,9 +257,7 @@ abstract class BasePlugin extends PluginBase{
 		return null;
 	}
 	public function transferGame(Player $player, $class, $checkPlayers = true){
-		$task = new SearchServerQuery($this, $class, $checkPlayers);
-		$this->queueFor($player->getId(), true, Queue::QUEUE_SESSION)
-			->pushToQueue(new TransferSearchRunnable($this, $player, $task));
+		new TransferServerQuery($this, $class, $checkPlayers, $player->getName());
 	}
 	public function queueFor($id, $garbage = false, $flag = Queue::QUEUE_GENERAL){
 		$queues =& $this->getQueueByFlag($flag);

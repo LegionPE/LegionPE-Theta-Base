@@ -26,6 +26,7 @@ use legionpe\theta\query\AddIpQuery;
 use legionpe\theta\query\JoinChannelQuery;
 use legionpe\theta\query\NextIdQuery;
 use legionpe\theta\query\PartChannelQuery;
+use legionpe\theta\query\RawAsyncQuery;
 use legionpe\theta\queue\ExecuteWarningRunnable;
 use legionpe\theta\queue\Queue;
 use legionpe\theta\utils\MUtils;
@@ -71,6 +72,7 @@ abstract class Session{
 	const STATE_LOGIN = 0x20;
 	const STATE_UPDATE_HASH = 0x30;
 	const STATE_PLAYING = 0x40;
+	const STATE_TRANSFERRING = 0x80;
 	const CHAT_STD = 0;
 	const CHAT_ME = 1;
 	const CHAT_LOCAL = 2;
@@ -223,6 +225,9 @@ abstract class Session{
 	 */
 	public function login($method){
 		$this->state = self::STATE_PLAYING;
+		if($this->getLoginDatum("status") === Settings::STATUS_TRANSFERRING){
+			new RawAsyncQuery($this->getMain(), "UPDATE users SET status=" . Settings::STATUS_ONLINE . " WHERE uid=" . $this->getUid());
+		}
 		$this->send(Phrases::LOGIN_AUTH_SUCCESS, ["method" => $this->translate(self::$AUTH_METHODS_PHRASES[$method])]);
 		$this->send(Phrases::LOGIN_AUTH_WHEREAMI, [
 				"class" => $this->translate(Settings::$CLASSES_NAMES_PHRASES[Settings::$LOCALIZE_CLASS]),
@@ -739,7 +744,7 @@ abstract class Session{
 		$this->saveData();
 	}
 	public function saveData($newStatus = Settings::STATUS_OFFLINE){
-		if($this->state === self::STATE_PLAYING){ // don't save if not registered/logged in
+		if($this->state === self::STATE_PLAYING){ // don't save if not registered/logged in or transferring
 			$this->getMain()->saveSessionData($this, $newStatus);
 		}
 	}
@@ -1005,6 +1010,9 @@ abstract class Session{
 	}
 	public function getPopup(){
 		return $this->curPopup;
+	}
+	public function setState($state){
+		$this->state = $state;
 	}
 	public function getCurrentFaceSkin(){
 		$seeks = $this->getMain()->getFaceSeeks();

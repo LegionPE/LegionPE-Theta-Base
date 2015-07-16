@@ -18,7 +18,7 @@ namespace legionpe\theta\queue;
 use legionpe\theta\BasePlugin;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
-use legionpe\theta\query\SearchServerQuery;
+use legionpe\theta\query\TransferServerQuery;
 use legionpe\theta\Session;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
@@ -29,9 +29,9 @@ class TransferSearchRunnable implements Runnable{
 	private $plugin;
 	/** @var Player */
 	private $player;
-	/** @var SearchServerQuery */
+	/** @var TransferServerQuery */
 	private $query;
-	public function __construct(BasePlugin $plugin, Player $player, SearchServerQuery $query){
+	public function __construct(BasePlugin $plugin, Player $player, TransferServerQuery $query){
 		$this->plugin = $plugin;
 		$this->player = $player;
 		$this->query = $query;

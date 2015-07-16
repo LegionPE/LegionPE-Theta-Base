@@ -24,8 +24,4 @@ class CloseServerQuery extends AsyncQuery{
 	public function getResultType(){
 		return self::TYPE_RAW;
 	}
-	public function onRun(){
-		parent::onRun();
-		$this->getConn()->close();
-	}
 }
