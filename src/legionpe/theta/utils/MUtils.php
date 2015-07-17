@@ -99,15 +99,15 @@ class MUtils{
 	}
 	public static function dir_copy($from, $to){
 		$to = rtrim($to, "\\/") . "/";
+		/** @var \SplFileInfo $file */
 		foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($from)) as $file){
 			if($file->isFile()){
-				$includePath = ltrim(substr($file, strlen($from)), "\\/");
-				$target = $to . $includePath;
+				$target = $to . ltrim(substr($file->getRealPath(), strlen($from)), "\\/");
 				$dir = dirname($target);
 				if(!is_dir($dir)){
 					mkdir(dirname($target), 0777, true);
 				}
-				copy($file, $target);
+				copy($file->getRealPath(), $target);
 			}
 		}
 	}
