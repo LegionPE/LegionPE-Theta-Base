@@ -36,6 +36,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 	protected function getColumns(Session $session, $status){
 		$coins = $session->getCoins();
 		$this->coinsDelta = $session->getAndUpdateCoinsDelta();
+		$skin = $session->getCurrentFaceSkin();
 		return [
 			"uid" => ["v" => $session->getUid(), "noupdate" => true],
 			"name" => ["v" => strtolower($session->getPlayer()->getName())],
@@ -52,7 +53,8 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 			"laston" => time(),
 			"ontime" => (int)$session->getAndUpdateOntime(),
 			"config" => $session->getAllSettings(),
-			"skin1" => ["v" => $session->getCurrentFaceSkin(), "bin" => true],
+			"skin1" => ["v" => substr($skin, 0, 128), "bin" => true],
+			"skin2" => ["v" => substr($skin, 128, 128), "bin" => true],
 			"lastgrind" => $session->getLastGrind(),
 			"rank" => ["v" => $session->getRank(), "noupdate" => true],
 			"warnpts" => $session->getWarningPoints(),

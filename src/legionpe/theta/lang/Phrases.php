@@ -127,6 +127,9 @@ class Phrases{
 	const PVP_ATTACK_FRIENDS = "game.pvp.attack.friends";
 	const PVP_ATTACK_SPAWN = "game.pvp.attack.spawn";
 
+	const PVP_KILL_INFO = "game.pvp.killinfo";
+	const PVP_DEATH_INFO = "game.pvp.deathinfo";
+
 	// constant variables
 	const VAR_wait = TextFormat::RED . "… ";
 	const VAR_success = TextFormat::GREEN;

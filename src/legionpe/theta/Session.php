@@ -225,9 +225,7 @@ abstract class Session{
 	 */
 	public function login($method){
 		$this->state = self::STATE_PLAYING;
-		if($this->getLoginDatum("status") === Settings::STATUS_TRANSFERRING){
-			new RawAsyncQuery($this->getMain(), "UPDATE users SET status=" . Settings::STATUS_ONLINE . " WHERE uid=" . $this->getUid());
-		}
+		new RawAsyncQuery($this->getMain(), "UPDATE users SET lastip='{$this->getPlayer()->getAddress()}',status=" . Settings::STATUS_ONLINE . " WHERE uid=" . $this->getUid());
 		$this->send(Phrases::LOGIN_AUTH_SUCCESS, ["method" => $this->translate(self::$AUTH_METHODS_PHRASES[$method])]);
 		$this->send(Phrases::LOGIN_AUTH_WHEREAMI, [
 				"class" => $this->translate(Settings::$CLASSES_NAMES_PHRASES[Settings::$LOCALIZE_CLASS]),
@@ -750,6 +748,7 @@ abstract class Session{
 	}
 	public function incrLoginDatum($key, $amplitude = 1){
 		$this->loginData[$key] += $amplitude;
+		return $this->loginData[$key];
 	}
 	public function getNicks(){
 		return array_filter(explode("|", $this->getLoginDatum("nicks")));
@@ -781,7 +780,7 @@ abstract class Session{
 				$level->addParticle($particle, $recipients);
 			}
 		}
-		$this->setCoins($this->getCoins() + $coins);
+		$this->setCoins($out = $this->getCoins() + $coins);
 		if($bonus){
 			if(mt_rand(0, 99) === 0){
 				$add = mt_rand(25, 50);
@@ -794,6 +793,7 @@ abstract class Session{
 				$this->grantCoins($add, false, true, false);
 			}
 		}
+		return [$coins, $out];
 	}
 	public function isGrinding(){
 		return time() - $this->getLastGrind() <= Settings::getGrindLength($this->getRank());

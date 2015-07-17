@@ -115,5 +115,8 @@
 	"game.pvp.action.egg": "egged",
 
 	"game.pvp.attack.friends": "%verbose%You may not attack your %type% (%em%%target%)!",
-	"game.pvp.attack.spawn": "%verbose%You may not attack players at spawn!"
+	"game.pvp.attack.spawn": "%verbose%You may not attack players at spawn!",
+
+	"game.pvp.killinfo": "%verbose%Your%em% %ord% %verbosemid%kill - the%em2% %streakord% %verbosemid% in a row.\n%verbose%Your coins + %em%%added%%verbosemid% => %em2%%coins%",
+	"game.pvp.deathinfo": "%verbose%This is your%em% %ord% %verbosemid%death! Watch out!"
 }
