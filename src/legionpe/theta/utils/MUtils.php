@@ -100,7 +100,7 @@ class MUtils{
 	public static function dir_copy($from, $to){
 		$to = rtrim($to, "\\/") . "/";
 		foreach(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($from)) as $file){
-			if(is_file($file)){
+			if($file->isFile()){
 				$includePath = ltrim(substr($file, strlen($from)), "\\/");
 				$target = $to . $includePath;
 				$dir = dirname($target);
@@ -121,7 +121,7 @@ class MUtils{
 			if(is_dir($path)){
 				self::dir_delete($path);
 			}else{
-				unlink($file);
+				unlink($path);
 			}
 		}
 		rmdir($dir);
