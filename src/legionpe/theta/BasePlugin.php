@@ -137,6 +137,7 @@ abstract class BasePlugin extends PluginBase{
 		$this->badWords = json_decode($this->getResourceContents("words.json"));
 		$this->approvedDomains = json_decode($this->getResourceContents("approvedDomains.json"));
 		$this->langs = new LanguageManager($this);
+		$this->getLogger()->alert("Enabled " . $this->getDescription()->getFullName() . " compiled at " . date("d/m/Y H:i:s (P)", (int)$this->getResourceContents("timestamp.LEGIONPE")));
 	}
 	public function getBasicListener(){
 		return BaseListener::class;

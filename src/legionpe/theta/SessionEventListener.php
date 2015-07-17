@@ -34,6 +34,7 @@ use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerItemConsumeEvent;
 use pocketmine\event\player\PlayerItemHeldEvent;
 use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
@@ -234,5 +235,12 @@ class SessionEventListener implements Listener{
 	public function onQuit(PlayerQuitEvent $event){
 		$this->main->endSession($event->getPlayer());
 		$event->setQuitMessage("");
+	}
+	public function onLogin(PlayerLoginEvent $event){
+		$class = new \ReflectionClass(Player::class);
+		$property = $class->getProperty("windows");
+		$property->setAccessible(true);
+		$windows = $property->getValue($event->getPlayer());
+		var_dump($windows);
 	}
 }
