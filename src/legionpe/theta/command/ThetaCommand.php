@@ -20,12 +20,18 @@ use legionpe\theta\command\admin\PrivateNoticeCommand;
 use legionpe\theta\command\override\MBCommand;
 use legionpe\theta\command\override\OverridingKillCommand;
 use legionpe\theta\command\override\OverridingMeCommand;
+use legionpe\theta\command\override\OverridingSayCommand;
 use legionpe\theta\command\override\OverridingStatusCommand;
 use legionpe\theta\command\override\OverridingTellCommand;
 use legionpe\theta\command\override\OverridingVersionCommand;
 use legionpe\theta\command\session\CoinsCommand;
 use legionpe\theta\command\session\ConsoleCommand;
 use legionpe\theta\command\session\DirectTeleportCommand;
+use legionpe\theta\command\session\friend\AddFriendCommand;
+use legionpe\theta\command\session\friend\FallbackFriendCommand;
+use legionpe\theta\command\session\friend\ListFriendsCommand;
+use legionpe\theta\command\session\friend\RejectFriendCommand;
+use legionpe\theta\command\session\friend\RemoveFriendCommand;
 use legionpe\theta\command\session\GrindCoinCommand;
 use legionpe\theta\command\session\LabelCommand;
 use legionpe\theta\command\session\TransferCommand;
@@ -98,6 +104,12 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			new TransferCommand($main, ["infected", "inf"], "Infected", Settings::CLASS_INFECTED),
 			new TransferCommand($main, ["classic", "cls"], "Classic PvP", Settings::CLASS_CLASSICAL),
 			new TransferCommand($main, ["hub", "spawn", "quit", "home", "back", "lobby"], "Hub", Settings::CLASS_HUB),
+			new OverridingSayCommand($main),
+			new FallbackFriendCommand($main),
+			new AddFriendCommand($main),
+			new ListFriendsCommand($main),
+			new RejectFriendCommand($main),
+			new RemoveFriendCommand($main),
 		]);
 	}
 	private static function unregisterCommand(CommandMap $map, $name){
