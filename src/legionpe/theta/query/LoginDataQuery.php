@@ -44,6 +44,42 @@ class LoginDataQuery extends AsyncQuery{
 		// warning: keep the first 7 characters ALWAYS "SELECT "
 		return "SELECT uid,name,nicks,lastip,status,lastses,authuuid,coins,hash,newhash,pwprefix,pwlen,registration,laston,ontime,config,(SELECT value FROM labels WHERE lid=users.lid)AS lbl,(SELECT approved FROM labels WHERE lid=users.lid)AS lblappr,lastgrind,rank,warnpts,lastwarn,tid,(SELECT name FROM teams WHERE tid=users.tid)as teamname,teamrank,teamjoin,ignorelist,email,emailkey FROM users WHERE name=$this->name";
 	}
+	protected function onAssocFetched(\mysqli $mysql, array &$row){
+		$uid = $row["uid"];
+		/* group_concat must be done somewhere else because it ALWAYS returns a row. */
+		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs, (SELECT group_concat(CONCAT(IF(smalluid=$uid, largeuid, smalluid), ':', type) SEPARATOR ',') FROM friends WHERE smalluid=$uid OR largeuid=$uid) AS friends, (SELECT group_concat(CONCAT(channel, ':', sublv) SEPARATOR ',') FROM channels WHERE uid=$uid);");
+		$result = $r->fetch_assoc();
+		$row["iphist"] = isset($result["iphist"]) ? $result["iphist"] : ",";
+		$row["langs"] = isset($result["langs"]) ? array_filter(explode(",", $result["langs"])) : [];
+		if(isset($result["channels"])){
+			$chanData = explode(",", $result["channels"]);
+			$channels = [];
+			foreach($chanData as $chanDatum){
+				list($key, $value) = explode(":", $chanDatum);
+				$channels[$key] = (int)$value;
+			}
+		}else{
+			$row["channels"] = [];
+		}
+		$row["friends"] = [];
+		if(isset($result["friends"])){
+			foreach(array_filter(explode(",", $result["friends"])) as $friend){
+				list($other, $type) = explode(":", $friend, 2);
+				$row["friends"][(int)$other] = (int)$type;
+			}
+		}
+		$row["isnew"] = false;
+		$r->close();
+		if($this->fetchPurchases()){
+			$r = $mysql->query("SELECT pid, id, amplitude, count, expiry FROM purchases WHERE uid=$uid AND class=$this->class");
+			$purchases = [];
+			while(is_array($result = $r->fetch_assoc())){
+				$purchases[$result["pid"]] = new Purchase($result["pid"], $uid, $this->class, $result["id"], $result["amplitude"], $result["count"], $result["expiry"]);
+			}
+			$r->close();
+			$row["purchases"] = $purchases;
+		}
+	}
 	public function getResultType(){
 		return self::TYPE_ASSOC;
 	}
@@ -107,48 +143,13 @@ class LoginDataQuery extends AsyncQuery{
 			$conseq = Settings::getWarnPtsConseq($this->totalWarnPts, $loginData["lastwarn"]);
 			if($conseq->banLength > 0){
 				$player->kick(TextFormat::RED . "You are banned.\nYou have accumulated " . TextFormat::DARK_PURPLE . $this->totalWarnPts . TextFormat::RED . " warning points,\nand you still have " . TextFormat::BLUE . MUtils::time_secsToString($conseq->banLength) . TextFormat::RED . " before you are unbanned.\n" . TextFormat::AQUA . "Believe this to be a mistake? Contact us with email at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu");
+				return;
 			}
 		}
 		$main->newSession($player, $loginData);
 	}
 	public function __debugInfo(){
 		return [];
-	}
-	protected function onAssocFetched(\mysqli $mysql, array &$row){
-		$uid = $row["uid"];
-		/* group_concat must be done somewhere else because it ALWAYS returns a row. */
-		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs, (SELECT group_concat(CONCAT(IF(smalluid=$uid, largeuid, smalluid), ':', type) SEPARATOR ',') FROM friends WHERE smalluid=$uid OR largeuid=$uid) AS friends, (SELECT group_concat(CONCAT(channel, ':', sublv) SEPARATOR ',') FROM channels WHERE uid=$uid);");
-		$result = $r->fetch_assoc();
-		$row["iphist"] = isset($result["iphist"]) ? $result["iphist"] : ",";
-		$row["langs"] = isset($result["langs"]) ? array_filter(explode(",", $result["langs"])) : [];
-		if(isset($result["channels"])){
-			$chanData = explode(",", $result["channels"]);
-			$channels = [];
-			foreach($chanData as $chanDatum){
-				list($key, $value) = explode(":", $chanDatum);
-				$channels[$key] = (int)$value;
-			}
-		}else{
-			$row["channels"] = [];
-		}
-		$row["friends"] = [];
-		if(isset($result["friends"])){
-			foreach(array_filter(explode(",", $result["friends"])) as $friend){
-				list($other, $type) = explode(":", $friend, 2);
-				$row["friends"][(int)$other] = (int)$type;
-			}
-		}
-		$row["isnew"] = false;
-		$r->close();
-		if($this->fetchPurchases()){
-			$r = $mysql->query("SELECT pid, id, amplitude, count, expiry FROM purchases WHERE uid=$uid AND class=$this->class");
-			$purchases = [];
-			while(is_array($result = $r->fetch_assoc())){
-				$purchases[$result["pid"]] = new Purchase($result["pid"], $uid, $this->class, $result["id"], $result["amplitude"], $result["count"], $result["expiry"]);
-			}
-			$r->close();
-			$row["purchases"] = $purchases;
-		}
 	}
 	protected function fetchPurchases(){
 		return false;

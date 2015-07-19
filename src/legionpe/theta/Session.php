@@ -24,11 +24,9 @@ use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\query\AddIpQuery;
 use legionpe\theta\query\JoinChannelQuery;
-use legionpe\theta\query\NextIdQuery;
 use legionpe\theta\query\PartChannelQuery;
+use legionpe\theta\query\PreExecuteWarningQuery;
 use legionpe\theta\query\RawAsyncQuery;
-use legionpe\theta\queue\ExecuteWarningRunnable;
-use legionpe\theta\queue\Queue;
 use legionpe\theta\utils\MUtils;
 use pocketmine\block\Block;
 use pocketmine\command\CommandSender;
@@ -219,13 +217,16 @@ abstract class Session{
 			$this->send(Phrases::LOGIN_REGISTER_PROMPT);
 		}
 	}
+	public function postOnline(){
+		new RawAsyncQuery($this->getMain(), "UPDATE users SET lastip='{$this->getPlayer()->getAddress()}',status=" . Settings::STATUS_ONLINE . ",laston=unix_timestamp() WHERE uid=" . $this->getUid());
+	}
 	/**
 	 * Override this method to do initialization stuff
 	 * @param int $method
 	 */
 	public function login($method){
 		$this->state = self::STATE_PLAYING;
-		new RawAsyncQuery($this->getMain(), "UPDATE users SET lastip='{$this->getPlayer()->getAddress()}',status=" . Settings::STATUS_ONLINE . " WHERE uid=" . $this->getUid());
+		$this->postOnline();
 		$this->send(Phrases::LOGIN_AUTH_SUCCESS, ["method" => $this->translate(self::$AUTH_METHODS_PHRASES[$method])]);
 		$this->send(Phrases::LOGIN_AUTH_WHEREAMI, [
 				"class" => $this->translate(Settings::$CLASSES_NAMES_PHRASES[Settings::$LOCALIZE_CLASS]),
@@ -308,6 +309,30 @@ abstract class Session{
 		$lbl = $this->getLabelInUse();
 		if($lbl !== ""){
 			$tag .= Phrases::VAR_symbol . "[" . $lbl . Phrases::VAR_symbol . "]";
+		}
+		if(!$this->isEmailVerified()){
+			$tag .= TextFormat::GRAY . "(UV)";
+		}
+		$tag .= $nameColor . $this->getPlayer()->getName();
+		return $tag;
+	}
+	public function calculateNameTag($nameColor = TextFormat::WHITE){
+		$tag = "";
+		$teamname = $this->getTeamName();
+		if($teamname){
+			$tag .= TextFormat::DARK_AQUA . "Team " . TextFormat::GOLD . $teamname;
+			$tag .= TextFormat::GREEN . "(" . $this->getTeamRank() . ")\n";
+		}
+		$rank = $this->calculateRank();
+		if($rank !== ""){
+			$tag .= $rank . "\n";
+		}
+		$lbl = $this->getLabelInUse();
+		if($lbl !== ""){
+			$tag .= Phrases::VAR_symbol . "[" . $lbl . Phrases::VAR_symbol . "]";
+		}
+		if(!$this->isEmailVerified()){
+			$tag .= TextFormat::GRAY . "(UV)";
 		}
 		$tag .= $nameColor . $this->getPlayer()->getName();
 		return $tag;
@@ -393,24 +418,6 @@ abstract class Session{
 		$rank = $this->getRank();
 		return ($rank & Settings::RANK_PERM_ADMIN) === Settings::RANK_PERM_ADMIN and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
 	}
-	public function calculateNameTag($nameColor = TextFormat::WHITE){
-		$tag = "";
-		$teamname = $this->getTeamName();
-		if($teamname){
-			$tag .= TextFormat::DARK_AQUA . "Team " . TextFormat::GOLD . $teamname;
-			$tag .= TextFormat::GREEN . "(" . $this->getTeamRank() . ")\n";
-		}
-		$rank = $this->calculateRank();
-		if($rank !== ""){
-			$tag .= $rank . "\n";
-		}
-		$lbl = $this->getLabelInUse();
-		if($lbl !== ""){
-			$tag .= Phrases::VAR_symbol . "[" . $lbl . Phrases::VAR_symbol . "]";
-		}
-		$tag .= $nameColor . $this->getPlayer()->getName();
-		return $tag;
-	}
 	public function getTeamName(){
 		return $this->getLoginDatum("teamname");
 	}
@@ -452,7 +459,7 @@ abstract class Session{
 		return $this->getRank() & Settings::RANK_PERM_SPAM;
 	}
 	public function isBuilder(){
-		return false;
+		return ($this->getRank() & Settings::RANK_PERM_WORLD_EDIT) === Settings::RANK_PERM_WORLD_EDIT;
 //		return $this->getRank() & Settings::RANK_PERM_WORLD_EDIT;
 	}
 	public function isDeveloper(){
@@ -604,8 +611,7 @@ abstract class Session{
 		foreach($this->getMain()->getSessions() as $ses){
 			// TODO handle $type
 			if($ses->isLocalChatOn() and ($type !== self::CHAT_LOCAL or Settings::isLocalChat($ses->getPlayer(), $this->getPlayer()))){
-				$ses->getPlayer()->sendMessage($this->getPlayer()->getDisplayName() . ">" . $this->getChatColor() . $msg);
-			}else{
+				$ses->getPlayer()->sendMessage($this->getPlayer()->getDisplayName() . ($type === self::CHAT_ME ? ": " : ">") . $this->getChatColor() . $msg);
 			}
 		}
 	}
@@ -855,6 +861,9 @@ abstract class Session{
 	public function startGrinding(){
 		$this->setLoginDatum("lastgrind", time());
 	}
+	public function isEmailVerified(){
+		return substr($this->getLoginDatum("email"), 0, 1) !== "~";
+	}
 	public function isDonatorPlus(){
 		return ($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR_PLUS) === Settings::RANK_IMPORTANCE_DONATOR_PLUS;
 	}
@@ -866,11 +875,8 @@ abstract class Session{
 		$this->setLoginDatum("lastwarn", time());
 	}
 	public function warn($id, $points, CommandSender $issuer, $msg){
-		$wid = new NextIdQuery($this->getMain(), NextIdQuery::WARNING);
 		/** @noinspection PhpDeprecationInspection */
-		$clientId = $this->getPlayer()->getClientId();
-		$this->getMain()->queueFor($this->getPlayer()->getId(), true, Queue::QUEUE_SESSION)
-			->pushToQueue(new ExecuteWarningRunnable($this->getMain(), $wid, $this->getUid(), $clientId, $id, $points, $issuer, $msg));
+		new PreExecuteWarningQuery($this->getMain(), $this->getUid(), $this->getPlayer()->getClientId(), $id, $points, $issuer, $msg);
 	}
 	public function getTeamJoinTime(){
 		return $this->getLoginDatum("teamjoin");
@@ -937,6 +943,8 @@ abstract class Session{
 	}
 	public function inviteIncrease($uid, $targetName, &$vars){
 		$vars = ["target" => $targetName];
+		$smallUid = min($uid, $this->getUid());
+		$largeUid = max($uid, $this->getUid());
 		$currentType = $this->getFriendType($uid, $io, $toLarge, $all);
 		if($io === self::FRIEND_OUT){
 			return Phrases::CMD_FRIEND_ALREADY_INVITED;
@@ -945,7 +953,7 @@ abstract class Session{
 			$new = $currentType << 1;
 			$all[$uid] = $new;
 			$this->setLoginDatum("friends", $all);
-			// TODO query
+			new RawAsyncQuery($this->getMain(), "UPDATE friends SET type=$new WHERE smalluid=$smallUid AND largeuid=$largeUid");
 			$vars["newtype"] = $this->translate(self::$FRIEND_TYPES[$new]);
 			return Phrases::CMD_FRIEND_RAISED;
 		}
@@ -955,7 +963,7 @@ abstract class Session{
 		$new = $currentType & ($toLarge ? self::FRIEND_REQUEST_TO_LARGE : self::FRIEND_REQUEST_TO_SMALL);
 		$all[$uid] = $new;
 		$this->setLoginDatum("friends", $all);
-		// TODO query
+		new RawAsyncQuery($this->getMain(), $currentType === self::FRIEND_NO_REQUEST ? "INSERT INTO friends (smalluid, largeuid, type) VALUES ($smallUid, $largeUid, $new)" : "UPDATE friends SET type=$new WHERE smalluid=$smallUid AND largeuid=$largeUid");
 		$vars["newtype"] = $this->translate(self::$FRIEND_TYPES[$currentType << 1]);
 		return Phrases::CMD_FRIEND_RAISE_REQUESTED;
 	}
@@ -974,6 +982,8 @@ abstract class Session{
 		return $type & ~self::FRIEND_BITMASK_REQUEST;
 	}
 	public function reduceFriend($uid){
+		$smallUid = min($this->getUid(), $uid);
+		$largeUid = max($this->getUid(), $uid);
 		$type = $this->getFriendType($uid, $io, $toLarge, $all);
 		if($type === self::FRIEND_LEVEL_NONE){
 			return false;
@@ -985,14 +995,16 @@ abstract class Session{
 			$all[$uid] = $new;
 		}
 		$this->setLoginDatum("friends", $all);
-		// TODO query
+		new RawAsyncQuery($this->getMain(), $new === self::FRIEND_LEVEL_NONE ? "DELETE FROM friends WHERE smalluid=$smallUid AND largeuid=$largeUid" : "UPDATE friends SET type=$new WHERE smalluid=$smallUid AND largeuid=$largeUid");
 		return true;
 	}
 	public function rejectFriend($uid){
+		$smallUid = min($this->getUid(), $uid);
+		$largeUid = max($this->getUid(), $uid);
 		$type = $this->getFriendType($uid, $originalIo, $toLarge, $all);
 		$all[$uid] = $type;
 		$this->setLoginDatum("friends", $all);
-		// TODO query
+		new RawAsyncQuery($this->getMain(), $type === self::FRIEND_LEVEL_NONE ? "DELETE FROM friends WHERE smalluid=$smallUid AND largeuid=$largeUid" : "UPDATE friends SET type=$type WHERE smalluid=$smallUid AND largeuid=$largeUid");
 		return $originalIo;
 	}
 	public function getPurchases(){
@@ -1029,6 +1041,9 @@ abstract class Session{
 		}
 		if(time() - $this->joinTime > Settings::KICK_PLAYER_TOO_LONG_ONLINE){
 			$this->getPlayer()->kick($this->translate(Phrases::KICK_TOO_LONG_ONLINE));
+		}
+		if($this->isLoggingIn() and time() - $this->joinTime > Settings::KICK_PLAYER_TOO_LONG_LOGIN){
+			$this->getPlayer()->kick($this->translate(Phrases::KICK_TOO_LONG_LOGIN));
 		}
 	}
 }

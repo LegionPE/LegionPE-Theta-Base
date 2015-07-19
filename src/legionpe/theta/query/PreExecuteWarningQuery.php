@@ -13,25 +13,18 @@
  * @author PEMapModder
  */
 
-namespace legionpe\theta\queue;
+namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
-use legionpe\theta\query\IncrementWarningPointsQuery;
-use legionpe\theta\query\LogWarningQuery;
-use legionpe\theta\query\NextIdQuery;
 use legionpe\theta\Session;
 use legionpe\theta\utils\MUtils;
 use pocketmine\command\CommandSender;
+use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 
-/** @deprecated */
-class ExecuteWarningRunnable implements Runnable{
-	/** @var BasePlugin */
-	private $main;
-	/** @var NextIdQuery */
-	private $wid;
+class PreExecuteWarningQuery extends NextIdQuery{
 	/** @var int */
 	private $uid;
 	/** @var number */
@@ -40,54 +33,52 @@ class ExecuteWarningRunnable implements Runnable{
 	private $id;
 	/** @var int */
 	private $points;
-	/** @var CommandSender */
+	/** @var int|CommandSender */
 	private $issuer;
 	/** @var string */
 	private $msg;
 	/** @var int */
 	private $creation, $expiry;
-	public function __construct(BasePlugin $main, NextIdQuery $wid, $uid, $clientId, $id, $points, CommandSender $issuer, $msg){
-		$this->main = $main;
-		$this->wid = $wid;
+	public function __construct(BasePlugin $main, $uid, $clientId, $id, $points, CommandSender $issuer, $msg){
 		$this->uid = $uid;
 		$this->clientId = $clientId;
 		$this->id = $id;
 		$this->points = $points;
-		$this->issuer = $issuer;
+		$this->issuer = $main->storeObject($issuer);
 		$this->msg = $msg;
 //		$this->expiry = ($this->creation = time()) + $duration;
 		$this->creation = time();
 		$this->expiry = PHP_INT_MAX;
+		parent::__construct($main, self::WARNING);
 	}
-	public function canRun(){
-		return $this->wid->hasResult(); // TODO DEPRECATION move to onCompletion of subclass of NextIdQuery
-	}
-	public function run(){
-		$id = $this->wid->getId();
+	public function onCompletion(Server $server){
+		$id = $this->getId();
+		$main = BasePlugin::getInstance($server);
+		/** @var CommandSender $issuer */
+		$issuer = $main->fetchObject($id);
 		if($id === -1){
-			$this->issuer->sendMessage("Failed to create warning");
-			$this->issuer = null; // release instance
+			$issuer->sendMessage("Failed to create warning");
+			$issuer = null; // release instance
 			return;
 		}
-		new LogWarningQuery($this->main, $this->wid, $this->uid, $this->clientId, $this->issuer, $this->points, $this->msg, $this->creation, $this->expiry);
-		foreach($this->main->getSessions() as $ses){
+		new LogWarningQuery($main, $id, $this->uid, $this->clientId, $issuer, $this->points, $this->msg, $this->creation, $this->expiry);
+		foreach($main->getSessions() as $ses){
 			if($ses->getUid() === $this->uid){
 				$ses->addWarningPoints($this->points);
 				$done = true;
-				$this->issuer->sendMessage(TextFormat::GREEN . "Warning points have been successfully issued to player.");
-				$this->execWarnOn($ses);
+				$issuer->sendMessage("Warning points have been successfully issued to player.");
+				$this->execWarnOn($issuer, $ses);
 				break;
 			}
 		}
 		if(!isset($done)){ // you think leaving the game can keep you away from trouble?
-			new IncrementWarningPointsQuery($this->main, $this->points, $this->uid);
-			$this->issuer->sendMessage(TextFormat::GREEN . "Warning points have been successfully issued to offline player.");
+			new IncrementWarningPointsQuery($main, $this->points, $this->uid);
+			$issuer->sendMessage(TextFormat::GREEN . "Warning points have been successfully issued to offline player.");
 		}
-		$this->issuer = null; // release instance
 	}
-	private function execWarnOn(Session $ses){
+	private function execWarnOn(CommandSender $issuer, Session $ses){
 		$msg = $ses->translate(Phrases::WARNING_RECEIVED_NOTIFICATION, [
-			"issuer" => $this->issuer->getName(),
+			"issuer" => $issuer->getName(),
 			"message" => $this->msg,
 			"points" => $this->points,
 			"totalpoints" => $ses->getWarningPoints()

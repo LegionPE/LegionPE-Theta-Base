@@ -23,6 +23,7 @@ abstract class Settings{
 	const STATUS_ONLINE = 1;
 	const STATUS_TRANSFERRING = 2;
 	const KICK_PLAYER_TOO_LONG_ONLINE = 5400;
+	const KICK_PLAYER_TOO_LONG_LOGIN = 30;
 	const CLASS_ALL = 0;
 	const CLASS_HUB = 1;
 	const CLASS_KITPVP = 2;

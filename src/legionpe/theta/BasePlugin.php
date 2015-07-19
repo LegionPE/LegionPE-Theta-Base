@@ -65,6 +65,8 @@ abstract class BasePlugin extends PluginBase{
 	private $internalLastChatId = null;
 	/** @var FireSyncChatQueryTask */
 	private $syncChatTask;
+	private $objectStore = [];
+	private $nextStoreId = 0;
 
 	// PluginManager-level stuff
 	/**
@@ -358,5 +360,24 @@ abstract class BasePlugin extends PluginBase{
 	}
 	public function getApprovedDomains(){
 		return $this->approvedDomains;
+	}
+
+	/**
+	 * @param object $object
+	 * @return int
+	 */
+	public function storeObject($object){
+		$id = $this->nextStoreId++;
+		$this->objectStore[$id] = $object;
+		return $id;
+	}
+	/**
+	 * @param int $id
+	 * @return object
+	 */
+	public function fetchObject($id){
+		$object = $this->objectStore[$id];
+		unset($this->objectStore[$id]);
+		return $object;
 	}
 }
