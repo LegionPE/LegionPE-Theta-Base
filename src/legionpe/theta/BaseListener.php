@@ -18,6 +18,7 @@ namespace legionpe\theta;
 use legionpe\theta\config\Settings;
 use legionpe\theta\query\LoginDataQuery;
 use pocketmine\event\Listener;
+use pocketmine\event\player\PlayerKickEvent;
 use pocketmine\event\player\PlayerPreLoginEvent;
 use pocketmine\event\server\QueryRegenerateEvent;
 use pocketmine\Player;
@@ -57,5 +58,10 @@ class BaseListener implements Listener{
 		$event->setExtraData($extra);
 	}
 	protected function addExtras(&$extra){
+	}
+	public function onKick(PlayerKickEvent $event){
+		if($event->getReason() === "disconnectionScreen.serverFull"){
+			$event->setCancelled();
+		}
 	}
 }

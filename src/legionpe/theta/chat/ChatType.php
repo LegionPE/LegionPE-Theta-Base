@@ -23,6 +23,7 @@ abstract class ChatType{
 	const TEAM_CHAT = 1;
 	const CONSOLE_MESSAGE = 2;
 	const CHANNEL_CHAT = 3;
+	const MUTE_CHAT = 4;
 	/** @var BasePlugin */
 	protected $main;
 	protected $src;
@@ -51,6 +52,8 @@ abstract class ChatType{
 				return new ConsoleChatType($main, $src, $msg, $class, $data);
 			case self::CHANNEL_CHAT:
 				return new ChannelChatType($main, $src, $msg, $class, $data);
+			case self::MUTE_CHAT:
+				return new MuteChatType($main, $src, $msg, $class, $data);
 		}
 		return null;
 	}

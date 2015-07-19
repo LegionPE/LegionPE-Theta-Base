@@ -73,12 +73,13 @@
 	"login.register.mismatch": "%error%The two passwords aren't the same!\n%notify%Please type a password you like %em%directly%notify% in chat.\n%verbose%Type a totally different password if you want.",
 
 	"warning.notification.main": "\n%notify2%%bold%~~~~~~~~~~ ATTENTION ~~~~~~~~~~\n%em%%issuer%%warning% sent you a warning!\n%verbose%Message:\n%em2%%message%\n%notify%This warning carries %em3%%points%%notify% warning points.\n%info%You now have %em%%totalpoints%%info% warning points in total.",
-	"warning.notification.muted": "\n%error%You will be muted for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake.",
+	"warning.notification.muted": "\n%error%You have been muted by %em2%%issuer% %em3%%passed%%error% before. The mute ends in %em%%left%.\n%verbose%Email %em2%support@legionpvp.eu%verbosemid% if you believe that this is a mistake.",
 	"warning.notification.banned": "\n%error%You will be banned for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake.",
 
 	"kick.toolong.online": "\nYou have been online for more than 90 minutes. Take a rest! I bet your device must be pretty hot.",
 	"kick.toolong.login": "\nHave you registered here using this username?\nPlease choose another username if you don't.",
 
+	"date.format": "d/m/Y H:i:s (\\U\\T\\C P)",
 	"local.class.name.hub": "Hub",
 	"local.class.name.pvp.kit": "KitPvP",
 	"local.class.name.parkour": "Parkour",

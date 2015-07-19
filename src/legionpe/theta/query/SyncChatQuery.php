@@ -16,6 +16,7 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
+use legionpe\theta\chat\ChatType;
 use legionpe\theta\config\Settings;
 use legionpe\theta\utils\FireSyncChatQueryTask;
 use pocketmine\Server;
@@ -23,20 +24,30 @@ use pocketmine\Server;
 class SyncChatQuery extends AsyncQuery{
 	private $class;
 	private $lastId;
+	private $fetchedMaxId;
 	public function __construct(BasePlugin $main, FireSyncChatQueryTask $task){
 		$this->class = Settings::$LOCALIZE_CLASS;
 		$task->canFireNext = false;
 		$this->lastId = $main->getInternalLastChatId();
 		parent::__construct($main);
 	}
+	public function onPreQuery(\mysqli $db){
+		if($this->lastId === null){
+			$r = $db->query("SELECT MAX(id)AS id FROM chat");
+			$this->fetchedMaxId = $r->fetch_assoc()["id"];
+			$r->close();
+		}
+	}
 	public function getQuery(){
-		return $this->lastId === null ? "SELECT MAX(id)AS id FROM chat" : "SELECT id,unix_timestamp(creation)AS creation,src,msg,type,class,json FROM chat WHERE id>$this->lastId AND (class=0 OR class=$this->class)";
+		return $this->lastId === null ? ("SELECT json,src,msg FROM chat WHERE type=" . ChatType::MUTE_CHAT . " AND unix_timestamp() - unix_timestamp(creation) <= 86400") : "SELECT id,unix_timestamp(creation)AS creation,src,msg,type,class,json FROM chat WHERE id>$this->lastId AND (class=0 OR class=$this->class)";
 	}
 	public function getResultType(){
-		return $this->lastId === null ? self::TYPE_ASSOC : self::TYPE_ALL;
+		return self::TYPE_ALL;
 	}
 	public function getExpectedColumns(){
-		return $this->lastId === null ? ["id" => self::COL_INT] : [
+		return $this->lastId === null ? [
+			"id" => self::COL_INT
+		] : [
 			"id" => self::COL_INT,
 			"creation" => self::COL_UNIXTIME,
 			"src" => self::COL_STRING,
@@ -50,7 +61,12 @@ class SyncChatQuery extends AsyncQuery{
 		$main = BasePlugin::getInstance($server);
 		$result = $this->getResult();
 		if($this->lastId === null){
-			$main->setInternalLastChatId($result["result"]["id"]);
+			$main->setInternalLastChatId($this->fetchedMaxId);
+			$result = $this->getResult()["result"];
+			foreach($result as $row){
+				$type = ChatType::get($main, ChatType::MUTE_CHAT, $result["src"], $result["msg"], Settings::$LOCALIZE_CLASS, json_decode($row["json"]));
+				$type->execute();
+			}
 		}elseif($result["resulttype"] === self::TYPE_ALL){
 			$result = $this->getResult()["result"];
 			foreach($result as $row){

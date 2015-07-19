@@ -67,6 +67,8 @@ abstract class BasePlugin extends PluginBase{
 	private $syncChatTask;
 	private $objectStore = [];
 	private $nextStoreId = 0;
+	/** @var MuteIssue[] */
+	private $mutes = [];
 
 	// PluginManager-level stuff
 	/**
@@ -379,5 +381,29 @@ abstract class BasePlugin extends PluginBase{
 		$object = $this->objectStore[$id];
 		unset($this->objectStore[$id]);
 		return $object;
+	}
+	public function addMute(MuteIssue $mute){
+		$this->mutes[] = $mute;
+	}
+	/**
+	 * @param Session $session
+	 * @param MuteIssue|null $mute
+	 * @return bool
+	 */
+	public function isMuted(Session $session, &$mute = null){
+		$uid = $session->getUid();
+		$ip = $session->getPlayer()->getAddress();
+		/** @noinspection PhpDeprecationInspection */
+		$cid = $session->getPlayer()->getClientId();
+		foreach($this->mutes as $k => $mute){
+			if(time() > $mute->since + $mute->length){
+				unset($this->mutes[$k]);
+				continue;
+			}
+			if($mute->uid === $uid or $mute->ip === $ip or $mute->cid === $cid){
+				return true;
+			}
+		}
+		return false;
 	}
 }

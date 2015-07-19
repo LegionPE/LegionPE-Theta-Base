@@ -32,6 +32,6 @@ class RemoveFriendCommand extends SessionCommand{
 		if(!($target instanceof Session)){
 			return $this->notOnline($sender, $name);
 		}
-		$sender->reduceFriend($target->getUid());
+		return $sender->reduceFriend($target->getUid()) ? "Success" : "Failure";
 	}
 }

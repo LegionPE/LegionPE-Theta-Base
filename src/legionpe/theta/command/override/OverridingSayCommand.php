@@ -26,6 +26,9 @@ class OverridingSayCommand extends ModeratorCommand{
 		parent::__construct($main, "say", "Network broadcast", "/say [.]<message ...>");
 	}
 	public function execute(CommandSender $sender, $commandLabel, array $args){
+		if(!$this->testPermission($sender)){
+			return true;
+		}
 		$msg = implode(" ", $args);
 		$local = true;
 		if(substr($msg, 0, 1) === "."){

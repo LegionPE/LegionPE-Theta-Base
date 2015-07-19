@@ -15,13 +15,25 @@
 
 namespace legionpe\theta\command\admin;
 
+use legionpe\theta\Session;
 use pocketmine\command\CommandSender;
 
 class MuteCommand extends ModeratorCommand{
 	public function execute(CommandSender $sender, $commandLabel, array $args){
 		if(!$this->testPermission($sender)){
-			return;
+			return true;
 		}
-		// TODO: Implement execute() method.
+		if(!isset($args[1])){
+			return false;
+		}
+		if(!(($session = $this->getSession($name = array_shift($args))) instanceof Session)){
+			return $this->notOnline($sender, $name);
+		}
+		$length = (int)(floatval(array_shift($args)) * 60);
+		$msg = implode(" ", $args);
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		$mute = $session->mute($msg, $length, $sender->getName());
+		// TODO message
+		return true;
 	}
 }

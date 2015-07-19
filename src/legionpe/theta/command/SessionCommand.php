@@ -34,7 +34,7 @@ abstract class SessionCommand extends ThetaCommand{
 	}
 	/**
 	 * @param Session $session
-	 * @param string $msg
+	 * @param string &$msg
 	 * @return bool
 	 */
 	protected function checkPerm(/** @noinspection PhpUnusedParameterInspection */

@@ -24,6 +24,9 @@ class MBCommand extends ModeratorCommand{
 		parent::__construct($main, "mb", "Deprecated command, use /warn instead", "Deprecated command, use /warn instead", ["ban"]);
 	}
 	public function execute(CommandSender $sender, $commandLabel, array $args){
+		if(!$this->testPermission($sender)){
+			return true;
+		}
 		return false;
 	}
 }

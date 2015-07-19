@@ -18,6 +18,7 @@
 namespace legionpe\theta;
 
 use legionpe\theta\chat\ChannelChatType;
+use legionpe\theta\chat\MuteChatType;
 use legionpe\theta\chat\SpamDetector;
 use legionpe\theta\chat\TeamChatType;
 use legionpe\theta\config\Settings;
@@ -602,6 +603,17 @@ abstract class Session{
 	 */
 	public function onChat($msg, $type){
 		$msg = TextFormat::clean($msg);
+		/** @var MuteIssue $mute */
+		if($this->getMain()->isMuted($this, $mute)){
+			$this->send(Phrases::WARNING_MUTED_NOTIFICATION, [
+				"length" => MUtils::time_secsToString($mute->length),
+				"since" => date($this->translate("date.format"), $mute->since),
+				"till" => date($this->translate("date.format"), $mute->since + $mute->length),
+				"passed" => MUtils::time_secsToString(time() - $mute->since),
+				"left" => MUtils::time_secsToString($mute->since + $mute->length - time()),
+			]);
+			return;
+		}
 		$msg = $this->getChatColor() . preg_replace_callback('/@([A-Za-z_]{2,16})/', function ($match){
 				if(($player = $this->getMain()->getServer()->getPlayer($match[1])) !== null){
 					return TextFormat::DARK_AQUA . TextFormat::ITALIC . $player->getName() . TextFormat::RESET . $this->getChatColor();
@@ -1045,5 +1057,19 @@ abstract class Session{
 		if($this->isLoggingIn() and time() - $this->joinTime > Settings::KICK_PLAYER_TOO_LONG_LOGIN){
 			$this->getPlayer()->kick($this->translate(Phrases::KICK_TOO_LONG_LOGIN));
 		}
+	}
+	public function mute($msg, $length, $src){
+		$mute = new MuteIssue;
+		$mute->cid = $this->getPlayer()->getClientId();
+		$mute->ip = $this->getPlayer()->getAddress();
+		$mute->uid = $this->getUid();
+		$mute->length = $length;
+		$mute->msg = $msg;
+		$mute->since = time();
+		$mute->src = $src;
+		$this->getMain()->addMute($mute);
+		$type = MuteChatType::fromObject($this->getMain(), $mute);
+		$type->push();
+		return $mute;
 	}
 }
