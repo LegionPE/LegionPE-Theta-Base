@@ -130,7 +130,7 @@ class LoginDataQuery extends AsyncQuery{
 		/** @var string $query */
 		extract($this->getResult());
 		if(!$success){
-			$player->close(TextFormat::RED . "Sorry, our server has encountered an internal error when trying to retrieve your data from the database.");
+			$player->kick(TextFormat::RED . "Sorry, our server has encountered an internal error when trying to retrieve your data from the database.", false);
 			return;
 		}
 		/** @var int $resulttype */
@@ -140,6 +140,10 @@ class LoginDataQuery extends AsyncQuery{
 		}else{
 			/** @var mixed[] $result */
 			$loginData = $result;
+			if(count($main->getSessions()) >= Settings::$SYSTEM_MAX_PLAYERS and isset($loginData["rank"]) and !(($loginData["rank"] & Settings::RANK_IMPORTANCE_DONATOR) or ($loginData["rank"] & Settings::RANK_PERM_MOD))){
+				$main->getAltServer($ip, $port);
+				$main->transfer($player, $ip, $port, "This server is full.", false);
+			}
 			$conseq = Settings::getWarnPtsConseq($this->totalWarnPts, $loginData["lastwarn"]);
 			if($conseq->banLength > 0){
 				$player->kick(TextFormat::RED . "You are banned.\nYou have accumulated " . TextFormat::DARK_PURPLE . $this->totalWarnPts . TextFormat::RED . " warning points,\nand you still have " . TextFormat::BLUE . MUtils::time_secsToString($conseq->banLength) . TextFormat::RED . " before you are unbanned.\n" . TextFormat::AQUA . "Believe this to be a mistake? Contact us with email at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu");

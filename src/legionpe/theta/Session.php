@@ -86,12 +86,12 @@ abstract class Session{
 	const FRIEND_REQUEST_TO_LARGE = 0b01;
 	const FRIEND_REQUEST_FROM_LARGE = 0b10;
 	const FRIEND_REQUEST_TO_SMALL = 0b10;
-	const FRIEND_LEVEL_NONE = 0;
-	const FRIEND_LEVEL_ACQUAINTANCE = 0b000100;
-	const FRIEND_LEVEL_GOOD_FRIEND  = 0b001000;
-	const FRIEND_LEVEL_BEST_FRIEND  = 0b010000;
+	const FRIEND_LEVEL_NONE = 0b000100;
+	const FRIEND_LEVEL_ACQUAINTANCE = 0b001000;
+	const FRIEND_LEVEL_GOOD_FRIEND = 0b010000;
+	const FRIEND_LEVEL_BEST_FRIEND = 0b100000;
 	const FRIEND_LEVEL_MAX = self::FRIEND_LEVEL_BEST_FRIEND;
-	const FRIEND_NO_REQUEST = 0;
+	const FRIEND_NO_REQUEST = 4;
 	const FRIEND_IN = 1;
 	const FRIEND_OUT = 2;
 	public static $AUTH_METHODS = [
@@ -975,7 +975,7 @@ abstract class Session{
 		$new = $currentType & ($toLarge ? self::FRIEND_REQUEST_TO_LARGE : self::FRIEND_REQUEST_TO_SMALL);
 		$all[$uid] = $new;
 		$this->setLoginDatum("friends", $all);
-		new RawAsyncQuery($this->getMain(), $currentType === self::FRIEND_NO_REQUEST ? "INSERT INTO friends (smalluid, largeuid, type) VALUES ($smallUid, $largeUid, $new)" : "UPDATE friends SET type=$new WHERE smalluid=$smallUid AND largeuid=$largeUid");
+		new RawAsyncQuery($this->getMain(), $currentType === self::FRIEND_LEVEL_NONE ? "INSERT INTO friends (smalluid, largeuid, type) VALUES ($smallUid, $largeUid, $new)" : "UPDATE friends SET type=$new WHERE smalluid=$smallUid AND largeuid=$largeUid");
 		$vars["newtype"] = $this->translate(self::$FRIEND_TYPES[$currentType << 1]);
 		return Phrases::CMD_FRIEND_RAISE_REQUESTED;
 	}
@@ -1060,6 +1060,7 @@ abstract class Session{
 	}
 	public function mute($msg, $length, $src){
 		$mute = new MuteIssue;
+		/** @noinspection PhpDeprecationInspection */
 		$mute->cid = $this->getPlayer()->getClientId();
 		$mute->ip = $this->getPlayer()->getAddress();
 		$mute->uid = $this->getUid();

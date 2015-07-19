@@ -122,6 +122,8 @@ abstract class BasePlugin extends PluginBase{
 		self::$NAME = $this->getName();
 		self::$CLASS = static::class;
 		class_exists(CloseServerQuery::class); // preload to workaround frequent corruption errors due to phar repalced
+		class_exists(SaveSinglePlayerQuery::class);
+		class_exists(LoginDataQuery::class);
 		if(!is_dir($this->getDataFolder())){
 			mkdir($this->getDataFolder());
 		}
@@ -320,7 +322,7 @@ abstract class BasePlugin extends PluginBase{
 	/**
 	 * @return SessionEventListener
 	 */
-	public function getSesList(){
+	public function getSesListener(){
 		return $this->sesList;
 	}
 	public function getFaceSeeks(){

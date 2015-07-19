@@ -23,12 +23,14 @@ class ReportStatusQuery extends AsyncQuery{
 	private $players;
 	private $class;
 	/** @var string */
-	private $altIp = null;
+	private $myIp, $altIp = null;
 	/** @var int */
-	private $altPort = null;
+	private $myPort, $altPort = null;
 	public function __construct(BasePlugin $plugin){
 		$this->players = count($plugin->getServer()->getOnlinePlayers());
 		$this->class = Settings::$LOCALIZE_CLASS;
+		$this->myIp = Settings::$LOCALIZE_IP;
+		$this->myPort = Settings::$LOCALIZE_PORT;
 		parent::__construct($plugin);
 	}
 	public function onPreQuery(\mysqli $mysql){
@@ -49,7 +51,7 @@ class ReportStatusQuery extends AsyncQuery{
 			FROM server_status WHERE unix_timestamp()-last_online<5";
 	}
 	public function onPostQuery(\mysqli $mysql){
-		$r = $mysql->query("SELECT ip,port FROM server_status WHERE class=$this->class ORDER BY max_players-online_players DESC LIMIT 1");
+		$r = $mysql->query("SELECT ip,port FROM server_status WHERE class=$this->class AND unix_timestamp() - last_online < 5 AND (ip != '$this->myIp' OR port != $this->myPort) ORDER BY max_players-online_players DESC LIMIT 1");
 		if($r === false){
 			echo "Error executing query: $mysql->error" . PHP_EOL;
 			return;

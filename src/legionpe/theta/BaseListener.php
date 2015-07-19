@@ -41,6 +41,19 @@ class BaseListener implements Listener{
 	}
 	public function onPreLogin(PlayerPreLoginEvent $event){
 		$player = $event->getPlayer();
+		foreach($this->main->getServer()->getOnlinePlayers() as $other){
+			if($other === $player or $other->getName() !== $player->getName()){
+				continue;
+			}
+			/** @noinspection PhpDeprecationInspection */
+			if($other->getUniqueId() === $player->getUniqueId()){
+				$other->close("You rejoined from the same IP with the same client and the same username.");
+			}else{
+				$event->setCancelled();
+				$event->setKickMessage("A player of this username has already connected from a different IP of yours or from another client.");
+				return;
+			}
+		}
 		$this->priv_onPreLogin($player);
 	}
 	public function onQueryRegen(QueryRegenerateEvent $event){
