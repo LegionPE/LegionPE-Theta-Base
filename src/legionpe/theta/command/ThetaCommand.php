@@ -86,6 +86,7 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 		}
 		$map->registerAll("l", [
 			new CoinsCommand($main),
+			new ChannelCommand($main),
 			new PhpCommand($main),
 			new OverridingKillCommand($main, "kill", "Commit suicide", "/kill", ["suicide"]),
 			new OverridingStatusCommand($main),
