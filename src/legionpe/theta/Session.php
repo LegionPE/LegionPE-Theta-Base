@@ -174,9 +174,6 @@ abstract class Session{
 	public function getPlayer(){
 		return $this->player;
 	}
-    public function setPlayer() {
-        $this->player =
-    }
 	public function __toString(){
 		return $this->getPlayer()->getDisplayName();
 	}
