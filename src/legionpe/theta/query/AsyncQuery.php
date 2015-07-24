@@ -49,7 +49,12 @@ abstract class AsyncQuery extends AsyncTask{
 	}
 	public function onRun(){
 		$mysql = $this->getConn();
-		$this->onPreQuery($mysql);
+		try{
+			$this->onPreQuery($mysql);
+		}catch(\Exception $e){
+			$this->setResult(["success" => false, "query" => null, "error" => $e->getMessage()]);
+			return;
+		}
 		$result = $mysql->query($query = $this->getQuery());
 		if(Settings::$SYSTEM_IS_TEST and $this->reportDebug()){
 			echo "Executing query: $query", PHP_EOL;

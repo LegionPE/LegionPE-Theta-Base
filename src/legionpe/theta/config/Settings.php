@@ -78,6 +78,7 @@ abstract class Settings{
 	const CONFIG_STATS_PUBLIC = 0x20;
 	const CONFIG_TEAM_CHANNEL_ON = 0x40;
 	const CONFIG_LOCAL_CHAT_ON = 0x80;
+	const TEAM_CONFIG_OPEN = 0x01;
 	const LABEL_APPROVED_NOT = 0;
 	const LABEL_APPROVED_EVERYONE = 1;
 	const LABEL_APPROVED_DONATOR = 2;
@@ -141,7 +142,7 @@ abstract class Settings{
 	];
 	public static function getWarnPtsConseq(/** @noinspection PhpUnusedParameterInspection */
 		$pts, $origin = null){
-		// TODO
+		// TODO define consequences
 		return new WarnPtsConseq(0, 0, $origin);
 	}
 	public static function getGrindFactor(/** @noinspection PhpUnusedParameterInspection */

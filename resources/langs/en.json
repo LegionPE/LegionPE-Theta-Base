@@ -53,6 +53,17 @@
 
 	"cmd.pn.recipient": "%notify%You have received a private notice from a staff member:\n%msg%",
 
+	"cmd.team.create.invalidname": "%error%The team name has to be %em%at least 5 characters long%error%, with %em2%all%error% characters being %em2%alphabets, numbers or underscores (-)%error%!",
+	"cmd.team.create.alreadyinteam": "%error%You are already in a team!",
+	"cmd.team.create.alreadyexists": "%error%A team of this name already exists!",
+	"cmd.team.create.success": "%success%New team has been successfully created.",
+	"cmd.team.loading": "%wait%Please wait patiently while we are processing your request.",
+	"cmd.team.join.alreadysent": "%error%You have already sent a join request to Team %em%%teamname%.",
+	"cmd.team.join.joined": "%success%You have joined Team %em%%teamname%!",
+	"cmd.team.join.accepted": "%success%You have accepted the join invitation from Team %em%%teamname%!",
+	"cmd.team.join.requested": "%info%A join request has been sent to Team %em%%teamname%.",
+	"cmd.team.joined": "%notify%%name% joined your team!",
+
 	"cmd.transfer.err.noservers": "%error%No servers for %class% have available slots.",
 	"cmd.transfer.success": "%success%Transferring you to %em%%ip%%success%:%em2%%port%%success% (%class% server)...",
 

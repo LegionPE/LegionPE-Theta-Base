@@ -23,7 +23,7 @@ class FallbackFriendCommand extends SessionCommand{
 	public function __construct(BasePlugin $main){
 		parent::__construct($main, "friends", "Show help for friend commands", "/f", [
 			"f",
-			"friend"
+			"friend",
 		]);
 	}
 	protected function run(array $args, Session $sender){

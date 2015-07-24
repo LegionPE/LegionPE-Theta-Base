@@ -78,6 +78,17 @@ class Phrases{
 
 	const CMD_PRIV_NOTICE_RECIPIENT = "cmd.pn.recipient";
 
+	const CMD_TEAM_CREATE_INVALID_NAME = "cmd.team.create.invalidname";
+	const CMD_TEAM_ERR_ALREADY_IN_TEAM = "cmd.team.create.alreadyinteam";
+	const CMD_TEAM_CREATE_ALREADY_EXISTS = "cmd.team.create.alreadyexists";
+	const CMD_TEAM_CREATE_SUCCESS = "cmd.team.create.success";
+	const CMD_TEAM_LOADING = "cmd.team.loading";
+	const CMD_TEAM_JOIN_ALREADY_REQUESTED = "cmd.team.join.alreadysent";
+	const CMD_TEAM_JOIN_REQUESTED = "cmd.team.join.requested";
+	const CMD_TEAM_JOIN_ACCEPTED = "cmd.team.join.accepted";
+	const CMD_TEAM_JOIN_DIRECTLY_JOINED = "cmd.team.join.joined";
+	const CMD_TEAM_JOINED = "cmd.team.joined";
+
 	const CMD_TRANSFER_ERR_NO_SERVERS = "cmd.transfer.err.noservers";
 	const CMD_TRANSFER_SUCCESS = "cmd.transfer.success";
 
@@ -133,7 +144,7 @@ class Phrases{
 
 	// constant variables
 	const VAR_wait = TextFormat::RED . "… ";
-	const VAR_success = TextFormat::GREEN;
+	const VAR_success = TextFormat::DARK_GREEN;
 	const VAR_info = TextFormat::WHITE;
 	const VAR_symbol = TextFormat::GRAY;
 	const VAR_verbose = "》 " . self::VAR_verbosemid;
