@@ -27,24 +27,27 @@ class ChannelCommand extends SessionCommand {
     public function __construct(BasePlugin $plugin) {
         parent::__construct($plugin, "channel", "switch channels", "/channel <channel...>");
     }
-
     public function run(array $args, Session $session)
     {
         if (strtolower($args[0]) == "local") {
             if($session->getCurrentChatState() === Session::CHANNEL_LOCAL) {
-                $session->getPlayer()->sendMessage(TextFormat::RED . "The chat state is already set to local");
+                $session->getPlayer()->sendMessage(TextFormat::RED . "The channel state is already local");
             } else {
                 $session->currentChatState = Session::CHANNEL_LOCAL;
             }
         }
         if (strtolower($args[0]) == "team") {
             if($session->getCurrentChatState() === Session::CHANNEL_TEAM) {
-                $session->getPlayer()->sendMessage(TextFormat::RED . "The chat state is already set to team");
+                $session->getPlayer()->sendMessage(TextFormat::RED . "The channel state is already the team");
             } else {
                 $session->currentChatState = Session::CHANNEL_TEAM;
             }
         }
+        $channel = array_shift($args);
+        $session->joinChannel($channel);
+        $session->getPlayer()->sendMessage(TextFormat::AQUA . "You have joined the channel " . $channel);
     }
 
 
 }
+
