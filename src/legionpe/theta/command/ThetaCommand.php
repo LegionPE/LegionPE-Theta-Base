@@ -25,6 +25,7 @@ use legionpe\theta\command\override\OverridingStatusCommand;
 use legionpe\theta\command\override\OverridingTellCommand;
 use legionpe\theta\command\override\OverridingVersionCommand;
 use legionpe\theta\command\session\CoinsCommand;
+use legionpe\theta\command\session\ChannelCommand;
 use legionpe\theta\command\session\ConsoleCommand;
 use legionpe\theta\command\session\DirectTeleportCommand;
 use legionpe\theta\command\session\friend\AddFriendCommand;
@@ -85,6 +86,7 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 		}
 		$map->registerAll("l", [
 			new CoinsCommand($main),
+			new ChannelCommand($main),
 			new PhpCommand($main),
 			new OverridingKillCommand($main, "kill", "Commit suicide", "/kill", ["suicide"]),
 			new OverridingStatusCommand($main),

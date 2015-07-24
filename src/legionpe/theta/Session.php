@@ -930,6 +930,12 @@ abstract class Session{
 		new JoinChannelQuery($this->getMain(), $this->getUid(), $channel, $subLevel);
 		return true;
 	}
+    public function getCurrentChatState() {
+        return $this->currentChatState;
+    }
+    public function setCurrentChatState() {
+        $this->currentChatState = self::CHANNEL_LOCAL;
+    }
 	public function getChannelSubscriptions(){
 		return $this->getLoginDatum("channels");
 	}
