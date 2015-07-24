@@ -32,17 +32,15 @@ class ChannelCommand extends SessionCommand {
     {
         if (strtolower($args[0]) == "local") {
             if($session->getCurrentChatState() === Session::CHANNEL_LOCAL) {
-                $session->getPlayer()->sendMessage(TextFormat::RED . "You are already in the local channel");
+                $session->getPlayer()->sendMessage(TextFormat::RED . "The chat state is already set to local");
             } else {
-                $session->joinChannel(Session::CHANNEL_LOCAL);
                 $session->currentChatState = Session::CHANNEL_LOCAL;
             }
         }
         if (strtolower($args[0]) == "team") {
             if($session->getCurrentChatState() === Session::CHANNEL_TEAM) {
-                $session->getPlayer()->sendMessage(TextFormat::RED . "You are already in your team channel");
+                $session->getPlayer()->sendMessage(TextFormat::RED . "The chat state is already set to team");
             } else {
-                $session->joinChannel(Session::CHANNEL_TEAM);
                 $session->currentChatState = Session::CHANNEL_TEAM;
             }
         }
