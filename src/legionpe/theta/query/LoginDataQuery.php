@@ -78,6 +78,21 @@ class LoginDataQuery extends AsyncQuery{
 			}
 			$r->close();
 			$row["purchases"] = $purchases;
+			if($this->fetchKits()){
+				$r = $mysql->query("SELECT kitid, slot, name, value FROM kits_slots WHERE uid=$uid AND class=$this->class");
+				/** @var mixed[][][] $kitRows */
+				$kitRows = [];
+				while(is_array($row = $r->fetch_assoc())){
+					$kitid = $row["kitid"];
+					if(!isset($kitRows[$kitid])){
+						$kitRows[$kitid] = [$row];
+					}else{
+						$kitRows[$kitid][] = $row;
+					}
+				}
+				$r->close();
+				$row["kitrowsarray"] = $kitRows;
+			}
 		}
 	}
 	public function getResultType(){
@@ -156,6 +171,9 @@ class LoginDataQuery extends AsyncQuery{
 		return [];
 	}
 	protected function fetchPurchases(){
+		return false;
+	}
+	protected function fetchKits(){
 		return false;
 	}
 }

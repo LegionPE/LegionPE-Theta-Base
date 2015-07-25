@@ -15,6 +15,9 @@
 
 namespace legionpe\theta\utils;
 
+use pocketmine\entity\Projectile;
+use pocketmine\math\Vector3;
+
 class MUtils{
 	public static function word_quantitize(&$word, $count){
 		if($count > 1){ // not >= 2
@@ -132,5 +135,50 @@ class MUtils{
 				$array[$i] = (is_object($value) and $clone) ? (clone $value) : $value;
 			}
 		}
+	}
+	public static function getArrowCollisionBlock(Projectile $p){
+		if($p->isCollidedVertically){
+			$block = $p->getLevel()->getBlock($p->floor());
+			if($block->getId() === 0){
+				$block = $p->getLevel()->getBlock($p->floor()->add(0, 1));
+			}
+			if($block->getId() === 0){
+				$block = $p->getLevel()->getBlock($p->floor()->subtract(1));
+			}
+			return $block->getId() === 0 ? null : $block;
+		}
+		if($p->isCollidedHorizontally){
+			$floor = $p->floor();
+			$pos = new Vector3(($p->x - $floor->x >= 0.5) ? ($floor->x + 1) : ($floor->x - 1), $floor->y, ($p->z - $floor->z >= 0.5) ? ($floor->z + 1) : ($floor->z - 1));
+			$block = $p->getLevel()->getBlock($pos);
+			return $block->getId() === 0 ? null : $block;
+		}
+		return null;
+	}
+	/**
+	 * @param int $integer
+	 * @return string
+	 * @link http://stackoverflow.com/questions/14994941/numbers-to-roman-numbers-with-php
+	 */
+	public static function romanic_number($integer){
+		if($integer === 0){
+			return "O";
+		}
+		$table = array("M" => 1000, "CM" => 900, "D" => 500, "CD" => 400, "C" => 100, "XC" => 90, "L" => 50, "XL" => 40, "X" => 10, "IX" => 9, "V" => 5, "IV" => 4, "I" => 1);
+		$return = "";
+		if($integer < 0){
+			$return = "-";
+			$integer *= -1;
+		}
+		while($integer > 0){
+			foreach($table as $rom => $arb){
+				if($integer >= $arb){
+					$integer -= $arb;
+					$return .= $rom;
+					break;
+				}
+			}
+		}
+		return $return;
 	}
 }

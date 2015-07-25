@@ -77,4 +77,10 @@ class BaseListener implements Listener{
 			$event->setCancelled();
 		}
 	}
+	/**
+	 * @return BasePlugin
+	 */
+	public function getMain(){
+		return $this->main;
+	}
 }

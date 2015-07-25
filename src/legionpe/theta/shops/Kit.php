@@ -33,38 +33,43 @@ class Kit{
 	/** @var int */
 	public $realSize, $abstractSize, $armorSize = 4;
 	public static function fromQuery(DownloadKitQuery $query, Session $session){
-		$rows = $query->rows;
-		$kit = new Kit;
-		$kit->uid = $query->uid;
-		$kit->kitid = $query->kitid;
+		return new Kit($session, $query->kitid, $query->rows);
+	}
+	/**
+	 * @param Session $session
+	 * @param int $kitid
+	 * @param mixed[][] $rows
+	 */
+	public function __construct(Session $session, $kitid, array $rows){
+		$this->uid = $session->getUid();
+		$this->kitid = $kitid;
 		foreach($rows as $row){
 			$slot = $row["slot"];
 			$name = $row["name"];
 			$value = $row["value"];
 			if($slot === self::SLOT_SPECIAL_REAL_SIZE){
-				$kit->realSize = $value;
+				$this->realSize = $value;
 			}elseif($slot === self::SLOT_SPECIAL_ABSTRACT_SIZE){
-				$kit->abstractSize = $value;
+				$this->abstractSize = $value;
 			}elseif($slot === self::SLOT_SPECIAL_NAME){
-				$kit->name = $name;
+				$this->name = $name;
 			}elseif($slot < self::ARMOR_STARTS_AT){
-				$kit->realSlots[$slot] = new KitEntry($kit, $slot, $name, $value, $session->getPurchase($value));
+				$this->realSlots[$slot] = new KitEntry($this, $slot, $name, $value, $session->getPurchase($value));
 			}elseif($slot < self::ABSTRACT_STARTS_AT){
-				$kit->armorSlots[$slot - self::ARMOR_STARTS_AT] = new KitEntry($kit, $slot, $name, $value, $session->getPurchase($value));
+				$this->armorSlots[$slot - self::ARMOR_STARTS_AT] = new KitEntry($this, $slot, $name, $value, $session->getPurchase($value));
 			}else{
-				$kit->abstractSlots[$slot - self::ABSTRACT_STARTS_AT] = new KitEntry($kit, $slot, $name, $value, $session->getPurchase($value));
+				$this->abstractSlots[$slot - self::ABSTRACT_STARTS_AT] = new KitEntry($this, $slot, $name, $value, $session->getPurchase($value));
 			}
 		}
-		for($i = 0; $i < $kit->realSize; $i++){
-			if(!isset($kit->realSlots[$i])){
-				$kit->realSize[$i] = new KitEntry($kit, $i, "Slot " . ($i + 1), 0, null, false);
+		for($i = 0; $i < $this->realSize; $i++){
+			if(!isset($this->realSlots[$i])){
+				$this->realSize[$i] = new KitEntry($this, $i, "Slot " . ($i + 1), 0, null, false);
 			}
 		}
-		for($i = 0; $i < $kit->abstractSize; $i++){
-			if(!isset($kit->abstractSlots[$i])){
-				$kit->abstractSlots[$i] = new KitEntry($kit, $i + self::ABSTRACT_STARTS_AT, "Slot " . ($i + 1), 0, null, false);
+		for($i = 0; $i < $this->abstractSize; $i++){
+			if(!isset($this->abstractSlots[$i])){
+				$this->abstractSlots[$i] = new KitEntry($this, $i + self::ABSTRACT_STARTS_AT, "Slot " . ($i + 1), 0, null, false);
 			}
 		}
-		return $kit;
 	}
 }
