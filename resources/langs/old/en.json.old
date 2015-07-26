@@ -1,0 +1,143 @@
+{
+	"meta.short": "en",
+	"meta.english": "English",
+	"meta.local": "English",
+	"meta.authors": [
+		"PEMapModder"
+	],
+	"meta.version": "1.0",
+	"meta.releng": "1.0",
+
+	"chat.blocked.pass": "%em%Never%warning% tell %em2%anybody%warning% %em3%(including staff)%warning% your password.",
+	"chat.blocked.toofast": "%warning%LegionPE is not a place for typing speed testing. Type slower.",
+	"chat.blocked.toofreq": "%warning%Don't try to dominate our chat screens!",
+	"chat.blocked.tooshort": "%warning%Every line you type takes up one line in the chat screen of other players. Don't you think you are wasting their screen space? %em%Stop spamming.",
+	"chat.broadcasts": [
+		"%notify%bold%Donate to get awesome perks at %reset%http://lgpe.co/d",
+		"%notify%bold%Download our Android app at %reset%http://lgpe.co/and",
+		"%notify%bold%Follow us on Twitter! %em%%italic%@LegionPE",
+		"%notify%bold%Earn coins by playing the games, and spend coins at the shops at each game!"
+	],
+	"chat.format.team": "%em1%TEAM%symbol%}%source%%symbol%>%msg%",
+
+	"cmd.error.noperm.normal": "%error%You don't have permission to use this command.",
+	"cmd.error.noperm.donate": "%error%Please doante to use this command.",
+	"cmd.error.wronguse": "%error%Usage: %usage%",
+	"cmd.error.absplayer.unknwon": "%error%That player is not online on this server.",
+	"cmd.error.absplayer.named": "%error%The player \"%player%\" is not online on this server.",
+	"cmd.error.donator": "%warning%Please upgrade your account to at least Donator to use this command.",
+	"cmd.error.vip": "%warning%Please upgrade your account to at least VIP to use this command.",
+	"cmd.error.staff": "%warning%This command is only available to staff members.",
+	"cmd.error.loading": "%wait%Loading. Please wait...",
+
+	"cmd.friend.alreadyinvited": "%error%You have %em%already%error% invited %em2%%target%!",
+	"cmd.friend.requested.raise": "%notice%Sent a request to %em2%target%notice% to become your %em%%newtype%.",
+	"cmd.friend.requested.removed": "%notice%Removed the request to %em2%target%notice% to become your %em%%newtype%.",
+	"cmd.friend.raised": "%em2%%target%%sucess% is now your %em%%newtype%!",
+	"cmd.friend.reduced": "%em2%%target%%sucess% is now your %em%%newtype%!",
+	"cmd.friend.max": "%em2%%target%%error% is already your best friend and cannot be increased any more!",
+	"cmd.friend.rejected": "%notice%Friend request from %em%%from% %notice%to %em2%%to% %notice%has been rejected.",
+	"cmd.friend.cancelled": "%notice%Friend request from %em%%from% %notice%to %em2%%to% %notice%has been cancelled.",
+	"cmd.friend.noinvite": "%error%You don't have a friend request to %em%%to%!",
+	"cmd.friend.list.key": "%info%Key:\n* means player is online on THIS server\n< means player is in your outbox\n> means player is in your inbox",
+
+	"cmd.gc.cannotstart": "%error%You need to wait for %time% more before you can start coin grinding again!",
+	"cmd.gc.reqconfirm": "%info%The coins you receive in the coming %length% will be multiplied by %amplitude% times.\n%notify%Execute this command again to activate coins grinding.",
+	"cmd.gc.started": "%success%You have activated coins grinding.",
+	"cmd.gc.advice": "%warning%Note: The advised alias for this command is %em%/cg.",
+
+	"cmd.lbl.view": "%success%You are using/attempting to use tag %em%%label%%success%, which is %em2%%state%",
+	"cmd.lbl.approving": "%error%The desired label is still awaiting for approval from admins.",
+	"cmd.lbl.changed": "%success%Your label has been changed!",
+
+	"cmd.pm.remindquery": "%notify%Reminder: Use /q next time if you want to %em%talk in chat directly%notify% instead of %em2%typing /w every time%notify%.",
+
+	"cmd.pn.recipient": "%notify%You have received a private notice from a staff member:\n%msg%",
+
+	"cmd.team.create.invalidname": "%error%The team name has to be %em%at least 5 characters long%error%, with %em2%all%error% characters being %em2%alphabets, numbers or underscores (-)%error%!",
+	"cmd.team.create.alreadyinteam": "%error%You are already in a team!",
+	"cmd.team.create.alreadyexists": "%error%A team of this name already exists!",
+	"cmd.team.create.success": "%success%New team has been successfully created.",
+	"cmd.team.loading": "%wait%Please wait patiently while we are processing your request.",
+	"cmd.team.join.alreadysent": "%error%You have already sent a join request to Team %em%%teamname%.",
+	"cmd.team.join.joined": "%success%You have joined Team %em%%teamname%!",
+	"cmd.team.join.accepted": "%success%You have accepted the join invitation from Team %em%%teamname%!",
+	"cmd.team.join.requested": "%info%A join request has been sent to Team %em%%teamname%.",
+	"cmd.team.quit.warning.junior": "%warning%Are you sure to quit your team? If your team is closed, you need to be %em2%invited again%warning% to join back the team!",
+	"cmd.team.quit.warning.normal": "%warning%Are you sure to quit your team? You will become a %em%Junior-Member%warning% when you join the team again!\n%verbose%If your team is closed, you need to be %em2%invited again%verbosemid% to join back the team!",
+	"cmd.team.quit.warning.leader": "%warning%Are you sure to quit your team? As the %em%leader%warning% of your team, you will disband the whole team (%em2%deleting everything including all your team points%warning%) by quitting your team!",
+	"cmd.team.invite.notsenior": "%error%You must be a %em%Senior-Member%error%, a %em%Leader%error% or a %em%Co-Leader%error% to invite a player!",
+
+	"cmd.team.joined": "%notify%%name% joined your team!",
+	"cmd.team.quitted": "%notify%%name% quitted the team!",
+	"cmd.team.disbanded": "%nofity2%%bold%Your team has been %em%%italic%disbanded!",
+
+	"cmd.transfer.err.noservers": "%error%No servers for %class% have available slots.",
+	"cmd.transfer.success": "%success%Transferring you to %em%%ip%%success%:%em2%%port%%success% (%class% server)...",
+
+	"cmd.version.msg": "%info%This server uses %em%%pmversion%%info% with %em2%%thetaversion%%info% by %em3%%thetaauthor%%info%. You are using %em%%lang% translation v%langversion%%info% by %em2%%langauthor%%info%.",
+
+	"login.auth.success": "%success%You have been authenticated by %em%%method%",
+	"login.auth.whereami": "%info%You are in %em%LegionPE %em2%%class% %em3%(%ip%:%port%)\n%verbose%Give this address to friends to play on this server together!",
+	"login.auth.firstjoin.hub": "%em%Walk into a portal%info% or %em2%Choose an item in your inventory%info% to join a game.\n%info%You can also type %em3%/help%info% in chat to check for available commands.",
+
+	"login.knownas": "%notify%You are now known as:\n%tag%",
+
+	"login.pass.prompt": "%notify%Please enter the password you registered directly into chat.",
+	"login.pass.mismatch": "%info%If you didn't register this account, please choose a new name.\n%verbose%If you believe that the owner of this \n%verbose%account is imposing you on purpose,\n%verbose%and would like to take it back, \n%verbose%please email %em2%support@legionpvp.eu%info%.\n%warning%The password you typed in isn't the one you registered with.\n%warning%You have %chances%left before you are kicked.",
+
+	"login.register.prompt": "%info%Thanks for joining %bold%Legion PE%reset%!\n%info%To protect your account, we are going to create an account for you.\n%notify%Please enter the password you wish to register with, %em%directly into chat.\n%verbose%Passwords are encrypted safely on our secure database.\n%verbose%Nobody else, including staff, will be able to decode and read/use it.\n%warning%You are disallwoed from mentioning your password in chat, so remember not to use a common word as your password.",
+	"login.register.retype": "%notify%Thanks! Now please type the password again to confirm it.",
+	"login.register.success": "%notify%Congratulations! You have successfully created your %em%own%notify% account on Legion PE!",
+	"login.register.mismatch": "%error%The two passwords aren't the same!\n%notify%Please type a password you like %em%directly%notify% in chat.\n%verbose%Type a totally different password if you want.",
+
+	"warning.notification.main": "\n%notify2%%bold%~~~~~~~~~~ ATTENTION ~~~~~~~~~~\n%em%%issuer%%warning% sent you a warning!\n%verbose%Message:\n%em2%%message%\n%notify%This warning carries %em3%%points%%notify% warning points.\n%info%You now have %em%%totalpoints%%info% warning points in total.",
+	"warning.notification.muted": "\n%error%You have been muted by %em2%%issuer% %em3%%passed%%error% before. The mute ends in %em%%left%.\n%verbose%Email %em2%support@legionpvp.eu%verbosemid% if you believe that this is a mistake.",
+	"warning.notification.banned": "\n%error%You will be banned for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake.",
+
+	"kick.toolong.online": "\nYou have been online for more than 90 minutes. Take a rest! I bet your device must be pretty hot.",
+	"kick.toolong.login": "\nHave you registered here using this username?\nPlease choose another username if you don't.",
+
+	"date.format": "d/m/Y H:i:s (\\U\\T\\C P)",
+	"local.class.name.hub": "Hub",
+	"local.class.name.pvp.kit": "KitPvP",
+	"local.class.name.parkour": "Parkour",
+	"local.class.name.spleef": "Spleef",
+	"local.class.name.infected": "Infected",
+	"local.class.name.pvp.classic": "Classic PvP",
+
+	"login.auth.method.transfer": "transferring",
+	"login.auth.method.uuid": "matching last UUID",
+	"login.auth.method.ip.last": "matching last IP",
+	"login.auth.method.ip.hist": "matching an IP in the IP history",
+	"login.auth.method.pass": "entering password",
+	"login.auth.method.register": "registering a new account",
+
+	"friend.type.acquaintance": "acquaintance",
+	"friend.type.goodfriend": "good friend",
+	"friend.type.bestfriend": "best friend",
+
+	"game.pvp.death.generic": "%error%You died!",
+	"game.pvp.death.killed": "%error%You were %action% by %killer%!",
+	"game.pvp.death.fall.generic": "%error%You were %em%%action% to a deadly fall%error% by %killer%!",
+	"game.pvp.death.fall.ladder": "%error%You were %em%%action% to a deadly fall%error% off %em2%a ladder%error% by %killer%!",
+	"game.pvp.death.fall.vine": "%error%You were %em%%action% to a deadly fall%error% off %em2%vines%error% by %killer%!",
+	"game.pvp.death.stats": "%info%This is your %em%%deaths% death!",
+
+	"game.pvp.kill.killed": "%success%You %action% %em%%victim%!",
+	"game.pvp.kill.fall.generic": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall!",
+	"game.pvp.kill.fall.ladder": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall%success% from a %em3%ladder!",
+	"game.pvp.kill.fall.vine": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall%success% from a %em3%vine!",
+	"game.pvp.kill.stats": "%info%This is your %em%%kills%%success% kill!",
+
+	"game.pvp.action.kill": "slained",
+	"game.pvp.action.arrow": "shot",
+	"game.pvp.action.snowball": "snowballed",
+	"game.pvp.action.egg": "egged",
+
+	"game.pvp.attack.friends": "%verbose%You may not attack your %type% (%em%%target%)!",
+	"game.pvp.attack.spawn": "%verbose%You may not attack players at spawn!",
+
+	"game.pvp.killinfo": "%verbose%Your%em% %ord% %verbosemid%kill - the%em2% %streakord% %verbosemid% in a row.\n%verbose%Your coins + %em%%added%%verbosemid% => %em2%%coins%",
+	"game.pvp.deathinfo": "%verbose%This is your%em% %ord% %verbosemid%death! Watch out!"
+}
