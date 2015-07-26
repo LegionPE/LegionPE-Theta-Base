@@ -48,6 +48,13 @@ use pocketmine\utils\TextFormat;
 abstract class ThetaCommand extends Command implements PluginIdentifiableCommand{
 	/** @var BasePlugin */
 	private $plugin;
+	/**
+	 * @param BasePlugin $plugin
+	 * @param string $name
+	 * @param string $desc
+	 * @param string $usage
+	 * @param string[] $aliases
+	 */
 	public function __construct(BasePlugin $plugin, $name, $desc, $usage, $aliases = []){
 		parent::__construct($name, $desc, $usage, (array)$aliases);
 		$this->plugin = $plugin;

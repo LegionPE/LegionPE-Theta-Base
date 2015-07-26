@@ -20,6 +20,7 @@ use legionpe\theta\query\LoginDataQuery;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerKickEvent;
 use pocketmine\event\player\PlayerPreLoginEvent;
+use pocketmine\event\plugin\PluginDisableEvent;
 use pocketmine\event\server\QueryRegenerateEvent;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
@@ -75,6 +76,13 @@ class BaseListener implements Listener{
 	public function onKick(PlayerKickEvent $event){
 		if($event->getReason() === "disconnectionScreen.serverFull"){
 			$event->setCancelled();
+		}
+	}
+	public function onDisable(PluginDisableEvent $event){
+		if($event->getPlugin() === $this->main){
+			foreach($this->main->getServer()->getOnlinePlayers() as $player){
+				$player->kick("Server stop", false);
+			}
 		}
 	}
 	/**

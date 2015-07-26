@@ -22,6 +22,7 @@ use pocketmine\scheduler\AsyncTask;
 use pocketmine\utils\Utils;
 
 abstract class AsyncQuery extends AsyncTask{
+	public static $QUERY_COUNT = 0;
 	const KEY_MYSQL = "legionpe.theta.query.mysql";
 	const TYPE_RAW = 0;
 	const TYPE_ASSOC = 1;
@@ -56,6 +57,7 @@ abstract class AsyncQuery extends AsyncTask{
 			return;
 		}
 		$result = $mysql->query($query = $this->getQuery());
+		self::$QUERY_COUNT++;
 		if(Settings::$SYSTEM_IS_TEST and $this->reportDebug()){
 			echo "Executing query: $query", PHP_EOL;
 		}

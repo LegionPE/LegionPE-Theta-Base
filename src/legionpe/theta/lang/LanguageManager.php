@@ -26,8 +26,10 @@ class LanguageManager{
 		foreach($langs as $lang){
 			$path = "langs/$lang.json";
 			$data = json_decode($plugin->getResourceContents($path), true);
-			foreach($data as $key => $phrase){
-				$this->getPhraseObject($key)->setImplementation($lang, $phrase);
+			$walker = new ArrayWalker($data);
+			$list = $walker->getPlainList();
+			foreach($list as $k => $v){
+				$this->getPhraseObject($k)->setImplementation($lang, $v);
 			}
 		}
 	}

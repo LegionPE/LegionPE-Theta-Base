@@ -47,7 +47,7 @@ class Phrases{
 	const CHAT_FORMAT_BROADCAST_CLASS = "chat.format.broadcast.class";
 	const CHAT_FORMAT_BROADCAST_LOCAL = "chat.format.broadcast.local";
 
-	const CMD_ERR_NO_PERM = "cmd.error.noperm";
+	const CMD_ERR_NO_PERM = "cmd.error.noperm.normal";
 	const CMD_ERR_NO_PERM_DONATE = "cmd.error.noperm.donate";
 	const CMD_ERR_WRONG_USE = "cmd.error.wronguse";
 	const CMD_ERR_ABSENT_PLAYER_NAME_UNKNOWN = "cmd.error.absplayer.unknown";
@@ -87,7 +87,12 @@ class Phrases{
 	const CMD_TEAM_JOIN_REQUESTED = "cmd.team.join.requested";
 	const CMD_TEAM_JOIN_ACCEPTED = "cmd.team.join.accepted";
 	const CMD_TEAM_JOIN_DIRECTLY_JOINED = "cmd.team.join.joined";
+	const CMD_TEAM_QUIT_WARNING_JUNIOR = "cmd.team.quit.warning.junior";
+	const CMD_TEAM_QUIT_WARNING_NORMAL = "cmd.team.quit.warning.normal";
+	const CMD_TEAM_QUIT_WARNING_LEADER = "cmd.team.quit.warning.leader";
+	const CMD_TEAM_INVITE_NOT_SENIOR = "cmd.team.invite.notsenior";
 	const CMD_TEAM_JOINED = "cmd.team.joined";
+	const CMD_TEAM_QUITTED = "cmd.team.quitted";
 
 	const CMD_TRANSFER_ERR_NO_SERVERS = "cmd.transfer.err.noservers";
 	const CMD_TRANSFER_SUCCESS = "cmd.transfer.success";

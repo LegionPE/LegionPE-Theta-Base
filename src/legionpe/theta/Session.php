@@ -115,7 +115,6 @@ abstract class Session{
 		self::FRIEND_LEVEL_GOOD_FRIEND => Phrases::FRIEND_GOOD_FRIEND,
 		self::FRIEND_LEVEL_BEST_FRIEND => Phrases::FRIEND_BEST_FRIEND
 	];
-	public $confirmGrind = false;
 	public $currentChatState = self::CHANNEL_LOCAL;
 	/** @var Player */
 	private $player;
@@ -133,9 +132,13 @@ abstract class Session{
 	private $spamDetector;
 	/** @var int */
 	private $state = self::STATE_LOADING;
+	/** @var bool */
+	public $confirmGrind = false, $confirmQuitTeam = false;
 	private $invisibleFrom = [];
 	/** @var string|TextContainer|null */
 	private $tmpHash = null, $curPopup = null;
+	/** @var int half seconds until #postOnline */
+	private $postOnlineTimeout = Settings::POST_ONLINE_FREQUENCY;
 	public function __construct(Player $player, $loginData){
 		$this->player = $player;
 		$this->loginData = $loginData;
@@ -219,7 +222,11 @@ abstract class Session{
 		}
 	}
 	public function postOnline(){
-		new RawAsyncQuery($this->getMain(), "UPDATE users SET lastip='{$this->getPlayer()->getAddress()}',status=" . Settings::STATUS_ONLINE . ",laston=unix_timestamp() WHERE uid=" . $this->getUid());
+		$class = Settings::$LOCALIZE_CLASS;
+		$ip = Settings::$LOCALIZE_IP;
+		$port = Settings::$LOCALIZE_PORT;
+		$online = Settings::STATUS_ONLINE;
+		new RawAsyncQuery($this->getMain(), "UPDATE users SET lastip='{$this->getPlayer()->getAddress()}',status=$online,laston=unix_timestamp(),lastses=$class,status_ip='$ip',status_port=$port WHERE uid=" . $this->getUid());
 	}
 	/**
 	 * Override this method to do initialization stuff
@@ -281,7 +288,7 @@ abstract class Session{
 		$this->getPlayer()->sendMessage($this->translate($phrase, $vars));
 	}
 	public function translate($phrase, array $vars = []){
-		return $this->getMain()->getLangs()->get($phrase, $vars, ...$this->getLangs());
+		return $this->getMain()->getLanguageManager()->get($phrase, $vars, ...$this->getLangs());
 	}
 	/**
 	 * @return BasePlugin
@@ -1039,7 +1046,7 @@ abstract class Session{
 		$this->state = $state;
 	}
 	public function getCurrentFaceSkin(){
-		$seeks = $this->getMain()->getFaceSeeks();
+		$seeks = $this->getMain()->getFacePixels();
 		$output = "";
 		$skin = $this->getPlayer()->getSkinData();
 		foreach($seeks as $seek){
@@ -1056,6 +1063,11 @@ abstract class Session{
 		}
 		if($this->isLoggingIn() and time() - $this->joinTime > Settings::KICK_PLAYER_TOO_LONG_LOGIN){
 			$this->getPlayer()->kick($this->translate(Phrases::KICK_TOO_LONG_LOGIN));
+		}
+		$this->postOnlineTimeout--;
+		if($this->postOnlineTimeout === 0){
+			$this->postOnline();
+			$this->postOnlineTimeout = Settings::POST_ONLINE_FREQUENCY;
 		}
 	}
 	public function mute($msg, $length, $src){
