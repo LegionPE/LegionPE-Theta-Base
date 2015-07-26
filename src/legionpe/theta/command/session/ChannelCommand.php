@@ -43,11 +43,14 @@ class ChannelCommand extends SessionCommand {
                 $session->currentChatState = Session::CHANNEL_TEAM;
             }
         }
-        $channel = array_shift($args);
-        $session->joinChannel($channel);
-        $session->getPlayer()->sendMessage(TextFormat::AQUA . "You have joined the channel " . $channel);
+        if(!isset($args[0])){
+	        return false;
+	} else {
+            $channel = array_shift($args);
+            $session->joinChannel($channel);
+            return $session->getPlayer()->sendMessage(TextFormat::AQUA . "You have joined the channel " . $channel);
+        }
     }
 
 
 }
-
