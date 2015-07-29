@@ -235,6 +235,9 @@ abstract class Session{
 	public function login($method){
 		$this->state = self::STATE_PLAYING;
 		$this->postOnline();
+		if(false === stripos($this->getLoginDatum("hist"), "," . $this->getPlayer()->getAddress() . ",")){
+			$this->addIp($this->getPlayer()->getAddress());
+		}
 		$this->send(Phrases::LOGIN_AUTH_SUCCESS, ["method" => $this->translate(self::$AUTH_METHODS_PHRASES[$method])]);
 		$this->send(Phrases::LOGIN_AUTH_WHEREAMI, [
 				"class" => $this->translate(Settings::$CLASSES_NAMES_PHRASES[Settings::$LOCALIZE_CLASS]),

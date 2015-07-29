@@ -39,6 +39,9 @@ class Purchase{
 		$this->count = $count;
 		$this->expiry = $expiry;
 	}
+	/**
+	 * @return int
+	 */
 	public function getOwner(){
 		return $this->uid;
 	}
@@ -72,7 +75,16 @@ class Purchase{
 	public function getExpiry(){
 		return $this->expiry;
 	}
+	/**
+	 * @return bool
+	 */
 	public function hasExpired(){
 		return time() > $this->expiry;
+	}
+	/**
+	 * @return int
+	 */
+	public function getPurchaseId(){
+		return $this->pid;
 	}
 }
