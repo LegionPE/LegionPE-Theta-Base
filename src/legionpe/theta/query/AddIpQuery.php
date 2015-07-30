@@ -33,7 +33,7 @@ class AddIpQuery extends AsyncQuery{
 		parent::__construct($plugin);
 	}
 	public function getQuery(){
-		return "INSERT INTO iphist (ip, uid) VALUES ({$this->esc($this->newIp)}, $this->uid)";
+		return "INSERT INTO iphist (ip, uid) VALUES ({$this->esc($this->newIp)}, $this->uid) ON DUPLICATE KEY UPDATE uid=uid";
 	}
 	public function getResultType(){
 		return self::TYPE_RAW;
