@@ -19,6 +19,7 @@ use legionpe\theta\BasePlugin;
 use legionpe\theta\command\SessionCommand;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
+use legionpe\theta\query\InviteTeamQuery;
 use legionpe\theta\Session;
 
 class TeamInviteCommand extends SessionCommand{
@@ -29,6 +30,11 @@ class TeamInviteCommand extends SessionCommand{
 		if($sender->getTeamId() === -1 or $sender->getTeamRank() < Settings::TEAM_RANK_SENIOR){
 			return $sender->translate(Phrases::CMD_TEAM_INVITE_NOT_SENIOR);
 		}
-		// TODO
+		$name = array_shift($args);
+		if($name === null){
+			return false;
+		}
+		new InviteTeamQuery($this->getMain(), $sender->getTeamId(), $name);
+		return true;
 	}
 }
