@@ -937,9 +937,13 @@ abstract class Session{
 		new JoinChannelQuery($this->getMain(), $this->getUid(), $channel, $subLevel);
 		return true;
 	}
+        
 	public function getChannelSubscriptions(){
 		return $this->getLoginDatum("channels");
 	}
+	public function getCurrentChatState() {
+                return $this->currentChatState;
+        }
 	public function partChannel($channel){
 		$subs = $this->getChannelSubscriptions();
 		$lowerChans = array_keys(array_change_key_case($subs, CASE_LOWER));
