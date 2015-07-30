@@ -934,7 +934,7 @@ abstract class Session{
 	public function getChannelSubscriptions(){
 		return $this->getLoginDatum("channels");
 	}
-        public function getCurrentChatState() {
+	public function getCurrentChatState() {
                 return $this->currentChatState;
         }
 	public function partChannel($channel){
