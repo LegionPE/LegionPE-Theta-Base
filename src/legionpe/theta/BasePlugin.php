@@ -103,7 +103,7 @@ abstract class BasePlugin extends PluginBase{
 		$this->badWords = json_decode($this->getResourceContents("words.json"));
 		$this->approvedDomains = json_decode($this->getResourceContents("approvedDomains.json"));
 		$this->langs = new LanguageManager($this);
-		$this->getLogger()->alert("Enabled " . $this->getDescription()->getFullName() . " compiled at " . date("d/m/Y H:i:s (P)", (int)$this->getResourceContents("timestamp.LEGIONPE")));
+		$this->getLogger()->alert("Enabled " . $this->getDescription()->getFullName() . " compiled at " . date("d/m/Y H:i:s (P)", (int)$this->getResourceContents("timestamp.LEGIONPE")) . ". MyPID is " . \getmypid() . ".");
 	}
 	public function getResourceContents($path){
 		$handle = $this->getResource($path);
@@ -113,6 +113,7 @@ abstract class BasePlugin extends PluginBase{
 	}
 	public function onDisable(){
 		new CloseServerQuery($this);
+		$this->getLogger()->alert("PID: " . \getmypid());
 	}
 	public function evaluate($code){
 		eval($code);
