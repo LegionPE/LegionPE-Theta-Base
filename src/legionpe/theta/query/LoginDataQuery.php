@@ -155,9 +155,14 @@ class LoginDataQuery extends AsyncQuery{
 		}else{
 			/** @var mixed[] $result */
 			$loginData = $result;
-			if(count($main->getSessions()) >= Settings::$SYSTEM_MAX_PLAYERS and isset($loginData["rank"]) and !(($loginData["rank"] & Settings::RANK_IMPORTANCE_DONATOR) or ($loginData["rank"] & Settings::RANK_PERM_MOD))){
-				$main->getAltServer($ip, $port);
-				$main->transfer($player, $ip, $port, "This server is full.", false);
+			if(count($main->getSessions()) >= Settings::$SYSTEM_MAX_PLAYERS){
+				$rank = (int)$loginData["rank"];
+				if(!($rank & Settings::RANK_PERM_MOD)){
+					if(!($rank & Settings::RANK_IMPORTANCE_DONATOR)){
+						$main->getAltServer($ip, $port);
+						$main->transfer($player, $ip, $port, "This server is full.", false);
+					}
+				}
 			}
 			$conseq = Settings::getWarnPtsConseq($this->totalWarnPts, $loginData["lastwarn"]);
 			if($conseq->banLength > 0){
