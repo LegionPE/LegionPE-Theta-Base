@@ -29,13 +29,13 @@ abstract class ChatType{
 	protected $src;
 	protected $msg;
 	protected $class;
-	protected $data;
+	protected $_classData;
 	public function __construct(BasePlugin $main, $src, $msg, $class, $data){
 		$this->main = $main;
-		$this->data = $data;
 		$this->src = $src;
 		$this->msg = $msg;
 		$this->class = $class;
+		$this->_classData = $data;
 		foreach($data as $key => $value){
 			if(!isset($this->{$key})){
 				$this->{$key} = $value;
@@ -59,7 +59,7 @@ abstract class ChatType{
 	}
 	public function push(){
 		$this->onPush();
-		new PushChatQuery($this->main, $this->src, $this->msg, $this->getType(), $this->class, $this->data);
+		new PushChatQuery($this->main, $this->src, $this->msg, $this->getType(), $this->class, $this->_classData);
 	}
 	protected function onPush(){
 

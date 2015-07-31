@@ -28,7 +28,7 @@ class TeamQuitCommand extends SessionCommand{
 	}
 	protected function run(array $args, Session $sender){
 		if($sender->getTeamId() === -1){
-			return $sender->translate(Phrases::CMD_TEAM_ERR_ALREADY_IN_TEAM);
+			return $sender->translate(Phrases::CMD_TEAM_ERR_NOT_IN_TEAM);
 		}
 		if(!$sender->confirmQuitTeam){
 			$sender->confirmQuitTeam = true;

@@ -18,6 +18,7 @@
 namespace legionpe\theta;
 
 use legionpe\theta\chat\ChannelChatType;
+use legionpe\theta\chat\ChatType;
 use legionpe\theta\chat\MuteChatType;
 use legionpe\theta\chat\SpamDetector;
 use legionpe\theta\chat\TeamChatType;
@@ -79,7 +80,7 @@ abstract class Session{
 	const CHANNEL_TEAM = "&team";
 	const CHANNEL_SUB_VERBOSE = 0;
 	const CHANNEL_SUB_NORMAL = 1;
-	const CHANNEL_SUB_ALERT = 2;
+	const CHANNEL_SUB_MENTION = 2;
 	const FRIEND_BITMASK_REQUEST = 0b11;
 	const FRIEND_REQUEST_BITS = 2;
 	const FRIEND_REQUEST_FROM_SMALL = 0b01;
@@ -927,8 +928,13 @@ abstract class Session{
 	public function isNew(){
 		return isset($this->loginData["isnew"]) and $this->loginData["isnew"] === true;
 	}
-	public function isOnChannel($channel){
-		return isset(array_change_key_case($this->getLoginDatum("channels"), CASE_LOWER)[strtolower($channel)]);
+	public function isOnChannel($channel, &$subLevel = null){
+		$chans = array_change_key_case($this->getLoginDatum("channels"), CASE_LOWER);
+		if(isset($chans[$channel = strtolower($channel)])){
+			$subLevel = $chans[$channel];
+			return true;
+		}
+		return false;
 	}
 	public function joinChannel($channel, $subLevel = self::CHANNEL_SUB_NORMAL){
 		$subs = $this->getChannelSubscriptions();
@@ -938,6 +944,19 @@ abstract class Session{
 		$subs[$channel] = $subLevel;
 		$this->setLoginDatum("channels", $subs);
 		new JoinChannelQuery($this->getMain(), $this->getUid(), $channel, $subLevel);
+		$type = ChatType::get($this->getMain(), ChatType::CHANNEL_CHAT, $this->getPlayer()->getName(), "%tr%" . Phrases::CMD_CHANNEL_JOINED_OTHER, Settings::CLASS_ALL, [
+			"channel" => $channel,
+			"fromClass" => Settings::$LOCALIZE_CLASS,
+			"ign" => $this->inGameName,
+			"level" => self::CHANNEL_SUB_VERBOSE,
+			"data" => [
+				"player" => $this->getInGameName(),
+				"ip" => Settings::$LOCALIZE_IP,
+				"port" => Settings::$LOCALIZE_PORT,
+				"channel" => $channel
+			]
+		]);
+		$type->push();
 		return true;
 	}
 	public function getChannelSubscriptions(){
@@ -952,6 +971,19 @@ abstract class Session{
 			unset($subs[$caseName]);
 			$this->setLoginDatum("channels", $subs);
 			new PartChannelQuery($this->getMain(), $this->getUid(), $caseName);
+			$type = ChatType::get($this->getMain(), ChatType::CHANNEL_CHAT, $this->getPlayer()->getName(), "%tr%" . Phrases::CMD_CHANNEL_QUITTED, Settings::CLASS_ALL, [
+				"channel" => $channel,
+				"fromClass" => Settings::$LOCALIZE_CLASS,
+				"ign" => $this->inGameName,
+				"level" => self::CHANNEL_SUB_VERBOSE,
+				"data" => [
+					"player" => $this->getInGameName(),
+					"ip" => Settings::$LOCALIZE_IP,
+					"port" => Settings::$LOCALIZE_PORT,
+					"channel" => $channel
+				]
+			]);
+			$type->push();
 		}
 	}
 	public function getFriends($level = self::FRIEND_LEVEL_GOOD_FRIEND){
@@ -1045,8 +1077,20 @@ abstract class Session{
 	public function getPopup(){
 		return $this->curPopup;
 	}
-	public function setState($state){
+	public function setSessionState($state){
 		$this->state = $state;
+	}
+	/**
+	 * @return string
+	 */
+	public function getCurrentChatState(){
+		return $this->currentChatState;
+	}
+	/**
+	 * @param string $currentChatState
+	 */
+	public function setCurrentChatState($currentChatState){
+		$this->currentChatState = $currentChatState;
 	}
 	public function getCurrentFaceSkin(){
 		$seeks = $this->getMain()->getFacePixels();

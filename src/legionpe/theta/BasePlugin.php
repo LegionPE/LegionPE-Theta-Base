@@ -188,7 +188,7 @@ abstract class BasePlugin extends PluginBase{
 	}
 	public function saveSessionData(Session $session, $newStatus = Settings::STATUS_OFFLINE){
 		if($newStatus === Settings::STATUS_TRANSFERRING){
-			$session->setState(Session::STATE_TRANSFERRING);
+			$session->setSessionState(Session::STATE_TRANSFERRING);
 		}
 		$SaveSinglePlayerQuery = $this->getSaveSingleQueryImpl();
 		new $SaveSinglePlayerQuery($this, $session, $newStatus);
