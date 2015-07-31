@@ -1,218 +1,243 @@
 {
-    "meta": {
-        "short": "en",
-        "english": "English",
-        "local": "English",
-        "authors": [
-            "PEMapModder"
-        ],
-        "version": "1.0",
-        "releng": "1.0"
-    },
-    "chat": {
-        "blocked": {
-            "pass": "%em%Never%warning% tell %em2%anybody%warning% %em3%(including staff)%warning% your password.",
-            "toofast": "%warning%LegionPE is not a place for typing speed testing. Type slower.",
-            "toofreq": "%warning%Don't try to dominate our chat screens!",
-            "tooshort": "%warning%Every line you type takes up one line in the chat screen of other players. Don't you think you are wasting their screen space? %em%Stop spamming."
-        },
-        "broadcasts": [
-            "%notify%bold%Donate to get awesome perks at %reset%http:\/\/lgpe.co\/d",
-            "%notify%bold%Download our Android app at %reset%http:\/\/lgpe.co\/and",
-            "%notify%bold%Follow us on Twitter! %em%%italic%@LegionPE",
-            "%notify%bold%Earn coins by playing the games, and spend coins at the shops at each game!"
-        ],
-        "format": {
-            "team": "%em1%TEAM%symbol%}%source%%symbol%>%msg%"
-        }
-    },
-    "cmd": {
-        "error": {
-            "noperm": {
-                "normal": "%error%You don't have permission to use this command.",
-                "donate": "%error%Please doante to use this command."
-            },
-            "wronguse": "%error%Usage: %usage%",
-            "absplayer": {
-                "unknwon": "%error%That player is not online on this server.",
-                "named": "%error%The player \"%player%\" is not online on this server."
-            },
-            "donator": "%warning%Please upgrade your account to at least Donator to use this command.",
-            "vip": "%warning%Please upgrade your account to at least VIP to use this command.",
-            "staff": "%warning%This command is only available to staff members.",
-            "loading": "%wait%Loading. Please wait..."
-        },
-        "friend": {
-            "alreadyinvited": "%error%You have %em%already%error% invited %em2%%target%!",
-            "requested": {
-                "raise": "%notice%Sent a request to %em2%target%notice% to become your %em%%newtype%.",
-                "removed": "%notice%Removed the request to %em2%target%notice% to become your %em%%newtype%."
-            },
-            "raised": "%em2%%target%%sucess% is now your %em%%newtype%!",
-            "reduced": "%em2%%target%%sucess% is now your %em%%newtype%!",
-            "max": "%em2%%target%%error% is already your best friend and cannot be increased any more!",
-            "rejected": "%notice%Friend request from %em%%from% %notice%to %em2%%to% %notice%has been rejected.",
-            "cancelled": "%notice%Friend request from %em%%from% %notice%to %em2%%to% %notice%has been cancelled.",
-            "noinvite": "%error%You don't have a friend request to %em%%to%!",
-            "list": {
-                "key": "%info%Key:\n* means player is online on THIS server\n< means player is in your outbox\n> means player is in your inbox"
-            }
-        },
-        "gc": {
-            "cannotstart": "%error%You need to wait for %time% more before you can start coin grinding again!",
-            "reqconfirm": "%info%The coins you receive in the coming %length% will be multiplied by %amplitude% times.\n%notify%Execute this command again to activate coins grinding.",
-            "started": "%success%You have activated coins grinding.",
-            "advice": "%warning%Note: The advised alias for this command is %em%\/cg."
-        },
-        "lbl": {
-            "view": "%success%You are using\/attempting to use tag %em%%label%%success%, which is %em2%%state%",
-            "approving": "%error%The desired label is still awaiting for approval from admins.",
-            "changed": "%success%Your label has been changed!"
-        },
-        "pm": {
-            "remindquery": "%notify%Reminder: Use \/q next time if you want to %em%talk in chat directly%notify% instead of %em2%typing \/w every time%notify%."
-        },
-        "pn": {
-            "recipient": "%notify%You have received a private notice from a staff member:\n%msg%"
-        },
-        "team": {
-            "create": {
-                "invalidname": "%error%The team name has to be %em%at least 5 characters long%error%, with %em2%all%error% characters being %em2%alphabets, numbers or underscores (-)%error%!",
-                "alreadyinteam": "%error%You are already in a team!",
-                "alreadyexists": "%error%A team of this name already exists!",
-                "success": "%success%New team has been successfully created."
-            },
-            "loading": "%wait%Please wait patiently while we are processing your request.",
-            "join": {
-                "alreadysent": "%error%You have already sent a join request to Team %em%%teamname%.",
-                "joined": "%success%You have joined Team %em%%teamname%!",
-                "accepted": "%success%You have accepted the join invitation from Team %em%%teamname%!",
-                "requested": "%info%A join request has been sent to Team %em%%teamname%."
-            },
-            "quit": {
-                "warning": {
-                    "junior": "%warning%Are you sure to quit your team? If your team is closed, you need to be %em2%invited again%warning% to join back the team!",
-                    "normal": "%warning%Are you sure to quit your team? You will become a %em%Junior-Member%warning% when you join the team again!\n%verbose%If your team is closed, you need to be %em2%invited again%verbosemid% to join back the team!",
-                    "leader": "%warning%Are you sure to quit your team? As the %em%leader%warning% of your team, you will disband the whole team (%em2%deleting everything including all your team points%warning%) by quitting your team!"
-                }
-            },
-            "invite": {
-                "notsenior": "%error%You must be a %em%Senior-Member%error%, a %em%Leader%error% or a %em%Co-Leader%error% to invite a player!"
-            },
-            "joined": "%notify%%name% joined your team!",
-            "quitted": "%notify%%name% quitted the team!",
-            "disbanded": "%nofity2%%bold%Your team has been %em%%italic%disbanded!"
-        },
-        "transfer": {
-            "err": {
-                "noservers": "%error%No servers for %class% have available slots."
-            },
-            "success": "%success%Transferring you to %em%%ip%%success%:%em2%%port%%success% (%class% server)..."
-        },
-        "version": {
-            "msg": "%info%This server uses %em%%pmversion%%info% with %em2%%thetaversion%%info% by %em3%%thetaauthor%%info%. You are using %em%%lang% translation v%langversion%%info% by %em2%%langauthor%%info%."
-        }
-    },
-    "login": {
-        "auth": {
-            "success": "%success%You have been authenticated by %em%%method%",
-            "whereami": "%info%You are in %em%LegionPE %em2%%class% %em3%(%ip%:%port%)\n%verbose%Give this address to friends to play on this server together!",
-            "firstjoin": {
-                "hub": "%em%Walk into a portal%info% or %em2%Choose an item in your inventory%info% to join a game.\n%info%You can also type %em3%\/help%info% in chat to check for available commands."
-            },
-            "method": {
-                "transfer": "transferring",
-                "uuid": "matching last UUID",
-                "ip": {
-                    "last": "matching last IP",
-                    "hist": "matching an IP in the IP history"
-                },
-                "pass": "entering password",
-                "register": "registering a new account"
-            }
-        },
-        "knownas": "%notify%You are now known as:\n%tag%",
-        "pass": {
-            "prompt": "%notify%Please enter the password you registered directly into chat.",
-            "mismatch": "%info%If you didn't register this account, please choose a new name.\n%verbose%If you believe that the owner of this \n%verbose%account is imposing you on purpose,\n%verbose%and would like to take it back, \n%verbose%please email %em2%support@legionpvp.eu%info%.\n%warning%The password you typed in isn't the one you registered with.\n%warning%You have %chances%left before you are kicked."
-        },
-        "register": {
-            "prompt": "%info%Thanks for joining %bold%Legion PE%reset%!\n%info%To protect your account, we are going to create an account for you.\n%notify%Please enter the password you wish to register with, %em%directly into chat.\n%verbose%Passwords are encrypted safely on our secure database.\n%verbose%Nobody else, including staff, will be able to decode and read\/use it.\n%warning%You are disallwoed from mentioning your password in chat, so remember not to use a common word as your password.",
-            "retype": "%notify%Thanks! Now please type the password again to confirm it.",
-            "success": "%notify%Congratulations! You have successfully created your %em%own%notify% account on Legion PE!",
-            "mismatch": "%error%The two passwords aren't the same!\n%notify%Please type a password you like %em%directly%notify% in chat.\n%verbose%Type a totally different password if you want."
-        }
-    },
-    "warning": {
-        "notification": {
-            "main": "\n%notify2%%bold%~~~~~~~~~~ ATTENTION ~~~~~~~~~~\n%em%%issuer%%warning% sent you a warning!\n%verbose%Message:\n%em2%%message%\n%notify%This warning carries %em3%%points%%notify% warning points.\n%info%You now have %em%%totalpoints%%info% warning points in total.",
-            "muted": "\n%error%You have been muted by %em2%%issuer% %em3%%passed%%error% before. The mute ends in %em%%left%.\n%verbose%Email %em2%support@legionpvp.eu%verbosemid% if you believe that this is a mistake.",
-            "banned": "\n%error%You will be banned for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake."
-        }
-    },
-    "kick": {
-        "toolong": {
-            "online": "\nYou have been online for more than 90 minutes. Take a rest! I bet your device must be pretty hot.",
-            "login": "\nHave you registered here using this username?\nPlease choose another username if you don't."
-        }
-    },
-    "date": {
-        "format": "d\/m\/Y H:i:s (\\U\\T\\C P)"
-    },
-    "local": {
-        "class": {
-            "name": {
-                "hub": "Hub",
-                "pvp": {
-                    "kit": "KitPvP",
-                    "classic": "Classic PvP"
-                },
-                "parkour": "Parkour",
-                "spleef": "Spleef",
-                "infected": "Infected"
-            }
-        }
-    },
-    "friend": {
-        "type": {
-            "acquaintance": "acquaintance",
-            "goodfriend": "good friend",
-            "bestfriend": "best friend"
-        }
-    },
-    "game": {
-        "pvp": {
-            "death": {
-                "generic": "%error%You died!",
-                "killed": "%error%You were %action% by %killer%!",
-                "fall": {
-                    "generic": "%error%You were %em%%action% to a deadly fall%error% by %killer%!",
-                    "ladder": "%error%You were %em%%action% to a deadly fall%error% off %em2%a ladder%error% by %killer%!",
-                    "vine": "%error%You were %em%%action% to a deadly fall%error% off %em2%vines%error% by %killer%!"
-                },
-                "stats": "%info%This is your %em%%deaths% death!"
-            },
-            "kill": {
-                "killed": "%success%You %action% %em%%victim%!",
-                "fall": {
-                    "generic": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall!",
-                    "ladder": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall%success% from a %em3%ladder!",
-                    "vine": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall%success% from a %em3%vine!"
-                },
-                "stats": "%info%This is your %em%%kills%%success% kill!"
-            },
-            "action": {
-                "kill": "slained",
-                "arrow": "shot",
-                "snowball": "snowballed",
-                "egg": "egged"
-            },
-            "attack": {
-                "friends": "%verbose%You may not attack your %type% (%em%%target%)!",
-                "spawn": "%verbose%You may not attack players at spawn!"
-            },
-            "killinfo": "%verbose%Your%em% %ord% %verbosemid%kill - the%em2% %streakord% %verbosemid% in a row.\n%verbose%Your coins + %em%%added%%verbosemid% => %em2%%coins%",
-            "deathinfo": "%verbose%This is your%em% %ord% %verbosemid%death! Watch out!"
-        }
-    }
+	"meta": {
+		"short": "en",
+		"english": "English",
+		"local": "English",
+		"authors": [
+			"PEMapModder"
+		],
+		"version": "1.0",
+		"releng": "1.0"
+	},
+	"chat": {
+		"blocked": {
+			"pass": "%em%Never%warning% tell %em2%anybody%warning% %em3%(including staff)%warning% your password.",
+			"toofast": "%warning%LegionPE is not a place for typing speed testing. Type slower.",
+			"toofreq": "%warning%Don't try to dominate our chat screens!",
+			"tooshort": "%warning%Every line you type takes up one line in the chat screen of other players. Don't you think you are wasting their screen space? %em%Stop spamming."
+		},
+		"broadcasts": [
+			"%notify%bold%Donate to get awesome perks at %reset%http:\/\/lgpe.co\/d",
+			"%notify%bold%Download our Android app at %reset%http:\/\/lgpe.co\/and",
+			"%notify%bold%Follow us on Twitter! %em%%italic%@LegionPE",
+			"%notify%bold%Earn coins by playing the games, and spend coins at the shops at each game!"
+		],
+		"format": {
+			"team": "%em1%TEAM%symbol%}%source%%symbol%>%msg%"
+		}
+	},
+	"cmd": {
+		"error": {
+			"noperm": {
+				"normal": "%error%You don't have permission to use this command.",
+				"donate": "%error%Please doante to use this command."
+			},
+			"wronguse": "%error%Usage: %usage%",
+			"absplayer": {
+				"unknwon": "%error%That player is not online on this server.",
+				"named": "%error%The player \"%player%\" is not online on this server."
+			},
+			"donator": "%warning%Please upgrade your account to at least Donator to use this command.",
+			"vip": "%warning%Please upgrade your account to at least VIP to use this command.",
+			"staff": "%warning%This command is only available to staff members.",
+			"loading": "%wait%Loading. Please wait..."
+		},
+		"channel": {
+			"view": {
+				"local": "%success%You are currently talking to %em%players on this local server%success%.",
+				"team": "%success%You are currently talking to %em%members of your team%success%.",
+				"other": "%success%You are currently talking to '%em%subscribers of the %em2%'%chan%'%em% channel%success%'.",
+				"subto": "%success%You are currently subscribing to %em%%channels%"
+			},
+			"set": {
+				"local": "%success%You are now talking to %em%players on this local server%success%.",
+				"team": "%success%You are now talking to %em%members of your team%success%.",
+				"other": "%success%You are now talking to '%em%subscribers of the %em2%'%chan%'%em% channel%success%'."
+			},
+			"quit": {
+				"notsub": "%warning%You are not on that channel!",
+				"success": "%success%You have left the channel."
+			},
+			"joined": {
+				"self": "%success%You have joined channel '%em%%channel%%success%'",
+				"other": "%verbose%%em%%player%%verbosemid%@%ip%:%port% joined channel %em2%%channel%."
+			},
+			"quitted": "%verbose%%em%%player%%verbosemid%@%ip%:%port% quitted channel %em2%%channel%."
+		},
+		"friend": {
+			"alreadyinvited": "%error%You have %em%already%error% invited %em2%%target%!",
+			"requested": {
+				"raise": "%notice%Sent a request to %em2%target%notice% to become your %em%%newtype%.",
+				"removed": "%notice%Removed the request to %em2%target%notice% to become your %em%%newtype%."
+			},
+			"raised": "%em2%%target%%sucess% is now your %em%%newtype%!",
+			"reduced": "%em2%%target%%sucess% is now your %em%%newtype%!",
+			"max": "%em2%%target%%error% is already your best friend and cannot be increased any more!",
+			"rejected": "%notice%Friend request from %em%%from% %notice%to %em2%%to% %notice%has been rejected.",
+			"cancelled": "%notice%Friend request from %em%%from% %notice%to %em2%%to% %notice%has been cancelled.",
+			"noinvite": "%error%You don't have a friend request to %em%%to%!",
+			"list": {
+				"key": "%info%Key:\n* means player is online on THIS server\n< means player is in your outbox\n> means player is in your inbox"
+			}
+		},
+		"gc": {
+			"cannotstart": "%error%You need to wait for %time% more before you can start coin grinding again!",
+			"reqconfirm": "%info%The coins you receive in the coming %length% will be multiplied by %amplitude% times.\n%notify%Execute this command again to activate coins grinding.",
+			"started": "%success%You have activated coins grinding.",
+			"advice": "%warning%Note: The advised alias for this command is %em%\/cg."
+		},
+		"lbl": {
+			"view": "%success%You are using\/attempting to use tag %em%%label%%success%, which is %em2%%state%",
+			"approving": "%error%The desired label is still awaiting for approval from admins.",
+			"changed": "%success%Your label has been changed!"
+		},
+		"pm": {
+			"remindquery": "%notify%Reminder: Use \/q next time if you want to %em%talk in chat directly%notify% instead of %em2%typing \/w every time%notify%."
+		},
+		"pn": {
+			"recipient": "%notify%You have received a private notice from a staff member:\n%msg%"
+		},
+		"team": {
+			"err": {
+				"alreadyinteam": "%error%You are already in a team!",
+				"notinteam": "%error%You are not in a team!"
+			},
+			"create": {
+				"invalidname": "%error%The team name has to be %em%at least 5 characters long%error%, with %em2%all%error% characters being %em2%alphabets, numbers or underscores (-)%error%!",
+				"alreadyexists": "%error%A team of this name already exists!",
+				"success": "%success%New team has been successfully created."
+			},
+			"loading": "%wait%Please wait patiently while we are processing your request.",
+			"join": {
+				"alreadysent": "%error%You have already sent a join request to Team %em%%teamname%.",
+				"joined": "%success%You have joined Team %em%%teamname%!",
+				"accepted": "%success%You have accepted the join invitation from Team %em%%teamname%!",
+				"requested": "%info%A join request has been sent to Team %em%%teamname%."
+			},
+			"quit": {
+				"warning": {
+					"junior": "%warning%Are you sure to quit your team? If your team is closed, you need to be %em2%invited again%warning% to join back the team!",
+					"normal": "%warning%Are you sure to quit your team? You will become a %em%Junior-Member%warning% when you join the team again!\n%verbose%If your team is closed, you need to be %em2%invited again%verbosemid% to join back the team!",
+					"leader": "%warning%Are you sure to quit your team? As the %em%leader%warning% of your team, you will disband the whole team (%em2%deleting everything including all your team points%warning%) by quitting your team!"
+				}
+			},
+			"invite": {
+				"notsenior": "%error%You must be a %em%Senior-Member%error%, a %em%Leader%error% or a %em%Co-Leader%error% to invite a player!"
+			},
+			"joined": "%notify%%name% joined your team!",
+			"quitted": "%notify%%name% quitted the team!",
+			"disbanded": "%nofity2%%bold%Your team has been %em%%italic%disbanded!"
+		},
+		"transfer": {
+			"err": {
+				"noservers": "%error%No servers for %class% have available slots."
+			},
+			"success": "%success%Transferring you to %em%%ip%%success%:%em2%%port%%success% (%class% server)..."
+		},
+		"version": {
+			"msg": "%info%This server uses %em%%pmversion%%info% with %em2%%thetaversion%%info% by %em3%%thetaauthor%%info%. You are using %em%%lang% translation v%langversion%%info% by %em2%%langauthor%%info%."
+		}
+	},
+	"login": {
+		"auth": {
+			"success": "%success%You have been authenticated by %em%%method%",
+			"whereami": "%info%You are in %em%LegionPE %em2%%class% %em3%(%ip%:%port%)\n%verbose%Give this address to friends to play on this server together!",
+			"firstjoin": {
+				"hub": "%em%Walk into a portal%info% or %em2%Choose an item in your inventory%info% to join a game.\n%info%You can also type %em3%\/help%info% in chat to check for available commands."
+			},
+			"method": {
+				"transfer": "transferring",
+				"uuid": "matching last UUID",
+				"ip": {
+					"last": "matching last IP",
+					"hist": "matching an IP in the IP history"
+				},
+				"pass": "entering password",
+				"register": "registering a new account"
+			}
+		},
+		"knownas": "%notify%You are now known as:\n%tag%",
+		"pass": {
+			"prompt": "%notify%Please enter the password you registered directly into chat.",
+			"mismatch": "%info%If you didn't register this account, please choose a new name.\n%verbose%If you believe that the owner of this \n%verbose%account is imposing you on purpose,\n%verbose%and would like to take it back, \n%verbose%please email %em2%support@legionpvp.eu%info%.\n%warning%The password you typed in isn't the one you registered with.\n%warning%You have %chances%left before you are kicked."
+		},
+		"register": {
+			"prompt": "%info%Thanks for joining %bold%Legion PE%reset%!\n%info%To protect your account, we are going to create an account for you.\n%notify%Please enter the password you wish to register with, %em%directly into chat.\n%verbose%Passwords are encrypted safely on our secure database.\n%verbose%Nobody else, including staff, will be able to decode and read\/use it.\n%warning%You are disallwoed from mentioning your password in chat, so remember not to use a common word as your password.",
+			"retype": "%notify%Thanks! Now please type the password again to confirm it.",
+			"success": "%notify%Congratulations! You have successfully created your %em%own%notify% account on Legion PE!",
+			"mismatch": "%error%The two passwords aren't the same!\n%notify%Please type a password you like %em%directly%notify% in chat.\n%verbose%Type a totally different password if you want."
+		}
+	},
+	"warning": {
+		"notification": {
+			"main": "\n%notify2%%bold%~~~~~~~~~~ ATTENTION ~~~~~~~~~~\n%em%%issuer%%warning% sent you a warning!\n%verbose%Message:\n%em2%%message%\n%notify%This warning carries %em3%%points%%notify% warning points.\n%info%You now have %em%%totalpoints%%info% warning points in total.",
+			"muted": "\n%error%You have been muted by %em2%%issuer% %em3%%passed%%error% before. The mute ends in %em%%left%.\n%verbose%Email %em2%support@legionpvp.eu%verbosemid% if you believe that this is a mistake.",
+			"banned": "\n%error%You will be banned for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake."
+		}
+	},
+	"kick": {
+		"toolong": {
+			"online": "\nYou have been online for more than 90 minutes. Take a rest! I bet your device must be pretty hot.",
+			"login": "\nHave you registered here using this username?\nPlease choose another username if you don't."
+		}
+	},
+	"date": {
+		"format": "d\/m\/Y H:i:s (\\U\\T\\C P)"
+	},
+	"local": {
+		"class": {
+			"name": {
+				"hub": "Hub",
+				"pvp": {
+					"kit": "KitPvP",
+					"classic": "Classic PvP"
+				},
+				"parkour": "Parkour",
+				"spleef": "Spleef",
+				"infected": "Infected"
+			}
+		}
+	},
+	"friend": {
+		"type": {
+			"acquaintance": "acquaintance",
+			"goodfriend": "good friend",
+			"bestfriend": "best friend"
+		}
+	},
+	"game": {
+		"pvp": {
+			"death": {
+				"generic": "%error%You died!",
+				"killed": "%error%You were %action% by %killer%!",
+				"fall": {
+					"generic": "%error%You were %em%%action% to a deadly fall%error% by %killer%!",
+					"ladder": "%error%You were %em%%action% to a deadly fall%error% off %em2%a ladder%error% by %killer%!",
+					"vine": "%error%You were %em%%action% to a deadly fall%error% off %em2%vines%error% by %killer%!"
+				},
+				"stats": "%info%This is your %em%%deaths% death!"
+			},
+			"kill": {
+				"killed": "%success%You %action% %em%%victim%!",
+				"fall": {
+					"generic": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall!",
+					"ladder": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall%success% from a %em3%ladder!",
+					"vine": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall%success% from a %em3%vine!"
+				},
+				"stats": "%info%This is your %em%%kills%%success% kill!"
+			},
+			"action": {
+				"kill": "slained",
+				"arrow": "shot",
+				"snowball": "snowballed",
+				"egg": "egged"
+			},
+			"attack": {
+				"friends": "%verbose%You may not attack your %type% (%em%%target%)!",
+				"spawn": "%verbose%You may not attack players at spawn!"
+			},
+			"killinfo": "%verbose%Your%em% %ord% %verbosemid%kill - the%em2% %streakord% %verbosemid% in a row.\n%verbose%Your coins + %em%%added%%verbosemid% => %em2%%coins%",
+			"deathinfo": "%verbose%This is your%em% %ord% %verbosemid%death! Watch out!"
+		}
+	}
 }

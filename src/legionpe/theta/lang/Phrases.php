@@ -54,6 +54,19 @@ class Phrases{
 	const CMD_ERR_ABSENT_PLAYER_NAME_KNOWN = "cmd.error.absplayer.named";
 	const CMD_ERR_LOADING = "cmd.error.loading";
 
+	const CMD_CHANNEL_VIEW_LOCAL = "cmd.channel.view.local";
+	const CMD_CHANNEL_VIEW_TEAM = "cmd.channel.view.team";
+	const CMD_CHANNEL_VIEW_OTHER = "cmd.channel.view.other";
+	const CMD_CHANNEL_VIEW_SUBSCRIBING_TO = "cmd.channel.view.subto";
+	const CMD_CHANNEL_SET_LOCAL = "cmd.channel.set.local";
+	const CMD_CHANNEL_SET_TEAM = "cmd.channel.set.team";
+	const CMD_CHANNEL_SET_OTHER = "cmd.channel.set.other";
+	const CMD_CHANNEL_QUIT_NOT_ON_CHANNEL = "cmd.channel.quit.notsub";
+	const CMD_CHANNEL_QUIT_SUCCESS = "cmd.channel.quit.success";
+	const CMD_CHANNEL_QUITTED = "cmd.channel.quitted";
+	const CMD_CHANNEL_JOINED_SELF = "cmd.channel.joined.self";
+	const CMD_CHANNEL_JOINED_OTHER = "cmd.channel.joined.other";
+
 	const CMD_FRIEND_ALREADY_INVITED = "cmd.friend.alreadyinvited";
 	const CMD_FRIEND_RAISE_REQUESTED = "cmd.friend.requested.raise";
 	const CMD_FRIEND_REQUEST_REMOVED = "cmd.friend.requested.removed";
@@ -79,7 +92,8 @@ class Phrases{
 	const CMD_PRIV_NOTICE_RECIPIENT = "cmd.pn.recipient";
 
 	const CMD_TEAM_CREATE_INVALID_NAME = "cmd.team.create.invalidname";
-	const CMD_TEAM_ERR_ALREADY_IN_TEAM = "cmd.team.create.alreadyinteam";
+	const CMD_TEAM_ERR_ALREADY_IN_TEAM = "cmd.team.err.alreadyinteam";
+	const CMD_TEAM_ERR_NOT_IN_TEAM = "cmd.team.err.notinteam";
 	const CMD_TEAM_CREATE_ALREADY_EXISTS = "cmd.team.create.alreadyexists";
 	const CMD_TEAM_CREATE_SUCCESS = "cmd.team.create.success";
 	const CMD_TEAM_LOADING = "cmd.team.loading";

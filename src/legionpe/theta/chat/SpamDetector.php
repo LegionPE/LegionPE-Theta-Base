@@ -84,7 +84,7 @@ class SpamDetector{
 			if(in_array($domain, $this->session->getMain()->getApprovedDomains())){
 				return $match[0];
 			}
-			return str_repeat("-", strlen($match));
+			return str_repeat("-", strlen($match[0]));
 		}, $string);
 	}
 }

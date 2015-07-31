@@ -72,4 +72,23 @@ class Kit{
 			}
 		}
 	}
+	public static function defaultInstance(Session $session, $kitid){
+		return new Kit($session, $kitid, [
+			[
+				"slot" => self::SLOT_SPECIAL_ABSTRACT_SIZE,
+				"name" => "",
+				"value" => 4,
+			],
+			[
+				"slot" => self::SLOT_SPECIAL_REAL_SIZE,
+				"name" => "",
+				"value" => 4,
+			],
+			[
+				"slot" => self::SLOT_SPECIAL_NAME,
+				"name" => "Kit $kitid",
+				"value" => 0,
+			],
+		]);
+	}
 }

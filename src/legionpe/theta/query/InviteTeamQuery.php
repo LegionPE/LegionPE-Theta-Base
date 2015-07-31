@@ -17,25 +17,20 @@ namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
 
-class AddIpQuery extends AsyncQuery{
-	/** @var string */
-	private $newIp;
-	/** @var int */
-	private $uid;
-	/**
-	 * @param BasePlugin $plugin
-	 * @param string $newIp
-	 * @param int $uid
-	 */
-	public function __construct(BasePlugin $plugin, $newIp, $uid){
-		$this->newIp = $newIp;
-		$this->uid = $uid;
-		parent::__construct($plugin);
+class InviteTeamQuery extends AsyncQuery{
+	private $tid;
+	private $name;
+	public function __construct(BasePlugin $main, $tid, $name){
+		$this->tid = $tid;
+		$this->name = $name;
+		parent::__construct($main);
+	}
+	public function onPreQuery(\mysqli $db){
+		// TODO
 	}
 	public function getQuery(){
-		return "INSERT INTO iphist (ip, uid) VALUES ({$this->esc($this->newIp)}, $this->uid) ON DUPLICATE KEY UPDATE uid=uid";
 	}
 	public function getResultType(){
-		return self::TYPE_RAW;
+		// TODO: Implement getResultType() method.
 	}
 }

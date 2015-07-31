@@ -38,17 +38,7 @@ class ReportStatusQuery extends AsyncQuery{
 		$mysql->query("UPDATE server_status SET last_online=unix_timestamp(),online_players=$this->players WHERE server_id=$myid;");
 	}
 	public function getQuery(){
-		return "SELECT
-			SUM(online_players)AS online,
-			SUM(max_players)AS max,
-			COUNT(*)AS servers,
-			(SELECT SUM(online_players)FROM server_status WHERE
-				class=$this->class AND unix_timestamp()-last_online<5)AS class_online,
-			(SELECT SUM(max_players)FROM server_status WHERE
-				class=$this->class AND unix_timestamp()-last_online<5)AS class_max,
-			(SELECT COUNT(*)FROM server_status WHERE
-				class=$this->class AND unix_timestamp()-last_online<5)AS class_servers
-			FROM server_status WHERE unix_timestamp()-last_online<5";
+		return "SELECT SUM(online_players)AS online,SUM(max_players)AS max,COUNT(*)AS servers, (SELECT SUM(online_players)FROM server_status WHERE class=$this->class AND unix_timestamp()-last_online<5)AS class_online, (SELECT SUM(max_players)FROM server_status WHERE class=$this->class AND unix_timestamp()-last_online<5)AS class_max, (SELECT COUNT(*)FROM server_status WHERE class=$this->class AND unix_timestamp()-last_online<5)AS class_servers FROM server_status WHERE unix_timestamp()-last_online<5";
 	}
 	public function onPostQuery(\mysqli $mysql){
 		$r = $mysql->query("SELECT ip,port FROM server_status WHERE class=$this->class AND unix_timestamp() - last_online < 5 AND (ip != '$this->myIp' OR port != $this->myPort) ORDER BY max_players-online_players DESC LIMIT 1");
