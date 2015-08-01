@@ -30,6 +30,7 @@ use legionpe\theta\queue\Queue;
 use legionpe\theta\utils\FireSyncChatQueryTask;
 use legionpe\theta\utils\SessionTickTask;
 use legionpe\theta\utils\SyncStatusTask;
+use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
@@ -112,6 +113,9 @@ abstract class BasePlugin extends PluginBase{
 		return $r;
 	}
 	public function onDisable(){
+		foreach($this->getServer()->getOnlinePlayers() as $player){
+			$this->sesList->onQuit(new PlayerQuitEvent($player, ""));
+		}
 		new CloseServerQuery($this);
 		$this->getLogger()->alert("PID: " . \getmypid());
 	}
