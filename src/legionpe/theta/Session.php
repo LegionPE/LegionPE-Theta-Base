@@ -219,7 +219,7 @@ abstract class Session{
 		if($this->isLoggingIn()){
 			$this->send(Phrases::LOGIN_PASS_PROMPT);
 		}else{
-			$this->send(Phrases::LOGIN_REGISTER_PROMPT);
+			$this->send(Phrases::LOGIN_REGISTER_PROMPT, ["name" => $this->getPlayer()->getName()]);
 		}
 	}
 	public function postOnline(){
