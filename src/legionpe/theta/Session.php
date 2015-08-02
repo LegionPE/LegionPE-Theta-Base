@@ -616,13 +616,7 @@ abstract class Session{
 		$msg = TextFormat::clean($msg);
 		/** @var MuteIssue $mute */
 		if($this->getMain()->isMuted($this, $mute)){
-			$this->send(Phrases::WARNING_MUTED_NOTIFICATION, [
-				"length" => MUtils::time_secsToString($mute->length),
-				"since" => date($this->translate("date.format"), $mute->since),
-				"till" => date($this->translate("date.format"), $mute->since + $mute->length),
-				"passed" => MUtils::time_secsToString(time() - $mute->since),
-				"left" => MUtils::time_secsToString($mute->since + $mute->length - time()),
-			]);
+			$mute->sendToSession($this);
 			return;
 		}
 		$msg = $this->getChatColor() . preg_replace_callback('/@([A-Za-z_]{2,16})/', function ($match){

@@ -15,6 +15,9 @@
 
 namespace legionpe\theta;
 
+use legionpe\theta\lang\Phrases;
+use legionpe\theta\utils\MUtils;
+
 class MuteIssue{
 	public $since;
 	public $length;
@@ -23,4 +26,13 @@ class MuteIssue{
 	public $cid;
 	public $msg;
 	public $src;
+	public function sendToSession(Session $session){
+		$session->send(Phrases::WARNING_MUTED_NOTIFICATION, [
+			"length" => MUtils::time_secsToString($this->length),
+			"since" => date($session->translate("date.format"), $this->since),
+			"till" => date($session->translate("date.format"), $this->since + $this->length),
+			"passed" => MUtils::time_secsToString(time() - $this->since),
+			"left" => MUtils::time_secsToString($this->since + $this->length - time()),
+		]);
+	}
 }

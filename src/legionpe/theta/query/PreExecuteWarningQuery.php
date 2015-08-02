@@ -18,6 +18,7 @@ namespace legionpe\theta\query;
 use legionpe\theta\BasePlugin;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
+use legionpe\theta\MuteIssue;
 use legionpe\theta\Session;
 use legionpe\theta\utils\MUtils;
 use pocketmine\command\CommandSender;
@@ -83,15 +84,21 @@ class PreExecuteWarningQuery extends NextIdQuery{
 			"points" => $this->points,
 			"totalpoints" => $ses->getWarningPoints()
 		]);
-		$conseq = Settings::getWarnPtsConseq($ses->getWarningPoints());
+		$conseq = Settings::getWarnPtsConseq($ses->getWarningPoints(), $this->creation);
 		if($conseq->banLength){
 			$msg .= $ses->translate(Phrases::WARNING_BANNED_NOTIFICATION, ["length" => MUtils::time_secsToString($conseq->banLength)]);
 			$msg = "\n" . $msg;
 			$ses->getPlayer()->kick($msg, false);
 		}elseif($conseq->muteSecs){
-			$msg .= $ses->translate(Phrases::WARNING_MUTED_NOTIFICATION, ["length" => MUtils::time_secsToString($conseq->muteSecs)]);
+			$mute = new MuteIssue;
+			$mute->cid = $this->clientId;
+			$mute->ip = $ses->getPlayer()->getAddress();
+			$mute->uid = $this->uid;
+			$mute->length = $conseq->muteSecs;
+			$mute->msg = $this->msg;
+			$mute->since = $this->creation;
+			$mute->src = $issuer->getName();
 			$ses->getPlayer()->sendMessage($msg);
-			// TODO mute
 		}
 	}
 }

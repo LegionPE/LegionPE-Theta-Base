@@ -33,7 +33,7 @@ class MuteCommand extends ModeratorCommand{
 		$msg = implode(" ", $args);
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$mute = $session->mute($msg, $length, $sender->getName());
-		// TODO message
+		$mute->sendToSession($session);
 		return true;
 	}
 }
