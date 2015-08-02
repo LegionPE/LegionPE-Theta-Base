@@ -15,7 +15,6 @@
 
 namespace legionpe\theta;
 
-use legionpe\theta\config\Settings;
 use legionpe\theta\query\LoginDataQuery;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerKickEvent;
@@ -60,14 +59,13 @@ class BaseListener implements Listener{
 	public function onQueryRegen(QueryRegenerateEvent $event){
 		$event->setWorld($this->main->query_world());
 		$this->main->getPlayersCount($total, $max, $classTotal, $classMax);
-		$event->setPlayerCount($classTotal);
-		$event->setMaxPlayerCount($classMax);
+		$event->setPlayerCount($total);
+		$event->setMaxPlayerCount($max);
 		$event->setPlayerList([]);
 		$event->setServerName(TextFormat::clean($this->main->getServer()->getNetwork()->getName()));
 		$extra = $event->getExtraData();
-		$name = strtolower(Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS]);
-		$extra[$name . "_numplayers"] = $classTotal;
-		$extra[$name . "_maxplayers"] = $classMax;
+		$extra["class_numplayers"] = $classMax;
+		$extra["class_maxplayers"] = $classMax;
 		$this->addExtras($extra);
 		$event->setExtraData($extra);
 	}
