@@ -7,22 +7,22 @@ There exists a list of precompiled format vars:
 
 | Name | Value |
 | ---: | :---- |
-| VAR_wait | TextFormat::RED + "… " |
-| VAR_success | TextFormat::DARK_GREEN |
-| VAR_info | TextFormat::WHITE |
-| VAR_symbol | TextFormat::GRAY |
-| VAR_verbose | "》 " + VAR_verbosemid |
-| VAR_verbosemid | TextFormat::GRAY |
-| VAR_error | TextFormat::DARK_RED |
-| VAR_warning | TextFormat::YELLOW |
-| VAR_notify | TextFormat::LIGHT_PURPLE |
-| VAR_notify2 | TextFormat::GOLD |
-| VAR_em | TextFormat::AQUA |
-| VAR_em1 | TextFormat::AQUA |
-| VAR_em2 | TextFormat::BLUE |
-| VAR_em3 | TextFormat::DARK_BLUE |
-| VAR_reset | TextFormat::RESET |
-| VAR_bold | TextFormat::BOLD |
-| VAR_italic | TextFormat::ITALIC |
+| wait | TextFormat::RED + "… " |
+| success | TextFormat::DARK_GREEN |
+| info | TextFormat::WHITE |
+| symbol | TextFormat::GRAY |
+| verbose | "》 " + verbosemid |
+| verbosemid | TextFormat::GRAY |
+| error | TextFormat::DARK_RED |
+| warning | TextFormat::YELLOW |
+| notify | TextFormat::LIGHT_PURPLE |
+| notify2 | TextFormat::GOLD |
+| em | TextFormat::AQUA |
+| em1 | TextFormat::AQUA |
+| em2 | TextFormat::BLUE |
+| em3 | TextFormat::DARK_BLUE |
+| reset | TextFormat::RESET |
+| bold | TextFormat::BOLD |
+| italic | TextFormat::ITALIC |
 
 They will be replaced into format modifiers upon plugin load.
