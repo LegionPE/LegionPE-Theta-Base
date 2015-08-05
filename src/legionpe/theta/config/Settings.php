@@ -32,6 +32,7 @@ abstract class Settings{
 	const CLASS_SPLEEF = 4;
 	const CLASS_INFECTED = 5;
 	const CLASS_CLASSICAL = 6;
+	const CLASS_NON_SERVER = 7;
 	const RANK_IMPORTANCE_DEFAULT = 0x0000;
 	const RANK_IMPORTANCE_TESTER = 0x0001;
 	const RANK_IMPORTANCE_DONATOR = 0x0004;

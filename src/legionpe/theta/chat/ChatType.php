@@ -17,6 +17,7 @@ namespace legionpe\theta\chat;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\query\PushChatQuery;
+use legionpe\theta\query\RawAsyncQuery;
 
 abstract class ChatType{
 	const SERVER_BROADCAST = 0;
@@ -24,17 +25,20 @@ abstract class ChatType{
 	const CONSOLE_MESSAGE = 2;
 	const CHANNEL_CHAT = 3;
 	const MUTE_CHAT = 4;
+	const PRIVATE_MESSAGE = 5;
 	/** @var BasePlugin */
 	protected $main;
 	protected $src;
 	protected $msg;
 	protected $class;
+	protected $rowId;
 	protected $_classData;
-	public function __construct(BasePlugin $main, $src, $msg, $class, $data){
+	protected function __construct(BasePlugin $main, $src, $msg, $class, $data, $rowId = null){
 		$this->main = $main;
 		$this->src = $src;
 		$this->msg = $msg;
 		$this->class = $class;
+		$this->rowId = $rowId;
 		$this->_classData = $data;
 		foreach($data as $key => $value){
 			if(!isset($this->{$key})){
@@ -42,24 +46,33 @@ abstract class ChatType{
 			}
 		}
 	}
-	public static function get(BasePlugin $main, $id, $src, $msg, $class, $data){
+	public static function get(BasePlugin $main, $id, $src, $msg, $class, $data, $rowId = null){
 		switch($id){
 			case self::SERVER_BROADCAST:
-				return new ServerBroadcastChatType($main, $src, $msg, $class, $data);
+				return new ServerBroadcastChatType($main, $src, $msg, $class, $data, $rowId);
 			case self::TEAM_CHAT:
-				return new TeamChatType($main, $src, $msg, $class, $data);
+				return new TeamChatType($main, $src, $msg, $class, $data, $rowId);
 			case self::CONSOLE_MESSAGE:
-				return new ConsoleChatType($main, $src, $msg, $class, $data);
+				return new ConsoleChatType($main, $src, $msg, $class, $data, $rowId);
 			case self::CHANNEL_CHAT:
-				return new ChannelChatType($main, $src, $msg, $class, $data);
+				return new ChannelChatType($main, $src, $msg, $class, $data, $rowId);
 			case self::MUTE_CHAT:
-				return new MuteChatType($main, $src, $msg, $class, $data);
+				return new MuteChatType($main, $src, $msg, $class, $data, $rowId);
+			case self::PRIVATE_MESSAGE:
+				return new PrivateMessageChatType($main, $src, $msg, $class, $data, $rowId);
 		}
 		return null;
 	}
 	public function push(){
 		$this->onPush();
 		new PushChatQuery($this->main, $this->src, $this->msg, $this->getType(), $this->class, $this->_classData);
+	}
+	public function consume(){
+		if(is_int($this->rowId)){
+			new RawAsyncQuery($this->main, "DELETE FROM chat WHERE id=$this->rowId");
+			return true;
+		}
+		return false;
 	}
 	protected function onPush(){
 

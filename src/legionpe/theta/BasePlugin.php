@@ -343,7 +343,7 @@ abstract class BasePlugin extends PluginBase{
 		$type = $row["type"];
 		$class = $row["class"];
 		$data = $row["json"];
-		$exe = ChatType::get($this, $type, $source, $message, $class, $data);
+		$exe = ChatType::get($this, $type, $source, $message, $class, $data, (int)$row["id"]);
 		$exe->execute();
 	}
 

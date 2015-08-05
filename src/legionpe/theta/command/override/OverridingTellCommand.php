@@ -31,16 +31,16 @@ class OverridingTellCommand extends SessionCommand{
 	}
 	protected function run(array $args, Session $sender){
 		$sender->send(Phrases::CMD_PRIV_MSG_REMIND_QUERY);
+		$target = $this->getSession($name = array_shift($args));
+		if($target === null){
+			return $this->offline($sender, $name);
+		}
 		if(!isset($args[1])){
 			return false;
 		}
 		$message = implode(" ", $args);
 		if(!$sender->getSpamDetector()->censor($message)){
 			return true;
-		}
-		$target = $this->getSession($name = array_shift($args));
-		if($target === null){
-			return $this->offline($sender, $name);
 		}
 		$target->getPlayer()->sendMessage($msg = Phrases::VAR_info . "[" . $sender->getPlayer()->getName() . " > " . $target->getPlayer()->getName() . "] " . Phrases::VAR_info . $message);
 		$sender->getPlayer()->sendMessage($msg);
