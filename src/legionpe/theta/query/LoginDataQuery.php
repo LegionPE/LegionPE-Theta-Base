@@ -82,12 +82,12 @@ class LoginDataQuery extends AsyncQuery{
 				$r = $mysql->query("SELECT kitid, slot, name, value FROM kits_slots WHERE uid=$uid AND class=$this->class");
 				/** @var mixed[][][] $kitRows */
 				$kitRows = [];
-				while(is_array($row = $r->fetch_assoc())){
-					$kitid = $row["kitid"];
+				while(is_array($resultRow = $r->fetch_assoc())){
+					$kitid = $resultRow["kitid"];
 					if(!isset($kitRows[$kitid])){
-						$kitRows[$kitid] = [$row];
+						$kitRows[$kitid] = [$resultRow];
 					}else{
-						$kitRows[$kitid][] = $row;
+						$kitRows[$kitid][] = $resultRow;
 					}
 				}
 				$r->close();
@@ -139,6 +139,7 @@ class LoginDataQuery extends AsyncQuery{
 			}
 		}
 		if(!isset($player)){
+			$main->getLogger()->info("Player of $this->sesId quitted the server before data were fetched.");
 			return;
 		}
 		/** @var bool $success */

@@ -34,6 +34,7 @@ use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
+use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
 use shoghicp\FastTransfer\FastTransfer;
 
@@ -161,6 +162,8 @@ abstract class BasePlugin extends PluginBase{
 			$this->sessions[$player->getId()] = $this->createSession($player, $loginData);
 			return true;
 		}catch(\Exception $e){
+			$this->getLogger()->error("An error occurred while trying to initialize session for player {$player->getName()}: ");
+			MainLogger::getLogger()->logException($e);
 			return false;
 		}
 	}

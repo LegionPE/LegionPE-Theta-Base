@@ -63,7 +63,7 @@ class Kit{
 		}
 		for($i = 0; $i < $this->realSize; $i++){
 			if(!isset($this->realSlots[$i])){
-				$this->realSize[$i] = new KitEntry($this, $i, "Slot " . ($i + 1), 0, null, false);
+				$this->realSlots[$i] = new KitEntry($this, $i, "Slot " . ($i + 1), 0, null, false);
 			}
 		}
 		for($i = 0; $i < $this->abstractSize; $i++){
@@ -71,24 +71,30 @@ class Kit{
 				$this->abstractSlots[$i] = new KitEntry($this, $i + self::ABSTRACT_STARTS_AT, "Slot " . ($i + 1), 0, null, false);
 			}
 		}
+		for($i = 0; $i < $this->armorSize; $i++){
+			if(!isset($this->armorSlots[$i])){
+				$this->armorSlots[$i] = new KitEntry($this, $i + self::ARMOR_STARTS_AT, "Slot " . ($i + 1), 0, null, false);
+			}
+		}
 	}
-	public static function defaultInstance(Session $session, $kitid){
-		return new Kit($session, $kitid, [
+	public static function defaultInstance(Session $session, $kitid, $realSize, $abstractSize){
+		$rows = [
 			[
 				"slot" => self::SLOT_SPECIAL_ABSTRACT_SIZE,
 				"name" => "",
-				"value" => 4,
+				"value" => $abstractSize,
 			],
 			[
 				"slot" => self::SLOT_SPECIAL_REAL_SIZE,
 				"name" => "",
-				"value" => 4,
+				"value" => $realSize,
 			],
 			[
 				"slot" => self::SLOT_SPECIAL_NAME,
 				"name" => "Kit $kitid",
 				"value" => 0,
 			],
-		]);
+		];
+		return new Kit($session, $kitid, $rows);
 	}
 }

@@ -28,24 +28,30 @@ class AddKitQuery extends AsyncQuery{
 	private $kitid;
 	/** @var string */
 	private $kitName;
+	/** @var int */
+	private $realSize, $abstractSize;
 	/**
 	 * @param BasePlugin $main
 	 * @param int $uid
 	 * @param int $kitid
 	 * @param $kitName
+	 * @param $realSize
+	 * @param $abstractSize
 	 */
-	public function __construct(BasePlugin $main, $uid, $kitid, $kitName){
+	public function __construct(BasePlugin $main, $uid, $kitid, $kitName, $realSize, $abstractSize){
 		$this->uid = $uid;
 		$this->class = Settings::$LOCALIZE_CLASS;
 		$this->kitid = $kitid;
 		$this->kitName = $kitName;
+		$this->realSize = $realSize;
+		$this->abstractSize = $abstractSize;
 		parent::__construct($main);
 	}
 	public function getQuery(){
 		$realSize = Kit::SLOT_SPECIAL_REAL_SIZE;
 		$abstractSize = Kit::SLOT_SPECIAL_ABSTRACT_SIZE;
 		$name = Kit::SLOT_SPECIAL_NAME;
-		return "INSERT INTO kits_slots (uid, class, kitid, slot, value, name) VALUES ($this->uid, $this->class, $this->kitid, $realSize, 3, ''),($this->uid, $this->class, $this->kitid, $abstractSize, 1, ''),($this->uid, $this->class, $this->kitid, $name, 0, '$this->kitName')";
+		return "INSERT INTO kits_slots (uid, class, kitid, slot, value, name) VALUES ($this->uid, $this->class, $this->kitid, $realSize, $this->realSize, ''),($this->uid, $this->class, $this->kitid, $abstractSize, $this->abstractSize, ''),($this->uid, $this->class, $this->kitid, $name, 0, '$this->kitName')";
 	}
 	public function getResultType(){
 		return self::TYPE_RAW;

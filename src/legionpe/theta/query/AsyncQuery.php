@@ -34,7 +34,7 @@ abstract class AsyncQuery extends AsyncTask{
 	private static $defaultValues = [
 		self::COL_STRING => "",
 		self::COL_INT => 0,
-		self::COL_FLOAT => 0.0
+		self::COL_FLOAT => 0.0,
 	];
 	public function __construct(BasePlugin $plugin){
 		$plugin->getServer()->getScheduler()->scheduleAsyncTask($this);

@@ -223,11 +223,12 @@ abstract class Session{
 		}
 	}
 	public function postOnline(){
-		$class = Settings::$LOCALIZE_CLASS;
-		$ip = Settings::$LOCALIZE_IP;
-		$port = Settings::$LOCALIZE_PORT;
-		$online = Settings::STATUS_ONLINE;
-		new RawAsyncQuery($this->getMain(), "UPDATE users SET lastip='{$this->getPlayer()->getAddress()}',status=$online,laston=unix_timestamp(),lastses=$class,status_ip='$ip',status_port=$port WHERE uid=" . $this->getUid());
+//		$class = Settings::$LOCALIZE_CLASS;
+//		$ip = Settings::$LOCALIZE_IP;
+//		$port = Settings::$LOCALIZE_PORT;
+//		$online = Settings::STATUS_ONLINE;
+//		new RawAsyncQuery($this->getMain(), "UPDATE users SET lastip='{$this->getPlayer()->getAddress()}',status=$online,laston=unix_timestamp(),lastses=$class,status_ip='$ip',status_port=$port WHERE uid=" . $this->getUid());
+		$this->saveData(Settings::STATUS_ONLINE);
 	}
 	/**
 	 * Override this method to do initialization stuff
@@ -498,6 +499,7 @@ abstract class Session{
 					$this->sendFirstJoinMessages();
 					$this->login(self::AUTH_REG);
 					$this->send(Phrases::LOGIN_REGISTER_SUCCESS);
+					$this->saveData(Settings::STATUS_ONLINE);
 				}else{
 					$this->send(Phrases::LOGIN_REGISTER_MISMATCH);
 					$this->tmpHash = null;
@@ -506,10 +508,19 @@ abstract class Session{
 			}
 			return false;
 		}elseif($this->isLoggingIn()){
-			$event->setMessage($hash = self::hash($event->getMessage(), $this->getUid()));
+			$msg = $event->getMessage();
+			$hash = self::hash($msg, $this->getUid());
+			$oldHash = self::oldHash($msg);
+			$len = strlen($msg);
+			$event->setMessage($hash);
 			$this->sendCurlyLines();
 			if($hash === $this->getPasswordHash()){
 				$this->login(self::AUTH_PASS);
+			}elseif($this->isPortingOldPassword() and $oldHash === $this->getPasswordOldHash()){
+				$this->setLoginDatum("pwprefix", "~");
+				$this->setLoginDatum("pwlen", $len);
+				$this->setLoginDatum("hash", $hash);
+				$this->setLoginDatum("oldhash", "");
 			}else{
 				$this->state++;
 				$chances = "chance";
@@ -576,9 +587,6 @@ abstract class Session{
 	public function isRegistering(){
 		return ($this->state & 0xF0) === self::STATE_REGISTERING;
 	}
-	public static function hash($password, $uid){
-		return bin2hex(hash("sha512", $password . $uid, true) ^ hash("whirlpool", $uid . $password, true));
-	}
 	public function getUid(){
 		return $this->getLoginDatum("uid");
 	}
@@ -595,6 +603,12 @@ abstract class Session{
 	}
 	public function getPasswordHash(){
 		return $this->getLoginDatum("hash");
+	}
+	public function isPortingOldPassword(){
+		return (trim(strtolower($this->getLoginDatum("hash")), "f") === "") and (strlen($this->getLoginDatum("oldhash")) === 128) and !$this->isNew();
+	}
+	public function getPasswordOldHash(){
+		return $this->getLoginDatum("oldhash");
 	}
 	public function getStatePrecise(){
 		return $this->state & 0x0F;
@@ -628,9 +642,12 @@ abstract class Session{
 		foreach($this->getMain()->getSessions() as $ses){
 			// TODO handle $type
 			if($ses->isLocalChatOn() and ($type !== self::CHAT_LOCAL or Settings::isLocalChat($ses->getPlayer(), $this->getPlayer()))){
-				$ses->getPlayer()->sendMessage($this->getPlayer()->getDisplayName() . ($type === self::CHAT_ME ? ": " : ">") . $this->getChatColor() . $msg);
+				$ses->getPlayer()->sendMessage($this->chatPrefix() . $this->getPlayer()->getDisplayName() . ($type === self::CHAT_ME ? ": " : ">") . $this->getChatColor() . $msg);
 			}
 		}
+	}
+	protected function chatPrefix(){
+		return "";
 	}
 	public function getChatColor(){
 		if($this->isAdmin()){
@@ -1125,5 +1142,11 @@ abstract class Session{
 		$type = MuteChatType::fromObject($this->getMain(), $mute);
 		$type->push();
 		return $mute;
+	}
+	public static function hash($password, $uid){
+		return bin2hex(hash("whirlpool", $password . $uid, true) ^ hash("sha512", $uid . $password, true));
+	}
+	public static function oldHash($password){
+		return bin2hex(hash("sha512", $password . "NaCl", true) ^ hash("whirlpool", "NaCl" . $password, true));
 	}
 }

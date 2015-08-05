@@ -25,7 +25,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 	private $coinsDelta;
 	public function __construct(BasePlugin $plugin, Session $session, $status){
 		$data = $this->getColumns($session, $status);
-		$this->data = serialize($data);
+		$this->data = $data;
 		parent::__construct($plugin);
 	}
 	/**
@@ -65,10 +65,10 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 			"ignorelist" => "," . implode(",", $session->getIgnoreList()) . ","
 		];
 	}
-	public function getQuery(){
+	public function getUpdateQuery(){
 		$query = "INSERT INTO" . " users(";
 		/** @var mixed[][] $data */
-		$data = unserialize($this->data);
+		$data = $this->data;
 		/** @var string[] $cols */
 		$cols = [];
 		/** @var string[] $inserts */
@@ -96,6 +96,9 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 	}
 	protected function queryFinalProcess($query){
 		return $query . ",coins=coins+$this->coinsDelta";
+	}
+	public function getQuery(){
+		return $this->getUpdateQuery();
 	}
 	public function getResultType(){
 		return self::TYPE_RAW;
