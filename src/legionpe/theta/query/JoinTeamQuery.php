@@ -16,7 +16,7 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
-use legionpe\theta\chat\TeamChatType;
+use legionpe\theta\chat\ChatType;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
 use pocketmine\Server;
@@ -90,7 +90,7 @@ class JoinTeamQuery extends AsyncQuery{
 			}
 		}
 		if(isset($joined)){
-			$type = new TeamChatType($main, "Network", "%tr%" . Phrases::CMD_TEAM_JOINED, Settings::CLASS_ALL, [
+			$type = ChatType::get($main, ChatType::TEAM_CHAT, "Network", "%tr%" . Phrases::CMD_TEAM_JOINED, Settings::CLASS_ALL, [
 				"tid" => $this->tid,
 				"teamName" => $this->teamName,
 				"ign" => "Network",

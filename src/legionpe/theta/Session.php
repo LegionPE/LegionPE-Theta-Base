@@ -17,11 +17,9 @@
 
 namespace legionpe\theta;
 
-use legionpe\theta\chat\ChannelChatType;
 use legionpe\theta\chat\ChatType;
 use legionpe\theta\chat\MuteChatType;
 use legionpe\theta\chat\SpamDetector;
-use legionpe\theta\chat\TeamChatType;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\query\AddIpQuery;
@@ -566,7 +564,7 @@ abstract class Session{
 					"teamName" => $this->getTeamName(),
 					"ign" => $this->getInGameName()
 				];
-				$type = new TeamChatType($this->getMain(), $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
+				$type = ChatType::get($this->getMain(), ChatType::TEAM_CHAT, $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
 				$type->push();
 				return false;
 			}
@@ -576,7 +574,7 @@ abstract class Session{
 					"fromClass" => Settings::$LOCALIZE_CLASS,
 					"ign" => $this->getInGameName()
 				];
-				$type = new ChannelChatType($this->getMain(), $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
+				$type = ChatType::get($this->getMain(), ChatType::CHANNEL_CHAT, $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
 				$type->push();
 				return false;
 			}
