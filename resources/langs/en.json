@@ -238,6 +238,11 @@
 			},
 			"killinfo": "%verbose%Your%em% %ord% %verbosemid%kill - the%em2% %streakord% %verbosemid% in a row.\n%verbose%Your coins + %em%%added%%verbosemid% => %em2%%coins%",
 			"deathinfo": "%verbose%This is your%em% %ord% %verbosemid%death! Watch out!"
+		},
+		"hub": {
+			"feather": {
+				"tut": "%bold%Tap feather in hotbar to adjust sprinting."
+			}
 		}
 	}
 }

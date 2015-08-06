@@ -182,4 +182,7 @@ class LoginDataQuery extends AsyncQuery{
 	protected function fetchKits(){
 		return false;
 	}
+	public function reportDebug(){
+		return false;
+	}
 }

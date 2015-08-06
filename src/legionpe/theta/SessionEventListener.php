@@ -21,6 +21,7 @@ use legionpe\theta\queue\Queue;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\inventory\InventoryOpenEvent;
 use pocketmine\event\inventory\InventoryPickupArrowEvent;
@@ -81,6 +82,19 @@ class SessionEventListener implements Listener{
 				return;
 			}
 			if($session->onDamage($event) === false){
+				$event->setCancelled();
+			}
+		}
+	}
+	public function onHeal(EntityRegainHealthEvent $event){
+		$entity = $event->getEntity();
+		if($entity instanceof Player){
+			$session = $this->main->getSession($entity);
+			if(!($session instanceof Session)){
+				$event->setCancelled();
+				return;
+			}
+			if($session->onHeal($event) === false){
 				$event->setCancelled();
 			}
 		}

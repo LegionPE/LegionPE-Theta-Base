@@ -161,6 +161,8 @@ class Phrases{
 	const PVP_KILL_INFO = "game.pvp.killinfo";
 	const PVP_DEATH_INFO = "game.pvp.deathinfo";
 
+	const HUB_FEATHER_TUT = "game.hub.feather.tut";
+
 	// constant variables
 	const VAR_wait = TextFormat::RED . "… ";
 	const VAR_success = TextFormat::DARK_GREEN;

@@ -33,6 +33,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\inventory\InventoryOpenEvent;
 use pocketmine\event\inventory\InventoryPickupArrowEvent;
@@ -322,7 +323,7 @@ abstract class Session{
 			$tag .= Phrases::VAR_symbol . "[" . $lbl . Phrases::VAR_symbol . "]";
 		}
 		if(!$this->isEmailVerified()){
-			$tag .= TextFormat::GRAY . "(UV)";
+//			$tag .= TextFormat::GRAY . "(UV)";
 		}
 		$tag .= $nameColor . $this->getPlayer()->getName();
 		return $tag;
@@ -631,7 +632,7 @@ abstract class Session{
 			$mute->sendToSession($this);
 			return;
 		}
-		$msg = $this->getChatColor() . preg_replace_callback('/@([A-Za-z_]{2,16})/', function ($match){
+		$msg = $this->getChatColor() . preg_replace_callback('/@([A-Za-z0-9_]{1,})/', function ($match){
 				if(($player = $this->getMain()->getServer()->getPlayer($match[1])) !== null){
 					return TextFormat::DARK_AQUA . TextFormat::ITALIC . $player->getName() . TextFormat::RESET . $this->getChatColor();
 				}
@@ -670,6 +671,13 @@ abstract class Session{
 	}
 	public function onDamage(/** @noinspection PhpUnusedParameterInspection */
 		EntityDamageEvent $event){
+		if(!$this->isPlaying()){
+			return false;
+		}
+		return true;
+	}
+	public function onHeal(/** @noinspection PhpUnusedParameterInspection */
+		EntityRegainHealthEvent $event){
 		if(!$this->isPlaying()){
 			return false;
 		}
