@@ -122,7 +122,17 @@
 				}
 			},
 			"invite": {
-				"notsenior": "%error%You must be a %em%Senior-Member%error%, a %em%Leader%error% or a %em%Co-Leader%error% to invite a player!"
+				"notsenior": "%error%You must be in a team and be a %em%Senior-Member%error%, a %em%Leader%error% or a %em%Co-Leader%error% to invite a player!",
+				"noplayer": "%error%No player with scuh name is ever registered on our network.",
+				"targetinteam": "%warning%The target player is already in a team, but you can still invite him.",
+				"accepttargetinteam": "%error%The target player is already in a team. You can't accept his invitation.",
+				"alreadysent": "%error%Your team has already invited the target player.",
+				"sameteam": "%error%The target user is already in your team!",
+				"accepted": {
+					"sender": "%success%You have accepted %em%%name%%success% into your team!",
+					"target": "%notify%Your team join invitation to %em%%teamname%%notify% has been accepted!"
+				},
+				"sent": "%success%%name% has been invited into your team."
 			},
 			"joined": "%notify%%name% joined your team!",
 			"quitted": "%notify%%name% quitted the team!",

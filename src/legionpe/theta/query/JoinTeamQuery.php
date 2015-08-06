@@ -39,7 +39,7 @@ class JoinTeamQuery extends AsyncQuery{
 		parent::__construct($main);
 	}
 	public function getResultType(){
-		return self::TYPE_ASSOC;
+		return self::TYPE_RAW;
 	}
 	public function onPreQuery(\mysqli $db){
 		$result = $db->query("SELECT tid, config, (SELECT type FROM tjrequests WHERE tid=teams.tid AND user=$this->uid) AS type FROM teams WHERE name={$this->esc($this->teamName)}");
@@ -47,9 +47,9 @@ class JoinTeamQuery extends AsyncQuery{
 		if(!is_array($checkFirst)){
 			throw new \RuntimeException(Phrases::VAR_error . "Team does not exist");
 		}
-		$this->tid = $result["tid"];
-		$this->type = $result["type"];
-		$config = $result["config"];
+		$this->tid = (int)$result["tid"];
+		$this->type = (int)$result["type"];
+		$config = (int)$result["config"];
 		$result->close();
 		if($config & Settings::TEAM_CONFIG_OPEN){
 			$this->type = self::DIRECT_JOIN;
@@ -76,12 +76,10 @@ class JoinTeamQuery extends AsyncQuery{
 					case self::REQUEST_FROM_TEAM:
 						$ses->send(Phrases::CMD_TEAM_JOIN_ACCEPTED, $data);
 						$joined = true;
-						$ses->recalculateNametag();
 						break 2;
 					case self::DIRECT_JOIN:
 						$ses->send(Phrases::CMD_TEAM_JOIN_DIRECTLY_JOINED, $data);
 						$joined = true;
-						$ses->recalculateNametag();
 						break 2;
 					default:
 						$ses->send(Phrases::CMD_TEAM_JOIN_REQUESTED, $data);
@@ -89,7 +87,9 @@ class JoinTeamQuery extends AsyncQuery{
 				}
 			}
 		}
-		if(isset($joined)){
+		if(isset($joined, $ses)){
+			$ses->setLoginDatum("tid", $this->tid);
+			$ses->recalculateNametag();
 			$type = ChatType::get($main, ChatType::TEAM_CHAT, "Network", "%tr%" . Phrases::CMD_TEAM_JOINED, Settings::CLASS_ALL, [
 				"tid" => $this->tid,
 				"teamName" => $this->teamName,

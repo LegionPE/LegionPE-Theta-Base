@@ -105,6 +105,14 @@ class Phrases{
 	const CMD_TEAM_QUIT_WARNING_NORMAL = "cmd.team.quit.warning.normal";
 	const CMD_TEAM_QUIT_WARNING_LEADER = "cmd.team.quit.warning.leader";
 	const CMD_TEAM_INVITE_NOT_SENIOR = "cmd.team.invite.notsenior";
+	const CMD_TEAM_INVITE_NO_PLAYER = "cmd.team.invite.noplayer";
+	const CMD_TEAM_INVITE_TARGET_IN_TEAM = "cmd.team.invite.targetinteam";
+	const CMD_TEAM_INVITE_ACCEPT_TARGET_IN_TEAM = "cmd.team.invite.accepttargetinteam";
+	const CMD_TEAM_INVITE_ALREADY_SENT = "cmd.team.invite.alreadysent";
+	const CMD_TEAM_INVITE_SAME_TEAM = "cmd.team.invite.sameteam";
+	const CMD_TEAM_INVITE_ACCEPTED_SENDER = "cmd.team.invite.accepted.sender";
+	const CMD_TEAM_INVITE_ACCEPTED_TARGET = "cmd.team.invite.accepted.target";
+	const CMD_TEAM_INVITE_SENT = "cmd.team.invite.sent";
 	const CMD_TEAM_JOINED = "cmd.team.joined";
 	const CMD_TEAM_QUITTED = "cmd.team.quitted";
 

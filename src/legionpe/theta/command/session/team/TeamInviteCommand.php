@@ -34,7 +34,7 @@ class TeamInviteCommand extends SessionCommand{
 		if($name === null){
 			return false;
 		}
-		new InviteTeamQuery($this->getMain(), $sender->getTeamId(), $name);
+		new InviteTeamQuery($this->getMain(), $sender, $name);
 		return true;
 	}
 }
