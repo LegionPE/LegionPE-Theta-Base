@@ -546,10 +546,23 @@ abstract class Session{
 				}
 			}
 			$firstChar = substr($event->getMessage(), 0, 1);
-			if($firstChar === "/"){
-				return true;
-			}elseif($firstChar === "\\"){
+			if($firstChar === "\\"){
 				$event->setMessage("/" . substr($event->getMessage(), 1));
+			}
+			if($firstChar === "/"){
+				$msg = $event->getMessage();
+				if(strpos($msg, " ") === false){
+					$cmd = $msg;
+					$postCmd = "";
+				}else{
+					$cmd = strtolower(strstr($msg, " ", true));
+					$postCmd = strstr($msg, " ");
+				}
+				if($cmd === "/w"){
+					$cmd = "/tell";
+				}
+				$event->setMessage($cmd . $postCmd);
+				return true;
 			}
 			$isLocal = $firstChar !== ".";
 			if(!$isLocal){
@@ -1012,7 +1025,21 @@ abstract class Session{
 		}
 		return $out;
 	}
-	public function inviteIncrease($uid, $targetName, &$vars){
+	public function getFriendType($uid, &$io = 0, &$toLarge = false, &$all = []){
+		$all = $this->getLoginDatum("friends");
+		$type = isset($all[$uid]) ? $all[$uid] : self::FRIEND_LEVEL_NONE;
+		$toLarge = $uid > $this->getUid();
+		$req = $type & self::FRIEND_BITMASK_REQUEST;
+		if($req === self::FRIEND_REQUEST_TO_LARGE and $toLarge or $req === self::FRIEND_REQUEST_TO_SMALL and !$toLarge){
+			$io = self::FRIEND_OUT;
+		}elseif($req === 0){
+			$io = self::FRIEND_NO_REQUEST;
+		}else{
+			$io = self::FRIEND_IN;
+		}
+		return $type & ~self::FRIEND_BITMASK_REQUEST;
+	}
+	public function inviteIncrease($uid, $targetName, &$vars_){
 		$vars = ["target" => $targetName];
 		$smallUid = min($uid, $this->getUid());
 		$largeUid = max($uid, $this->getUid());
@@ -1036,21 +1063,8 @@ abstract class Session{
 		$this->setLoginDatum("friends", $all);
 		new RawAsyncQuery($this->getMain(), $currentType === self::FRIEND_LEVEL_NONE ? "INSERT INTO friends (smalluid, largeuid, type) VALUES ($smallUid, $largeUid, $new)" : "UPDATE friends SET type=$new WHERE smalluid=$smallUid AND largeuid=$largeUid");
 		$vars["newtype"] = $this->translate(self::$FRIEND_TYPES[$currentType << 1]);
+		$vars_ = $vars;
 		return Phrases::CMD_FRIEND_RAISE_REQUESTED;
-	}
-	public function getFriendType($uid, &$io = 0, &$toLarge = false, &$all = []){
-		$all = $this->getLoginDatum("friends");
-		$type = isset($all[$uid]) ? $all[$uid] : 0;
-		$toLarge = $uid > $this->getUid();
-		$req = $type & self::FRIEND_BITMASK_REQUEST;
-		if($req === self::FRIEND_REQUEST_TO_LARGE and $toLarge or $req === self::FRIEND_REQUEST_TO_SMALL and !$toLarge){
-			$io = self::FRIEND_OUT;
-		}elseif($req === 0){
-			$io = self::FRIEND_NO_REQUEST;
-		}else{
-			$io = self::FRIEND_IN;
-		}
-		return $type & ~self::FRIEND_BITMASK_REQUEST;
 	}
 	public function reduceFriend($uid){
 		$smallUid = min($this->getUid(), $uid);

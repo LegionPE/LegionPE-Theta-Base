@@ -70,6 +70,7 @@ class Phrases{
 	const CMD_FRIEND_ALREADY_INVITED = "cmd.friend.alreadyinvited";
 	const CMD_FRIEND_RAISE_REQUESTED = "cmd.friend.requested.raise";
 	const CMD_FRIEND_REQUEST_REMOVED = "cmd.friend.requested.removed";
+	const CMD_FRIEND_RECEIVED = "cmd.friend.received";
 	const CMD_FRIEND_RAISED = "cmd.friend.raised";
 	const CMD_FRIEND_REDUCED = "cmd.friend.reduced";
 	const CMD_FRIEND_MAX = "cmd.friend.max";
@@ -142,7 +143,7 @@ class Phrases{
 	const CLASS_INFECTED = "local.class.name.infected";
 	const CLASS_CLASSIC_PVP = "local.class.name.pvp.classic";
 
-	const FRIEND_ACQUAINTANCE = "friend.type.acquantaince";
+	const FRIEND_ACQUAINTANCE = "friend.type.acquaintance";
 	const FRIEND_GOOD_FRIEND = "friend.type.goodfriend";
 	const FRIEND_BEST_FRIEND = "friend.type.bestfriend";
 

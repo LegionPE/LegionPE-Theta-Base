@@ -67,14 +67,15 @@
 		"friend": {
 			"alreadyinvited": "%error%You have %em%already%error% invited %em2%%target%!",
 			"requested": {
-				"raise": "%notice%Sent a request to %em2%target%notice% to become your %em%%newtype%.",
-				"removed": "%notice%Removed the request to %em2%target%notice% to become your %em%%newtype%."
+				"raise": "%success%Sent a request to %em2%target%success% to become your %em%%newtype%.",
+				"removed": "%success%Removed the request to %em2%target%success% to become your %em%%newtype%."
 			},
+			"received": "%notify%%em%%source%%notify% sent you a %em2%%newtype%%notify% request.",
 			"raised": "%em2%%target%%sucess% is now your %em%%newtype%!",
 			"reduced": "%em2%%target%%sucess% is now your %em%%newtype%!",
 			"max": "%em2%%target%%error% is already your best friend and cannot be increased any more!",
-			"rejected": "%notice%Friend request from %em%%from% %notice%to %em2%%to% %notice%has been rejected.",
-			"cancelled": "%notice%Friend request from %em%%from% %notice%to %em2%%to% %notice%has been cancelled.",
+			"rejected": "%success%Friend request from %em%%from% %success%to %em2%%to% %success%has been rejected.",
+			"cancelled": "%success%Friend request from %em%%from% %success%to %em2%%to% %success%has been cancelled.",
 			"noinvite": "%error%You don't have a friend request to %em%%to%!",
 			"list": {
 				"key": "%info%Key:\n* means player is online on THIS server\n< means player is in your outbox\n> means player is in your inbox"

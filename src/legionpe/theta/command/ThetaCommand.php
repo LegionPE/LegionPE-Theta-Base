@@ -65,6 +65,8 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 				"version",
 				"stop",
 				"tell",
+				"w",
+				"msg",
 				"defaultgamemode",
 				"ban",
 				"ban-ip",

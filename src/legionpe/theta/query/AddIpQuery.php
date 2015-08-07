@@ -38,4 +38,7 @@ class AddIpQuery extends AsyncQuery{
 	public function getResultType(){
 		return self::TYPE_RAW;
 	}
+	public function reportDebug(){
+		return false;
+	}
 }

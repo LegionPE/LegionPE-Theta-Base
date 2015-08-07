@@ -35,7 +35,9 @@ class AddFriendCommand extends SessionCommand{
 		}
 		$phrase = $sender->inviteIncrease($target->getUid(), $target->getPlayer()->getDisplayName(), $vars);
 		if($phrase === Phrases::CMD_FRIEND_RAISED){
-			$target->send($phrase, ["target" => $sender->getPlayer()->getDisplayName(), "target", "newtype" => $vars["newtype"]]);
+			$target->send($phrase, ["target" => $sender->getPlayer()->getDisplayName(), "newtype" => $vars["newtype"]]);
+		}elseif($phrase === Phrases::CMD_FRIEND_RAISE_REQUESTED){
+			$target->send(Phrases::CMD_FRIEND_RECEIVED, ["source" => $sender->getPlayer()->getDisplayName(), "newtype" => $vars["newtype"]]);
 		}
 		return $sender->translate($phrase, $vars);
 	}
