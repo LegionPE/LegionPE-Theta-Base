@@ -39,7 +39,7 @@ class SyncChatQuery extends AsyncQuery{
 		}
 	}
 	public function getQuery(){
-		return $this->lastId === null ? ("SELECT json,src,msg FROM chat WHERE type=" . ChatType::MUTE_CHAT . " AND unix_timestamp() - unix_timestamp(creation) <= 86400") : "SELECT id,unix_timestamp(creation)AS creation,src,msg,type,class,json FROM chat WHERE id>$this->lastId AND (class=0 OR class=$this->class)";
+		return $this->lastId === null ? ("SELECT json,src,msg FROM chat WHERE (type=" . ChatType::MUTE_CHAT . ") AND unix_timestamp() - unix_timestamp(creation) <= 86400") : "SELECT id,unix_timestamp(creation)AS creation,src,msg,type,class,json FROM chat WHERE id>$this->lastId AND (class=0 OR class=$this->class)";
 	}
 	public function getResultType(){
 		return self::TYPE_ALL;

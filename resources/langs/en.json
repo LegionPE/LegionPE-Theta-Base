@@ -248,7 +248,11 @@
 				"spawn": "%verbose%You may not attack players at spawn!"
 			},
 			"killinfo": "%verbose%Your%em% %ord% %verbosemid%kill - the%em2% %streakord% %verbosemid% in a row.\n%verbose%Your coins + %em%%added%%verbosemid% => %em2%%coins%",
-			"deathinfo": "%verbose%This is your%em% %ord% %verbosemid%death! Watch out!"
+			"deathinfo": "%verbose%This is your%em% %ord% %verbosemid%death! Watch out!",
+			"invinc": {
+				"left": "%em%%left% %notify2%second(s) of invicibility left",
+				"off": "%notify2%You are no longer invincible."
+			}
 		},
 		"hub": {
 			"feather": {

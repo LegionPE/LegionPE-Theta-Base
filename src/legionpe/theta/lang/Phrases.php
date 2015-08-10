@@ -170,6 +170,9 @@ class Phrases{
 	const PVP_KILL_INFO = "game.pvp.killinfo";
 	const PVP_DEATH_INFO = "game.pvp.deathinfo";
 
+	const PVP_INVINCIBILITY_LEFT = "game.pvp.invinc.left";
+	const PVP_INVINCIBILITY_OFF = "game.pvp.invinc.off";
+
 	const HUB_FEATHER_TUT = "game.hub.feather.tut";
 
 	// constant variables

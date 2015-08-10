@@ -18,9 +18,15 @@ namespace legionpe\theta\chat;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\Session;
 
+/**
+ * Class PrivateMessageChatType
+ * @package legionpe\theta\chat
+ * @deprecated
+ */
 class PrivateMessageChatType extends ChatType{
 	protected $recipient;
 	public function getType(){
+		/** @noinspection PhpDeprecationInspection */
 		return self::PRIVATE_MESSAGE;
 	}
 	public function execute(){

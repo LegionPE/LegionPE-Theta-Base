@@ -17,6 +17,7 @@ namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\config\Settings;
+use legionpe\theta\Friend;
 use legionpe\theta\shops\Purchase;
 use legionpe\theta\utils\MUtils;
 use pocketmine\Server;
@@ -47,7 +48,7 @@ class LoginDataQuery extends AsyncQuery{
 	protected function onAssocFetched(\mysqli $mysql, array &$row){
 		$uid = $row["uid"];
 		/* group_concat must be done somewhere else because it ALWAYS returns a row. */
-		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs, (SELECT group_concat(CONCAT(IF(smalluid=$uid, largeuid, smalluid), ':', type) SEPARATOR ',') FROM friends WHERE smalluid=$uid OR largeuid=$uid) AS friends, (SELECT group_concat(CONCAT(channel, ':', sublv) SEPARATOR ',') FROM channels WHERE uid=$uid);");
+		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs, (SELECT group_concat(CONCAT(channel, ':', sublv) SEPARATOR ',') FROM channels WHERE uid=$uid) as channels, (SELECT group_concat(CONCAT(IF(smalluid=$uid,largeuid, smalluid), ':', type, ':', requested, ':', direction)) FROM friends) AS friends");
 		$result = $r->fetch_assoc();
 		$row["iphist"] = isset($result["iphist"]) ? $result["iphist"] : ",";
 		$row["langs"] = isset($result["langs"]) ? array_filter(explode(",", $result["langs"])) : [];
@@ -61,13 +62,18 @@ class LoginDataQuery extends AsyncQuery{
 		}else{
 			$row["channels"] = [];
 		}
-		$row["friends"] = [];
-		if(isset($result["friends"])){
-			foreach(array_filter(explode(",", $result["friends"])) as $friend){
-				list($other, $type) = explode(":", $friend, 2);
-				$row["friends"][(int)$other] = (int)$type;
-			}
+		$friendsString = $result["friends"];
+		$friends = [
+			Friend::FRIEND_ENEMY => [],
+			Friend::FRIEND_ACQUAINTANCE => [],
+			Friend::FRIEND_GOOD_FRIEND => [],
+			Friend::FRIEND_BEST_FRIEND => [],
+		];
+		foreach($friendsString as $friend){
+			list($friendUid, $type, $requested, $reqDir) = explode(":", $friend);
+			$friends[$type][$friendUid] = new Friend($uid, $friendUid, $type, $requested, $reqDir);
 		}
+		$row["friends"] = $friends;
 		$row["isnew"] = false;
 		$r->close();
 		if($this->fetchPurchases()){

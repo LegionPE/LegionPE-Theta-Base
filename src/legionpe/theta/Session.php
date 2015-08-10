@@ -1,7 +1,5 @@
 <?php
 
-#define $this->getLoginDatum(key) (isset($this->loginData[key]) ? $this->loginData[key] : null)
-
 /*
  * LegionPE Theta
  *
@@ -14,6 +12,7 @@
  *
  * @author PEMapModder
  */
+#define $this->getLoginDatum(key) (isset($this->loginData[key]) ? $this->loginData[key] : null)
 
 namespace legionpe\theta;
 
@@ -64,36 +63,6 @@ abstract class Session{
 	const AUTH_SUBNET_HIST = 5;
 	const AUTH_PASS = 6;
 	const AUTH_REG = 7;
-	const STATE_LOADING = 0x00;
-	const STATE_REGISTERING = 0x10;
-	const STATE_REGISTERING_FIRST = self::STATE_REGISTERING;
-	const STATE_REGISTERING_SECOND = self::STATE_REGISTERING | 0x01;
-	const STATE_LOGIN = 0x20;
-	const STATE_UPDATE_HASH = 0x30;
-	const STATE_PLAYING = 0x40;
-	const STATE_TRANSFERRING = 0x80;
-	const CHAT_STD = 0;
-	const CHAT_ME = 1;
-	const CHAT_LOCAL = 2;
-	const CHANNEL_LOCAL = "&local";
-	const CHANNEL_TEAM = "&team";
-	const CHANNEL_SUB_VERBOSE = 0;
-	const CHANNEL_SUB_NORMAL = 1;
-	const CHANNEL_SUB_MENTION = 2;
-	const FRIEND_BITMASK_REQUEST = 0b11;
-	const FRIEND_REQUEST_BITS = 2;
-	const FRIEND_REQUEST_FROM_SMALL = 0b01;
-	const FRIEND_REQUEST_TO_LARGE = 0b01;
-	const FRIEND_REQUEST_FROM_LARGE = 0b10;
-	const FRIEND_REQUEST_TO_SMALL = 0b10;
-	const FRIEND_LEVEL_NONE = 0b000100;
-	const FRIEND_LEVEL_ACQUAINTANCE = 0b001000;
-	const FRIEND_LEVEL_GOOD_FRIEND = 0b010000;
-	const FRIEND_LEVEL_BEST_FRIEND = 0b100000;
-	const FRIEND_LEVEL_MAX = self::FRIEND_LEVEL_BEST_FRIEND;
-	const FRIEND_NO_REQUEST = 4;
-	const FRIEND_IN = 1;
-	const FRIEND_OUT = 2;
 	public static $AUTH_METHODS = [
 		self::AUTH_TRANSFER => "transferring",
 		self::AUTH_UUID => "matching unique ID",
@@ -110,11 +79,22 @@ abstract class Session{
 		self::AUTH_PASS => "login.auth.method.pass",
 		self::AUTH_REG => "login.auth.method.register"
 	];
-	public static $FRIEND_TYPES = [
-		self::FRIEND_LEVEL_ACQUAINTANCE => Phrases::FRIEND_ACQUAINTANCE,
-		self::FRIEND_LEVEL_GOOD_FRIEND => Phrases::FRIEND_GOOD_FRIEND,
-		self::FRIEND_LEVEL_BEST_FRIEND => Phrases::FRIEND_BEST_FRIEND
-	];
+	const STATE_LOADING = 0x00;
+	const STATE_REGISTERING = 0x10;
+	const STATE_REGISTERING_FIRST = self::STATE_REGISTERING;
+	const STATE_REGISTERING_SECOND = self::STATE_REGISTERING | 0x01;
+	const STATE_LOGIN = 0x20;
+	const STATE_UPDATE_HASH = 0x30;
+	const STATE_PLAYING = 0x40;
+	const STATE_TRANSFERRING = 0x80;
+	const CHAT_STD = 0;
+	const CHAT_ME = 1;
+	const CHAT_LOCAL = 2;
+	const CHANNEL_LOCAL = "&local";
+	const CHANNEL_TEAM = "&team";
+	const CHANNEL_SUB_VERBOSE = 0;
+	const CHANNEL_SUB_NORMAL = 1;
+	const CHANNEL_SUB_MENTION = 2;
 	public $currentChatState = self::CHANNEL_LOCAL;
 	/** @var Player */
 	private $player;
@@ -1016,81 +996,96 @@ abstract class Session{
 			$type->push();
 		}
 	}
-	public function getFriends($level = self::FRIEND_LEVEL_GOOD_FRIEND){
-		$out = [];
-		foreach($this->getLoginDatum("friends") as $uid => $type){
-			if(($type & $level) === $level){
-				$out[] = $uid;
+	public function getFriends($flags = Friend::FLAG_ALL){
+		$ret = [];
+		foreach($this->getLoginDatum("friends") as $type => $friends){
+			if(!($flags & $type)){
+				continue;
+			}
+			/** @var Friend $friend */
+			foreach($friends as $friend){
+				if(($flags & Friend::FLAG_IN_ONLY) and $friend->isRequestOut()){
+					continue;
+				}
+				if(($flags & Friend::FLAG_OUT_ONLY) and !$friend->isRequestOut()){
+					continue;
+				}
+				$ret[$friend->friendUid] = $friend;
 			}
 		}
-		return $out;
+		return $ret;
 	}
-	public function getFriendType($uid, &$io = 0, &$toLarge = false, &$all = []){
-		$all = $this->getLoginDatum("friends");
-		$type = isset($all[$uid]) ? $all[$uid] : self::FRIEND_LEVEL_NONE;
-		$toLarge = $uid > $this->getUid();
-		$req = $type & self::FRIEND_BITMASK_REQUEST;
-		if($req === self::FRIEND_REQUEST_TO_LARGE and $toLarge or $req === self::FRIEND_REQUEST_TO_SMALL and !$toLarge){
-			$io = self::FRIEND_OUT;
-		}elseif($req === 0){
-			$io = self::FRIEND_NO_REQUEST;
-		}else{
-			$io = self::FRIEND_IN;
+	public function getFriend($uid, &$hasRow = false){
+		foreach($this->getLoginDatum("friends") as $type => $friends){
+			if(isset($friends[$uid])){
+				$hasRow = true;
+				return $friends[$uid];
+			}
 		}
-		return $type & ~self::FRIEND_BITMASK_REQUEST;
+		$hasRow = false;
+		return new Friend($this->getUid(), $uid, Friend::FRIEND_NOT_FRIEND, Friend::FRIEND_NOT_FRIEND);
 	}
-	public function inviteIncrease($uid, $targetName, &$vars_){
-		$vars = ["target" => $targetName];
-		$smallUid = min($uid, $this->getUid());
-		$largeUid = max($uid, $this->getUid());
-		$currentType = $this->getFriendType($uid, $io, $toLarge, $all);
-		if($io === self::FRIEND_OUT){
-			return Phrases::CMD_FRIEND_ALREADY_INVITED;
+	public function setFriendAttempt($otherUid, $type = Friend::FRIEND_GOOD_FRIEND){
+		$friend = $this->getFriend($otherUid, $update);
+		$dir = $friend->getRequestRelativeDirection();
+		$current = $friend->type;
+		$requested = $friend->requestedType;
+		$outDirection = ($this->getUid() > $otherUid) ? Friend::DIRECTION_BIG_TO_SMALL : Friend::DIRECTION_SMALL_TO_BIG;
+		$small = min($this->getUid(), $otherUid);
+		$large = max($this->getUid(), $otherUid);
+		$condition = "WHERE smalluid=$small AND largeuid=$large";
+		$NOT_FRIEND = Friend::FRIEND_NOT_FRIEND;
+		$NIL = Friend::DIRECTION_NIL;
+		// MEMO: $requested > $current
+		if($dir === Friend::DIRECTION_NIL){
+			if($type === $current){
+				return Friend::RET_IS_CURRENT_STATE;
+			}elseif($type > $current){
+				new RawAsyncQuery($this->getMain(), $update ? "UPDATE friends SET requested=$type, direction=$outDirection $condition" : "INSERT INTO friends (smalluid, largeuid, type, requested, direction) VALUES ($small, $large, $NOT_FRIEND, $type, $outDirection)");
+				return Friend::RET_SENT_REQUEST;
+			}else{
+				new RawAsyncQuery($this->getMain(), $update ? "UPDATE friends SET type=$type, requested=$NOT_FRIEND, direction=$NIL $condition" : "INSERT INTO friends (smalluid, largeuid, type, requested, direction) VALUES ($small, $large, $type, $NOT_FRIEND, $NIL)");
+				return Friend::RET_REDUCED;
+			}
+		}elseif($dir === Friend::DIRECTION_OUT){
+			if($type === $requested){
+				return Friend::RET_REQUEST_ALREADY_SENT;
+			}elseif($type > $requested){ // i.e. $type > $current
+				new RawAsyncQuery($this->getMain(), "UPDATE friends SET requested=$type $condition");
+				return Friend::RET_RAISED_REQUEST;
+			}else{
+				if($type > $current){
+					new RawAsyncQuery($this->getMain(), "UPDATE friends SET requested=$type $condition");
+					return Friend::RET_REQUEST_REDUCED;
+				}elseif($type === $current){
+					new RawAsyncQuery($this->getMain(), "DELETE FROM friends $condition");
+					return Friend::RET_REQUEST_CANCELLED;
+				}else{
+					new RawAsyncQuery($this->getMain(), "UPDATE friends SET type=$type, requested=$NOT_FRIEND, direciton=$NIL $condition");
+					return Friend::RET_REQUEST_CANCELLED_AND_REDUCED;
+				}
+			}
+		}else{ // $dir = Friend::DIRECTION_IN
+			if($type === $requested){
+				new RawAsyncQuery($this->getMain(), "UPDATE friends SET type=$type, requested=$NOT_FRIEND, direction=$NIL $condition");
+				return Friend::RET_REQUEST_ACCEPTED;
+			}elseif($type > $requested){ // $type > $requested > $current
+				new RawAsyncQuery($this->getMain(), "UPDATE friends SET type=$requested, requested=$type, direction=$outDirection $condition");
+				return Friend::RET_REQUEST_ACCEPTED_AND_RAISE_SENT;
+			}else{ // $requested > $type <=> $current
+				if($type === $current){
+					new RawAsyncQuery($this->getMain(), "UPDATE friends SET requested=$NOT_FRIEND, direction=$NIL $condition");
+					return Friend::RET_REQUEST_REJECTED;
+				}elseif($type > $current){
+					new RawAsyncQuery($this->getMain(), "UPDATE friends SET requested=$type, direction=$outDirection $condition");
+					return Friend::RET_REQUEST_REJECTED_AND_LOWER_SENT;
+				}else{
+					new RawAsyncQuery($this->getMain(), "UPDATE friends SET type=$type, requested=$NOT_FRIEND, direction=$NIL $condition");
+					return Friend::RET_REQUEST_REJECTED_AND_REDUCED;
+				}
+			}
 		}
-		if($io === self::FRIEND_IN){
-			$new = $currentType << 1;
-			$all[$uid] = $new;
-			$this->setLoginDatum("friends", $all);
-			new RawAsyncQuery($this->getMain(), "UPDATE friends SET type=$new WHERE smalluid=$smallUid AND largeuid=$largeUid");
-			$vars["newtype"] = $this->translate(self::$FRIEND_TYPES[$new]);
-			return Phrases::CMD_FRIEND_RAISED;
-		}
-		if($currentType === self::FRIEND_LEVEL_MAX){
-			return Phrases::CMD_FRIEND_MAX;
-		}
-		$new = $currentType & ($toLarge ? self::FRIEND_REQUEST_TO_LARGE : self::FRIEND_REQUEST_TO_SMALL);
-		$all[$uid] = $new;
-		$this->setLoginDatum("friends", $all);
-		new RawAsyncQuery($this->getMain(), $currentType === self::FRIEND_LEVEL_NONE ? "INSERT INTO friends (smalluid, largeuid, type) VALUES ($smallUid, $largeUid, $new)" : "UPDATE friends SET type=$new WHERE smalluid=$smallUid AND largeuid=$largeUid");
-		$vars["newtype"] = $this->translate(self::$FRIEND_TYPES[$currentType << 1]);
-		$vars_ = $vars;
-		return Phrases::CMD_FRIEND_RAISE_REQUESTED;
-	}
-	public function reduceFriend($uid){
-		$smallUid = min($this->getUid(), $uid);
-		$largeUid = max($this->getUid(), $uid);
-		$type = $this->getFriendType($uid, $io, $toLarge, $all);
-		if($type === self::FRIEND_LEVEL_NONE){
-			return false;
-		}
-		$new = $type >> 1;
-		if($new === 0){
-			unset($all[$uid]);
-		}else{
-			$all[$uid] = $new;
-		}
-		$this->setLoginDatum("friends", $all);
-		new RawAsyncQuery($this->getMain(), $new === self::FRIEND_LEVEL_NONE ? "DELETE FROM friends WHERE smalluid=$smallUid AND largeuid=$largeUid" : "UPDATE friends SET type=$new WHERE smalluid=$smallUid AND largeuid=$largeUid");
-		return true;
-	}
-	public function rejectFriend($uid){
-		$smallUid = min($this->getUid(), $uid);
-		$largeUid = max($this->getUid(), $uid);
-		$type = $this->getFriendType($uid, $originalIo, $toLarge, $all);
-		$all[$uid] = $type;
-		$this->setLoginDatum("friends", $all);
-		new RawAsyncQuery($this->getMain(), $type === self::FRIEND_LEVEL_NONE ? "DELETE FROM friends WHERE smalluid=$smallUid AND largeuid=$largeUid" : "UPDATE friends SET type=$type WHERE smalluid=$smallUid AND largeuid=$largeUid");
-		return $originalIo;
+		// TODO: Propagate change to other servers in the network by a ReloadFriendChatType broadcast
 	}
 	public function getPurchases(){
 		return $this->getLoginDatum("purchases", []);
@@ -1168,5 +1163,12 @@ abstract class Session{
 	}
 	public static function oldHash($password){
 		return bin2hex(hash("sha512", $password . "NaCl", true) ^ hash("whirlpool", "NaCl" . $password, true));
+	}
+	public function sendMessage($msg, $args){
+		if(substr($msg, 0, 4) === "%tr%"){
+			$this->send(substr($msg, 4), $args);
+		}else{
+			$this->getPlayer()->sendMessage($msg);
+		}
 	}
 }

@@ -25,6 +25,7 @@ abstract class ChatType{
 	const CONSOLE_MESSAGE = 2;
 	const CHANNEL_CHAT = 3;
 	const MUTE_CHAT = 4;
+	/** @deprecated */
 	const PRIVATE_MESSAGE = 5;
 	const TEAM_JOIN_PROPAGANDA = 6;
 	/** @var BasePlugin */
@@ -59,6 +60,7 @@ abstract class ChatType{
 				return new ChannelChatType($main, $src, $msg, $class, $data, $rowId);
 			case self::MUTE_CHAT:
 				return new MuteChatType($main, $src, $msg, $class, $data, $rowId);
+			/** @noinspection PhpDeprecationInspection */
 			case self::PRIVATE_MESSAGE:
 				return new PrivateMessageChatType($main, $src, $msg, $class, $data, $rowId);
 			case self::TEAM_JOIN_PROPAGANDA:

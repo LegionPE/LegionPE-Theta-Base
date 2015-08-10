@@ -23,6 +23,7 @@ use legionpe\theta\lang\Phrases;
 use legionpe\theta\query\CloseServerQuery;
 use legionpe\theta\query\InitDbQuery;
 use legionpe\theta\query\LoginDataQuery;
+use legionpe\theta\query\NewPrivateMessageQuery;
 use legionpe\theta\query\NewUserQuery;
 use legionpe\theta\query\SaveSinglePlayerQuery;
 use legionpe\theta\query\TransferServerQuery;
@@ -236,6 +237,9 @@ abstract class BasePlugin extends PluginBase{
 		}
 		return false;
 	}
+	public function sendPrivateMessage($uid, $message, array $args = []){
+		new NewPrivateMessageQuery($this, $uid, $message, $args);
+	}
 
 	// override-able implementations/classes
 	protected abstract function createSession(Player $player, array $loginData);
@@ -274,7 +278,12 @@ abstract class BasePlugin extends PluginBase{
 			"iphist" => ",$ip,",
 			"isnew" => true,
 			"email" => self::EMAIL_UNVERIFIED,
-			"friends" => [],
+			"friends" => [
+				Friend::FRIEND_ENEMY => [],
+				Friend::FRIEND_ACQUAINTANCE => [],
+				Friend::FRIEND_GOOD_FRIEND => [],
+				Friend::FRIEND_BEST_FRIEND => []
+			],
 			"langs" => [],
 			"purchases" => [],
 		];

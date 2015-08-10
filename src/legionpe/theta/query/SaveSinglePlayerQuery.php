@@ -18,13 +18,18 @@ namespace legionpe\theta\query;
 use legionpe\theta\BasePlugin;
 use legionpe\theta\config\Settings;
 use legionpe\theta\Session;
+use pocketmine\Server;
 
 class SaveSinglePlayerQuery extends AsyncQuery{
+	const INBOX_UNREAD = 0;
+	const INBOX_READ = 1;
+	private $uid;
 	/** @var string $data serialization of getColumns */
 	private $data;
 	private $coinsDelta;
 	public function __construct(BasePlugin $plugin, Session $session, $status){
 		$data = $this->getColumns($session, $status);
+		$this->uid = $session->getUid();
 		$this->data = $data;
 		parent::__construct($plugin);
 	}
@@ -97,10 +102,31 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 	protected function queryFinalProcess($query){
 		return $query . ",coins=coins+$this->coinsDelta";
 	}
+	public function onPreQuery(\mysqli $db){
+		$db->query($this->getUpdateQuery());
+	}
 	public function getQuery(){
-		return $this->getUpdateQuery();
+		return "SELECT msgid,msg,args FROM inbox WHERE uid=$this->uid AND status=" . self::INBOX_UNREAD;
 	}
 	public function getResultType(){
-		return self::TYPE_RAW;
+		return self::TYPE_ALL;
+	}
+	public function reportDebug(){
+		return false;
+	}
+	public function onCompletion(Server $server){
+		$main = BasePlugin::getInstance($server);
+		$ses = $main->getSession($this->uid);
+		if($ses instanceof Session){
+			$result = $this->getResult();
+			if(isset($result["result"])){
+				$read = [];
+				foreach($result["result"] as $row){
+					$read[] = $row["msgid"];
+					$ses->sendMessage($row["msg"], json_decode($row["args"]));
+				}
+				new MarkPrivateMessageReadQuery($main, $read);
+			}
+		}
 	}
 }

@@ -37,12 +37,12 @@ abstract class AsyncQuery extends AsyncTask{
 		self::COL_FLOAT => 0.0,
 	];
 	public function __construct(BasePlugin $plugin){
-		$plugin->getServer()->getScheduler()->scheduleAsyncTask($this);
 		if($this->getResultType() !== self::TYPE_RAW and $this->getExpectedColumns() === null){
 			echo "Fatal: Plugin error. ", static::class . " must override getExpectedColumns(), but it didn't. Committing suicide.";
 			sleep(604800);
 			die;
 		}
+		$plugin->getServer()->getScheduler()->scheduleAsyncTask($this);
 	}
 	public abstract function getResultType();
 	public function getExpectedColumns(){

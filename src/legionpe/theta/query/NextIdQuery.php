@@ -21,7 +21,7 @@ class NextIdQuery extends AsyncQuery{
 	const TEAM = "tid";
 	const USER = "uid";
 	const WARNING = "wid";
-	const PURCHASE = "pid";
+//	const PURCHASE = "pid";
 	const LABEL = "lid";
 	/** @var string */
 	private $name;

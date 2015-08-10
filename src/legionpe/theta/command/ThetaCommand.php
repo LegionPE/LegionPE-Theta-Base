@@ -27,11 +27,7 @@ use legionpe\theta\command\override\OverridingVersionCommand;
 use legionpe\theta\command\session\CoinsCommand;
 use legionpe\theta\command\session\ConsoleCommand;
 use legionpe\theta\command\session\DirectTeleportCommand;
-use legionpe\theta\command\session\friend\AddFriendCommand;
 use legionpe\theta\command\session\friend\FallbackFriendCommand;
-use legionpe\theta\command\session\friend\ListFriendsCommand;
-use legionpe\theta\command\session\friend\RejectFriendCommand;
-use legionpe\theta\command\session\friend\RemoveFriendCommand;
 use legionpe\theta\command\session\GrindCoinCommand;
 use legionpe\theta\command\session\LabelCommand;
 use legionpe\theta\command\session\TransferCommand;
@@ -115,10 +111,6 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			new TransferCommand($main, ["hub", "spawn", "quit", "home", "back", "lobby"], "Hub", Settings::CLASS_HUB),
 			new OverridingSayCommand($main),
 			new FallbackFriendCommand($main),
-			new AddFriendCommand($main),
-			new ListFriendsCommand($main),
-			new RejectFriendCommand($main),
-			new RemoveFriendCommand($main),
 		]);
 	}
 	private static function unregisterCommand(CommandMap $map, $name){
