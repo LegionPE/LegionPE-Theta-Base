@@ -28,6 +28,8 @@ abstract class ChatType{
 	/** @deprecated */
 	const PRIVATE_MESSAGE = 5;
 	const TEAM_JOIN_PROPAGANDA = 6;
+	const RELOAD_FRIENDS_PROPAGANDA = 7;
+	const CLASS_CHAT = 8;
 	/** @var BasePlugin */
 	protected $main;
 	protected $src;

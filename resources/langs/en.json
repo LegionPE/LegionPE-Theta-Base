@@ -24,6 +24,10 @@
 		],
 		"format": {
 			"team": "%em1%TEAM%symbol%}%source%%symbol%>%msg%"
+		},
+		"inbox": {
+			"start": "%verbose%=== You have received %em%%count%%verbosemid% new messages ===",
+			"end": "%verbose%=== End of new messages ==="
 		}
 	},
 	"cmd": {

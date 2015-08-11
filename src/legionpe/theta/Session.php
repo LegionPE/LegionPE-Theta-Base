@@ -659,6 +659,9 @@ abstract class Session{
 	public function isLocalChatOn(){
 		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_LOCAL_CHAT_ON) and $this->state === self::STATE_PLAYING;
 	}
+	public function isClassChatOn(){
+		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_CLASS_CHAT_ON) and $this->state === self::STATE_PLAYING;
+	}
 	public function isOwner(){
 		return ($this->getRank() & Settings::RANK_PERM_OWNER) === Settings::RANK_PERM_OWNER;
 	}
@@ -1025,7 +1028,12 @@ abstract class Session{
 		$hasRow = false;
 		return new Friend($this->getUid(), $uid, Friend::FRIEND_NOT_FRIEND, Friend::FRIEND_NOT_FRIEND);
 	}
-	public function setFriendAttempt($otherUid, $type = Friend::FRIEND_GOOD_FRIEND){
+	public function setFriendAttempt($otherUid, $type = Friend::FRIEND_GOOD_FRIEND, &$prop){
+		$prop = true;
+		if($otherUid === $this){
+			$prop = false;
+			return Friend::RET_SAME_UID;
+		}
 		$friend = $this->getFriend($otherUid, $update);
 		$dir = $friend->getRequestRelativeDirection();
 		$current = $friend->type;
@@ -1039,6 +1047,7 @@ abstract class Session{
 		// MEMO: $requested > $current
 		if($dir === Friend::DIRECTION_NIL){
 			if($type === $current){
+				$prop = false;
 				return Friend::RET_IS_CURRENT_STATE;
 			}elseif($type > $current){
 				new RawAsyncQuery($this->getMain(), $update ? "UPDATE friends SET requested=$type, direction=$outDirection $condition" : "INSERT INTO friends (smalluid, largeuid, type, requested, direction) VALUES ($small, $large, $NOT_FRIEND, $type, $outDirection)");
@@ -1049,6 +1058,7 @@ abstract class Session{
 			}
 		}elseif($dir === Friend::DIRECTION_OUT){
 			if($type === $requested){
+				$prop = false;
 				return Friend::RET_REQUEST_ALREADY_SENT;
 			}elseif($type > $requested){ // i.e. $type > $current
 				new RawAsyncQuery($this->getMain(), "UPDATE friends SET requested=$type $condition");
@@ -1164,7 +1174,7 @@ abstract class Session{
 	public static function oldHash($password){
 		return bin2hex(hash("sha512", $password . "NaCl", true) ^ hash("whirlpool", "NaCl" . $password, true));
 	}
-	public function sendMessage($msg, $args){
+	public function sendMessage($msg, $args = []){
 		if(substr($msg, 0, 4) === "%tr%"){
 			$this->send(substr($msg, 4), $args);
 		}else{

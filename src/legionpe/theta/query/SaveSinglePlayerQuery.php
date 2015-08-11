@@ -17,6 +17,7 @@ namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\config\Settings;
+use legionpe\theta\lang\Phrases;
 use legionpe\theta\Session;
 use pocketmine\Server;
 
@@ -119,13 +120,15 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 		$ses = $main->getSession($this->uid);
 		if($ses instanceof Session){
 			$result = $this->getResult();
-			if(isset($result["result"])){
+			if(isset($result["result"]) and count($result["result"]) > 0){
+				$ses->send(Phrases::CHAT_INBOX_START, count($result["result"]));
 				$read = [];
 				foreach($result["result"] as $row){
 					$read[] = $row["msgid"];
 					$ses->sendMessage($row["msg"], json_decode($row["args"]));
 				}
 				new MarkPrivateMessageReadQuery($main, $read);
+				$ses->send(Phrases::CHAT_INBOX_END, count($result["result"]));
 			}
 		}
 	}

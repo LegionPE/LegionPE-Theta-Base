@@ -24,7 +24,7 @@ abstract class Settings{
 	const STATUS_TRANSFERRING = 2;
 	const KICK_PLAYER_TOO_LONG_ONLINE = 5400;
 	const KICK_PLAYER_TOO_LONG_LOGIN = 30;
-	const POST_ONLINE_FREQUENCY = 60;
+	const POST_ONLINE_FREQUENCY = 20;
 	const CLASS_ALL = 0;
 	const CLASS_HUB = 1;
 	const CLASS_KITPVP = 2;
@@ -80,6 +80,7 @@ abstract class Settings{
 	const CONFIG_STATS_PUBLIC = 0x20;
 	const CONFIG_TEAM_CHANNEL_ON = 0x40;
 	const CONFIG_LOCAL_CHAT_ON = 0x80;
+	const CONFIG_CLASS_CHAT_ON = 0x100;
 	const TEAM_CONFIG_OPEN = 0x01;
 	const LABEL_APPROVED_NOT = 0;
 	const LABEL_APPROVED_EVERYONE = 1;

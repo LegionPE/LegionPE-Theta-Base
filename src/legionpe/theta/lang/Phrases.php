@@ -46,6 +46,8 @@ class Phrases{
 	const CHAT_FORMAT_BROADCAST_NETWORK = "chat.format.broadcast.network";
 	const CHAT_FORMAT_BROADCAST_CLASS = "chat.format.broadcast.class";
 	const CHAT_FORMAT_BROADCAST_LOCAL = "chat.format.broadcast.local";
+	const CHAT_INBOX_START = "chat.inbox.start";
+	const CHAT_INBOX_END = "chat.inbox.end";
 
 	const CMD_ERR_NO_PERM = "cmd.error.noperm.normal";
 	const CMD_ERR_NO_PERM_DONATE = "cmd.error.noperm.donate";
