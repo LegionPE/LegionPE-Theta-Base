@@ -87,9 +87,10 @@ abstract class Session{
 	const STATE_UPDATE_HASH = 0x30;
 	const STATE_PLAYING = 0x40;
 	const STATE_TRANSFERRING = 0x80;
-	const CHAT_STD = 0;
-	const CHAT_ME = 1;
-	const CHAT_LOCAL = 2;
+	const CHAT_NORMAL_LOCAL = 0;
+	const CHAT_NORMAL_CLASS = 1;
+	const CHAT_ME_LOCAL = 2;
+	const CHAT_ME_CLASS = 3;
 	const CHANNEL_LOCAL = "&local";
 	const CHANNEL_TEAM = "&team";
 	const CHANNEL_SUB_VERBOSE = 0;
@@ -572,7 +573,7 @@ abstract class Session{
 				$type->push();
 				return false;
 			}
-			$this->onChat($message, $isLocal ? self::CHAT_LOCAL : self::CHAT_STD);
+			$this->onChat($message, $isLocal ? self::CHAT_NORMAL_LOCAL : self::CHAT_NORMAL_CLASS);
 			return false;
 		}
 	}
@@ -631,10 +632,40 @@ abstract class Session{
 				}
 				return TextFormat::ITALIC . TextFormat::GRAY . $match[0] . TextFormat::RESET . $this->getChatColor();
 			}, $msg);
-		foreach($this->getMain()->getSessions() as $ses){
-			// TODO handle $type
-			if($ses->isLocalChatOn() and ($type !== self::CHAT_LOCAL or Settings::isLocalChat($ses->getPlayer(), $this->getPlayer()))){
-				$ses->getPlayer()->sendMessage($this->chatPrefix() . $this->getPlayer()->getDisplayName() . ($type === self::CHAT_ME ? ": " : ">") . $this->getChatColor() . $msg);
+		switch($type){
+			case self::CHAT_ME_CLASS:
+				$symbol = ": ";
+				$local = false;
+				break;
+			case self::CHAT_NORMAL_CLASS:
+				$symbol = ">";
+				$local = false;
+				break;
+			case self::CHAT_ME_LOCAL:
+				$symbol = ": ";
+				$local = true;
+				break;
+			case self::CHAT_NORMAL_LOCAL:
+				$symbol = ">";
+				$local = true;
+				break;
+			default:
+				$symbol = "";
+				$local = true;
+				break;
+		}
+		$type = ChatType::get($this->getMain(), ChatType::CLASS_CHAT, $this->getInGameName(), $msg, Settings::$LOCALIZE_CLASS, [
+			"ip" => Settings::$LOCALIZE_IP,
+			"port" => Settings::$LOCALIZE_PORT,
+			"symbol" => $symbol,
+			"local" => $local
+		]);
+		$type->push();
+		if($local){
+			foreach($this->getMain()->getSessions() as $ses){
+				if($ses->isLocalChatOn()){
+					$ses->getPlayer()->sendMessage($this->chatPrefix() . $this->getPlayer()->getDisplayName() . $symbol . $this->getChatColor() . $msg);
+				}
 			}
 		}
 	}
@@ -769,7 +800,7 @@ abstract class Session{
 	public function onChatEvent(/** @noinspection PhpUnusedParameterInspection */
 		PlayerChatEvent $event){
 		$msg = $event->getMessage();
-		$this->onChat($msg, self::CHAT_STD);
+		$this->onChat($msg, self::CHAT_NORMAL_CLASS);
 		return false;
 	}
 	public function onHoldItem(/** @noinspection PhpUnusedParameterInspection */

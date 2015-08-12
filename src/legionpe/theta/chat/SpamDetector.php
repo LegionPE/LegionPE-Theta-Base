@@ -47,7 +47,7 @@ class SpamDetector{
 			return false;
 		}
 		$cpm = $lengthSum / (microtime(true) - $this->chatLog[0]->time) * 60;
-		if($cpm > 200){
+		if($cpm > 250){
 			$this->session->send(Phrases::CHAT_BLOCKED_TOO_FAST, ["cpm" => $cpm]);
 			return false;
 		}

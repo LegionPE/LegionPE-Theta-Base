@@ -145,7 +145,7 @@ class LoginDataQuery extends AsyncQuery{
 			}
 		}
 		if(!isset($player)){
-			$main->getLogger()->info("Player of $this->sesId quitted the server before data were fetched.");
+			$main->getLogger()->debug("Player of $this->sesId quitted the server before data were fetched.");
 			return;
 		}
 		/** @var bool $success */
@@ -163,10 +163,16 @@ class LoginDataQuery extends AsyncQuery{
 			/** @var mixed[] $result */
 			$loginData = $result;
 			if(count($main->getSessions()) >= Settings::$SYSTEM_MAX_PLAYERS){
+				$main->getLogger()->notice("Server slots exceeded optimum level!");
 				$rank = (int)$loginData["rank"];
-				if(!($rank & Settings::RANK_PERM_MOD)){
-					if(!($rank & Settings::RANK_IMPORTANCE_DONATOR)){
-						$main->getAltServer($ip, $port);
+				if($rank & Settings::RANK_PERM_MOD){
+					$main->getLogger()->notice($player->getName() . " bypassed as mod");
+				}elseif($rank & Settings::RANK_IMPORTANCE_DONATOR){
+					$main->getLogger()->notice($player->getName() . " bypassed as donator");
+				}else{
+					$main->getAltServer($ip, $port);
+					if($ip !== "0.0.0.0"){
+						$main->getLogger()->notice($player->getName() . " is transferred to $ip:$port");
 						$main->transfer($player, $ip, $port, "This server is full.", false);
 					}
 				}

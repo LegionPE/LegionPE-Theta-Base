@@ -61,9 +61,9 @@ abstract class BasePlugin extends PluginBase{
 	private $sessions = [];
 	private $totalPlayers, $maxPlayers, $classTotalPlayers, $classMaxPlayers, $servers, $classServers;
 	/** @var string */
-	private $altIp;
+	private $altIp = "0.0.0.0";
 	/** @var int */
-	private $altPort;
+	private $altPort = 0;
 	/** @var int */
 	private $internalLastChatId = null;
 	/** @var FireSyncChatQueryTask */
@@ -182,7 +182,7 @@ abstract class BasePlugin extends PluginBase{
 	}
 	public function transfer(Player $player, $ip, $port, $msg, $save = true){
 		if($save and ($session = $this->getSession($player)) instanceof Session){
-			$this->saveSessionData($session, Settings::STATUS_TRANSFERRING);
+			$session->saveData(Settings::STATUS_TRANSFERRING);
 		}
 		$this->FastTransfer->transferPlayer($player, $ip, $port, $msg);
 	}

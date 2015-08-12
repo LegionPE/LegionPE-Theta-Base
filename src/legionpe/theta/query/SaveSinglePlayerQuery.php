@@ -112,6 +112,13 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 	public function getResultType(){
 		return self::TYPE_ALL;
 	}
+	public function getExpectedColumns(){
+		return [
+			"msgid" => self::COL_INT,
+			"msg" => self::COL_STRING,
+			"args" => self::COL_STRING,
+		];
+	}
 	public function reportDebug(){
 		return false;
 	}

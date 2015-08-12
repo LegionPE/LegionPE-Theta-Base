@@ -67,6 +67,10 @@ abstract class ChatType{
 				return new PrivateMessageChatType($main, $src, $msg, $class, $data, $rowId);
 			case self::TEAM_JOIN_PROPAGANDA:
 				return new TeamJoinPropaganda($main, $src, $msg, $class, $data, $rowId);
+			case self::RELOAD_FRIENDS_PROPAGANDA:
+				return new ReloadFriendsPropaganda($main, $src, $msg, $class, $data, $rowId);
+			case self::CLASS_CHAT:
+				return new ClassChatType($main, $src, $msg, $class, $data, $rowId);
 		}
 		return null;
 	}

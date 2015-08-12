@@ -175,6 +175,8 @@ class Phrases{
 	const PVP_INVINCIBILITY_LEFT = "game.pvp.invinc.left";
 	const PVP_INVINCIBILITY_OFF = "game.pvp.invinc.off";
 
+	const PVP_LEAVE_SPAWN_HINT = "game.pvp.hinttext";
+
 	const HUB_FEATHER_TUT = "game.hub.feather.tut";
 
 	// constant variables

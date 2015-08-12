@@ -256,7 +256,8 @@
 			"invinc": {
 				"left": "%em%%left% %notify2%second(s) of invicibility left",
 				"off": "%notify2%You are no longer invincible."
-			}
+			},
+			"hinttext": "%notify2%Jump into the %em%void%%notify2% to start fighting."
 		},
 		"hub": {
 			"feather": {

@@ -25,8 +25,12 @@ class OverridingMeCommand extends SessionCommand{
 	}
 	protected function run(array $args, Session $sender){
 		$msg = implode(" ", $args);
+		$isLocal = substr($msg, 0, 1) === ".";
+		if($isLocal){
+			$msg = substr($msg, 1);
+		}
 		if($sender->getSpamDetector()->censor($msg)){
-			$sender->onChat($msg, Session::CHAT_ME);
+			$sender->onChat($msg, $isLocal ? Session::CHAT_ME_LOCAL : Session::CHAT_ME_CLASS);
 		}
 	}
 }

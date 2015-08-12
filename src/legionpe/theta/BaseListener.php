@@ -74,6 +74,11 @@ class BaseListener implements Listener{
 	public function onKick(PlayerKickEvent $event){
 		if($event->getReason() === "disconnectionScreen.serverFull"){
 			$event->setCancelled();
+			$this->main->getAltServer($ip, $port);
+			if($ip !== "0.0.0.0"){
+				$this->getMain()->getLogger()->notice("Transferring " . $event->getPlayer()->getName() . " to $ip:$port because server strict limit is reached");
+				$this->main->transfer($event->getPlayer(), $ip, $port, "This server is full");
+			}
 		}
 	}
 	public function onDisable(PluginDisableEvent $event){

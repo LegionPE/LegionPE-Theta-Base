@@ -20,6 +20,7 @@ use legionpe\theta\lang\Phrases;
 class ClassChatType extends ChatType{
 	protected $ip;
 	protected $port;
+	protected $symbol;
 	protected $local;
 	public function getType(){
 		return self::CLASS_CHAT;
