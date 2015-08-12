@@ -18,6 +18,7 @@ namespace legionpe\theta;
 use legionpe\theta\query\LoginDataQuery;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerKickEvent;
+use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\player\PlayerPreLoginEvent;
 use pocketmine\event\plugin\PluginDisableEvent;
 use pocketmine\event\server\QueryRegenerateEvent;
@@ -30,10 +31,10 @@ class BaseListener implements Listener{
 	public function __construct(BasePlugin $main){
 		$this->main = $main;
 		foreach($main->getServer()->getOnlinePlayers() as $player){
-			$this->priv_onPreLogin($player);
+			$this->priv_onLogin($player);
 		}
 	}
-	private function priv_onPreLogin(Player $player){
+	private function priv_onLogin(Player $player){
 		/** @var string|LoginDataQuery $LoginQuery */
 		$LoginQuery = $this->main->getLoginQueryImpl();
 		/** @noinspection PhpDeprecationInspection */
@@ -54,7 +55,9 @@ class BaseListener implements Listener{
 				return;
 			}
 		}
-		$this->priv_onPreLogin($player);
+	}
+	public function onLogin(PlayerLoginEvent $event){
+		$this->priv_onLogin($event->getPlayer());
 	}
 	public function onQueryRegen(QueryRegenerateEvent $event){
 		$event->setWorld($this->main->query_world());

@@ -43,7 +43,7 @@ class LoginDataQuery extends AsyncQuery{
 	}
 	public function getQuery(){
 		// warning: keep the first 7 characters ALWAYS "SELECT "
-		return "SELECT uid,name,nicks,lastip,status,lastses,authuuid,coins,hash,oldhash,pwprefix,pwlen,registration,laston,ontime,config,(SELECT value FROM labels WHERE lid=users.lid)AS lbl,(SELECT approved FROM labels WHERE lid=users.lid)AS lblappr,lastgrind,rank,warnpts,lastwarn,tid,(SELECT name FROM teams WHERE tid=users.tid)as teamname,teamrank,teamjoin,ignorelist,email,emailkey FROM users WHERE name=$this->name";
+		return "SELECT uid,name,nicks,lastip,status,lastses,authuuid,coins,hash,oldhash,pwprefix,pwlen,registration,laston,ontime,config,(SELECT value FROM labels WHERE lid=users.lid)AS lbl,(SELECT approved FROM labels WHERE lid=users.lid)AS lblappr,lastgrind,rank,warnpts,lastwarn,tid,(SELECT name FROM teams WHERE tid=users.tid)as teamname,teamrank,teamjoin,ignorelist,email,emailkey,emailauth FROM users WHERE name=$this->name";
 	}
 	protected function onAssocFetched(\mysqli $mysql, array &$row){
 		$uid = $row["uid"];
@@ -135,17 +135,19 @@ class LoginDataQuery extends AsyncQuery{
 			"ignorelist" => self::COL_STRING,
 			"email" => self::COL_STRING,
 			"emailkey" => self::COL_STRING,
+			"emailauth" => self::COL_INT,
 		];
 	}
 	public function onCompletion(Server $server){
 		$main = BasePlugin::getInstance($server);
-		foreach($server->getOnlinePlayers() as $player){
-			if($player->getId() === $this->sesId){
+		foreach($server->getOnlinePlayers() as $p){
+			if($p->getId() === $this->sesId){
+				$player = $p;
 				break;
 			}
 		}
 		if(!isset($player)){
-			$main->getLogger()->debug("Player of $this->sesId quitted the server before data were fetched.");
+			$main->getLogger()->notice("Player of $this->sesId quitted the server before data were fetched.");
 			return;
 		}
 		/** @var bool $success */

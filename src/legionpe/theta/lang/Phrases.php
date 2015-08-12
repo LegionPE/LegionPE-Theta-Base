@@ -34,6 +34,8 @@ class Phrases{
 	const LOGIN_REGISTER_RETYPE = "login.register.retype";
 	const LOGIN_REGISTER_SUCCESS = "login.register.success";
 	const LOGIN_REGISTER_MISMATCH = "login.register.mismatch";
+	const LOGIN_POPUP_LOGIN = "login.popup.login";
+	const LOGIN_POPUP_REGISTER = "login.popup.register";
 
 	const CHAT_BLOCKED_PASS = "chat.blocked.pass";
 	const CHAT_BLOCKED_TOO_FAST = "chat.blocked.toofast";
@@ -118,6 +120,7 @@ class Phrases{
 	const CMD_TEAM_INVITE_SENT = "cmd.team.invite.sent";
 	const CMD_TEAM_JOINED = "cmd.team.joined";
 	const CMD_TEAM_QUITTED = "cmd.team.quitted";
+	const CMD_TEAM_RANKS = "cmd.team.ranks";
 
 	const CMD_TRANSFER_ERR_NO_SERVERS = "cmd.transfer.err.noservers";
 	const CMD_TRANSFER_SUCCESS = "cmd.transfer.success";
@@ -151,12 +154,14 @@ class Phrases{
 
 	const PVP_DEATH_GENERIC = "game.pvp.death.generic";
 	const PVP_DEATH_KILLED = "game.pvp.death.killed";
+	const PVP_DEATH_LAVA = "game.pvp.death.lava";
 	const PVP_DEATH_FALL_GENERIC = "game.pvp.death.fall.generic";
 	const PVP_DEATH_FALL_LADDER = "game.pvp.death.fall.ladder";
 	const PVP_DEATH_FALL_VINE = "game.pvp.death.fall.vine";
 	const PVP_DEATH_STATS = "game.pvp.death.stats";
 	const PVP_KILL_GENERIC = "game.pvp.kill.generic";
 	const PVP_KILL_KILLED = "game.pvp.kill.killed";
+	const PVP_KILL_LAVA = "game.pvp.kill.lava";
 	const PVP_KILL_FALL_GENERIC = "game.pvp.kill.fall.generic";
 	const PVP_KILL_FALL_LADDER = "game.pvp.kill.fall.ladder";
 	const PVP_KILL_FALL_VINE = "game.pvp.kill.fall.vine";

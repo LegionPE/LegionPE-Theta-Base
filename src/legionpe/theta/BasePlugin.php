@@ -29,6 +29,7 @@ use legionpe\theta\query\SaveSinglePlayerQuery;
 use legionpe\theta\query\TransferServerQuery;
 use legionpe\theta\queue\Queue;
 use legionpe\theta\utils\FireSyncChatQueryTask;
+use legionpe\theta\utils\MUtils;
 use legionpe\theta\utils\SessionTickTask;
 use legionpe\theta\utils\SyncStatusTask;
 use pocketmine\event\player\PlayerQuitEvent;
@@ -40,7 +41,7 @@ use pocketmine\utils\TextFormat;
 use shoghicp\FastTransfer\FastTransfer;
 
 abstract class BasePlugin extends PluginBase{
-	const EMAIL_UNVERIFIED = "~NOTSET";
+	const EMAIL_UNVERIFIED = "NOTSET";
 	private static $NAME = null;
 	private static $CLASS = null;
 	/** @var SessionEventListener */
@@ -106,7 +107,8 @@ abstract class BasePlugin extends PluginBase{
 		$this->badWords = json_decode($this->getResourceContents("words.json"));
 		$this->approvedDomains = json_decode($this->getResourceContents("approvedDomains.json"));
 		$this->langs = new LanguageManager($this);
-		$this->getLogger()->alert("Enabled " . $this->getDescription()->getFullName() . " compiled at " . date("d/m/Y H:i:s (P)", (int)$this->getResourceContents("timestamp.LEGIONPE")) . ". MyPID is " . \getmypid() . ".");
+		$compileTime = (int)$this->getResourceContents("timestamp.LEGIONPE");
+		$this->getLogger()->alert("Enabled " . $this->getDescription()->getFullName() . " compiled at " . date("d/m/Y H:i:s (P)", $compileTime) . " (" . MUtils::time_secsToString(time() - $compileTime) . " ago). MyPID is " . \getmypid() . ".");
 	}
 	public function getResourceContents($path){
 		$handle = $this->getResource($path);
@@ -256,10 +258,10 @@ abstract class BasePlugin extends PluginBase{
 			"name" => $name,
 			"nicks" => "|$name|",
 			"lastip" => "",
-			"status" => Settings::STATUS_ONLINE,
+			"status" => Settings::STATUS_OFFLINE,
 			"lastses" => Settings::$LOCALIZE_CLASS,
 			"authuuid" => $player->getUniqueId(),
-			"coins" => 100.0,
+			"coins" => 0.0,
 			"hash" => str_repeat("0", 128),
 			"pwprefix" => "\0",
 			"pwlen" => 0,

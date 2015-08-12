@@ -31,6 +31,7 @@ use pocketmine\block\Block;
 use pocketmine\command\CommandSender;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\block\BlockPlaceEvent;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\entity\EntityTeleportEvent;
@@ -84,7 +85,6 @@ abstract class Session{
 	const STATE_REGISTERING_FIRST = self::STATE_REGISTERING;
 	const STATE_REGISTERING_SECOND = self::STATE_REGISTERING | 0x01;
 	const STATE_LOGIN = 0x20;
-	const STATE_UPDATE_HASH = 0x30;
 	const STATE_PLAYING = 0x40;
 	const STATE_TRANSFERRING = 0x80;
 	const CHAT_NORMAL_LOCAL = 0;
@@ -96,6 +96,13 @@ abstract class Session{
 	const CHANNEL_SUB_VERBOSE = 0;
 	const CHANNEL_SUB_NORMAL = 1;
 	const CHANNEL_SUB_MENTION = 2;
+	public static $TEAM_RANKS = [
+		"Junior-Member",
+		"Member",
+		"Senior-Member",
+		"Co-Leader",
+		"Leader"
+	];
 	public $currentChatState = self::CHANNEL_LOCAL;
 	/** @var Player */
 	private $player;
@@ -120,6 +127,7 @@ abstract class Session{
 	private $tmpHash = null, $curPopup = null;
 	/** @var int half seconds until #postOnline */
 	private $postOnlineTimeout = Settings::POST_ONLINE_FREQUENCY;
+	public $doHashSaves = false;
 	public function __construct(Player $player, $loginData){
 		$this->player = $player;
 		$this->loginData = $loginData;
@@ -198,7 +206,7 @@ abstract class Session{
 		}
 		if($this->isLoggingIn()){
 			$this->send(Phrases::LOGIN_PASS_PROMPT);
-		}else{
+		}elseif($this->isRegistering()){
 			$this->send(Phrases::LOGIN_REGISTER_PROMPT, ["name" => $this->getPlayer()->getName()]);
 		}
 	}
@@ -286,6 +294,27 @@ abstract class Session{
 		}
 		return $array;
 	}
+	public function isPlaying(){
+		return ($this->state & 0xF0) === self::STATE_PLAYING;
+	}
+	public function isRegistering(){
+		return ($this->state & 0xF0) === self::STATE_REGISTERING;
+	}
+	public function isLoggingIn(){
+		return ($this->state & 0xF0) === self::STATE_LOGIN;
+	}
+	public function standardHandler(){
+		if($this->isRegistering()){
+			$this->setMaintainedPopup($this->translate(Phrases::LOGIN_POPUP_REGISTER));
+			return false;
+		}
+		if($this->isLoggingIn()){
+			$this->setMaintainedPopup($this->translate(Phrases::LOGIN_POPUP_LOGIN));
+			return false;
+		}
+		return $this->isPlaying();
+	}
+
 	public function recalculateNametag(){
 		$this->setInGameName($plain = $this->calculatePlainName());
 		$this->getPlayer()->setDisplayName($plain);
@@ -314,7 +343,7 @@ abstract class Session{
 		$teamname = $this->getTeamName();
 		if($teamname){
 			$tag .= TextFormat::DARK_AQUA . "Team " . TextFormat::GOLD . $teamname;
-			$tag .= TextFormat::GREEN . "(" . $this->getTeamRank() . ")\n";
+			$tag .= TextFormat::GREEN . "(" . self::$TEAM_RANKS[$this->getTeamRank()] . ")\n";
 		}
 		$rank = $this->calculateRank();
 		if($rank !== ""){
@@ -369,6 +398,7 @@ abstract class Session{
 		}
 		return ($suffix === "+") ? "Tester" : "";
 	}
+
 	public function getRank(){
 		return $this->getLoginDatum("rank");
 	}
@@ -445,9 +475,6 @@ abstract class Session{
 		}
 		return $ip0[0] === $ip1[0] and $ip0[1] = $ip1[1];
 	}
-	public function isLoggingIn(){
-		return ($this->state & 0xF0) === self::STATE_LOGIN;
-	}
 	public function isSpammer(){
 		return $this->getRank() & Settings::RANK_PERM_SPAM;
 	}
@@ -501,6 +528,7 @@ abstract class Session{
 				$this->setLoginDatum("pwlen", $len);
 				$this->setLoginDatum("hash", $hash);
 				$this->setLoginDatum("oldhash", "");
+				$this->doHashSaves = true;
 			}else{
 				$this->state++;
 				$chances = "chance";
@@ -577,9 +605,6 @@ abstract class Session{
 			return false;
 		}
 	}
-	public function isRegistering(){
-		return ($this->state & 0xF0) === self::STATE_REGISTERING;
-	}
 	public function getUid(){
 		return $this->getLoginDatum("uid");
 	}
@@ -598,7 +623,7 @@ abstract class Session{
 		return $this->getLoginDatum("hash");
 	}
 	public function isPortingOldPassword(){
-		return (trim(strtolower($this->getLoginDatum("hash")), "f") === "") and (strlen($this->getLoginDatum("oldhash")) === 128) and !$this->isNew();
+		return (trim(strtolower($this->getLoginDatum("hash")), "0f") === "") and (strlen($this->getLoginDatum("oldhash")) === 128) and !$this->isNew();
 	}
 	public function getPasswordOldHash(){
 		return $this->getLoginDatum("oldhash");
@@ -674,13 +699,13 @@ abstract class Session{
 	}
 	public function getChatColor(){
 		if($this->isAdmin()){
-			return TextFormat::LIGHT_PURPLE . TextFormat::BOLD;
+			return TextFormat::LIGHT_PURPLE . TextFormat::ITALIC;
 		}
 		if($this->isModerator()){
 			return TextFormat::LIGHT_PURPLE;
 		}
 		if($this->isVIP()){
-			return TextFormat::WHITE . TextFormat::BOLD;
+			return TextFormat::WHITE . TextFormat::ITALIC;
 		}
 		if($this->isDonator()){
 			return TextFormat::WHITE;
@@ -701,6 +726,17 @@ abstract class Session{
 		if(!$this->isPlaying()){
 			return false;
 		}
+		if($event instanceof EntityDamageByEntityEvent){
+			$player = $event->getDamager();
+			if($player instanceof Player){
+				$ses = $this->getMain()->getSession($player);
+				if($ses instanceof Session){
+					if(!$ses->isPlaying()){
+						return false;
+					}
+				}
+			}
+		}
 		return true;
 	}
 	public function onHeal(/** @noinspection PhpUnusedParameterInspection */
@@ -709,9 +745,6 @@ abstract class Session{
 			return false;
 		}
 		return true;
-	}
-	public function isPlaying(){
-		return ($this->state & 0xF0) === self::STATE_PLAYING;
 	}
 	public function onDeath(/** @noinspection PhpUnusedParameterInspection */
 		PlayerDeathEvent $event){
@@ -729,59 +762,31 @@ abstract class Session{
 	}
 	public function onConsume(/** @noinspection PhpUnusedParameterInspection */
 		PlayerItemConsumeEvent $event){
-		if(!$this->isPlaying()){
-			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
-			return false;
-		}
-		return true;
+		return $this->standardHandler();
 	}
 	public function onDropItem(/** @noinspection PhpUnusedParameterInspection */
 		PlayerDropItemEvent $event){
-		if(!$this->isPlaying()){
-			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
-			return false;
-		}
-		return true;
+		return $this->standardHandler();
 	}
 	public function onInteract(/** @noinspection PhpUnusedParameterInspection */
 		PlayerInteractEvent $event){
-		if(!$this->isPlaying()){
-			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
-			return false;
-		}
-		return true;
+		return $this->standardHandler();
 	}
 	public function onRespawn(/** @noinspection PhpUnusedParameterInspection */
 		PlayerRespawnEvent $event){
-		if(!$this->isPlaying()){
-			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
-			return false;
-		}
-		return true;
+		return $this->standardHandler();
 	}
 	public function onBreak(/** @noinspection PhpUnusedParameterInspection */
 		BlockBreakEvent $event){
-		if(!$this->isPlaying()){
-			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
-			return false;
-		}
-		return true;
+		return $this->standardHandler();
 	}
 	public function onPlace(/** @noinspection PhpUnusedParameterInspection */
 		BlockPlaceEvent $event){
-		if(!$this->isPlaying()){
-			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
-			return false;
-		}
-		return true;
+		return $this->standardHandler();
 	}
 	public function onOpenInv(/** @noinspection PhpUnusedParameterInspection */
 		InventoryOpenEvent $event){
-		if(!$this->isPlaying()){
-			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
-			return false;
-		}
-		return true;
+		return $this->standardHandler();
 	}
 	public function onPickupItem(/** @noinspection PhpUnusedParameterInspection */
 		InventoryPickupItemEvent $event){
@@ -929,7 +934,7 @@ abstract class Session{
 		$this->setLoginDatum("lastgrind", time());
 	}
 	public function isEmailVerified(){
-		return substr($this->getLoginDatum("email"), 0, 1) !== "~";
+		return $this->getLoginDatum("emailauth") === 2;
 	}
 	public function isDonatorPlus(){
 		return ($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR_PLUS) === Settings::RANK_IMPORTANCE_DONATOR_PLUS;

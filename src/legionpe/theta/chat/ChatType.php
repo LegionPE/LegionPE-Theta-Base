@@ -64,6 +64,7 @@ abstract class ChatType{
 				return new MuteChatType($main, $src, $msg, $class, $data, $rowId);
 			/** @noinspection PhpDeprecationInspection */
 			case self::PRIVATE_MESSAGE:
+				/** @noinspection PhpDeprecationInspection */
 				return new PrivateMessageChatType($main, $src, $msg, $class, $data, $rowId);
 			case self::TEAM_JOIN_PROPAGANDA:
 				return new TeamJoinPropaganda($main, $src, $msg, $class, $data, $rowId);

@@ -141,7 +141,14 @@
 			},
 			"joined": "%notify%%name% joined your team!",
 			"quitted": "%notify%%name% quitted the team!",
-			"disbanded": "%nofity2%%bold%Your team has been %em%%italic%disbanded!"
+			"disbanded": "%nofity2%%bold%Your team has been %em%%italic%disbanded!",
+			"ranks": [
+				"Junior-Member",
+				"Member",
+				"Senior-Member",
+				"Co-Leader",
+				"Leader"
+			]
 		},
 		"transfer": {
 			"err": {
@@ -181,6 +188,10 @@
 			"retype": "%notify%Great! Now please type the password %em2%again%notify% to confirm it.",
 			"success": "%notify%Thanks for registering! You can use this password to login at anywhere on our network.\n%verbose%Remember %bold%%em%never%reset%%verbosemid% to share your password to %em2%anybody%verbosemid%. Not even staff members.",
 			"mismatch": "%error%The two passwords aren't the same!\nLet's start all over again.\n%notify%Please type a password you like %em%directly%notify% into chat."
+		},
+		"popup": {
+			"login": "%notify2%Please login by typing your password directly into chat.",
+			"register": "%notify2%Please register by typing your password directly into chat."
 		}
 	},
 	"warning": {
@@ -225,6 +236,7 @@
 			"death": {
 				"generic": "%error%You died!",
 				"killed": "%error%You were %action% by %killer%!",
+				"lava": "%error%You tried to swin in lava to escape from %killer%!",
 				"fall": {
 					"generic": "%error%You were %em%%action% to a deadly fall%error% by %killer%!",
 					"ladder": "%error%You were %em%%action% to a deadly fall%error% off %em2%a ladder%error% by %killer%!",
@@ -234,6 +246,7 @@
 			},
 			"kill": {
 				"killed": "%success%You %action% %em%%victim%!",
+				"lava": "%success%%em%%victim%%success% tried to swim in lava to escape from you!",
 				"fall": {
 					"generic": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall!",
 					"ladder": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall%success% from a %em3%ladder!",
@@ -257,7 +270,7 @@
 				"left": "%em%%left% %notify2%second(s) of invicibility left",
 				"off": "%notify2%You are no longer invincible."
 			},
-			"hinttext": "%notify2%Jump into the %em%void%%notify2% to start fighting."
+			"hinttext": "%notify2%Jump into the %em%void%notify2% to start fighting."
 		},
 		"hub": {
 			"feather": {
