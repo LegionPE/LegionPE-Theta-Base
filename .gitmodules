@@ -1,0 +1,3 @@
+[submodule "kitinfo"]
+	path = src/libtheta/info
+	url = https://github.com/LegionPE/kit-info.git

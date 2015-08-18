@@ -35,7 +35,14 @@ class FetchLabelQuery extends AsyncQuery{
 		return self::TYPE_ASSOC;
 	}
 	public function getQuery(){
-		return "SELECT lid,value,approved FROM labels WHERE lid=$this->name";
+		return "SELECT lid,value,approved FROM labels WHERE lid={$this->esc($this->name)}";
+	}
+	public function getExpectedColumns(){
+		return [
+			"lid" => self::COL_INT,
+			"value" => self::COL_STRING,
+			"approved" => self::COL_INT
+		];
 	}
 	public function onCompletion(Server $server){
 		$session = BasePlugin::getInstance($server)->getSessionByUid($this->uid);
@@ -43,7 +50,7 @@ class FetchLabelQuery extends AsyncQuery{
 			return;
 		}
 		$result = $this->getResult();
-		if($result["type"] === self::TYPE_ASSOC){
+		if($result["resulttype"] === self::TYPE_ASSOC){
 			if($session->canUseLabel($result["approved"])){
 				$session->setLoginDatum("lbl", $result["value"]);
 				new SetLabelQuery($session, $result["lid"]);

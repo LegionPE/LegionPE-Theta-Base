@@ -26,6 +26,7 @@ use legionpe\theta\query\JoinChannelQuery;
 use legionpe\theta\query\PartChannelQuery;
 use legionpe\theta\query\PreExecuteWarningQuery;
 use legionpe\theta\query\RawAsyncQuery;
+use legionpe\theta\query\UpdateHashesQuery;
 use legionpe\theta\utils\MUtils;
 use pocketmine\block\Block;
 use pocketmine\command\CommandSender;
@@ -171,7 +172,7 @@ abstract class Session{
 	}
 	public function onJoin(){
 		foreach($this->player->getLevel()->getChunkPlayers($this->player->getFloorX() >> 4, $this->player->getFloorZ() >> 4) as $other){
-			$other->hidePlayer($this->player);
+//			$other->hidePlayer($this->player);
 			$this->invisibleFrom[$other->getId()] = true;
 		}
 		$this->prepareLogin();
@@ -528,7 +529,8 @@ abstract class Session{
 				$this->setLoginDatum("pwlen", $len);
 				$this->setLoginDatum("hash", $hash);
 				$this->setLoginDatum("oldhash", "");
-				$this->doHashSaves = true;
+				$this->login(self::AUTH_PASS);
+				new UpdateHashesQuery($this->getMain(), $this->getUid(), $hash);
 			}else{
 				$this->state++;
 				$chances = "chance";
@@ -752,13 +754,7 @@ abstract class Session{
 	}
 	public function onMove(/** @noinspection PhpUnusedParameterInspection */
 		PlayerMoveEvent $event){
-		if(!$this->isPlaying()){
-			$this->setMaintainedPopup(TextFormat::RED . "Please " . ($this->isRegistering() ? "register" : "login") . " by typing your password directly into chat.");
-			$from = $event->getFrom();
-			$to = $event->getTo();
-			return ($from->x === $to->x) and ($from->y === $to->y) and ($from->z === $to->z);
-		}
-		return true;
+		return $this->standardHandler();
 	}
 	public function onConsume(/** @noinspection PhpUnusedParameterInspection */
 		PlayerItemConsumeEvent $event){
@@ -1217,4 +1213,5 @@ abstract class Session{
 			$this->getPlayer()->sendMessage($msg);
 		}
 	}
+	public function reloadKits(){}
 }
