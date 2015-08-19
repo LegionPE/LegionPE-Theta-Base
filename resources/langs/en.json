@@ -159,7 +159,7 @@
 					"dup": "%error%You have already sent a request to teleport to %em%%to%%error%."
 				},
 				"sent": "%success%Sent a request to teleport to %em%%to%",
-				"received": "%notify%%from% sent a request to teleport to you!",
+				"received": "%em%%from%%notify% sent a request to teleport to you! Do %em2%/tpa %from%%notify% to accept.",
 				"accepted": "%success%Accepted request to teleport you to %em%%to%%success%. Teleportation will start in a few seconds. Hold the handrail!",
 				"beaccepted": "%notify%Request to teleport %em%%from%%notify% to you has been accepted. Teleportation will take place in a few seconds. Don't stand near a cliff!",
 				"bf": {
@@ -175,7 +175,7 @@
 					"dup": "%error%You have already sent a request to teleport %em%%to%%error% to you."
 				},
 				"sent": "%success%Sent a request to teleport %em%%to% to you.",
-				"received": "%notify%%from% sent a request to teleport you to him/her!",
+				"received": "%em%%from%%notify% sent a request to teleport you to him/her! Do %em2%/tp %from%%notify% to accept.",
 				"accepted": "%success%Accepted request to teleport %em%%to%%success% to you. Teleportation will start in a few seconds. Don't stand near a cliff!",
 				"beaccepted": "%notify%Request to teleport %em%%from%%notify% to you has been accepted. Teleportation will take place in a few seconds. Hold the handrail!",
 				"bf": {

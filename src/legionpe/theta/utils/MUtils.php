@@ -98,7 +98,7 @@ class MUtils{
 		if($secs > 0){
 			$time .= "$secs s ";
 		}
-		return substr($time, 0, -2);
+		return substr($time, 0, -1);
 	}
 	public static function dir_copy($from, $to){
 		$to = rtrim($to, "\\/") . "/";

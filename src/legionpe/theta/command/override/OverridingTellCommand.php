@@ -35,7 +35,7 @@ class OverridingTellCommand extends SessionCommand{
 		if($target === null){
 			return $this->offline($sender, $name);
 		}
-		if(!isset($args[1])){
+		if(!isset($args[0])){
 			return false;
 		}
 		$message = implode(" ", $args);
@@ -43,7 +43,6 @@ class OverridingTellCommand extends SessionCommand{
 			return true;
 		}
 		$target->getPlayer()->sendMessage($msg = Phrases::VAR_info . "[" . $sender->getPlayer()->getName() . " > " . $target->getPlayer()->getName() . "] " . Phrases::VAR_info . $message);
-		$sender->getPlayer()->sendMessage($msg);
 		fwrite($this->pmLog, "|from:{$sender->getPlayer()->getName()}|to:{$target->getPlayer()->getName()}|msg:$message|" . PHP_EOL);
 		return $msg;
 	}
