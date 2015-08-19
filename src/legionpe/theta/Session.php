@@ -1127,7 +1127,6 @@ abstract class Session{
 				}
 			}
 		}
-		// TODO: Propagate change to other servers in the network by a ReloadFriendChatType broadcast
 	}
 	public function getPurchases(){
 		return $this->getLoginDatum("purchases", []);

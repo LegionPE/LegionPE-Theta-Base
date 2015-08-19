@@ -15,6 +15,7 @@
 
 namespace legionpe\theta\chat;
 
+use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\Session;
 
@@ -64,8 +65,16 @@ class SpamDetector{
 		$string = str_replace("4", "a", $string);
 		$string = str_replace("3", "e", $string);
 		foreach($badWords as $word){
-			if(stripos(str_replace("1", "i", $string), $word) !== false or stripos(str_replace("1", "l", $string), $word) !== false){
-				// TODO warn
+			if(($pos = stripos(str_replace("1", "i", $string), $word)) !== false or ($pos = stripos(str_replace("1", "l", $string), $word)) !== false){
+				$this->session->send(Phrases::CHAT_SWEAR_WARN, ["word" => $word]);
+				$type = ChatType::get($this->session->getMain(), ChatType::CONSOLE_MESSAGE, "SpamDetector",
+					Phrases::VAR_notify2 . "Player {$this->session->getPlayer()->getName()}@" .
+					Settings::$LOCALIZE_IP . ":" . Settings::$LOCALIZE_PORT . " said: " .
+					substr($string, 0, $pos) .
+					Phrases::VAR_em . substr($string, $pos, strlen($word)) . Phrases::VAR_notify2 .
+					substr($string, $pos + strlen($word)),
+					Settings::CLASS_ALL, ["ip" => Settings::$LOCALIZE_IP, "port" => Settings::$LOCALIZE_PORT]);
+				$type->push();
 				return false;
 			}
 		}
@@ -73,9 +82,9 @@ class SpamDetector{
 	}
 	public function detectAds(&$string){
 		$string = preg_replace_callback('%([0-9]{1,3}\.){3}[0-9]{1,3}%i', function ($match){
-			return str_repeat("-", strlen($match));
+			return str_repeat("-", strlen($match[0]));
 		}, $string);
-		$string = str_replace([".lbsg.net", ".leet.cc"], "", $string);
+		$string = str_replace([".lbsg.net", ".leet.cc"], "--------", $string);
 		$string = preg_replace_callback('%(http[s]?://)?(([A-Za-z0-9\-]+\.){2,}([A-Za-z0-9\-]{1,3}))%', function ($match){
 			if(strlen($match[1]) > 6){
 				return $match[0];

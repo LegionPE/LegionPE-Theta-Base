@@ -28,6 +28,11 @@
 		"inbox": {
 			"start": "%verbose%=== You have received %em%%count%%verbosemid% new messages ===",
 			"end": "%verbose%=== End of new messages ==="
+		},
+		"spam": {
+			"swear": {
+				"warn": "%warning%The word %em%%word%%warning% is detected as offensive!"
+			}
 		}
 	},
 	"cmd": {
@@ -69,21 +74,21 @@
 			"quitted": "%verbose%%em%%player%%verbosemid%@%ip%:%port% quitted channel %em2%%channel%."
 		},
 		"friend": {
-			"alreadyinvited": "%error%You have %em%already%error% invited %em2%%target%!",
-			"requested": {
-				"raise": "%success%Sent a request to %em2%target%success% to become your %em%%newtype%.",
-				"removed": "%success%Removed the request to %em2%target%success% to become your %em%%newtype%."
+			"request": {
+				"alreadysent": "%error%You have already sent a %req% request to %target%.",
+				"accepted": "%success%You are now %current% with %target%.",
+				"sent": "%success%%req% request to %target% sent.",
+				"acceptraise": "%success%You are now %cur% with %target%.\n%success%You have sent a %req% request to %target%.",
+				"raise": "%success%You have changed the request to %target% into a %req% request.",
+				"reduce": "%success%You have reduced the request to %target% into a %req% request.",
+				"cancel": "%success%You have cancelled the request to %target%.",
+				"rejected": "%success%You have rejected the request from %target%.",
+				"rejectsend": "%success%You have rejected the request from %target%.\n%success%You have sent a %req% request to %target%.",
+				"rejectreduce": "%success%You have rejected the request from %target%.\n%success%You have set %target% as %cur%.",
+				"cancelreduce": "%success%You have cancelled the request to %target%.\n%success%You have set %target% as %cur%."
 			},
-			"received": "%notify%%em%%source%%notify% sent you a %em2%%newtype%%notify% request.",
-			"raised": "%em2%%target%%sucess% is now your %em%%newtype%!",
-			"reduced": "%em2%%target%%sucess% is now your %em%%newtype%!",
-			"max": "%em2%%target%%error% is already your best friend and cannot be increased any more!",
-			"rejected": "%success%Friend request from %em%%from% %success%to %em2%%to% %success%has been rejected.",
-			"cancelled": "%success%Friend request from %em%%from% %success%to %em2%%to% %success%has been cancelled.",
-			"noinvite": "%error%You don't have a friend request to %em%%to%!",
-			"list": {
-				"key": "%info%Key:\n* means player is online on THIS server\n< means player is in your outbox\n> means player is in your inbox"
-			}
+			"reduced": "%success%You have set %target% as %cur%.",
+			"nochange": "%error%You are already %cur% with %target%!"
 		},
 		"gc": {
 			"cannotstart": "%error%You need to wait for %time% more before you can start coin grinding again!",
