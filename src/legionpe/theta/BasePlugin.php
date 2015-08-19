@@ -33,6 +33,7 @@ use legionpe\theta\utils\MUtils;
 use legionpe\theta\utils\ResendPlayersTask;
 use legionpe\theta\utils\SessionTickTask;
 use legionpe\theta\utils\SyncStatusTask;
+use libtheta\info\pvp\PvpKitInfo;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
@@ -94,6 +95,7 @@ abstract class BasePlugin extends PluginBase{
 		if(!is_dir($this->getDataFolder())){
 			mkdir($this->getDataFolder());
 		}
+		PvpKitInfo::init();
 	}
 	public function onEnable(){
 		ThetaCommand::registerAll($this, $this->getServer()->getCommandMap());
