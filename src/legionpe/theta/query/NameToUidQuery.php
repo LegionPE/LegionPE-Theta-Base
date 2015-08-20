@@ -29,4 +29,9 @@ class NameToUidQuery extends AsyncQuery{
 	public function getQuery(){
 		return "SELECT uid FROM users WHERE name={$this->esc($this->name)}";
 	}
+	public function getExpectedColumns(){
+		return [
+			"uid" => self::COL_INT
+		];
+	}
 }

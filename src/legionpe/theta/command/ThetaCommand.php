@@ -28,10 +28,14 @@ use legionpe\theta\command\session\CoinsCommand;
 use legionpe\theta\command\session\ConsoleCommand;
 use legionpe\theta\command\session\DirectTeleportCommand;
 use legionpe\theta\command\session\friend\FallbackFriendCommand;
+use legionpe\theta\command\session\friend\FriendListCommand;
+use legionpe\theta\command\session\friend\FriendlyFireActivationCommand;
+use legionpe\theta\command\session\friend\SetFriendCommand;
 use legionpe\theta\command\session\GrindCoinCommand;
 use legionpe\theta\command\session\LabelCommand;
 use legionpe\theta\command\session\TransferCommand;
 use legionpe\theta\config\Settings;
+use legionpe\theta\Friend;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\Session;
 use pocketmine\command\Command;
@@ -111,6 +115,13 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			new TransferCommand($main, ["hub", "spawn", "quit", "home", "back", "lobby"], "Hub", Settings::CLASS_HUB),
 			new OverridingSayCommand($main),
 			new FallbackFriendCommand($main),
+			new FriendlyFireActivationCommand($main),
+			new SetFriendCommand($main, Friend::FRIEND_ENEMY),
+			new SetFriendCommand($main, Friend::FRIEND_NOT_FRIEND),
+			new SetFriendCommand($main, Friend::FRIEND_ACQUAINTANCE),
+			new SetFriendCommand($main, Friend::FRIEND_GOOD_FRIEND),
+			new SetFriendCommand($main, Friend::FRIEND_BEST_FRIEND),
+			new FriendListCommand($main),
 		]);
 	}
 	private static function unregisterCommand(CommandMap $map, $name){

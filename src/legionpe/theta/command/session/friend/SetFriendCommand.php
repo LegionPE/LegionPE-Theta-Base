@@ -50,6 +50,9 @@ class SetFriendCommand extends SessionCommand{
 			return false;
 		}
 		$name = array_shift($args);
+		if(strtolower($name) === strtolower($sender->getPlayer()->getName())){
+			return false;
+		}
 		new SetFriendQuery($this->getMain(), $name, $sender->getUid(), $this->level);
 		return true;
 	}

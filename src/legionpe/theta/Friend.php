@@ -45,12 +45,14 @@ class Friend{
 	const DIRECTION_OUT = 1;
 	const DIRECTION_NIL = 2;
 	public $myUid, $friendUid, $type, $requestedType, $requestDirection;
-	public function __construct($myUid, $friendUid, $type, $requestedType, $requestDirection = self::DIRECTION_NO_REQUEST){
-		$this->myUid = $myUid;
-		$this->friendUid = $friendUid;
-		$this->type = $type;
-		$this->requestedType = $requestedType;
-		$this->requestDirection = $requestDirection;
+	public $friendName;
+	public function __construct($myUid, $friendUid, $type, $requestedType, $requestDirection, $friendName){
+		$this->myUid = (int)$myUid;
+		$this->friendUid = (int)$friendUid;
+		$this->friendName = $friendName;
+		$this->type = (int)$type;
+		$this->requestedType = (int)$requestedType;
+		$this->requestDirection = (int)$requestDirection;
 	}
 	public function isRequestOut(){
 		return ($this->myUid > $this->friendUid) and $this->requestDirection === self::DIRECTION_BIG_TO_SMALL;

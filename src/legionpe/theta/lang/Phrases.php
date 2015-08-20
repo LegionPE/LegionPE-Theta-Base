@@ -73,19 +73,26 @@ class Phrases{
 	const CMD_CHANNEL_JOINED_SELF = "cmd.channel.joined.self";
 	const CMD_CHANNEL_JOINED_OTHER = "cmd.channel.joined.other";
 
+	const CMD_FRIEND_PROPAGANDA = "cmd.friend.propaganda";
+	const CMD_FRIEND_NOT_FOUND = "cmd.friend.notfound";
 	const CMD_FRIEND_REQUEST_ALREADY_SENT = "cmd.friend.request.alreadysent";
 	const CMD_FRIEND_REQUEST_ACCEPTED = "cmd.friend.request.accepted";
 	const CMD_FRIEND_SENT_REQUEST = "cmd.friend.request.sent";
 	const CMD_FRIEND_REQUEST_ACCEPTED_AND_RAISE_SENT = "cmd.friend.request.acceptraise";
 	const CMD_FRIEND_REDUCED = "cmd.friend.reduced";
 	const CMD_FRIEND_IS_CURRENT_STATE = "cmd.friend.nochange";
-	const CMD_FRIEND_REQUEST_RAISED = "cmd.friend.requeset.raise";
+	const CMD_FRIEND_REQUEST_RAISED = "cmd.friend.request.raise";
 	const CMD_FRIEND_REQUEST_REDUCED = "cmd.friend.request.reduce";
 	const CMD_FRIEND_REQUEST_CANCELLED = "cmd.friend.request.cancel";
 	const CMD_FRIEND_REQUEST_CANCELLED_AND_REDUCED = "cmd.friend.request.cancelreduce";
 	const CMD_FRIEND_REQUEST_REJECTED = "cmd.friend.request.rejected";
 	const CMD_FRIEND_REQUEST_REJECTED_AND_LOWER_SENT = "cmd.friend.request.rejectsend";
 	const CMD_FRIEND_REQUEST_REJECTED_AND_REDUCED = "cmd.friend.request.rejectreduce";
+
+	const CMD_FFA_CHECK_TRUE = "cmd.ffa.check.true";
+	const CMD_FFA_CHECK_FALSE = "cmd.ffa.check.false";
+	const CMD_FFA_SET_TRUE = "cmd.ffa.set.false";
+	const CMD_FFA_SET_FALSE = "cmd.ffa.set.false";
 
 	const CMD_GRIND_COIN_CANNOT_START = "cmd.gc.cannotstart";
 	const CMD_GRIND_COIN_REQUEST_CONFIRM = "cmd.gc.reqconfirm";
@@ -196,6 +203,7 @@ class Phrases{
 	const PVP_ACTION_EGG = "game.pvp.action.egg";
 
 	const PVP_ATTACK_FRIENDS = "game.pvp.attack.friends";
+	const PVP_ATTACK_FFA_HINT = "game.pvp.attack.ffahint";
 	const PVP_ATTACK_SPAWN = "game.pvp.attack.spawn";
 
 	const PVP_KILL_INFO = "game.pvp.killinfo";

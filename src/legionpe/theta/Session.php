@@ -1031,6 +1031,10 @@ abstract class Session{
 			$type->push();
 		}
 	}
+	/**
+	 * @param int $flags
+	 * @return Friend[]
+	 */
 	public function getFriends($flags = Friend::FLAG_ALL){
 		$ret = [];
 		foreach($this->getLoginDatum("friends") as $type => $friends){
@@ -1058,7 +1062,7 @@ abstract class Session{
 			}
 		}
 		$hasRow = false;
-		return new Friend($this->getUid(), $uid, Friend::FRIEND_NOT_FRIEND, Friend::FRIEND_NOT_FRIEND);
+		return new Friend($this->getUid(), $uid, Friend::FRIEND_NOT_FRIEND, Friend::FRIEND_NOT_FRIEND, Friend::DIRECTION_NIL, "");
 	}
 	public function setFriendAttempt($otherUid, $type = Friend::FRIEND_GOOD_FRIEND, &$prop){
 		$prop = true;
@@ -1109,7 +1113,7 @@ abstract class Session{
 			}
 		}else{ // $dir = Friend::DIRECTION_IN
 			if($type === $requested){
-				new RawAsyncQuery($this->getMain(), "UPDATE friends SET type=$type, requested=$NOT_FRIEND, direction=$NIL $condition");
+				new RawAsyncQuery($this->getMain(), "UPDATE friends SET type=$type, requested=$type, direction=$NIL $condition");
 				return Friend::RET_REQUEST_ACCEPTED;
 			}elseif($type > $requested){ // $type > $requested > $current
 				new RawAsyncQuery($this->getMain(), "UPDATE friends SET type=$requested, requested=$type, direction=$outDirection $condition");

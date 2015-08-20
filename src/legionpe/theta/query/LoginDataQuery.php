@@ -48,7 +48,7 @@ class LoginDataQuery extends AsyncQuery{
 	protected function onAssocFetched(\mysqli $mysql, array &$row){
 		$uid = $row["uid"];
 		/* group_concat must be done somewhere else because it ALWAYS returns a row. */
-		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs, (SELECT group_concat(CONCAT(channel, ':', sublv) SEPARATOR ',') FROM channels WHERE uid=$uid) as channels, (SELECT group_concat(CONCAT(IF(smalluid=$uid,largeuid, smalluid), ':', type, ':', requested, ':', direction)) FROM friends) AS friends");
+		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs, (SELECT group_concat(CONCAT(channel, ':', sublv) SEPARATOR ',') FROM channels WHERE uid=$uid) as channels, (SELECT group_concat(CONCAT(IF(smalluid=$uid,largeuid, smalluid), ':', type, ':', requested, ':', direction, ':', (SELECT name FROM users WHERE uid=IF(smalluid=$uid,largeuid, smalluid))) SEPARATOR ';') FROM friends) AS friends");
 		$result = $r->fetch_assoc();
 		$row["iphist"] = isset($result["iphist"]) ? $result["iphist"] : ",";
 		$row["langs"] = isset($result["langs"]) ? array_filter(explode(",", $result["langs"])) : [];
@@ -62,16 +62,17 @@ class LoginDataQuery extends AsyncQuery{
 		}else{
 			$row["channels"] = [];
 		}
-		$friendsString = $result["friends"];
+		$friendsString = explode(";", $result["friends"]);
 		$friends = [
 			Friend::FRIEND_ENEMY => [],
 			Friend::FRIEND_ACQUAINTANCE => [],
 			Friend::FRIEND_GOOD_FRIEND => [],
 			Friend::FRIEND_BEST_FRIEND => [],
+			Friend::FRIEND_NOT_FRIEND => []
 		];
 		foreach($friendsString as $friend){
-			list($friendUid, $type, $requested, $reqDir) = explode(":", $friend);
-			$friends[$type][$friendUid] = new Friend($uid, $friendUid, $type, $requested, $reqDir);
+			list($friendUid, $type, $requested, $reqDir, $name) = explode(":", $friend);
+			$friends[(int)$type][(int)$friendUid] = new Friend($uid, $friendUid, $type, $requested, $reqDir, $name);
 		}
 		$row["friends"] = $friends;
 		$row["isnew"] = false;

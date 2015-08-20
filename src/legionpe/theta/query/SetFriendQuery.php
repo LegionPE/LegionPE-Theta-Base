@@ -45,7 +45,7 @@ class SetFriendQuery extends NameToUidQuery{
 	];
 	public static $TYPES = [
 		Friend::FRIEND_ENEMY => "enemy",
-		Friend::FRIEND_NOT_FRIEND => "no relationship",
+		Friend::FRIEND_NOT_FRIEND => "normal",
 		Friend::FRIEND_ACQUAINTANCE => "acquaintance",
 		Friend::FRIEND_GOOD_FRIEND => "good friend",
 		Friend::FRIEND_BEST_FRIEND => "best friend",
@@ -56,21 +56,32 @@ class SetFriendQuery extends NameToUidQuery{
 		parent::__construct($main, $name);
 	}
 	public function onCompletion(Server $server){
-		$targetUid = $this->getResult()["result"]["uid"];
 		$main = BasePlugin::getInstance($server);
-		if(!(($ses = $main->getSession($this->senderUid)) instanceof Session)){
+		$ses = $main->getSessionByUid($this->senderUid);
+		if(!($ses instanceof Session)){
 			return;
 		}
+		$result = $this->getResult();
+		if($result["resulttype"] !== self::TYPE_ASSOC){
+			$ses->send(Phrases::CMD_FRIEND_NOT_FOUND, ["name" => $this->name]);
+			return;
+		}
+		$targetUid = $result["result"]["uid"];
 		$result = $ses->setFriendAttempt($targetUid, $this->type, $prop);
 		if($prop){
-			$type = ChatType::get($main, ChatType::RELOAD_FRIENDS_PROPAGANDA, "", "$result", Settings::CLASS_ALL, [
+			$type = ChatType::get($main, ChatType::RELOAD_FRIENDS_PROPAGANDA, $ses->getPlayer()->getName(), "$result", Settings::CLASS_ALL, [
 				"uid" => $targetUid
+			]);
+			$type->push();
+			$type = ChatType::get($main, ChatType::RELOAD_FRIENDS_PROPAGANDA, $this->name, "$result", Settings::CLASS_ALL, [
+				"uid" => $this->senderUid
 			]);
 			$type->push();
 		}
 		$ses->send(self::$RESPONSES[$result], [
 			"from" => $ses->getInGameName(),
 			"to" => $this->name,
+			"target" => $this->name,
 			"req" => self::$TYPES[$this->type],
 			"cur" => self::$TYPES[$ses->getFriend($targetUid)->type]
 		]);

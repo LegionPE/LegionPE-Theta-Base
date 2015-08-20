@@ -15,6 +15,7 @@
 
 namespace legionpe\theta\chat;
 
+use legionpe\theta\lang\Phrases;
 use legionpe\theta\query\ReloadFriendsQuery;
 use legionpe\theta\Session;
 
@@ -24,9 +25,10 @@ class ReloadFriendsPropaganda extends ChatType{
 		return self::RELOAD_FRIENDS_PROPAGANDA;
 	}
 	public function execute(){
-		$ses = $this->main->getSession($this->uid);
+		$ses = $this->main->getSessionByUid($this->uid);
 		if($ses instanceof Session){
 			new ReloadFriendsQuery($this->main, $this->uid);
+			$ses->send(Phrases::CMD_FRIEND_PROPAGANDA, ["src" => $this->src]);
 		}
 	}
 }

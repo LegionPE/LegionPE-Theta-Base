@@ -31,6 +31,11 @@ class Phrase{
 		}
 		$this->impls[$lang] = $impl;
 	}
+	/**
+	 * @param array $vars
+	 * @param array $fallbackList
+	 * @return string|mixed
+	 */
 	public function get(array $vars, array $fallbackList){
 		foreach($fallbackList as $lang){
 			if(isset($this->impls[$lang])){

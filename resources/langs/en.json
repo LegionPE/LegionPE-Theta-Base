@@ -74,6 +74,7 @@
 			"quitted": "%verbose%%em%%player%%verbosemid%@%ip%:%port% quitted channel %em2%%channel%."
 		},
 		"friend": {
+			"notfound": "%error%Player %em%%name%%error% not found! Please type the %em2%full%error% (but upper/lower case doesn't matter) name of the player.",
 			"request": {
 				"alreadysent": "%error%You have already sent a %req% request to %target%.",
 				"accepted": "%success%You are now %current% with %target%.",
@@ -88,7 +89,18 @@
 				"cancelreduce": "%success%You have cancelled the request to %target%.\n%success%You have set %target% as %cur%."
 			},
 			"reduced": "%success%You have set %target% as %cur%.",
-			"nochange": "%error%You are already %cur% with %target%!"
+			"nochange": "%error%You are already %cur% with %target%!",
+			"propaganda": "%notify%Your friend status with %em%%src%%notify% has been edited. Type %em2%/fl%notify% to check."
+		},
+		"ffa": {
+			"check": {
+				"true": "%info%Friendly Fire is %em%Activated%info%. Do %em2%/ffa off%info% to turn off.",
+				"false": "%info%Friendly Fire is %em%Not Activated%info%. Do %em2%/ffa on%info% to turn on."
+			},
+			"set": {
+				"true": "%info%Friendly Fire has been activated. Do %em2%/ffa off%info% to turn off.",
+				"false": "%info%Friendly Fire has been deactivated. Do %em2%/ffa off%info% to turn on."
+			}
 		},
 		"gc": {
 			"cannotstart": "%error%You need to wait for %time% more before you can start coin grinding again!",
@@ -307,7 +319,8 @@
 			},
 			"attack": {
 				"friends": "%verbose%You may not attack your %type% (%em%%target%)!",
-				"spawn": "%verbose%You may not attack players at spawn!"
+				"spawn": "%verbose%You may not attack players at spawn!",
+				"ffahint": "%info%%ffa% activated friendly fire, so %source% can attack %target%."
 			},
 			"killinfo": "%verbose%Your%em% %ord% %verbosemid%kill - the%em2% %streakord% %verbosemid% in a row.\n%verbose%Your coins + %em%%added%%verbosemid% => %em2%%coins%",
 			"deathinfo": "%verbose%This is your%em% %ord% %verbosemid%death! Watch out!",

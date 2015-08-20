@@ -31,14 +31,15 @@ class ReloadFriendsQuery extends AsyncQuery{
 		return self::TYPE_ALL;
 	}
 	public function getQuery(){
-		return "SELECT IF(smalluid=$this->uid, largeuid, smalluid)AS uid, type,requested,direction FROM friends WHERE smalluid=$this->uid OR largeuid=$this->uid";
+		return "SELECT IF(smalluid=$this->uid, largeuid, smalluid)AS uid, type,requested,direction,(SELECT name FROM users WHERE uid=IF(friends.smalluid=$this->uid, friends.largeuid, friends.smalluid)) FROM friends WHERE smalluid=$this->uid OR largeuid=$this->uid";
 	}
 	public function getExpectedColumns(){
 		return [
 			"uid" => self::COL_INT,
 			"type" => self::COL_INT,
 			"requested" => self::COL_INT,
-			"direction" => self::COL_INT
+			"direction" => self::COL_INT,
+			"name" => self::COL_STRING,
 		];
 	}
 	public function onCompletion(Server $server){
@@ -56,7 +57,8 @@ class ReloadFriendsQuery extends AsyncQuery{
 				$type = $friend["type"];
 				$requested = $friend["requested"];
 				$reqDir = $friend["direction"];
-				$friends[$type][$friendUid] = new Friend($this->uid, $friendUid, $type, $requested, $reqDir);
+				$name = $friend["name"];
+				$friends[$type][$friendUid] = new Friend($this->uid, $friendUid, $type, $requested, $reqDir, $name);
 			}
 			$ses->setLoginDatum("friends", $friends);
 		}
