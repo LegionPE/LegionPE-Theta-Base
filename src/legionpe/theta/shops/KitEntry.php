@@ -85,4 +85,13 @@ class KitEntry{
 		$class = Settings::$LOCALIZE_CLASS;
 		new RawAsyncQuery($main, "INSERT INTO kits_slots (uid, class, kitid, slot, name, value) VALUES ({$this->kit->uid}, $class, {$this->kit->kitid}, $this->slot, $this->name, $this->value)");
 	}
+	public function __debugInfo(){
+		return [
+			"slot" => $this->slot,
+			"name" => $this->name,
+			"value" => $this->value,
+			"purchase" => $this->purchase,
+			"inserted" => $this->inserted
+		];
+	}
 }

@@ -50,8 +50,7 @@ class Phrases{
 	const CHAT_FORMAT_BROADCAST_LOCAL = "chat.format.broadcast.local";
 	const CHAT_INBOX_START = "chat.inbox.start";
 	const CHAT_INBOX_END = "chat.inbox.end";
-	const CHAT_SWEAR_WARN = "chat.spam.swear";
-	const CHAT_SWEAR_PROPAGANDA = "chat.spam.swear";
+	const CHAT_SWEAR_WARN = "chat.spam.swear.warn";
 
 	const CMD_ERR_NO_PERM = "cmd.error.noperm.normal";
 	const CMD_ERR_NO_PERM_DONATE = "cmd.error.noperm.donate";
@@ -133,11 +132,9 @@ class Phrases{
 	const CMD_TEAM_QUITTED = "cmd.team.quitted";
 	const CMD_TEAM_RANKS = "cmd.team.ranks";
 
-	const CMD_TPR_FAIL_ENEMY_NEARBY = "cmd.tpreq.proceed.fail.enemynearby";
-
 	const CMD_TPR_TO_FAIL_ENEMY_TARGET = "cmd.tpreq.to.fail.enemy.target";
-	const CMD_TPR_PROCEED_FAIL_OFFLINE = "cmd.tpreq.proceed.fail.offline";
 	const CMD_TPR_TO_FAIL_DUPLICATED = "cmd.tpreq.to.fail.dup";
+	const CMD_TPR_TO_FAIL_SPAWN = "cmd.tpreq.to.fail.spawn";
 	const CMD_TPR_TO_SENT = "cmd.tpreq.to.sent";
 	const CMD_TPR_TO_RECEIVED = "cmd.tpreq.to.received";
 	const CMD_TPR_TO_ACCEPTED = "cmd.tpreq.to.accepted";
@@ -146,12 +143,15 @@ class Phrases{
 	const CMD_TPR_TO_BEST_FRIEND_TO = "cmd.tpreq.to.bf.to";
 	const CMD_TPR_HERE_FAIL_ENEMY_TARGET = "cmd.tpreq.here.fail.enemy.target";
 	const CMD_TPR_HERE_FAIL_DUPLICATED = "cmd.tpreq.here.fail.dup";
+	const CMD_TPR_HERE_FAIL_SPAWN = "cmd.tpreq.here.fail.spawn";
 	const CMD_TPR_HERE_SENT = "cmd.tpreq.here.sent";
 	const CMD_TPR_HERE_RECEIVED = "cmd.tpreq.here.received";
 	const CMD_TPR_HERE_ACCEPTED = "cmd.tpreq.here.accepted";
 	const CMD_TPR_HERE_BE_ACCEPTED = "cmd.tpreq.here.beaccepted";
 	const CMD_TPR_HERE_BEST_FRIEND_FROM = "cmd.tpreq.here.bf.from";
 	const CMD_TPR_HERE_BEST_FRIEND_TO = "cmd.tpreq.here.bf.to";
+	const CMD_TPR_PROCEED_FAIL_OFFLINE = "cmd.tpreq.proceed.fail.offline";
+	const CMD_TPR_PROCEED_FAIL_ENEMY_NEARBY = "cmd.tpreq.proceed.fail.enemynearby";
 
 	const CMD_TRANSFER_ERR_NO_SERVERS = "cmd.transfer.err.noservers";
 	const CMD_TRANSFER_SUCCESS = "cmd.transfer.success";

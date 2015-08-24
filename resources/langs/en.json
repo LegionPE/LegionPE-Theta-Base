@@ -173,7 +173,8 @@
 					"enemy": {
 						"target": "%error%You cannot send a teleport request to your enemy (%em%%to%%error%)!"
 					},
-					"dup": "%error%You have already sent a request to teleport to %em%%to%%error%."
+					"dup": "%error%You have already sent a request to teleport to %em%%to%%error%.",
+					"spawn": "%error%You can't teleport to someone at spawn!"
 				},
 				"sent": "%success%Sent a request to teleport to %em%%to%",
 				"received": "%em%%from%%notify% sent a request to teleport to you! Do %em2%/tpa %from%%notify% to accept.",
@@ -189,7 +190,8 @@
 					"enemy": {
 						"target": "%error%Don't teleport your enemy (%em%%to%%error%) to you!"
 					},
-					"dup": "%error%You have already sent a request to teleport %em%%to%%error% to you."
+					"dup": "%error%You have already sent a request to teleport %em%%to%%error% to you.",
+					"spawn": "%error%You can't teleport someone from spawn!"
 				},
 				"sent": "%success%Sent a request to teleport %em%%to% to you.",
 				"received": "%em%%from%%notify% sent a request to teleport you to him/her! Do %em2%/tp %from%%notify% to accept.",

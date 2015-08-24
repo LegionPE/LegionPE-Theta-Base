@@ -48,7 +48,7 @@ class LoginDataQuery extends AsyncQuery{
 	protected function onAssocFetched(\mysqli $mysql, array &$row){
 		$uid = $row["uid"];
 		/* group_concat must be done somewhere else because it ALWAYS returns a row. */
-		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs, (SELECT group_concat(CONCAT(channel, ':', sublv) SEPARATOR ',') FROM channels WHERE uid=$uid) as channels, (SELECT group_concat(CONCAT(IF(smalluid=$uid,largeuid, smalluid), ':', type, ':', requested, ':', direction, ':', (SELECT name FROM users WHERE uid=IF(smalluid=$uid,largeuid, smalluid))) SEPARATOR ';') FROM friends) AS friends");
+		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs, (SELECT group_concat(CONCAT(channel, ':', sublv) SEPARATOR ',') FROM channels WHERE uid=$uid) as channels, (SELECT group_concat(CONCAT(IF(smalluid=$uid,largeuid, smalluid), ':', type, ':', requested, ':', direction, ':', (SELECT name FROM users WHERE uid=IF(smalluid=$uid,largeuid, smalluid))) SEPARATOR ';') FROM friends WHERE smalluid=$uid OR largeuid=$uid) AS friends");
 		$result = $r->fetch_assoc();
 		$row["iphist"] = isset($result["iphist"]) ? $result["iphist"] : ",";
 		$row["langs"] = isset($result["langs"]) ? array_filter(explode(",", $result["langs"])) : [];
@@ -81,7 +81,7 @@ class LoginDataQuery extends AsyncQuery{
 			$r = $mysql->query("SELECT pid, id, amplitude, count, expiry FROM purchases WHERE uid=$uid AND class=$this->class");
 			$purchases = [];
 			while(is_array($result = $r->fetch_assoc())){
-				$purchases[$result["pid"]] = new Purchase($result["pid"], $uid, $this->class, $result["id"], $result["amplitude"], $result["count"], $result["expiry"]);
+				$purchases[$result["pid"]] = new Purchase((int)$result["pid"], $uid, $this->class, (int)$result["id"], (int)$result["amplitude"], (int)$result["count"], (int)$result["expiry"]);
 			}
 			$r->close();
 			$row["purchases"] = $purchases;
@@ -90,7 +90,10 @@ class LoginDataQuery extends AsyncQuery{
 				/** @var mixed[][][] $kitRows */
 				$kitRows = [];
 				while(is_array($resultRow = $r->fetch_assoc())){
-					$kitid = $resultRow["kitid"];
+					$kitid = (int)$resultRow["kitid"];
+					$resultRow["kitid"] = (int)$resultRow["kitid"];
+					$resultRow["slot"] = (int)$resultRow["slot"];
+					$resultRow["value"] = (int)$resultRow["value"];
 					if(!isset($kitRows[$kitid])){
 						$kitRows[$kitid] = [$resultRow];
 					}else{

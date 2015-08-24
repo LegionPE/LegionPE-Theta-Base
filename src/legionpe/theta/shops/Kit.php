@@ -44,9 +44,9 @@ class Kit{
 		$this->uid = $session->getUid();
 		$this->kitid = $kitid;
 		foreach($rows as $row){
-			$slot = $row["slot"];
-			$name = $row["name"];
-			$value = $row["value"];
+			$slot = (int)$row["slot"];
+			$name = (int)$row["name"];
+			$value = (int)$row["value"];
 			if($slot === self::SLOT_SPECIAL_REAL_SIZE){
 				$this->realSize = $value;
 			}elseif($slot === self::SLOT_SPECIAL_ABSTRACT_SIZE){
