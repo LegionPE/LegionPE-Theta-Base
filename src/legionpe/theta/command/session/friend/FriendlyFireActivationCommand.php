@@ -25,12 +25,10 @@ class FriendlyFireActivationCommand extends SessionCommand{
 	public function __construct(BasePlugin $main){
 		parent::__construct($main, "ffa", "Friendly Fire Activation", "/ffa [on|off]", ["ff"]);
 	}
-	/**
-	 * @param array $args
-	 * @param ClassicSession|Session $sender
-	 * @return string
-	 */
 	protected function run(array $args, Session $sender){
+		if(!($sender instanceof ClassicSession)){
+			return "This command is only available on PvP servers";
+		}
 		if(isset($args[0])){
 			if($args[0] === "on"){
 				$on = true;
@@ -43,5 +41,12 @@ class FriendlyFireActivationCommand extends SessionCommand{
 		}
 		$sender->setFriendlyFireActivated($on);
 		return $sender->translate($on ? Phrases::CMD_FFA_SET_TRUE : Phrases::CMD_FFA_SET_FALSE);
+	}
+	protected function checkPerm(Session $session, &$msg = null){
+		if(!($session instanceof ClassicSession)){
+			$msg = "This command is only available on PvP servers";
+			return false;
+		}
+		return true;
 	}
 }
