@@ -42,7 +42,7 @@ use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
 use shoghicp\FastTransfer\FastTransfer;
 
-const RESEND_ADD_PLAYER = 20;
+const RESEND_ADD_PLAYER = 0;
 
 abstract class BasePlugin extends PluginBase{
 	const EMAIL_UNVERIFIED = "NOTSET";
@@ -105,7 +105,7 @@ abstract class BasePlugin extends PluginBase{
 		$class = $this->getSessionListenerClass();
 		$this->getServer()->getPluginManager()->registerEvents($this->sesList = new $class($this), $this);
 		new InitDbQuery($this);
-		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SyncStatusTask($this), 40, 40);
+		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SyncStatusTask($this), 40, 20);
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SessionTickTask($this), 1, 10);
 		$this->getServer()->getScheduler()->scheduleRepeatingTask($this->syncChatTask = new FireSyncChatQueryTask($this), 5);
 		if(RESEND_ADD_PLAYER > 0){

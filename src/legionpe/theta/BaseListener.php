@@ -16,6 +16,7 @@
 namespace legionpe\theta;
 
 use legionpe\theta\query\LoginDataQuery;
+use pocketmine\event\level\ChunkLoadEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerKickEvent;
 use pocketmine\event\player\PlayerLoginEvent;
@@ -81,6 +82,14 @@ class BaseListener implements Listener{
 			if($ip !== "0.0.0.0"){
 				$this->getMain()->getLogger()->notice("Transferring " . $event->getPlayer()->getName() . " to $ip:$port because server strict limit is reached");
 				$this->main->transfer($event->getPlayer(), $ip, $port, "This server is full");
+			}
+		}
+	}
+	public function onLoadChunk(ChunkLoadEvent $event){
+		for($i = 0;$i < 16;$i++){
+			for($j = 0;$j < 16;$j++){
+				$event->getChunk()->setBiomeColor($i, $j, 141, 179, 96);
+				$event->getChunk()->setChanged(true);
 			}
 		}
 	}

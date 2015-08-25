@@ -24,6 +24,12 @@ class ConsoleChatType extends ChatType{
 	protected $port;
 	public function execute(){
 		$this->main->getLogger()->alert($this->src . "@$this->ip:$this->port executed /console: " . TextFormat::YELLOW . $this->msg);
+		foreach($this->main->getSessions() as $ses){
+			if($ses->isAdmin()){
+				$ses->sendMessage($this->src . "@$this->ip:$this->port executed /console:");
+				$ses->sendMessage($this->msg);
+			}
+		}
 	}
 	public function getType(){
 		return self::CONSOLE_MESSAGE;

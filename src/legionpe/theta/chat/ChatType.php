@@ -31,7 +31,6 @@ abstract class ChatType{
 	const RELOAD_FRIENDS_PROPAGANDA = 7;
 	const CLASS_CHAT = 8;
 	/** @var BasePlugin */
-	protected $main;
 	protected $src;
 	protected $msg;
 	protected $class;

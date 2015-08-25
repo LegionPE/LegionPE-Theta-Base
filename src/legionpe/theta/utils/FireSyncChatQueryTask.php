@@ -20,10 +20,22 @@ use pocketmine\scheduler\PluginTask;
 
 class FireSyncChatQueryTask extends PluginTask{
 	public $canFireNext = true;
+	public $lastTenDiff = [];
+	private $lastFire;
 	public function onRun($currentTick){
 		if($this->canFireNext){
+			if(isset($this->lastFire)){
+				$this->lastTenDiff[] = microtime(true) - $this->lastFire;
+				if(count($this->lastTenDiff) > 10){
+					array_shift($this->lastTenDiff);
+				}
+			}
 			/** @noinspection PhpParamsInspection */
 			new SyncChatQuery($this->getOwner(), $this);
+			$this->lastFire = microtime(true);
 		}
+	}
+	public function getFrequency(){
+		return array_sum($this->lastTenDiff) / count($this->lastTenDiff);
 	}
 }

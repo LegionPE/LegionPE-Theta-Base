@@ -39,12 +39,13 @@ class OverridingStatusCommand extends ThetaCommand{
 		$this->getMain()->getServersCount($servers, $cservers);
 		$red = TextFormat::RED;
 		$output .= TextFormat::GOLD . "LegionPE Network:$red $total slots of $max used in $servers server(s)\n";
-		$output .= TextFormat::GOLD . Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS] . ":$red $ctotal slots of $cmax used in $servers server(s)\n";
+		$output .= TextFormat::GOLD . Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS] . ":$red $ctotal slots of $cmax used in $cservers server(s)\n";
 		$output .= TextFormat::GREEN . "=== LOCAL STATUS (" . TextFormat::AQUA . Settings::$LOCALIZE_IP . ":" . Settings::$LOCALIZE_PORT . TextFormat::GREEN . ") ===\n";
 		$sender->sendMessage($output);
 		array_shift($messages);
 		foreach($messages as $message){
 			$sender->sendMessage($message);
 		}
+		$sender->sendMessage(TextFormat::GOLD . "SyncChatQuery ping:$red " . round($this->getMain()->getFireSyncChatQueryTask()->getFrequency(), 5) . "s");
 	}
 }
