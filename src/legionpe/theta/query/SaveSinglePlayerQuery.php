@@ -53,7 +53,6 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 			"authuuid" => $session->getPlayer()->getUniqueId(),
 			"coins" => ["v" => $coins, "noupdate" => true],
 			"hash" => ["v" => $session->getPasswordHash(), "noupdate" => !$session->doHashSaves],
-			"oldhash" => ["v" => $session->getPasswordOldHash(), "noupdate" => !$session->doHashSaves],
 			"pwprefix" => ["v" => $session->getPasswordPrefix(), "noupdate" => true],
 			"pwlen" => ["v" => $session->getPasswordLength(), "noupdate" => true],
 			"registration" => ["v" => $session->getRegisterTime(), "noupdate" => true],
@@ -105,7 +104,10 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 		return $query . ",coins=coins+$this->coinsDelta";
 	}
 	public function onPreQuery(\mysqli $db){
-		$db->query($this->getUpdateQuery());
+		$db->query($q = $this->getUpdateQuery());
+		if($db->error){
+			echo $db->error . "\n";
+		}
 	}
 	public function getQuery(){
 		return "SELECT msgid,msg,args FROM inbox WHERE uid=$this->uid AND status=" . self::INBOX_UNREAD;
@@ -121,7 +123,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 		];
 	}
 	public function reportDebug(){
-		return false;
+		return true;
 	}
 	public function onCompletion(Server $server){
 		$main = BasePlugin::getInstance($server);

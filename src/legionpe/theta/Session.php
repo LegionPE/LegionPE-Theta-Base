@@ -187,7 +187,7 @@ abstract class Session{
 			$this->state = self::STATE_REGISTERING;
 		}else{
 			$method = $this->getAuthSettings();
-			if(!$this->getLoginDatum("isnew") and $method === Settings::CONFIG_AUTH_UUID and $this->getPlayer()->getUniqueId() === $this->getLoginDatum("authuuid")){
+			if($method === Settings::CONFIG_AUTH_UUID and $this->getPlayer()->getUniqueId() === $this->getLoginDatum("authuuid")){
 				$this->login(self::AUTH_UUID);
 				return;
 			}
