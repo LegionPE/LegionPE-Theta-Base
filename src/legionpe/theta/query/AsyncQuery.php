@@ -49,7 +49,11 @@ abstract class AsyncQuery extends AsyncTask{
 		return null;
 	}
 	public function onRun(){
-		require_once dirname(dirname(__FILE__)) . "/credentials/Credentials.php";
+		if(class_exists(Credentials::class, true) === false){
+			spl_autoload_register(function($class){
+				require_once dirname(dirname(dirname(dirname(__FILE__)))) . "/" . str_replace("\\", "/", $class) . ".php";
+			});
+		}
 		$mysql = $this->getConn();
 		try{
 			$this->onPreQuery($mysql);
