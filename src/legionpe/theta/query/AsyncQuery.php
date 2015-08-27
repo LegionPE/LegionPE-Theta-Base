@@ -153,4 +153,30 @@ abstract class AsyncQuery extends AsyncTask{
 	public function __debugInfo(){
 		return [];
 	}
+
+	/**
+	 * Gets something into the local thread store.
+	 * You have to initialize this in some way from the task on run
+	 *
+	 * @param string $identifier
+	 * @return mixed
+	 */
+	public function getFromThreadStore($identifier){
+		global $store;
+		return $this->isGarbage() ? null : $store[$identifier];
+	}
+
+	/**
+	 * Saves something into the local thread store.
+	 * This might get deleted at any moment.
+	 *
+	 * @param string $identifier
+	 * @param mixed  $value
+	 */
+	public function saveToThreadStore($identifier, $value){
+		global $store;
+		if(!$this->isGarbage()){
+			$store[$identifier] = $value;
+		}
+	}
 }
