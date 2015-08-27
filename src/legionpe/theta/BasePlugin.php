@@ -43,7 +43,7 @@ use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
 use shoghicp\FastTransfer\FastTransfer;
 
-const RESEND_ADD_PLAYER = 30;
+const RESEND_ADD_PLAYER = 0;
 
 abstract class BasePlugin extends PluginBase{
 	const EMAIL_UNVERIFIED = "NOTSET";
