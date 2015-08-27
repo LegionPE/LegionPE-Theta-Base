@@ -21,6 +21,10 @@ use legionpe\theta\credentials\Credentials;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\utils\Utils;
 
+function autoload($class){
+	require_once dirname(dirname(dirname(dirname(__FILE__)))) . "/" . str_replace("\\", "/", $class) . ".php";
+}
+
 abstract class AsyncQuery extends AsyncTask{
 	public static $QUERY_COUNT = 0;
 	const KEY_MYSQL = "legionpe.theta.query.mysql";
@@ -50,9 +54,7 @@ abstract class AsyncQuery extends AsyncTask{
 	}
 	public function onRun(){
 		if(class_exists(Credentials::class, true) === false){
-			spl_autoload_register(function($class){
-				require_once dirname(dirname(dirname(dirname(__FILE__)))) . "/" . str_replace("\\", "/", $class) . ".php";
-			});
+			spl_autoload_register(__NAMESPACE__ . "\\autoload");
 		}
 		$mysql = $this->getConn();
 		try{
