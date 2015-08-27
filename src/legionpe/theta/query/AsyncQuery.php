@@ -49,6 +49,7 @@ abstract class AsyncQuery extends AsyncTask{
 		return null;
 	}
 	public function onRun(){
+		require_once dirname(dirname(__FILE__)) . "/credentials/Credentials.php";
 		$mysql = $this->getConn();
 		try{
 			$this->onPreQuery($mysql);
