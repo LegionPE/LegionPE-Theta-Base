@@ -47,9 +47,9 @@ class JoinTeamQuery extends AsyncQuery{
 		if(!is_array($checkFirst)){
 			throw new \RuntimeException(Phrases::VAR_error . "Team does not exist");
 		}
-		$this->tid = (int)$result["tid"];
-		$this->type = (int)$result["type"];
-		$config = (int)$result["config"];
+		$this->tid = (int) $result["tid"];
+		$this->type = (int) $result["type"];
+		$config = (int) $result["config"];
 		$result->close();
 		if($config & Settings::TEAM_CONFIG_OPEN){
 			$this->type = self::DIRECT_JOIN;

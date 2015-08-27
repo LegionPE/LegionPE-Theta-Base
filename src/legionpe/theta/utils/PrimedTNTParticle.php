@@ -19,6 +19,7 @@ use pocketmine\entity\Entity;
 use pocketmine\entity\PrimedTNT;
 use pocketmine\level\Level;
 use pocketmine\level\particle\Particle;
+use pocketmine\math\Vector3;
 use pocketmine\network\protocol\AddEntityPacket;
 use pocketmine\network\protocol\ExplodePacket;
 use pocketmine\network\protocol\RemoveEntityPacket;
@@ -28,8 +29,8 @@ class PrimedTNTParticle extends Particle{
 	private $delay;
 	public $exploded = false;
 	private $eid;
-	public function __construct($x, $y, $z, Level $level, $name, $delay){
-		parent::__construct($x, $y, $z);
+	public function __construct(Vector3 $v, Level $level, $name, $delay){
+		parent::__construct($v->x, $v->y, $v->z);
 		$this->name = $name;
 		$this->delay = $delay;
 		$this->eid = Entity::$entityCount;

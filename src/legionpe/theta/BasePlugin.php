@@ -42,7 +42,7 @@ use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
 use shoghicp\FastTransfer\FastTransfer;
 
-const RESEND_ADD_PLAYER = 40;
+const RESEND_ADD_PLAYER = 30;
 
 abstract class BasePlugin extends PluginBase{
 	const EMAIL_UNVERIFIED = "NOTSET";
@@ -115,7 +115,7 @@ abstract class BasePlugin extends PluginBase{
 		$this->badWords = json_decode($this->getResourceContents("words.json"));
 		$this->approvedDomains = json_decode($this->getResourceContents("approvedDomains.json"));
 		$this->langs = new LanguageManager($this);
-		$compileTime = (int)$this->getResourceContents("timestamp.LEGIONPE");
+		$compileTime = (int) $this->getResourceContents("timestamp.LEGIONPE");
 		$this->getLogger()->alert("Enabled " . $this->getDescription()->getFullName() . " compiled at " . date("d/m/Y H:i:s (P)", $compileTime) . " (" . MUtils::time_secsToString(time() - $compileTime) . " ago). MyPID is " . \getmypid() . ".");
 	}
 	public function getResourceContents($path){
@@ -362,7 +362,7 @@ abstract class BasePlugin extends PluginBase{
 		$type = $row["type"];
 		$class = $row["class"];
 		$data = $row["json"];
-		$exe = ChatType::get($this, $type, $source, $message, $class, $data, (int)$row["id"]);
+		$exe = ChatType::get($this, $type, $source, $message, $class, $data, (int) $row["id"]);
 		$exe->execute();
 	}
 

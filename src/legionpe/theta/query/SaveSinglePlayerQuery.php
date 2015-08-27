@@ -57,7 +57,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 			"pwlen" => ["v" => $session->getPasswordLength(), "noupdate" => true],
 			"registration" => ["v" => $session->getRegisterTime(), "noupdate" => true],
 			"laston" => time(),
-			"ontime" => (int)$session->getAndUpdateOntime(),
+			"ontime" => (int) $session->getAndUpdateOntime(),
 			"config" => $session->getAllSettings(),
 			"skin1" => ["v" => substr($skin, 0, 128), "bin" => true],
 			"skin2" => ["v" => substr($skin, 128, 128), "bin" => true],

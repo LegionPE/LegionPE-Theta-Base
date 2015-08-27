@@ -31,7 +31,7 @@ class CreateTeamQuery extends NextIdQuery{
 	}
 	public function onPreQuery(\mysqli $db){
 		$r = $db->query("SELECT COUNT(*) AS cnt FROM teams WHERE name={$this->esc($this->teamName)}");
-		$cnt = (int)$r->fetch_assoc()["cnt"];
+		$cnt = (int) $r->fetch_assoc()["cnt"];
 		$r->close();
 		if($cnt !== 0){
 			throw new \Exception(Phrases::CMD_TEAM_CREATE_ALREADY_EXISTS);

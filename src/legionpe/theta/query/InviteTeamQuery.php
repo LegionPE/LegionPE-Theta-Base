@@ -45,9 +45,9 @@ class InviteTeamQuery extends AsyncQuery{
 		$row = $result->fetch_assoc();
 		$result->close();
 		if(is_array($row)){
-			$this->targetUid = (int)$row["uid"];
+			$this->targetUid = (int) $row["uid"];
 			$this->targetName = $row["name"];
-			$utid = (int)$row["tid"];
+			$utid = (int) $row["tid"];
 			if($utid === $this->tid){
 				throw new \RuntimeException(Phrases::CMD_TEAM_INVITE_SAME_TEAM);
 			}
@@ -57,7 +57,7 @@ class InviteTeamQuery extends AsyncQuery{
 		}else{
 			throw new \RuntimeException(Phrases::CMD_TEAM_INVITE_NO_PLAYER);
 		}
-		$this->type = (int)$row["type"];
+		$this->type = (int) $row["type"];
 		if($this->type === JoinTeamQuery::REQUEST_FROM_TEAM){
 			throw new \RuntimeException(Phrases::CMD_TEAM_INVITE_ALREADY_SENT);
 		}

@@ -57,7 +57,7 @@ class LoginDataQuery extends AsyncQuery{
 			$channels = [];
 			foreach($chanData as $chanDatum){
 				list($key, $value) = explode(":", $chanDatum);
-				$channels[$key] = (int)$value;
+				$channels[$key] = (int) $value;
 			}
 		}else{
 			$row["channels"] = [];
@@ -72,7 +72,7 @@ class LoginDataQuery extends AsyncQuery{
 		];
 		foreach($friendsString as $friend){
 			list($friendUid, $type, $requested, $reqDir, $name) = explode(":", $friend);
-			$friends[(int)$type][(int)$friendUid] = new Friend($uid, $friendUid, $type, $requested, $reqDir, $name);
+			$friends[(int) $type][(int) $friendUid] = new Friend($uid, $friendUid, $type, $requested, $reqDir, $name);
 		}
 		$row["friends"] = $friends;
 		$row["isnew"] = false;
@@ -81,7 +81,7 @@ class LoginDataQuery extends AsyncQuery{
 			$r = $mysql->query("SELECT pid, id, amplitude, count, expiry FROM purchases WHERE uid=$uid AND class=$this->class");
 			$purchases = [];
 			while(is_array($result = $r->fetch_assoc())){
-				$purchases[$result["pid"]] = new Purchase((int)$result["pid"], $uid, $this->class, (int)$result["id"], (int)$result["amplitude"], (int)$result["count"], (int)$result["expiry"]);
+				$purchases[$result["pid"]] = new Purchase((int) $result["pid"], $uid, $this->class, (int) $result["id"], (int) $result["amplitude"], (int) $result["count"], (int) $result["expiry"]);
 			}
 			$r->close();
 			$row["purchases"] = $purchases;
@@ -90,10 +90,10 @@ class LoginDataQuery extends AsyncQuery{
 				/** @var mixed[][][] $kitRows */
 				$kitRows = [];
 				while(is_array($resultRow = $r->fetch_assoc())){
-					$kitid = (int)$resultRow["kitid"];
-					$resultRow["kitid"] = (int)$resultRow["kitid"];
-					$resultRow["slot"] = (int)$resultRow["slot"];
-					$resultRow["value"] = (int)$resultRow["value"];
+					$kitid = (int) $resultRow["kitid"];
+					$resultRow["kitid"] = (int) $resultRow["kitid"];
+					$resultRow["slot"] = (int) $resultRow["slot"];
+					$resultRow["value"] = (int) $resultRow["value"];
 					if(!isset($kitRows[$kitid])){
 						$kitRows[$kitid] = [$resultRow];
 					}else{
@@ -170,7 +170,7 @@ class LoginDataQuery extends AsyncQuery{
 			$loginData = $result;
 			if(count($main->getSessions()) >= Settings::$SYSTEM_MAX_PLAYERS){
 				$main->getLogger()->notice("Server slots exceeded optimum level!");
-				$rank = (int)$loginData["rank"];
+				$rank = (int) $loginData["rank"];
 				if($rank & Settings::RANK_PERM_MOD){
 					$main->getLogger()->notice($player->getName() . " bypassed as mod");
 				}elseif($rank & Settings::RANK_IMPORTANCE_DONATOR){

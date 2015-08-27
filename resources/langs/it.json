@@ -1,93 +1,93 @@
 {
-    "meta": {
-        "short": "it",
-        "english": "Italian",
-        "local": "Italiano",
-        "authors": [
-            "Heromine"
-        ],
-        "version": "1.0"
-    },
-    "chat": {
-        "blocked": {
-            "pass": "%em%Never%warning% tell %em2%anybody%warning% %em3%(including staff)%warning% your password."
-        },
-        "broadcasts": [
-            "%notify%bold%Donate to get awesome perks at %reset%http:\/\/lgpe.co\/d",
-            "%notify%bold%Download our Android app at %reset%http:\/\/lgpe.co\/and",
-            "%notify%bold%Follow us on Twitter! %em%%italic%@LegionPE",
-            "%notify%bold%Earn coins by playing the games, and spend coins at the shops at each game!"
-        ]
-    },
-    "cmd": {
-        "error": {
-            "noperm": {
-                "normal": "%error%You don't have permission to use this command."
-            },
-            "wronguse": "%error%Usage: %usage%",
-            "absplayer": {
-                "unknwon": "%error%That player is not online on this server.",
-                "named": "%error%The player \"%player%\" is not online on this server."
-            }
-        },
-        "transfer": {
-            "err": {
-                "noservers": "%error%No servers for %class% have available slots."
-            },
-            "success": "%success%Transferring you to %em%%ip%%success%:%em2%%port%%success% (%class% server)..."
-        }
-    },
-    "login": {
-        "auth": {
-            "success": "%success%You have been authenticated by %em%%method%",
-            "whereami": "%info%You are in %em%LegionPE %em2%%class% %em3%(%ip%:%port%)\n%verbose%Give this address to friends to play on this server together!",
-            "firstjoin": {
-                "hub": "%em%Walk into a portal%info% or %em2%Choose an item in your inventory%info% to join a game.\n%info%You can also type %em3%\/help%info% in chat to check for available commands."
-            },
-            "method": {
-                "transfer": "transferring",
-                "uuid": "matching last UUID",
-                "ip": {
-                    "last": "matching last IP",
-                    "hist": "matching an IP in the IP history"
-                },
-                "pass": "entering password",
-                "register": "registering a new account"
-            }
-        },
-        "register": {
-            "prompt": "%info%Thanks for joining %bold%Legion PE%reset%!\n%info%To protect your account, we are going to create an account for you.\n%notify%Please enter the password you wish to register with, %em%directly into chat.\n%verbose%Passwords are encrypted safely on our secure database.\n%verbose%Nobody else, including staff, will be able to decode and read\/use it.\n%warning%You are disallwoed from mentioning your password in chat, so remember not to use a common word as your password.",
-            "retype": "%notify%Thanks! Now please type the password again to confirm it.",
-            "success": "%notify%Congratulations! You have successfully created your %em%own%notify% account on Legion PE!",
-            "mismatch": "%error%The two passwords aren't the same!\n%notify%Please type a password you like %em%directly%notify% in chat.\n%verbose%Type a totally different password if you want."
-        },
-        "pass": {
-            "prompt": "%notify%Please enter the password you registered directly into chat.",
-            "mismatch": "%info%If you didn't register this account, please choose a new name.\n%verbose%If you believe that the owner of this \n%verbose%account is imposing you on purpose,\n%verbose%and would like to take it back, \n%verbose%please email %em2%support@legionpvp.eu%info%.\n%warning%The password you typed in isn't the one you registered with.\n%warning%You have %chances%left before you are kicked."
-        }
-    },
-    "warning": {
-        "notification": {
-            "main": "%notify2%%bold%~~~~~~~~~~ ATTENTION ~~~~~~~~~~\n%em%%issuer%%warning% sent you a warning!\n%verbose%Message:\n%em2%%message%\n%notify%This warning carries %em3%%points%%notify% warning points.\n%info%You now have %em%%totalpoints%%info% warning points in total.",
-            "muted": "%error%You will be muted for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake.",
-            "banned": "%error%You will be banned for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake."
-        }
-    },
-    "kick": {
-        "toolongonline": "You have been online for more than 90 minutes. Take a rest! I bet your device must be pretty hot."
-    },
-    "local": {
-        "class": {
-            "name": {
-                "hub": "Hub",
-                "pvp": {
-                    "kit": "KitPvP",
-                    "classic": "Classic PvP"
-                },
-                "parkour": "Parkour",
-                "spleef": "Spleef",
-                "infected": "Infected"
-            }
-        }
-    }
+	"meta": {
+		"short": "it",
+		"english": "Italian",
+		"local": "Italiano",
+		"authors": [
+			"Heromine"
+		],
+		"version": "1.0"
+	},
+	"chat": {
+		"blocked": {
+			"pass": "%em%Never%warning% tell %em2%anybody%warning% %em3%(including staff)%warning% your password."
+		},
+		"broadcasts": [
+			"%notify%bold%Donate to get awesome perks at %reset%http:\/\/lgpe.co\/d",
+			"%notify%bold%Download our Android app at %reset%http:\/\/lgpe.co\/and",
+			"%notify%bold%Follow us on Twitter! %em%%italic%@LegionPE",
+			"%notify%bold%Earn coins by playing the games, and spend coins at the shops at each game!"
+		]
+	},
+	"cmd": {
+		"error": {
+			"noperm": {
+				"normal": "%error%You don't have permission to use this command."
+			},
+			"wronguse": "%error%Usage: %usage%",
+			"absplayer": {
+				"unknwon": "%error%That player is not online on this server.",
+				"named": "%error%The player \"%player%\" is not online on this server."
+			}
+		},
+		"transfer": {
+			"err": {
+				"noservers": "%error%No servers for %class% have available slots."
+			},
+			"success": "%success%Transferring you to %em%%ip%%success%:%em2%%port%%success% (%class% server)..."
+		}
+	},
+	"login": {
+		"auth": {
+			"success": "%success%You have been authenticated by %em%%method%",
+			"whereami": "%info%You are in %em%LegionPE %em2%%class% %em3%(%ip%:%port%)\n%verbose%Give this address to friends to play on this server together!",
+			"firstjoin": {
+				"hub": "%em%Walk into a portal%info% or %em2%Choose an item in your inventory%info% to join a game.\n%info%You can also type %em3%\/help%info% in chat to check for available commands."
+			},
+			"method": {
+				"transfer": "transferring",
+				"uuid": "matching last UUID",
+				"ip": {
+					"last": "matching last IP",
+					"hist": "matching an IP in the IP history"
+				},
+				"pass": "entering password",
+				"register": "registering a new account"
+			}
+		},
+		"register": {
+			"prompt": "%info%Thanks for joining %bold%Legion PE%reset%!\n%info%To protect your account, we are going to create an account for you.\n%notify%Please enter the password you wish to register with, %em%directly into chat.\n%verbose%Passwords are encrypted safely on our secure database.\n%verbose%Nobody else, including staff, will be able to decode and read\/use it.\n%warning%You are disallwoed from mentioning your password in chat, so remember not to use a common word as your password.",
+			"retype": "%notify%Thanks! Now please type the password again to confirm it.",
+			"success": "%notify%Congratulations! You have successfully created your %em%own%notify% account on Legion PE!",
+			"mismatch": "%error%The two passwords aren't the same!\n%notify%Please type a password you like %em%directly%notify% in chat.\n%verbose%Type a totally different password if you want."
+		},
+		"pass": {
+			"prompt": "%notify%Please enter the password you registered directly into chat.",
+			"mismatch": "%info%If you didn't register this account, please choose a new name.\n%verbose%If you believe that the owner of this \n%verbose%account is imposing you on purpose,\n%verbose%and would like to take it back, \n%verbose%please email %em2%support@legionpvp.eu%info%.\n%warning%The password you typed in isn't the one you registered with.\n%warning%You have %chances%left before you are kicked."
+		}
+	},
+	"warning": {
+		"notification": {
+			"main": "%notify2%%bold%~~~~~~~~~~ ATTENTION ~~~~~~~~~~\n%em%%issuer%%warning% sent you a warning!\n%verbose%Message:\n%em2%%message%\n%notify%This warning carries %em3%%points%%notify% warning points.\n%info%You now have %em%%totalpoints%%info% warning points in total.",
+			"muted": "%error%You will be muted for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake.",
+			"banned": "%error%You will be banned for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake."
+		}
+	},
+	"kick": {
+		"toolongonline": "You have been online for more than 90 minutes. Take a rest! I bet your device must be pretty hot."
+	},
+	"local": {
+		"class": {
+			"name": {
+				"hub": "Hub",
+				"pvp": {
+					"kit": "KitPvP",
+					"classic": "Classic PvP"
+				},
+				"parkour": "Parkour",
+				"spleef": "Spleef",
+				"infected": "Infected"
+			}
+		}
+	}
 }

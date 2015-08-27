@@ -86,7 +86,6 @@ abstract class ChatType{
 		return false;
 	}
 	protected function onPush(){
-
 	}
 	public abstract function getType();
 	public abstract function execute();

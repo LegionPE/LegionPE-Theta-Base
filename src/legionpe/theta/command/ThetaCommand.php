@@ -55,7 +55,7 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 	 * @param string[] $aliases
 	 */
 	public function __construct(BasePlugin $plugin, $name, $desc, $usage, $aliases = []){
-		parent::__construct($name, $desc, $usage, (array)$aliases);
+		parent::__construct($name, $desc, $usage, (array) $aliases);
 		$this->plugin = $plugin;
 	}
 	public static function registerAll(BasePlugin $main, CommandMap $map){

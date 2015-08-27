@@ -86,9 +86,9 @@ class BaseListener implements Listener{
 		}
 	}
 	public function onLoadChunk(ChunkLoadEvent $event){
-		for($i = 0;$i < 16;$i++){
-			for($j = 0;$j < 16;$j++){
-				$event->getChunk()->setBiomeColor($i, $j, 141, 179, 96);
+		for($i = 0; $i < 16; $i++){
+			for($j = 0; $j < 16; $j++){
+				$event->getChunk()->setBiomeColor($i, $j, 141 + mt_rand(-8, 8), 179 + mt_rand(-8, 8), 96 + mt_rand(-8, 8));
 				$event->getChunk()->setChanged(true);
 			}
 		}

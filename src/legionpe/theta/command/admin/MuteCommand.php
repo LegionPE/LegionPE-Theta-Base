@@ -29,7 +29,7 @@ class MuteCommand extends ModeratorCommand{
 		if(!(($session = $this->getSession($name = array_shift($args))) instanceof Session)){
 			return $this->notOnline($sender, $name);
 		}
-		$length = (int)(floatval(array_shift($args)) * 60);
+		$length = (int) (floatval(array_shift($args)) * 60);
 		$msg = implode(" ", $args);
 		/** @noinspection PhpUnusedLocalVariableInspection */
 		$mute = $session->mute($msg, $length, $sender->getName());

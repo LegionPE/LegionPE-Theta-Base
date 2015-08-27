@@ -128,9 +128,9 @@ abstract class AsyncQuery extends AsyncTask{
 			if(!isset($r[$column])){
 				$r[$column] = self::$defaultValues[$col];
 			}elseif($col === self::COL_INT){
-				$r[$column] = (int)$r[$column];
+				$r[$column] = (int) $r[$column];
 			}elseif($col === self::COL_FLOAT){
-				$r[$column] = (float)$r[$column];
+				$r[$column] = (float) $r[$column];
 			}
 		}
 	}
@@ -148,7 +148,7 @@ abstract class AsyncQuery extends AsyncTask{
 			}
 			return "'" . $this->getConn()->escape_string($str) . "'";
 		}
-		return (string)$str;
+		return (string) $str;
 	}
 	public function __debugInfo(){
 		return [];

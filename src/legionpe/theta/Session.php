@@ -232,7 +232,7 @@ abstract class Session{
 		$this->send(Phrases::LOGIN_AUTH_SUCCESS, ["method" => $this->translate(self::$AUTH_METHODS_PHRASES[$method])]);
 		$this->send(Phrases::LOGIN_AUTH_WHEREAMI, [
 				"class" => $this->translate(Settings::$CLASSES_NAMES_PHRASES[Settings::$LOCALIZE_CLASS]),
-				"ip" => Settings::$LOCALIZE_IP, "port" => (string)Settings::$LOCALIZE_PORT]
+				"ip" => Settings::$LOCALIZE_IP, "port" => (string) Settings::$LOCALIZE_PORT]
 		);
 		$this->recalculateNametag();
 		$this->setMaintainedPopup();
@@ -433,10 +433,10 @@ abstract class Session{
 		return ($rank & Settings::RANK_PERM_MOD) === Settings::RANK_PERM_MOD and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
 	}
 	public function isDonator(){
-		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR);
+		return (bool) ($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR);
 	}
 	public function isVIP(){
-		return (bool)($this->getRank() & Settings::RANK_IMPORTANCE_VIP);
+		return (bool) ($this->getRank() & Settings::RANK_IMPORTANCE_VIP);
 	}
 	public function isAdmin($includeTrial = true){
 		$rank = $this->getRank();
@@ -715,10 +715,10 @@ abstract class Session{
 		return TextFormat::GRAY;
 	}
 	public function isLocalChatOn(){
-		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_LOCAL_CHAT_ON) and $this->state === self::STATE_PLAYING;
+		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_LOCAL_CHAT_ON) and $this->state === self::STATE_PLAYING;
 	}
 	public function isClassChatOn(){
-		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_CLASS_CHAT_ON) and $this->state === self::STATE_PLAYING;
+		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_CLASS_CHAT_ON) and $this->state === self::STATE_PLAYING;
 	}
 	public function isOwner(){
 		return ($this->getRank() & Settings::RANK_PERM_OWNER) === Settings::RANK_PERM_OWNER;
@@ -909,13 +909,13 @@ abstract class Session{
 		return $this->getLoginDatum("config");
 	}
 	public function getTagEnabled(){
-		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_TAG_ON);
+		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_TAG_ON);
 	}
 	public function getStatsPublic(){
-		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_STATS_PUBLIC);
+		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_STATS_PUBLIC);
 	}
 	public function isTeamChannelOn(){
-		return (bool)($this->getLoginDatum("config") & Settings::CONFIG_TEAM_CHANNEL_ON);
+		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_TEAM_CHANNEL_ON);
 	}
 	public function canStartGrind(){
 		if(!$this->isDonator()){
@@ -1216,5 +1216,6 @@ abstract class Session{
 			$this->getPlayer()->sendMessage($msg);
 		}
 	}
-	public function reloadKits(){}
+	public function reloadKits(){
+	}
 }
