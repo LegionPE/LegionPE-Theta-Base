@@ -18,6 +18,7 @@ namespace legionpe\theta;
 use legionpe\theta\chat\ChatType;
 use legionpe\theta\command\ThetaCommand;
 use legionpe\theta\config\Settings;
+use legionpe\theta\credentials\Credentials;
 use legionpe\theta\lang\LanguageManager;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\query\CloseServerQuery;
@@ -89,6 +90,7 @@ abstract class BasePlugin extends PluginBase{
 	public function onLoad(){
 		self::$NAME = $this->getName();
 		self::$CLASS = static::class;
+		class_exists(Credentials::class);
 		class_exists(CloseServerQuery::class); // preload to workaround frequent corruption errors due to phar repalced
 		class_exists(SaveSinglePlayerQuery::class);
 		class_exists(LoginDataQuery::class);
