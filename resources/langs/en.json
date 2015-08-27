@@ -125,7 +125,7 @@
 				"notinteam": "%error%You are not in a team!"
 			},
 			"create": {
-				"invalidname": "%error%The team name has to be %em%at least 5 characters long%error%, with %em2%all%error% characters being %em2%alphabets, numbers or underscores (-)%error%!",
+				"invalidname": "%error%The team name has to be %em%at least 5 characters long%error%, with %em2%all%error% characters being %em2%alphabets, numbers, hyphens (-) or underscores (_)%error%!",
 				"alreadyexists": "%error%A team of this name already exists!",
 				"success": "%success%New team has been successfully created."
 			},
@@ -141,7 +141,8 @@
 					"junior": "%warning%Are you sure to quit your team? If your team is closed, you need to be %em2%invited again%warning% to join back the team!",
 					"normal": "%warning%Are you sure to quit your team? You will become a %em%Junior-Member%warning% when you join the team again!\n%verbose%If your team is closed, you need to be %em2%invited again%verbosemid% to join back the team!",
 					"leader": "%warning%Are you sure to quit your team? As the %em%leader%warning% of your team, you will disband the whole team (%em2%deleting everything including all your team points%warning%) by quitting your team!"
-				}
+				},
+				"quitted": "%success%You have quitted your team."
 			},
 			"invite": {
 				"notsenior": "%error%You must be in a team and be a %em%Senior-Member%error%, a %em%Leader%error% or a %em%Co-Leader%error% to invite a player!",
@@ -243,7 +244,7 @@
 			"mismatch": "%info%If you didn't register this account, please choose a new name.\n%warning%The password you typed in isn't the one you registered with.\n%warning%You have %chances% left."
 		},
 		"register": {
-			"prompt": "%info%Welcome to %bold%Legion PE%reset%!\n%notify%Please register by typing your password %em%directly into chat.\n%warning%You are disallwoed from mentioning your password in chat, so remember not to use a common word as your password.",
+			"prompt": "%info%Welcome to %bold%Legion PE%reset%!\n%notify%Please register by typing your password %em%directly into chat.\n%warning%You are disallowed from mentioning your password in chat, so remember not to use a common word as your password.",
 			"retype": "%notify%Great! Now please type the password %em2%again%notify% to confirm it.",
 			"success": "%notify%Thanks for registering! You can use this password to login at anywhere on our network.\n%verbose%Remember %bold%%em%never%reset%%verbosemid% to share your password to %em2%anybody%verbosemid%. Not even staff members.",
 			"mismatch": "%error%The two passwords aren't the same!\nLet's start all over again.\n%notify%Please type a password you like %em%directly%notify% into chat."

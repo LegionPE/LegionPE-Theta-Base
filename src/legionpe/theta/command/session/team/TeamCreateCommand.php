@@ -40,7 +40,7 @@ class TeamCreateCommand extends SessionCommand{
 		if($name === null){
 			return false;
 		}
-		if(!preg_match('/^[A-Za-z0-9_]{5,}$/', $name)){
+		if(!preg_match('/^[A-Za-z0-9_\-]{5,}$/', $name)){
 			$sender->send(Phrases::CMD_TEAM_CREATE_INVALID_NAME);
 			return true;
 		}

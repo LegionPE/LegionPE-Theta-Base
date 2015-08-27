@@ -119,6 +119,7 @@ class Phrases{
 	const CMD_TEAM_QUIT_WARNING_JUNIOR = "cmd.team.quit.warning.junior";
 	const CMD_TEAM_QUIT_WARNING_NORMAL = "cmd.team.quit.warning.normal";
 	const CMD_TEAM_QUIT_WARNING_LEADER = "cmd.team.quit.warning.leader";
+	const CMD_TEAM_QUIT_QUITTED = "cmd.team.quit.quitted";
 	const CMD_TEAM_INVITE_NOT_SENIOR = "cmd.team.invite.notsenior";
 	const CMD_TEAM_INVITE_NO_PLAYER = "cmd.team.invite.noplayer";
 	const CMD_TEAM_INVITE_TARGET_IN_TEAM = "cmd.team.invite.targetinteam";

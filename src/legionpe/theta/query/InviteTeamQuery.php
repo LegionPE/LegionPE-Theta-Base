@@ -41,7 +41,10 @@ class InviteTeamQuery extends AsyncQuery{
 		parent::__construct($main);
 	}
 	public function onPreQuery(\mysqli $db){
-		$result = $db->query("SELECT uid, name, tid, (SELECT type FROM tjrequests WHERE team=$this->tid AND user=users.uid) as type FROM users WHERE name='{$this->esc($this->queriedTargetName)}'");
+		$result = $db->query("SELECT uid, name, tid, (SELECT type FROM tjrequests WHERE team=$this->tid AND user=users.uid) as type FROM users WHERE name={$this->esc($this->queriedTargetName)}");
+		if($result === false){
+			throw new \RuntimeException($db->error);
+		}
 		$row = $result->fetch_assoc();
 		$result->close();
 		if(is_array($row)){
@@ -70,6 +73,11 @@ class InviteTeamQuery extends AsyncQuery{
 		$toUser = JoinTeamQuery::REQUEST_FROM_TEAM;
 		return $this->type === JoinTeamQuery::REQUEST_FROM_USER ? "DELETE FROM tjrequests WHERE team=$this->tid AND user=$this->targetUid" : "INSERT INTO tjrequests (team, user, type) VALUES ($this->tid, $this->targetUid, $toUser)";
 	}
+	public function onPostQuery(\mysqli $db){
+		if($this->type === JoinTeamQuery::REQUEST_FROM_USER){
+			$db->query("UPDATE users SET tid=$this->tid, teamjoin=unix_timestamp(), teampts=0, teamrank=0 WHERE uid=$this->targetUid");
+		}
+	}
 	public function getResultType(){
 		return self::TYPE_RAW;
 	}
@@ -88,6 +96,7 @@ class InviteTeamQuery extends AsyncQuery{
 			$sender->send(Phrases::CMD_TEAM_INVITE_ACCEPTED_SENDER, ["name" => $this->targetName]);
 		}else{
 			$sender->send(Phrases::CMD_TEAM_INVITE_SENT, ["name" => $this->targetName]);
+			return;
 		}
 		$type = ChatType::get($main, ChatType::TEAM_JOIN_PROPAGANDA, $this->issuerName, "", Settings::CLASS_ALL, [
 			"uid" => $this->targetUid,

@@ -32,6 +32,11 @@ use legionpe\theta\command\session\friend\FriendListCommand;
 use legionpe\theta\command\session\friend\SetFriendCommand;
 use legionpe\theta\command\session\GrindCoinCommand;
 use legionpe\theta\command\session\LabelCommand;
+use legionpe\theta\command\session\team\FallbackTeamCommand;
+use legionpe\theta\command\session\team\TeamCreateCommand;
+use legionpe\theta\command\session\team\TeamInviteCommand;
+use legionpe\theta\command\session\team\TeamJoinCommand;
+use legionpe\theta\command\session\team\TeamQuitCommand;
 use legionpe\theta\command\session\TransferCommand;
 use legionpe\theta\config\Settings;
 use legionpe\theta\Friend;
@@ -120,6 +125,11 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			new SetFriendCommand($main, Friend::FRIEND_GOOD_FRIEND),
 			new SetFriendCommand($main, Friend::FRIEND_BEST_FRIEND),
 			new FriendListCommand($main),
+			new TeamCreateCommand($main),
+			new TeamInviteCommand($main),
+			new TeamJoinCommand($main),
+			new TeamQuitCommand($main),
+			new FallbackTeamCommand($main)
 		]);
 	}
 	private static function unregisterCommand(CommandMap $map, $name){

@@ -16,6 +16,7 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
+use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
 use pocketmine\Server;
 
@@ -49,6 +50,11 @@ class CreateTeamQuery extends NextIdQuery{
 				$result = $this->getResult();
 				if($result["success"]){
 					$ses->send(Phrases::CMD_TEAM_CREATE_SUCCESS);
+					$ses->setLoginDatum("tid", $this->getId());
+					$ses->setLoginDatum("teamname", $this->teamName);
+					$ses->setLoginDatum("teamrank", Settings::TEAM_RANK_LEADER);
+					$ses->setLoginDatum("teamjointime", time());
+					$ses->setLoginDatum("teampts", 0);
 					$ses->recalculateNametag();
 				}else{
 					$ses->send($result["error"]);

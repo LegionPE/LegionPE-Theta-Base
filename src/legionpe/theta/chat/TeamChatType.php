@@ -34,6 +34,6 @@ class TeamChatType extends ChatType{
 		$this->main->getLogger()->info("{Team $this->teamName} <$this->ign>" . $this->msg);
 	}
 	public function getType(){
-		return $this->getType();
+		return self::TEAM_CHAT;
 	}
 }

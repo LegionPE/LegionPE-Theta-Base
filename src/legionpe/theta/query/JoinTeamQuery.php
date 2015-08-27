@@ -42,14 +42,15 @@ class JoinTeamQuery extends AsyncQuery{
 		return self::TYPE_RAW;
 	}
 	public function onPreQuery(\mysqli $db){
-		$result = $db->query("SELECT tid, config, (SELECT type FROM tjrequests WHERE tid=teams.tid AND user=$this->uid) AS type FROM teams WHERE name={$this->esc($this->teamName)}");
+		$result = $db->query("SELECT tid, config, (SELECT type FROM tjrequests WHERE team=teams.tid AND user=$this->uid) AS type FROM teams WHERE name={$this->esc($this->teamName)}");
 		$checkFirst = $result->fetch_assoc();
+		$result->close();
 		if(!is_array($checkFirst)){
 			throw new \RuntimeException(Phrases::VAR_error . "Team does not exist");
 		}
-		$this->tid = (int) $result["tid"];
-		$this->type = (int) $result["type"];
-		$config = (int) $result["config"];
+		$this->tid = (int) $checkFirst["tid"];
+		$this->type = (int) $checkFirst["type"];
+		$config = (int) $checkFirst["config"];
 		$result->close();
 		if($config & Settings::TEAM_CONFIG_OPEN){
 			$this->type = self::DIRECT_JOIN;
@@ -61,7 +62,7 @@ class JoinTeamQuery extends AsyncQuery{
 	}
 	public function getQuery(){
 		$fromUser = self::REQUEST_FROM_USER;
-		return ($this->type === self::REQUEST_FROM_TEAM) ? "DELETE FROM tjrequests WHERE tid=$this->tid AND user=$this->uid" : "INSERT INTO tjrequests (team, user, type) VALUES ($this->tid, $this->uid, $fromUser)";
+		return ($this->type === self::REQUEST_FROM_TEAM) ? "DELETE FROM tjrequests WHERE team=$this->tid AND user=$this->uid" : "INSERT INTO tjrequests (team, user, type) VALUES ($this->tid, $this->uid, $fromUser)";
 	}
 	public function onCompletion(Server $server){
 		$main = BasePlugin::getInstance($server);

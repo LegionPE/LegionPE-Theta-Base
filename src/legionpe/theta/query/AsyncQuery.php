@@ -53,9 +53,6 @@ abstract class AsyncQuery extends AsyncTask{
 		return null;
 	}
 	public function onRun(){
-		if(class_exists(Credentials::class, true) === false){
-			spl_autoload_register(__NAMESPACE__ . "\\autoload");
-		}
 		$mysql = $this->getConn();
 		try{
 			$this->onPreQuery($mysql);

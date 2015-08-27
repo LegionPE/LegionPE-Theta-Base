@@ -26,7 +26,7 @@ class TeamJoinCommand extends SessionCommand{
 		parent::__construct($main, "tj", "Join, send an invitation request to or accept invitation from a team", "/tj <target team>", []);
 	}
 	protected function run(array $args, Session $sender){
-		if($sender->getTeamId() === -1){
+		if($sender->getTeamId() !== -1){
 			return $sender->translate(Phrases::CMD_TEAM_ERR_ALREADY_IN_TEAM);
 		}
 		if(!isset($args[0])){

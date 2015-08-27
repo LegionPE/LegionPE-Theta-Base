@@ -49,6 +49,16 @@ abstract class ChatType{
 			}
 		}
 	}
+	/**
+	 * @param BasePlugin $main
+	 * @param int $id
+	 * @param string $src
+	 * @param string $msg
+	 * @param int $class
+	 * @param array $data
+	 * @param int|null $rowId
+	 * @return ChatType
+	 */
 	public static function get(BasePlugin $main, $id, $src, $msg, $class, $data, $rowId = null){
 		switch($id){
 			case self::SERVER_BROADCAST:
@@ -76,6 +86,9 @@ abstract class ChatType{
 	}
 	public function push(){
 		$this->onPush();
+		if($this->getType() === self::TEAM_CHAT){
+			echo "a\n";
+		}
 		new PushChatQuery($this->main, $this->src, $this->msg, $this->getType(), $this->class, $this->_classData);
 	}
 	public function consume(){

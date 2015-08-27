@@ -49,9 +49,10 @@ class TeamQuitCommand extends SessionCommand{
 		]);
 		$type->push();
 		$sender->setLoginDatum("tid", -1);
+		$sender->setLoginDatum("teamname", null);
 		$sender->setLoginDatum("teamrank", 0);
 		$sender->setLoginDatum("teamjoin", 0);
 		$sender->setLoginDatum("teampts", 0);
-		return true;
+		return $sender->translate(Phrases::CMD_TEAM_QUITTED);
 	}
 }
