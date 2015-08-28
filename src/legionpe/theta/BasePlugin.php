@@ -82,7 +82,7 @@ abstract class BasePlugin extends PluginBase{
 	// PluginManager-level stuff
 	/**
 	 * @param Server $server
-	 * @return BasePlugin
+	 * @return static
 	 */
 	public static function getInstance(Server $server){
 		return $server->getPluginManager()->getPlugin(self::$NAME);

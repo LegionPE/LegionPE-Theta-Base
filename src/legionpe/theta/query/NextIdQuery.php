@@ -23,6 +23,7 @@ class NextIdQuery extends AsyncQuery{
 	const WARNING = "wid";
 //	const PURCHASE = "pid";
 	const LABEL = "lid";
+	const GAME = "gid";
 	/** @var string */
 	private $name;
 	private $resultId;
