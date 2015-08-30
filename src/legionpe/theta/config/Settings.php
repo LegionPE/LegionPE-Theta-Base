@@ -32,7 +32,6 @@ abstract class Settings{
 	const CLASS_SPLEEF = 4;
 	const CLASS_INFECTED = 5;
 	const CLASS_CLASSICAL = 6;
-	const CLASS_NON_SERVER = 7;
 	const RANK_IMPORTANCE_DEFAULT = 0x0000;
 	const RANK_IMPORTANCE_TESTER = 0x0001;
 	const RANK_IMPORTANCE_DONATOR = 0x0004;
@@ -43,9 +42,6 @@ abstract class Settings{
 	const RANK_PERM_DEFAULT = 0x0000;
 	const RANK_PERM_MOD = 0x0010;
 	const RANK_PERM_ADMIN = 0x0030;
-
-	// ranks of importance (how important the person is, like VERY Important Person) must not exceed 15 according to this, 1 nibble
-	// the first two bits are the two actual permission-affecting nibbles
 	const RANK_PERM_OWNER = 0x0070; // 0  , 0000
 	const RANK_PERM_STAFF = 0x00F0; // 1  , 0001
 	/** Permission to be undetected by the auto AFK kicker. */
@@ -57,12 +53,10 @@ abstract class Settings{
 	/** Permission to execute raw PHP code by `/eval` */
 	const RANK_PERM_DEV = 0x0800; // 13 , 1101
 	const RANK_SECTOR_PERMISSION = 0x00F0;
-	// permissions the rank has, 2 nibbles
 	const RANK_PREC_STD = 0x0000;
 	const RANK_PREC_TRIAL = 0x1000; // 16
 	const RANK_PREC_HEAD = 0x2000; // 48
 	const RANK_SECTOR_PRECISION = 0x3000; // 112
-	// Here you are, the youtuber rank */
 	const RANK_DECOR_YOUTUBER = 0x4000; // 240
 	const RANK_SECTOR_DECOR = 0xC000; // 256
 	const CONFIG_DEFAULT_VALUE = Settings::CONFIG_AUTH_UUID | Settings::CONFIG_LOCAL_CHAT_ON | Settings::CONFIG_TEAM_CHANNEL_ON | Settings::CONFIG_STATS_PUBLIC | Settings::CONFIG_TAG_ON;
@@ -70,12 +64,10 @@ abstract class Settings{
 	/** @deprecated */
 	const CONFIG_AUTH_SUBNET_HISTORY = 0; // 2048
 	const CONFIG_AUTH_SUBNET_LAST = 1;
-	// precise (generally won't affect the program) degree of rank, 2 bits
 	const CONFIG_AUTH_IP_HISTORY = 2;
 	const CONFIG_AUTH_IP_LAST = 3;
 	const CONFIG_AUTH_UUID = 4;
 	const CONFIG_AUTH_NONE = 5;
-	// decorative ranks, which don't actually affect anything, 2 bits
 	const CONFIG_TAG_ON = 0x10;
 	const CONFIG_STATS_PUBLIC = 0x20;
 	const CONFIG_TEAM_CHANNEL_ON = 0x40;

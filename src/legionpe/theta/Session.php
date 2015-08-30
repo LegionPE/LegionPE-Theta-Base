@@ -122,7 +122,7 @@ abstract class Session{
 	/** @var int */
 	private $state = self::STATE_LOADING;
 	/** @var bool */
-	public $confirmGrind = false, $confirmQuitTeam = false;
+	public $confirmGrind = false, $confirmQuitTeam = false, $confirmAlt = false;
 	private $invisibleFrom = [];
 	/** @var string|TextContainer|null */
 	private $tmpHash = null, $curPopup = null;
