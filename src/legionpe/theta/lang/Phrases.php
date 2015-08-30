@@ -59,6 +59,10 @@ class Phrases{
 	const CMD_ERR_ABSENT_PLAYER_NAME_KNOWN = "cmd.error.absplayer.named";
 	const CMD_ERR_LOADING = "cmd.error.loading";
 
+	const CMD_ALT_WARNING = "cmd.alt.warning";
+	const CMD_ALT_SUCCESS = "cmd.alt.success";
+	const CMD_ALT_WAIT = "cmd.alt.wait";
+
 	const CMD_CHANNEL_VIEW_LOCAL = "cmd.channel.view.local";
 	const CMD_CHANNEL_VIEW_TEAM = "cmd.channel.view.team";
 	const CMD_CHANNEL_VIEW_OTHER = "cmd.channel.view.other";

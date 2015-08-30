@@ -51,6 +51,11 @@
 			"staff": "%warning%This command is only available to staff members.",
 			"loading": "%wait%Loading. Please wait..."
 		},
+		"alt": {
+			"warning": "%warning%Are you sure to teleport to another server? %notify%Do /alt again to confirm.",
+			"success": "%success%You are going to be transferred to %em%%ip%:%port%",
+			"wait": "%error%No alternate server available! Please wait for a few seconds and try again."
+		},
 		"channel": {
 			"view": {
 				"local": "%success%You are currently talking to %em%players on this local server%success%.",
