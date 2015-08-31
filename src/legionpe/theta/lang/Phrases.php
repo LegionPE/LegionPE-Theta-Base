@@ -219,6 +219,8 @@ class Phrases{
 
 	const PVP_LEAVE_SPAWN_HINT = "game.pvp.hinttext";
 
+	const PVP_KIT_SHOPS_WEB_HINT = "game.pvp.kit.shops.webhint";
+
 	const HUB_FEATHER_TUT = "game.hub.feather.tut";
 
 	// constant variables

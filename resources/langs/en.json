@@ -336,7 +336,12 @@
 				"left": "%em%%left% %notify2%second(s) of invicibility left",
 				"off": "%notify2%You are no longer invincible."
 			},
-			"hinttext": "%notify2%Jump into the %em%void%notify2% to start fighting."
+			"hinttext": "%notify2%Jump into the %em%void%notify2% to start fighting.",
+			"kit": {
+				"shops": {
+					"webhint": "%notify2%Go to %em%http://lgpe.co/s%notify2% to upgrade your kits!"
+				}
+			}
 		},
 		"hub": {
 			"feather": {
