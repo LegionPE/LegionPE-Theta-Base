@@ -820,6 +820,11 @@ abstract class Session{
 			$this->getMain()->saveSessionData($this, $newStatus);
 		}
 	}
+	/**
+	 * @param string $key
+	 * @param int $amplitude
+	 * @return int
+	 */
 	public function incrLoginDatum($key, $amplitude = 1){
 		$this->loginData[$key] += $amplitude;
 		return $this->loginData[$key];
@@ -831,7 +836,7 @@ abstract class Session{
 		$this->setLoginDatum("iphist", $this->getLoginDatum("iphist") . "$ip,");
 		new AddIpQuery($this->getMain(), $ip, $this->getUid());
 	}
-	public function grantCoins($coins, $ignoreGrind = false, $effects = true, $bonus = true){
+	public function grantCoins($coins, $ignoreGrind = false, $effects = true){
 		if(!$ignoreGrind and $this->isGrinding()){
 			$coins *= Settings::getGrindFactor($this->getRank());
 		}
@@ -842,31 +847,19 @@ abstract class Session{
 			$particle = new TerrainParticle($player, Block::get(Block::GOLD_BLOCK));
 			$level = $player->getLevel();
 			$recipients = [$player];
-			for($i = 0; $i < 500; $i++){
+			for($i = 0; $i < 50; $i++){
 				$x = $random->nextSignedFloat();
-				$y = $random->nextSignedFloat();
+				$y = $random->nextSignedFloat() * $player->eyeHeight / 2;
 				$z = $random->nextSignedFloat();
 				$particle->setComponents(
 					$player->x + $x,
-					$player->y + $y,
+					$player->y + $player->eyeHeight / 2 + $y,
 					$player->z + $z
 				);
 				$level->addParticle($particle, $recipients);
 			}
 		}
 		$this->setCoins($out = $this->getCoins() + $coins);
-		if($bonus){
-			if(mt_rand(0, 99) === 0){
-				$add = mt_rand(25, 50);
-			}elseif(mt_rand(0, 499) === 0){
-				$add = mt_rand(150, 300);
-			}elseif(mt_rand(0, 749) === 0){
-				$add = mt_rand(300, 500);
-			}
-			if(isset($add)){
-				$this->grantCoins($add, false, true, false);
-			}
-		}
 		return [$coins, $out];
 	}
 	public function isGrinding(){
