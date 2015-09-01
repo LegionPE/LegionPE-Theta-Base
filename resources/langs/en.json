@@ -320,7 +320,7 @@
 				"stats": "%info%This is your %em%%kills%%success% kill!"
 			},
 			"action": {
-				"kill": "slained",
+				"kill": "killed",
 				"arrow": "shot",
 				"snowball": "snowballed",
 				"egg": "egged"
