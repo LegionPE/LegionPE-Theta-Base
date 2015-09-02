@@ -1211,4 +1211,6 @@ abstract class Session{
 	}
 	public function reloadKits(){
 	}
+	public function reloadKitsCallback(){
+	}
 }

@@ -17,6 +17,7 @@ namespace legionpe\theta\command\session;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\command\SessionCommand;
+use legionpe\theta\lang\Phrases;
 use legionpe\theta\Session;
 
 class ReloadKitsCommand extends SessionCommand{
@@ -25,5 +26,6 @@ class ReloadKitsCommand extends SessionCommand{
 	}
 	protected function run(array $args, Session $sender){
 		$sender->reloadKits();
+		return $sender->translate(Phrases::KITS_RELOADING);
 	}
 }

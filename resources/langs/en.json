@@ -348,5 +348,9 @@
 				"tut": "%bold%Tap feather in hotbar to adjust sprinting."
 			}
 		}
+	},
+	"kits": {
+		"reloading": "%wait%Please wait while we are reloading your kits.",
+		"reloaded": "%success%Your kits have been reloaded. Do /kill to activate (counts one death)."
 	}
 }

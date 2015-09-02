@@ -170,6 +170,9 @@ class Phrases{
 	const KICK_TOO_LONG_ONLINE = "kick.toolong.online";
 	const KICK_TOO_LONG_LOGIN = "kick.toolong.login";
 
+	const KITS_RELOADING = "kits.reloading";
+	const KITS_RELOADED = "kits.reloaded";
+
 	const AUTH_METHOD_TRANSFER = "login.auth.method.transfer";
 	const AUTH_METHOD_UUID = "login.auth.method.uuid";
 	const AUTH_METHOD_IP_LAST = "login.auth.method.ip.last";
