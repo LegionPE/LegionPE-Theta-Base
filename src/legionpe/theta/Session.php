@@ -1082,6 +1082,12 @@ abstract class Session{
 				new RawAsyncQuery($this->getMain(), $update ? "UPDATE friends SET requested=$type, direction=$outDirection $condition" : "INSERT INTO friends (smalluid, largeuid, type, requested, direction) VALUES ($small, $large, $NOT_FRIEND, $type, $outDirection)");
 				return Friend::RET_SENT_REQUEST;
 			}else{
+				Friend::countFriends($this->getMain()->getDb(), $type, $fulls, $otherUid, $this->getUid());
+				if(isset($fulls[$this->getUid()])){
+					return Friend::RET_ME_FULL;
+				}elseif(count($fulls) > 0){
+					return Friend::RET_OTHER_FULL;
+				}
 				new RawAsyncQuery($this->getMain(), $update ? "UPDATE friends SET type=$type, requested=$NOT_FRIEND, direction=$NIL $condition" : "INSERT INTO friends (smalluid, largeuid, type, requested, direction) VALUES ($small, $large, $type, $NOT_FRIEND, $NIL)");
 				return Friend::RET_REDUCED;
 			}
@@ -1100,15 +1106,33 @@ abstract class Session{
 					new RawAsyncQuery($this->getMain(), "DELETE FROM friends $condition");
 					return Friend::RET_REQUEST_CANCELLED;
 				}else{
+					Friend::countFriends($this->getMain()->getDb(), $type, $fulls, $otherUid, $this->getUid());
+					if(isset($fulls[$this->getUid()])){
+						return Friend::RET_ME_FULL;
+					}elseif(count($fulls) > 0){
+						return Friend::RET_OTHER_FULL;
+					}
 					new RawAsyncQuery($this->getMain(), "UPDATE friends SET type=$type, requested=$NOT_FRIEND, direciton=$NIL $condition");
 					return Friend::RET_REQUEST_CANCELLED_AND_REDUCED;
 				}
 			}
 		}else{ // $dir = Friend::DIRECTION_IN
 			if($type === $requested){
+				Friend::countFriends($this->getMain()->getDb(), $type, $fulls, $otherUid, $this->getUid());
+				if(isset($fulls[$this->getUid()])){
+					return Friend::RET_ME_FULL;
+				}elseif(count($fulls) > 0){
+					return Friend::RET_OTHER_FULL;
+				}
 				new RawAsyncQuery($this->getMain(), "UPDATE friends SET type=$type, requested=$type, direction=$NIL $condition");
 				return Friend::RET_REQUEST_ACCEPTED;
 			}elseif($type > $requested){ // $type > $requested > $current
+				Friend::countFriends($this->getMain()->getDb(), $type, $fulls, $otherUid, $this->getUid());
+				if(isset($fulls[$this->getUid()])){
+					return Friend::RET_ME_FULL;
+				}elseif(count($fulls) > 0){
+					return Friend::RET_OTHER_FULL;
+				}
 				new RawAsyncQuery($this->getMain(), "UPDATE friends SET type=$requested, requested=$type, direction=$outDirection $condition");
 				return Friend::RET_REQUEST_ACCEPTED_AND_RAISE_SENT;
 			}else{ // $requested > $type <=> $current
@@ -1119,6 +1143,12 @@ abstract class Session{
 					new RawAsyncQuery($this->getMain(), "UPDATE friends SET requested=$type, direction=$outDirection $condition");
 					return Friend::RET_REQUEST_REJECTED_AND_LOWER_SENT;
 				}else{
+					Friend::countFriends($this->getMain()->getDb(), $type, $fulls, $otherUid, $this->getUid());
+					if(isset($fulls[$this->getUid()])){
+						return Friend::RET_ME_FULL;
+					}elseif(count($fulls) > 0){
+						return Friend::RET_OTHER_FULL;
+					}
 					new RawAsyncQuery($this->getMain(), "UPDATE friends SET type=$type, requested=$NOT_FRIEND, direction=$NIL $condition");
 					return Friend::RET_REQUEST_REJECTED_AND_REDUCED;
 				}

@@ -15,6 +15,8 @@
 
 namespace legionpe\theta;
 
+use legionpe\theta\config\Settings;
+
 class Friend{
 	const FRIEND_NOT_FRIEND = 0x10;
 	const FRIEND_ACQUAINTANCE = 0x20;
@@ -41,6 +43,8 @@ class Friend{
 	const RET_REQUEST_REJECTED_AND_LOWER_SENT = 11;
 	const RET_REQUEST_REJECTED_AND_REDUCED = 12;
 	const RET_SAME_UID = 13;
+	const RET_OTHER_FULL = 14;
+	const RET_ME_FULL = 15;
 	const DIRECTION_IN = 0;
 	const DIRECTION_OUT = 1;
 	const DIRECTION_NIL = 2;
@@ -71,5 +75,49 @@ class Friend{
 			return self::DIRECTION_OUT;
 		}
 		return self::DIRECTION_IN;
+	}
+	public static function countFriends(\mysqli $db, $type, &$fulls, ...$uids){
+		$fulls = [];
+		$r = $db->query("SELECT (SELECT COUNT(*) FROM friends WHERE (smalluid=users.uid OR largeuid=users.uid) AND type=$type) AS cnt, rank FROM users WHERE " .
+			implode(" OR ", array_map(function($uid){
+				return "uid=$uid";
+			}, $uids)));
+		while(is_array($row = $r->fetch_assoc())){
+			$uid = (int) $row["uid"];
+			$cnt = (int) $row["cnt"];
+			$rank = (int) $row["rank"];
+			$r->close();
+			if(($rank & Settings::RANK_IMPORTANCE_VIP) === Settings::RANK_IMPORTANCE_VIP){
+				if($type === self::FRIEND_ACQUAINTANCE or $type === self::FRIEND_GOOD_FRIEND){
+					if($cnt >= 12){
+						$fulls[$uid] = true;
+				}
+				}elseif($type === self::FRIEND_BEST_FRIEND){
+					if($cnt >= 8){
+						$fulls[$uid] = true;
+					}
+				}
+			}elseif(($rank & Settings::RANK_IMPORTANCE_DONATOR) === Settings::RANK_IMPORTANCE_DONATOR){
+				if($type === self::FRIEND_ACQUAINTANCE or $type === self::FRIEND_GOOD_FRIEND){
+					if($cnt >= 8){
+						$fulls[$uid] = true;
+					}
+				}elseif($type === self::FRIEND_BEST_FRIEND){
+					if($cnt >= 5){
+						$fulls[$uid] = true;
+					}
+				}
+			}else{
+				if($type === self::FRIEND_ACQUAINTANCE or $type === self::FRIEND_GOOD_FRIEND){
+					if($cnt >= 2){
+						$fulls[$uid] = true;
+					}
+				}elseif($type === self::FRIEND_BEST_FRIEND){
+					if($cnt >= 2){
+						$fulls[$uid] = true;
+					}
+				}
+			}
+		}
 	}
 }

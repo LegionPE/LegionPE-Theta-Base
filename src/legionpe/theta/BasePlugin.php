@@ -29,6 +29,7 @@ use legionpe\theta\query\NewUserQuery;
 use legionpe\theta\query\SaveSinglePlayerQuery;
 use legionpe\theta\query\TransferServerQuery;
 use legionpe\theta\queue\Queue;
+use legionpe\theta\utils\DbPingQuery;
 use legionpe\theta\utils\FireSyncChatQueryTask;
 use legionpe\theta\utils\MUtils;
 use legionpe\theta\utils\ResendPlayersTask;
@@ -57,6 +58,8 @@ abstract class BasePlugin extends PluginBase{
 	private $listener;
 	/** @var LanguageManager */
 	private $langs;
+	/** @var \mysqli */
+	private $db;
 	/** @var int[] */
 	private $faceSeeks = [];
 	/** @var string[] */
@@ -106,10 +109,12 @@ abstract class BasePlugin extends PluginBase{
 		$this->getServer()->getPluginManager()->registerEvents($this->listener = new $class($this), $this);
 		$class = $this->getSessionListenerClass();
 		$this->getServer()->getPluginManager()->registerEvents($this->sesList = new $class($this), $this);
+		$this->db = Credentials::getMysql();
 		new InitDbQuery($this);
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SyncStatusTask($this), 40, 20);
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SessionTickTask($this), 1, 10);
 		$this->getServer()->getScheduler()->scheduleRepeatingTask($this->syncChatTask = new FireSyncChatQueryTask($this), 5);
+		$this->getServer()->getScheduler()->scheduleRepeatingTask(new DbPingQuery($this), 1200);
 		if(RESEND_ADD_PLAYER > 0){
 			$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new ResendPlayersTask($this), RESEND_ADD_PLAYER, RESEND_ADD_PLAYER);
 		}
@@ -436,5 +441,11 @@ abstract class BasePlugin extends PluginBase{
 		$object = $this->objectStore[$id];
 		unset($this->objectStore[$id]);
 		return $object;
+	}
+	/**
+	 * @return \mysqli
+	 */
+	public function getDb(){
+		return $this->db;
 	}
 }
