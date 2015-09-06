@@ -135,6 +135,8 @@ class Phrases{
 	const CMD_TEAM_INVITE_SENT = "cmd.team.invite.sent";
 	const CMD_TEAM_JOINED = "cmd.team.joined";
 	const CMD_TEAM_QUITTED = "cmd.team.quitted";
+	const CMD_TEAM_INVITED = "cmd.team.invited";
+	const CMD_TEAM_REQUEST_RECEIVED = "cmd.team.requested";
 	const CMD_TEAM_DISBANDED = "cmd.team.disbanded";
 	const CMD_TEAM_RANKS = "cmd.team.ranks";
 

@@ -89,9 +89,6 @@ abstract class ChatType{
 	}
 	public function push(){
 		$this->onPush();
-		if($this->getType() === self::TEAM_CHAT){
-			echo "a\n";
-		}
 		new PushChatQuery($this->main, $this->src, $this->msg, $this->getType(), $this->class, $this->_classData);
 	}
 	public function consume(){

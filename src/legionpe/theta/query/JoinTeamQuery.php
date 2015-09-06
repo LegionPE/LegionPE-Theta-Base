@@ -19,6 +19,7 @@ use legionpe\theta\BasePlugin;
 use legionpe\theta\chat\ChatType;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
+use legionpe\theta\Session;
 use pocketmine\Server;
 
 class JoinTeamQuery extends AsyncQuery{
@@ -33,9 +34,10 @@ class JoinTeamQuery extends AsyncQuery{
 	private $tid;
 	/** @var int */
 	private $type;
-	public function __construct(BasePlugin $main, $uid, $teamName){
+	public function __construct(BasePlugin $main, Session $session, $teamName){
 		$this->teamName = $teamName;
-		$this->uid = $uid;
+		$this->uid = $session->getUid();
+		$this->playerName = $session->getInGameName();
 		parent::__construct($main);
 	}
 	public function getResultType(){
@@ -83,6 +85,13 @@ class JoinTeamQuery extends AsyncQuery{
 						$joined = true;
 						break 2;
 					default:
+						$type = ChatType::get($main, ChatType::TEAM_CHAT, "Network", "%tr%" . Phrases::CMD_TEAM_REQUEST_RECEIVED, Settings::CLASS_ALL, [
+							"tid" => $this->tid,
+							"teamName" => $this->teamName,
+							"ign" => "Network",
+							"data" => ["name" => $this->playerName]
+						]);
+						$type->push();
 						$ses->send(Phrases::CMD_TEAM_JOIN_REQUESTED, $data);
 						break 2;
 				}

@@ -85,6 +85,9 @@ class InviteTeamQuery extends AsyncQuery{
 		$result = $this->getResult();
 		$main = BasePlugin::getInstance($server);
 		$sender = $main->getSessionByUid($this->issuerUid);
+		if($sender === null){
+			return;
+		}
 		if($result["success"] === false){
 			$sender->send($result["error"]);
 			return;
@@ -96,6 +99,7 @@ class InviteTeamQuery extends AsyncQuery{
 			$sender->send(Phrases::CMD_TEAM_INVITE_ACCEPTED_SENDER, ["name" => $this->targetName]);
 		}else{
 			$sender->send(Phrases::CMD_TEAM_INVITE_SENT, ["name" => $this->targetName]);
+			$main->sendPrivateMessage($this->targetUid, "%tr%" . Phrases::CMD_TEAM_INVITED, ["team" => $sender->getTeamName()]);
 			return;
 		}
 		$type = ChatType::get($main, ChatType::TEAM_JOIN_PROPAGANDA, $this->issuerName, "", Settings::CLASS_ALL, [

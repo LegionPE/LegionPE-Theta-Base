@@ -163,7 +163,9 @@
 				"sent": "%success%%name% has been invited into your team."
 			},
 			"joined": "%notify%%name% joined your team!",
-			"quitted": "%notify%%name% quitted the team!",
+			"quitted": "%notify%%name% quitted your team!",
+			"invited": "%notify%You have been invited into Team %team%!",
+			"requested": "%notify%%name% sent a request to join your team!",
 			"disbanded": "%notify2%%bold%Your team has been %em%%italic%disbanded!",
 			"ranks": [
 				"Junior-Member",

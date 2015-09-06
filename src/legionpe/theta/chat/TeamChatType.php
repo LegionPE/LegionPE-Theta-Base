@@ -21,13 +21,17 @@ class TeamChatType extends ChatType{
 	protected $tid;
 	protected $teamName;
 	protected $ign;
-	protected $data = [];
+	protected $data;
 	public function execute(){
+		if(!isset($this->data)){
+			$this->data = [];
+		}
 		foreach($this->main->getSessions() as $ses){
 			if($ses->getTeamId() === $this->tid){
+				$msg = (substr($this->msg, 0, 4) === "%tr%") ? $ses->translate(substr($this->msg, 4), $this->data) : $this->msg;
 				$ses->send(Phrases::CHAT_FORMAT_TEAM, [
 					"source" => $this->ign,
-					"msg" => (substr($this->msg, 0, 4) === "%tr%") ? $ses->translate(substr($this->msg, 4), $this->data) : $this->msg // shall we let it translate in Session->translate()?
+					"msg" => $msg // shall we let it translate in Session->translate()?
 				]);
 			}
 		}

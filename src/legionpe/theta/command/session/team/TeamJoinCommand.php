@@ -33,7 +33,7 @@ class TeamJoinCommand extends SessionCommand{
 			return false;
 		}
 		$team = array_shift($args);
-		new JoinTeamQuery($this->getMain(), $sender->getUid(), $team);
+		new JoinTeamQuery($this->getMain(), $sender, $team);
 		return $sender->translate(Phrases::CMD_TEAM_LOADING);
 	}
 }

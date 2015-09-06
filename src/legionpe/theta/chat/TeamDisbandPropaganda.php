@@ -26,6 +26,12 @@ class TeamDisbandPropaganda extends ChatType{
 		foreach($this->main->getSessions() as $ses){
 			if($ses->getTeamId() === $this->tid){
 				$ses->send(Phrases::CMD_TEAM_DISBANDED);
+				$ses->setLoginDatum("tid", -1);
+				$ses->setLoginDatum("teamname", null);
+				$ses->setLoginDatum("teamrank", 0);
+				$ses->setLoginDatum("teamjoin", 0);
+				$ses->setLoginDatum("teampts", 0);
+				$ses->recalculateNametag();
 			}
 		}
 	}

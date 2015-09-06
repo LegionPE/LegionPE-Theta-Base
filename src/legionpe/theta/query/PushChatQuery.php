@@ -16,7 +16,6 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
-use legionpe\theta\chat\ChatType;
 
 class PushChatQuery extends AsyncQuery{
 	private $src;
@@ -25,20 +24,11 @@ class PushChatQuery extends AsyncQuery{
 	private $class;
 	private $data;
 	public function __construct(BasePlugin $main, $src, $msg, $type, $class, $data = []){
-		if($type === ChatType::TEAM_CHAT){
-			echo "b\n";
-		}
 		$this->src = $src;
 		$this->msg = $msg;
 		$this->type = $type;
 		$this->class = $class;
 		$this->data = json_encode($data);
-		if($type === ChatType::TEAM_CHAT){
-			echo "c\n";
-		}
-		if($type === ChatType::TEAM_CHAT){
-			echo "d\n";
-		}
 		parent::__construct($main);
 	}
 	public function getQuery(){
