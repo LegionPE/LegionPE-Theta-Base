@@ -20,6 +20,7 @@ use legionpe\theta\chat\ChatType;
 use legionpe\theta\command\SessionCommand;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
+use legionpe\theta\query\RawAsyncQuery;
 use legionpe\theta\Session;
 
 class TeamQuitCommand extends SessionCommand{
@@ -37,6 +38,14 @@ class TeamQuitCommand extends SessionCommand{
 				($sender->getTeamRank() === Settings::TEAM_RANK_JUNIOR ?
 					$sender->translate(Phrases::CMD_TEAM_QUIT_WARNING_JUNIOR) :
 					$sender->translate(Phrases::CMD_TEAM_QUIT_WARNING_NORMAL));
+		}
+		if($sender->getTeamRank() === 4){
+			$prop = ChatType::get($this->getMain(), ChatType::TEAM_DISBAND_PROPAGANDA, $sender->getInGameName(), "Team disbanded by owner /tq", Settings::CLASS_ALL, [
+				"tid" => $sender->getTeamId()
+			]);
+			$prop->push();
+			new RawAsyncQuery($this->getMain(), "DELETE FROM teams WHERE tid=" . $sender->getTeamId());
+			return true;
 		}
 		$type = ChatType::get($this->getMain(), ChatType::TEAM_CHAT, "Network", "%tr%" . Phrases::CMD_TEAM_QUITTED, Settings::CLASS_ALL, [
 			"tid" => $sender->getTeamId(),

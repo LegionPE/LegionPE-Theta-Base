@@ -30,6 +30,7 @@ abstract class ChatType{
 	const TEAM_JOIN_PROPAGANDA = 6;
 	const RELOAD_FRIENDS_PROPAGANDA = 7;
 	const CLASS_CHAT = 8;
+	const TEAM_DISBAND_PROPAGANDA = 9;
 	/** @var BasePlugin */
 	protected $src;
 	protected $msg;
@@ -81,6 +82,8 @@ abstract class ChatType{
 				return new ReloadFriendsPropaganda($main, $src, $msg, $class, $data, $rowId);
 			case self::CLASS_CHAT:
 				return new ClassChatType($main, $src, $msg, $class, $data, $rowId);
+			case self::TEAM_DISBAND_PROPAGANDA:
+				return new TeamDisbandPropaganda($main, $src, $msg, $class, $data, $rowId);
 		}
 		return null;
 	}

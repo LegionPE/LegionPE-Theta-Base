@@ -17,9 +17,11 @@ namespace legionpe\theta\command;
 
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\Session;
+use legionpe\theta\utils\ReportErrorTask;
 use pocketmine\command\CommandSender;
 use pocketmine\event\TextContainer;
 use pocketmine\Player;
+use pocketmine\utils\TextFormat;
 
 abstract class SessionCommand extends ThetaCommand{
 	public function testPermissionSilent(CommandSender $sender){
@@ -42,23 +44,30 @@ abstract class SessionCommand extends ThetaCommand{
 		return true;
 	}
 	public function execute(CommandSender $sender, $l, array $args){
-		if(!($sender instanceof Player)){
-			$sender->sendMessage(Phrases::VAR_error . "Please run this command in-game.");
+		try{
+			if(!($sender instanceof Player)){
+				$sender->sendMessage(Phrases::VAR_error . "Please run this command in-game.");
+				return true;
+			}
+			if(!$this->testPermission($sender)){
+				return false;
+			}
+			$session = $this->getPlugin()->getSession($sender);
+			if(!($session instanceof Session)){
+				return true;
+			}
+			/** @noinspection PhpMethodParametersCountMismatchInspection */
+			$r = $this->run($args, $session, $l);
+			if($r === false){
+				$session->send(Phrases::CMD_ERR_WRONG_USE, ["usage" => $this->getUsage()]);
+			}elseif(is_string($r) or ($r instanceof TextContainer)){
+				$sender->sendMessage($r);
+			}
+		}catch(\Exception $e){
+			$sender->sendMessage(TextFormat::RED . "An internal server error occurred during executing the command. Sorry for the inconvenience; we are aware of and will fix the issue as soon as possible.");
+			$task = new ReportErrorTask($e, "Executing command '$l " . implode(" ", $args) . "'");
+			$this->getMain()->getServer()->getScheduler()->scheduleAsyncTask($task);
 			return true;
-		}
-		if(!$this->testPermission($sender)){
-			return false;
-		}
-		$session = $this->getPlugin()->getSession($sender);
-		if(!($session instanceof Session)){
-			return true;
-		}
-		/** @noinspection PhpMethodParametersCountMismatchInspection */
-		$r = $this->run($args, $session, $l);
-		if($r === false){
-			$session->send(Phrases::CMD_ERR_WRONG_USE, ["usage" => $this->getUsage()]);
-		}elseif(is_string($r) or ($r instanceof TextContainer)){
-			$sender->sendMessage($r);
 		}
 		return true;
 	}

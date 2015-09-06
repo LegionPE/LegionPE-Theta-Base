@@ -68,6 +68,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 			"tid" => $session->getTeamId(),
 			"teamrank" => $session->getTeamRank(),
 			"teamjoin" => $session->getTeamJoinTime(),
+			"teampts" => $session->getTeamPoints(),
 			"ignorelist" => "," . implode(",", $session->getIgnoreList()) . ","
 		];
 	}

@@ -164,7 +164,7 @@
 			},
 			"joined": "%notify%%name% joined your team!",
 			"quitted": "%notify%%name% quitted the team!",
-			"disbanded": "%nofity2%%bold%Your team has been %em%%italic%disbanded!",
+			"disbanded": "%notify2%%bold%Your team has been %em%%italic%disbanded!",
 			"ranks": [
 				"Junior-Member",
 				"Member",

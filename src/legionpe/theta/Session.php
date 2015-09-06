@@ -942,6 +942,17 @@ abstract class Session{
 	public function getTeamJoinTime(){
 		return $this->getLoginDatum("teamjoin");
 	}
+	public function getTeamPoints(){
+		return $this->getLoginDatum("teampts");
+	}
+	public function grantTeamPoints($points = 1){
+		$this->incrLoginDatum("teampts", $points);
+	}
+	public function takeTeamPoints($points = 1){
+		$pts = $this->getTeamPoints();
+		$pts = max(0, $pts - $points);
+		$this->setLoginDatum("teampts", $pts);
+	}
 	public function getIgnoreList(){
 		return array_filter(explode(",", $this->getLoginDatum("ignorelist")));
 	}

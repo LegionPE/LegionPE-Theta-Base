@@ -43,7 +43,7 @@ class LoginDataQuery extends AsyncQuery{
 	}
 	public function getQuery(){
 		// warning: keep the first 7 characters ALWAYS "SELECT "
-		return "SELECT uid,name,nicks,lastip,status,lastses,authuuid,coins,hash,oldhash,pwprefix,pwlen,registration,laston,ontime,config,(SELECT value FROM labels WHERE lid=users.lid)AS lbl,(SELECT approved FROM labels WHERE lid=users.lid)AS lblappr,lastgrind,rank,warnpts,lastwarn,tid,(SELECT name FROM teams WHERE tid=users.tid)as teamname,teamrank,teamjoin,ignorelist,email,emailkey,emailauth FROM users WHERE name=$this->name";
+		return "SELECT uid,name,nicks,lastip,status,lastses,authuuid,coins,hash,oldhash,pwprefix,pwlen,registration,laston,ontime,config,(SELECT value FROM labels WHERE lid=users.lid)AS lbl,(SELECT approved FROM labels WHERE lid=users.lid)AS lblappr,lastgrind,rank,warnpts,lastwarn,tid,(SELECT name FROM teams WHERE tid=users.tid)as teamname,teamrank,teamjoin,teampts,ignorelist,email,emailkey,emailauth FROM users WHERE name=$this->name";
 	}
 	protected function onAssocFetched(\mysqli $mysql, array &$row){
 		$uid = $row["uid"];
@@ -136,6 +136,7 @@ class LoginDataQuery extends AsyncQuery{
 			"teamname" => self::COL_STRING,
 			"teamrank" => self::COL_INT,
 			"teamjoin" => self::COL_UNIXTIME,
+			"teampts" => self::COL_INT,
 			"ignorelist" => self::COL_STRING,
 			"email" => self::COL_STRING,
 			"emailkey" => self::COL_STRING,
