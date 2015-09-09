@@ -33,6 +33,7 @@ use legionpe\theta\utils\DbPingQuery;
 use legionpe\theta\utils\FireSyncChatQueryTask;
 use legionpe\theta\utils\MUtils;
 use legionpe\theta\utils\ResendPlayersTask;
+use legionpe\theta\utils\RestartServerTask;
 use legionpe\theta\utils\SessionTickTask;
 use legionpe\theta\utils\SyncStatusTask;
 use libtheta\info\pvp\PvpKitInfo;
@@ -44,7 +45,7 @@ use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
 use shoghicp\FastTransfer\FastTransfer;
 
-const RESEND_ADD_PLAYER = 30;
+const RESEND_ADD_PLAYER = 50;
 
 abstract class BasePlugin extends PluginBase{
 	const EMAIL_UNVERIFIED = "NOTSET";
@@ -115,6 +116,7 @@ abstract class BasePlugin extends PluginBase{
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SessionTickTask($this), 1, 10);
 		$this->getServer()->getScheduler()->scheduleRepeatingTask($this->syncChatTask = new FireSyncChatQueryTask($this), 5);
 		$this->getServer()->getScheduler()->scheduleRepeatingTask(new DbPingQuery($this), 1200);
+		$this->getServer()->getScheduler()->scheduleDelayedTask(new RestartServerTask($this), 72000);
 		if(RESEND_ADD_PLAYER > 0){
 			$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new ResendPlayersTask($this), RESEND_ADD_PLAYER, RESEND_ADD_PLAYER);
 		}

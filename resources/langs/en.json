@@ -282,7 +282,8 @@
 		"toolong": {
 			"online": "\nYou have been online for more than 90 minutes. Take a rest! I bet your device must be pretty hot.",
 			"login": "\nHave you registered here using this username?\nPlease choose another username if you don't."
-		}
+		},
+		"serverstop": "\n%notify2%Server restart. Please reconnect.\n%verbosemid%Sorry for the inconvenience."
 	},
 	"date": {
 		"format": "d\/m\/Y H:i:s (\\U\\T\\C P)"

@@ -182,6 +182,7 @@ class Phrases{
 
 	const KICK_TOO_LONG_ONLINE = "kick.toolong.online";
 	const KICK_TOO_LONG_LOGIN = "kick.toolong.login";
+	const KICK_SERVER_STOP = "kick.serverstop";
 
 	const KITS_RELOADING = "kits.reloading";
 	const KITS_RELOADED = "kits.reloaded";
