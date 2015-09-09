@@ -58,6 +58,7 @@ class Phrases{
 	const CMD_ERR_ABSENT_PLAYER_NAME_UNKNOWN = "cmd.error.absplayer.unknown";
 	const CMD_ERR_ABSENT_PLAYER_NAME_KNOWN = "cmd.error.absplayer.named";
 	const CMD_ERR_LOADING = "cmd.error.loading";
+	const CMD_ERR_NOT_FOUND = "cmd.error.notfound";
 
 	const CMD_ALT_WARNING = "cmd.alt.warning";
 	const CMD_ALT_SUCCESS = "cmd.alt.success";
@@ -77,7 +78,6 @@ class Phrases{
 	const CMD_CHANNEL_JOINED_OTHER = "cmd.channel.joined.other";
 
 	const CMD_FRIEND_PROPAGANDA = "cmd.friend.propaganda";
-	const CMD_FRIEND_NOT_FOUND = "cmd.friend.notfound";
 	const CMD_FRIEND_REQUEST_ALREADY_SENT = "cmd.friend.request.alreadysent";
 	const CMD_FRIEND_REQUEST_ACCEPTED = "cmd.friend.request.accepted";
 	const CMD_FRIEND_SENT_REQUEST = "cmd.friend.request.sent";
@@ -110,9 +110,10 @@ class Phrases{
 
 	const CMD_PRIV_NOTICE_RECIPIENT = "cmd.pn.recipient";
 
-	const CMD_TEAM_CREATE_INVALID_NAME = "cmd.team.create.invalidname";
 	const CMD_TEAM_ERR_ALREADY_IN_TEAM = "cmd.team.err.alreadyinteam";
 	const CMD_TEAM_ERR_NOT_IN_TEAM = "cmd.team.err.notinteam";
+	const CMD_TEAM_ERR_DIFFERENT_TEAM = "cmd.team.err.diffteam";
+	const CMD_TEAM_CREATE_INVALID_NAME = "cmd.team.create.invalidname";
 	const CMD_TEAM_CREATE_ALREADY_EXISTS = "cmd.team.create.alreadyexists";
 	const CMD_TEAM_CREATE_SUCCESS = "cmd.team.create.success";
 	const CMD_TEAM_LOADING = "cmd.team.loading";
@@ -133,6 +134,13 @@ class Phrases{
 	const CMD_TEAM_INVITE_ACCEPTED_SENDER = "cmd.team.invite.accepted.sender";
 	const CMD_TEAM_INVITE_ACCEPTED_TARGET = "cmd.team.invite.accepted.target";
 	const CMD_TEAM_INVITE_SENT = "cmd.team.invite.sent";
+	const CMD_TEAM_RANK_CHANGE_NEED_SENIOR = "cmd.team.rankchange.senior";
+	const CMD_TEAM_RANK_CHANGE_NO_PROMOTE_CO_LEADER = "cmd.team.rankchange.promco";
+	const CMD_TEAM_RANK_CHANGE_NO_DEMOTE_JUNIOR = "cmd.team.rankchange.demjunior";
+	const CMD_TEAM_RANK_CHANGE_ONE_LEADER = "cmd.team.rankchange.leader";
+	const CMD_TEAM_RANK_CHANGE_NEED_TO_LOW = "cmd.team.rankchange.tohigh";
+	const CMD_TEAM_RANK_CHANGE_PROMOTED = "cmd.team.rankchange.promoted";
+	const CMD_TEAM_RANK_CHANGE_DEMOTED = "cmd.team.rankchange.demoted";
 	const CMD_TEAM_JOINED = "cmd.team.joined";
 	const CMD_TEAM_QUITTED = "cmd.team.quitted";
 	const CMD_TEAM_INVITED = "cmd.team.invited";
@@ -169,6 +177,8 @@ class Phrases{
 	const WARNING_RECEIVED_NOTIFICATION = "warning.notification.main";
 	const WARNING_MUTED_NOTIFICATION = "warning.notification.muted";
 	const WARNING_BANNED_NOTIFICATION = "warning.notification.banned";
+
+	const WORDS_TEAM_RANKS = "words.team.ranks";
 
 	const KICK_TOO_LONG_ONLINE = "kick.toolong.online";
 	const KICK_TOO_LONG_LOGIN = "kick.toolong.login";

@@ -63,7 +63,7 @@ class SetFriendQuery extends NameToUidQuery{
 		}
 		$result = $this->getResult();
 		if($result["resulttype"] !== self::TYPE_ASSOC){
-			$ses->send(Phrases::CMD_FRIEND_NOT_FOUND, ["name" => $this->name]);
+			$ses->send(Phrases::CMD_ERR_NOT_FOUND, ["name" => $this->name]);
 			return;
 		}
 		$targetUid = $result["result"]["uid"];

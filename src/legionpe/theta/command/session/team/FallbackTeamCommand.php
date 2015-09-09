@@ -29,7 +29,8 @@ class FallbackTeamCommand extends SessionCommand{
 		$em2 = Phrases::VAR_em2;
 		return implode("\n", array_filter([
 			"Usage:",
-			($sender->isDonator() or $sender->isModerator()) ? "$em/tc <team name>:$em2 Create a new team" : "",
+			($sender->isDonator() or $sender->isModerator()) ?
+				"$em/tc <team name>:$em2 Create a new team" : "",
 			"$em/tj <team name>:$em2 Join an opened team or accept the invitation into the team.",
 			"$em/tq:$em2 Quit a team.",
 			"$em/tinv <player full name>:$em2 Invite a player into your team.",

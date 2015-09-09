@@ -17,6 +17,7 @@ namespace legionpe\theta\command;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\command\admin\PrivateNoticeCommand;
+use legionpe\theta\command\admin\WarnCommand;
 use legionpe\theta\command\override\MBCommand;
 use legionpe\theta\command\override\OverridingKillCommand;
 use legionpe\theta\command\override\OverridingMeCommand;
@@ -24,6 +25,7 @@ use legionpe\theta\command\override\OverridingSayCommand;
 use legionpe\theta\command\override\OverridingStatusCommand;
 use legionpe\theta\command\override\OverridingTellCommand;
 use legionpe\theta\command\override\OverridingVersionCommand;
+use legionpe\theta\command\session\ChannelCommand;
 use legionpe\theta\command\session\CoinsCommand;
 use legionpe\theta\command\session\ConsoleCommand;
 use legionpe\theta\command\session\DirectTeleportCommand;
@@ -37,6 +39,7 @@ use legionpe\theta\command\session\team\TeamCreateCommand;
 use legionpe\theta\command\session\team\TeamInviteCommand;
 use legionpe\theta\command\session\team\TeamJoinCommand;
 use legionpe\theta\command\session\team\TeamQuitCommand;
+use legionpe\theta\command\session\team\TeamRankChangeCommand;
 use legionpe\theta\command\session\TransferCommand;
 use legionpe\theta\config\Settings;
 use legionpe\theta\Friend;
@@ -109,6 +112,7 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			new GrindCoinCommand($main),
 			new LabelCommand($main),
 			new MBCommand($main),
+			new ChannelCommand($main),
 			new OverridingMeCommand($main),
 			new GetPositionCommand($main),
 			new TransferCommand($main, ["pvp", "kitpvp"], "Kit PvP", Settings::CLASS_KITPVP),
@@ -129,7 +133,17 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			new TeamInviteCommand($main),
 			new TeamJoinCommand($main),
 			new TeamQuitCommand($main),
-			new FallbackTeamCommand($main)
+			new TeamRankChangeCommand($main, true),
+			new TeamRankChangeCommand($main, false),
+			new FallbackTeamCommand($main),
+			new WarnCommand($main, ["mod", "mods"], "using mods", WarnCommand::MODS),
+			new WarnCommand($main, ["swear", "curse"], "swearing or harassing", WarnCommand::SWEAR),
+			new WarnCommand($main, ["cap", "caps"], "using abusive caps", WarnCommand::CAPS),
+			new WarnCommand($main, ["ad", "ads"], "advertizing", WarnCommand::ADS),
+			new WarnCommand($main, ["do", "disobey"], "refusing to follow instructions", WarnCommand::DISOBEY),
+			new WarnCommand($main, ["impose", "imp"], "staff imposing", WarnCommand::IMPOSE),
+			new WarnCommand($main, ["spam"], "spamming", WarnCommand::SPAM),
+			new WarnCommand($main, ["misc"], "miscellaneous warnings", WarnCommand::MISC),
 		]);
 	}
 	private static function unregisterCommand(CommandMap $map, $name){

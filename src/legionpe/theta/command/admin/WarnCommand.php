@@ -63,7 +63,13 @@ class WarnCommand extends ModeratorCommand{
 	 * @param int $id
 	 */
 	public function __construct(BasePlugin $plugin, array $aliases, $realname, $id){ // TODO register
-		parent::__construct($plugin, $cmd = "w" . array_shift($aliases), "Warn about $realname", "/$cmd <player> [points = " . ($this->points = self::$IDS_TO_POINTS[$id]) . "] [message ]", $aliases);
+		parent::__construct(
+			$plugin,
+			$cmd = "w" . array_shift($aliases),
+			"Warn about $realname",
+			"/$cmd <player> [points = " . ($this->points = self::$IDS_TO_POINTS[$id]) . "] [message...]",
+			$aliases
+		);
 		$this->realname = $realname;
 		$this->id = $id;
 	}

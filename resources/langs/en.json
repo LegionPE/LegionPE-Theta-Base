@@ -49,7 +49,8 @@
 			"donator": "%warning%Please upgrade your account to at least Donator to use this command.",
 			"vip": "%warning%Please upgrade your account to at least VIP to use this command.",
 			"staff": "%warning%This command is only available to staff members.",
-			"loading": "%wait%Loading. Please wait..."
+			"loading": "%wait%Loading. Please wait...",
+			"notfound": "%error%Player %em%%name%%error% not found! Please type the %em2%full%error% (but upper/lower case doesn't matter) name of the player."
 		},
 		"alt": {
 			"warning": "%warning%Are you sure to teleport to another server? %notify%Do /alt again to confirm.",
@@ -79,7 +80,6 @@
 			"quitted": "%verbose%%em%%player%%verbosemid%@%ip%:%port% quitted channel %em2%%channel%."
 		},
 		"friend": {
-			"notfound": "%error%Player %em%%name%%error% not found! Please type the %em2%full%error% (but upper/lower case doesn't matter) name of the player.",
 			"request": {
 				"alreadysent": "%error%You have already sent a %req% request to %target%.",
 				"accepted": "%success%You are now %current% with %target%.",
@@ -127,7 +127,8 @@
 		"team": {
 			"err": {
 				"alreadyinteam": "%error%You are already in a team!",
-				"notinteam": "%error%You are not in a team!"
+				"notinteam": "%error%You are not in a team!",
+				"diffteam": "%error%You are in different teams!"
 			},
 			"create": {
 				"invalidname": "%error%The team name has to be %em%at least 5 characters long%error%, with %em2%all%error% characters being %em2%alphabets, numbers, hyphens (-) or underscores (_)%error%!",
@@ -161,6 +162,15 @@
 					"target": "%notify%Your team join invitation to %em%%teamname%%notify% has been accepted!"
 				},
 				"sent": "%success%%name% has been invited into your team."
+			},
+			"rankchange": {
+				"senior": "%error%You need to be at least a %em%Senior Member% in your team to promote/demote team members.",
+				"promco": "%error%There can only be one team leader!",
+				"demjunior": "%error%You cannot demote a junior member!",
+				"leader": "%error%A team leader cannot be promoted/demoted!",
+				"tohigh": "%error%You can only promote/demote players of lower rank than you!",
+				"promoted": "%success%You have promoted %em%%name%%success% to a %em2%%newrank%!",
+				"demoted": "%success%You have demoted %em%%name%%success% to a %em2%%newrank%!"
 			},
 			"joined": "%notify%%name% joined your team!",
 			"quitted": "%notify%%name% quitted your team!",
@@ -277,6 +287,17 @@
 	"date": {
 		"format": "d\/m\/Y H:i:s (\\U\\T\\C P)"
 	},
+	"words": {
+		"team": {
+			"ranks": [
+				"Junior Member",
+				"Member",
+				"Senior Member",
+				"Co-Leader",
+				"Leader"
+			]
+		}
+	},
 	"local": {
 		"class": {
 			"name": {
@@ -297,6 +318,10 @@
 			"goodfriend": "good friend",
 			"bestfriend": "best friend"
 		}
+	},
+	"kits": {
+		"reloading": "%wait%Please wait while we are reloading your kits.",
+		"reloaded": "%success%Your kits have been reloaded. Do /kill to activate (counts one death)."
 	},
 	"game": {
 		"pvp": {
@@ -350,9 +375,5 @@
 				"tut": "%bold%Tap feather in hotbar to adjust sprinting."
 			}
 		}
-	},
-	"kits": {
-		"reloading": "%wait%Please wait while we are reloading your kits.",
-		"reloaded": "%success%Your kits have been reloaded. Do /kill to activate (counts one death)."
 	}
 }
