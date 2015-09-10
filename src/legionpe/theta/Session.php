@@ -543,6 +543,7 @@ abstract class Session{
 			}
 			return false;
 		}else{
+			$event->setMessage(TextFormat::clean($event->getMessage()));
 			$msg = $event->getMessage();
 			$len = $this->getLoginDatum("pwlen");
 			$msgLen = strlen($msg);

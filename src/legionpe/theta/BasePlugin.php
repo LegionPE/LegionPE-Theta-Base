@@ -79,7 +79,7 @@ abstract class BasePlugin extends PluginBase{
 	/** @var FireSyncChatQueryTask */
 	private $syncChatTask;
 	private $objectStore = [];
-	private $nextStoreId = 0;
+	private $nextStoreId = 1;
 	/** @var MuteIssue[] */
 	private $mutes = [];
 

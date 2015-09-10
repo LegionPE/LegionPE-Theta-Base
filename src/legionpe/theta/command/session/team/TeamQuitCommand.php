@@ -25,7 +25,7 @@ use legionpe\theta\Session;
 
 class TeamQuitCommand extends SessionCommand{
 	public function __construct(BasePlugin $main){
-		parent::__construct($main, "tq", "Quit a team", "/tq");
+		parent::__construct($main, "tq", "Quit a team", "/tq", ["tdisband"]);
 	}
 	protected function run(array $args, Session $sender){
 		if($sender->getTeamId() === -1){

@@ -172,6 +172,22 @@
 				"promoted": "%success%You have promoted %em%%name%%success% to a %em2%%newrank%!",
 				"demoted": "%success%You have demoted %em%%name%%success% to a %em2%%newrank%!"
 			},
+			"property": {
+				"check": "%info%Your team %type% is:\n%em%%value%",
+				"change": "%success%Your team %type% has been changed to:\n%em%%value%",
+				"colead": "%error%You must be at least a %em%Co-Leader%error% to change your team %type%!"
+			},
+			"config": {
+				"check": {
+					"true": "%info%Your team is %type%.",
+					"false": "%info%Your team is %em%not%info% %type%."
+				},
+				"change": {
+					"true": "%info%Your team is now %type%.",
+					"false": "%info%Your team is %em%no longer%info% %type%."
+				},
+				"colead": "%error%You must be at least a %em%Co-Leader%error% to change your team %type%!"
+			},
 			"joined": "%notify%%name% joined your team!",
 			"quitted": "%notify%%name% quitted your team!",
 			"invited": "%notify%You have been invited into Team %team%!",
@@ -296,7 +312,15 @@
 				"Senior Member",
 				"Co-Leader",
 				"Leader"
-			]
+			],
+			"properties": {
+				"desc": "description",
+				"rule": "rules",
+				"req": "requirements"
+			},
+			"config": {
+				"open": "open"
+			}
 		}
 	},
 	"local": {
@@ -309,7 +333,8 @@
 				},
 				"parkour": "Parkour",
 				"spleef": "Spleef",
-				"infected": "Infected"
+				"infected": "Infected",
+				"shops": "Shops"
 			}
 		}
 	},

@@ -35,9 +35,11 @@ use legionpe\theta\command\session\friend\SetFriendCommand;
 use legionpe\theta\command\session\GrindCoinCommand;
 use legionpe\theta\command\session\LabelCommand;
 use legionpe\theta\command\session\team\FallbackTeamCommand;
+use legionpe\theta\command\session\team\TeamConfigCommand;
 use legionpe\theta\command\session\team\TeamCreateCommand;
 use legionpe\theta\command\session\team\TeamInviteCommand;
 use legionpe\theta\command\session\team\TeamJoinCommand;
+use legionpe\theta\command\session\team\TeamPropertyChangeCommand;
 use legionpe\theta\command\session\team\TeamQuitCommand;
 use legionpe\theta\command\session\team\TeamRankChangeCommand;
 use legionpe\theta\command\session\TransferCommand;
@@ -119,6 +121,7 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			new TransferCommand($main, ["parkour", "pk"], "Parkour", Settings::CLASS_PARKOUR),
 			new TransferCommand($main, ["spleef", "spf"], "Spleef", Settings::CLASS_SPLEEF),
 			new TransferCommand($main, ["infected", "inf"], "Infected", Settings::CLASS_INFECTED),
+			new TransferCommand($main, ["shop", "shops"], "Shops", Settings::CLASS_SHOPS),
 			new TransferCommand($main, ["classic", "cls"], "Classic PvP", Settings::CLASS_CLASSICAL),
 			new TransferCommand($main, ["hub", "spawn", "quit", "home", "back", "lobby"], "Hub", Settings::CLASS_HUB),
 			new OverridingSayCommand($main),
@@ -135,6 +138,11 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			new TeamQuitCommand($main),
 			new TeamRankChangeCommand($main, true),
 			new TeamRankChangeCommand($main, false),
+			new TeamPropertyChangeCommand($main, ["tdesc", "tdescr"], Phrases::WORDS_TEAM_PROPERTY_DESCRIPTION, "descr"),
+			new TeamPropertyChangeCommand($main, ["trule", "trules"], Phrases::WORDS_TEAM_PROPERTY_RULES, "rules"),
+			new TeamPropertyChangeCommand($main, ["treq", "trequire", "trequires", "trequirement", "trequirements"], Phrases::WORDS_TEAM_PROPERTY_REQUIREMENTS, "req"),
+			new TeamConfigCommand($main, Settings::TEAM_CONFIG_OPEN, true, Phrases::WORDS_TEAM_CONFIG_OPEN, ["topen"]),
+			new TeamConfigCommand($main, Settings::TEAM_CONFIG_OPEN, false, Phrases::WORDS_TEAM_CONFIG_OPEN, ["tclose"]),
 			new FallbackTeamCommand($main),
 			new WarnCommand($main, ["mod", "mods"], "using mods", WarnCommand::MODS),
 			new WarnCommand($main, ["swear", "curse"], "swearing or harassing", WarnCommand::SWEAR),

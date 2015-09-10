@@ -141,6 +141,14 @@ class Phrases{
 	const CMD_TEAM_RANK_CHANGE_NEED_TO_LOW = "cmd.team.rankchange.tohigh";
 	const CMD_TEAM_RANK_CHANGE_PROMOTED = "cmd.team.rankchange.promoted";
 	const CMD_TEAM_RANK_CHANGE_DEMOTED = "cmd.team.rankchange.demoted";
+	const CMD_TEAM_PROPERTY_CHECK = "cmd.team.property.check";
+	const CMD_TEAM_PROPERTY_VALUE_CHANGED = "cmd.team.property.change";
+	const CMD_TEAM_PROPERTY_NEED_CO_LEADER = "cmd.team.property.colead";
+	const CMD_TEAM_CONFIG_CHECK_TRUE = "cmd.team.config.check.true";
+	const CMD_TEAM_CONFIG_CHECK_FALSE = "cmd.team.config.check.false";
+	const CMD_TEAM_CONFIG_VALUE_CHANGED_TRUE = "cmd.team.config.change.true";
+	const CMD_TEAM_CONFIG_VALUE_CHANGED_FALSE = "cmd.team.config.change.false";
+	const CMD_TEAM_CONFIG_NEED_CO_LEADER = "cmd.team.config.colead";
 	const CMD_TEAM_JOINED = "cmd.team.joined";
 	const CMD_TEAM_QUITTED = "cmd.team.quitted";
 	const CMD_TEAM_INVITED = "cmd.team.invited";
@@ -179,6 +187,10 @@ class Phrases{
 	const WARNING_BANNED_NOTIFICATION = "warning.notification.banned";
 
 	const WORDS_TEAM_RANKS = "words.team.ranks";
+	const WORDS_TEAM_PROPERTY_DESCRIPTION = "words.team.property.desc";
+	const WORDS_TEAM_PROPERTY_RULES = "words.team.property.rule";
+	const WORDS_TEAM_PROPERTY_REQUIREMENTS = "words.team.property.req";
+	const WORDS_TEAM_CONFIG_OPEN = "words.team.config.open";
 
 	const KICK_TOO_LONG_ONLINE = "kick.toolong.online";
 	const KICK_TOO_LONG_LOGIN = "kick.toolong.login";
@@ -200,6 +212,7 @@ class Phrases{
 	const CLASS_SPLEEF = "local.class.name.spleef";
 	const CLASS_INFECTED = "local.class.name.infected";
 	const CLASS_CLASSIC_PVP = "local.class.name.pvp.classic";
+	const CLASS_SHOPS = "local.class.name.shops";
 
 	const FRIEND_ACQUAINTANCE = "friend.type.acquaintance";
 	const FRIEND_GOOD_FRIEND = "friend.type.goodfriend";

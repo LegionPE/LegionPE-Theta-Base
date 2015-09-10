@@ -32,6 +32,7 @@ abstract class Settings{
 	const CLASS_SPLEEF = 4;
 	const CLASS_INFECTED = 5;
 	const CLASS_CLASSICAL = 6;
+	const CLASS_SHOPS = 7;
 	const RANK_IMPORTANCE_DEFAULT = 0x0000;
 	const RANK_IMPORTANCE_TESTER = 0x0001;
 	const RANK_IMPORTANCE_DONATOR = 0x0004;
@@ -86,6 +87,7 @@ abstract class Settings{
 	const TEAM_RANK_MEMBER = 1;
 	const TEAM_RANK_SENIOR = 2;
 	const TEAM_RANK_COLEAD = 3;
+	const TEAM_RANK_CO_LEADER = 3;
 	const TEAM_RANK_LEADER = 4;
 	public static $TEAM_RANKS = [
 		self::TEAM_RANK_JUNIOR => "Junior-Member",
@@ -116,6 +118,7 @@ abstract class Settings{
 		"spleef" => self::CLASS_SPLEEF,
 		"infected" => self::CLASS_INFECTED,
 		"classical" => self::CLASS_CLASSICAL,
+		"shops" => self::CLASS_SHOPS
 	];
 	/** @var string[] */
 	public static $CLASSES_NAMES = [
@@ -124,7 +127,8 @@ abstract class Settings{
 		self::CLASS_PARKOUR => "Parkour",
 		self::CLASS_SPLEEF => "Spleef",
 		self::CLASS_INFECTED => "Infected",
-		self::CLASS_CLASSICAL => "Classic PvP"
+		self::CLASS_CLASSICAL => "Classic PvP",
+		self::CLASS_SHOPS => "Shops"
 	];
 	/** @var string[] */
 	public static $CLASSES_NAMES_PHRASES = [
@@ -187,7 +191,7 @@ $config = new Config("legionpe.yml", Config::YAML, [
 		"id" => 0,
 		"ip" => "pe.legionpvp.eu",
 		"port" => 19132,
-		"class" => "hub", # hub, pvp, parkour, spleef, infected, classical
+		"class" => "hub", # hub, pvp, parkour, spleef, infected, classical, shops
 	],
 	"system" => [
 		"isTest" => false,
@@ -209,7 +213,9 @@ $array = [
 	"spleef" => Settings::CLASS_SPLEEF,
 	"infected" => Settings::CLASS_INFECTED,
 	"classic" => Settings::CLASS_CLASSICAL,
-	"classical" => Settings::CLASS_CLASSICAL
+	"classical" => Settings::CLASS_CLASSICAL,
+	"shop" => Settings::CLASS_SHOPS,
+	"shops" => Settings::CLASS_SHOPS,
 ];
 if(!isset($array[$config->getNested("localize.class")])){
 	throw new \RuntimeException("Invalid class: " . var_export($config->getNested("localize.class"), true));
