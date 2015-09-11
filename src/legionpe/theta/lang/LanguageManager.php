@@ -24,6 +24,7 @@ class LanguageManager{
 		/** @var string[] $langs */
 		$langs = json_decode($plugin->getResourceContents("langs/index.json"), true);
 		foreach($langs as $lang){
+			$plugin->getLogger()->info("Loading language '$lang'...");
 			$path = "langs/$lang.json";
 			$data = json_decode($plugin->getResourceContents($path), true);
 			$walker = new ArrayWalker($data);
@@ -31,6 +32,7 @@ class LanguageManager{
 			foreach($list as $k => $v){
 				$this->getPhraseObject($k)->setImplementation($lang, $v);
 			}
+			$plugin->getLogger()->info("Loaded language '$lang' with " . count($list) . " entries.");
 		}
 	}
 	public function getPhraseObject($key){

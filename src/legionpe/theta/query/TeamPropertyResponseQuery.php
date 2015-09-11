@@ -38,6 +38,9 @@ class TeamPropertyResponseQuery extends AsyncQuery{
 	public function getResultType(){
 		return self::TYPE_ASSOC;
 	}
+	public function getExpectedColumns(){
+		return [$this->column => self::COL_STRING];
+	}
 	public function getQuery(){
 		return "SELECT $this->column FROM teams WHERE tid=$this->tid";
 	}

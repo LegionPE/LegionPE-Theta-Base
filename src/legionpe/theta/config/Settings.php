@@ -15,6 +15,7 @@
 
 namespace legionpe\theta\config;
 
+use legionpe\theta\lang\Phrases;
 use pocketmine\math\Vector3;
 use pocketmine\utils\Config;
 
@@ -132,12 +133,13 @@ abstract class Settings{
 	];
 	/** @var string[] */
 	public static $CLASSES_NAMES_PHRASES = [
-		self::CLASS_HUB => "local.class.name.hub",
-		self::CLASS_KITPVP => "local.class.name.pvp.kit",
-		self::CLASS_PARKOUR => "local.class.name.parkour",
-		self::CLASS_SPLEEF => "local.class.name.spleef",
-		self::CLASS_INFECTED => "local.class.name.infected",
-		self::CLASS_CLASSICAL => "local.class.name.pvp.classic"
+		self::CLASS_HUB => Phrases::CLASS_HUB,
+		self::CLASS_KITPVP => Phrases::CLASS_KITPVP,
+		self::CLASS_PARKOUR => Phrases::CLASS_PARKOUR,
+		self::CLASS_SPLEEF => Phrases::CLASS_SPLEEF,
+		self::CLASS_INFECTED => Phrases::CLASS_INFECTED,
+		self::CLASS_CLASSICAL => Phrases::CLASS_CLASSIC_PVP,
+		self::CLASS_SHOPS => Phrases::CLASS_SHOPS,
 	];
 	public static function getWarnPtsConseq(/** @noinspection PhpUnusedParameterInspection */
 		$pts, $origin = null){

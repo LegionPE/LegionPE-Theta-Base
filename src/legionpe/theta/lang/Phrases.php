@@ -113,6 +113,7 @@ class Phrases{
 	const CMD_TEAM_ERR_ALREADY_IN_TEAM = "cmd.team.err.alreadyinteam";
 	const CMD_TEAM_ERR_NOT_IN_TEAM = "cmd.team.err.notinteam";
 	const CMD_TEAM_ERR_DIFFERENT_TEAM = "cmd.team.err.diffteam";
+	const CMD_TEAM_ERR_NO_SUCH_TEAM = "cmd.team.err.unknownteam";
 	const CMD_TEAM_CREATE_INVALID_NAME = "cmd.team.create.invalidname";
 	const CMD_TEAM_CREATE_ALREADY_EXISTS = "cmd.team.create.alreadyexists";
 	const CMD_TEAM_CREATE_SUCCESS = "cmd.team.create.success";
@@ -149,6 +150,7 @@ class Phrases{
 	const CMD_TEAM_CONFIG_VALUE_CHANGED_TRUE = "cmd.team.config.change.true";
 	const CMD_TEAM_CONFIG_VALUE_CHANGED_FALSE = "cmd.team.config.change.false";
 	const CMD_TEAM_CONFIG_NEED_CO_LEADER = "cmd.team.config.colead";
+	const CMD_TEAM_MEMBER_RESULT = "cmd.team.member.result";
 	const CMD_TEAM_JOINED = "cmd.team.joined";
 	const CMD_TEAM_QUITTED = "cmd.team.quitted";
 	const CMD_TEAM_INVITED = "cmd.team.invited";
@@ -206,17 +208,17 @@ class Phrases{
 	const AUTH_METHOD_PASS = "login.auth.method.pass";
 	const AUTH_METHOD_REG = "login.auth.method.register";
 
-	const CLASS_HUB = "local.class.name.hub";
-	const CLASS_KITPVP = "local.class.name.pvp.kit";
-	const CLASS_PARKOUR = "local.class.name.parkour";
-	const CLASS_SPLEEF = "local.class.name.spleef";
-	const CLASS_INFECTED = "local.class.name.infected";
-	const CLASS_CLASSIC_PVP = "local.class.name.pvp.classic";
-	const CLASS_SHOPS = "local.class.name.shops";
+	const CLASS_HUB = "words.local.class.name.hub";
+	const CLASS_KITPVP = "words.local.class.name.pvp.kit";
+	const CLASS_PARKOUR = "words.local.class.name.parkour";
+	const CLASS_SPLEEF = "words.local.class.name.spleef";
+	const CLASS_INFECTED = "words.local.class.name.infected";
+	const CLASS_CLASSIC_PVP = "words.local.class.name.pvp.classic";
+	const CLASS_SHOPS = "words.local.class.name.shops";
 
-	const FRIEND_ACQUAINTANCE = "friend.type.acquaintance";
-	const FRIEND_GOOD_FRIEND = "friend.type.goodfriend";
-	const FRIEND_BEST_FRIEND = "friend.type.bestfriend";
+	const FRIEND_ACQUAINTANCE = "words.friend.type.acquaintance";
+	const FRIEND_GOOD_FRIEND = "words.friend.type.goodfriend";
+	const FRIEND_BEST_FRIEND = "words.friend.type.bestfriend";
 
 	const PVP_DEATH_GENERIC = "game.pvp.death.generic";
 	const PVP_DEATH_KILLED = "game.pvp.death.killed";
@@ -249,7 +251,8 @@ class Phrases{
 
 	const PVP_LEAVE_SPAWN_HINT = "game.pvp.hinttext";
 
-	const PVP_CMD_STATS = "game.pvp.cmd.stats";
+	const PVP_CMD_STATS = "game.pvp.cmd.stats.std";
+	const PVP_CMD_STATS_PRIVATE = "game.pvp.cmd.stats.private";
 
 	const PVP_KIT_SHOPS_WEB_HINT = "game.pvp.kit.shops.webhint";
 

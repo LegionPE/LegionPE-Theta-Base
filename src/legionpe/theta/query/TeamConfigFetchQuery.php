@@ -39,6 +39,9 @@ class TeamConfigFetchQuery extends AsyncQuery{
 	public function getResultType(){
 		return self::TYPE_ASSOC;
 	}
+	public function getExpectedColumns(){
+		return ["config" => self::COL_INT];
+	}
 	public function getQuery(){
 		return "SELECT config FROM teams WHERE tid=$this->tid";
 	}
