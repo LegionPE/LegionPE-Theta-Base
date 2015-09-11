@@ -16,7 +16,7 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
-use legionpe\theta\chat\ChatType;
+use legionpe\theta\chat\Hormone;
 use legionpe\theta\config\Settings;
 use legionpe\theta\Friend;
 use legionpe\theta\lang\Phrases;
@@ -69,11 +69,11 @@ class SetFriendQuery extends NameToUidQuery{
 		$targetUid = $result["result"]["uid"];
 		$result = $ses->setFriendAttempt($targetUid, $this->type, $prop);
 		if($prop){
-			$type = ChatType::get($main, ChatType::RELOAD_FRIENDS_PROPAGANDA, $ses->getPlayer()->getName(), "$result", Settings::CLASS_ALL, [
+			$type = Hormone::get($main, Hormone::RELOAD_FRIENDS_PROPAGANDA, $ses->getPlayer()->getName(), "$result", Settings::CLASS_ALL, [
 				"uid" => $targetUid
 			]);
 			$type->push();
-			$type = ChatType::get($main, ChatType::RELOAD_FRIENDS_PROPAGANDA, $this->name, "$result", Settings::CLASS_ALL, [
+			$type = Hormone::get($main, Hormone::RELOAD_FRIENDS_PROPAGANDA, $this->name, "$result", Settings::CLASS_ALL, [
 				"uid" => $this->senderUid
 			]);
 			$type->push();

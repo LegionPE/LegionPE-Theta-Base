@@ -18,14 +18,14 @@ namespace legionpe\theta\chat;
 use legionpe\theta\BasePlugin;
 use legionpe\theta\MuteIssue;
 
-class MuteChatType extends ChatType{
+class MuteHormone extends Hormone{
 	protected $since;
 	protected $length;
 	protected $uid;
 	protected $ip;
 	protected $cid;
 	public static function fromObject(BasePlugin $main, MuteIssue $mute){
-		return new MuteChatType($main, $mute->src, $mute->msg, 0, [
+		return new MuteHormone($main, $mute->src, $mute->msg, 0, [
 			"since" => $mute->since,
 			"length" => $mute->length,
 			"uid" => $mute->uid,

@@ -15,7 +15,7 @@
 
 namespace legionpe\theta;
 
-use legionpe\theta\chat\ChatType;
+use legionpe\theta\chat\Hormone;
 use legionpe\theta\command\ThetaCommand;
 use legionpe\theta\config\Settings;
 use legionpe\theta\credentials\Credentials;
@@ -374,7 +374,7 @@ abstract class BasePlugin extends PluginBase{
 		$type = $row["type"];
 		$class = $row["class"];
 		$data = $row["json"];
-		$exe = ChatType::get($this, $type, $source, $message, $class, $data, (int) $row["id"]);
+		$exe = Hormone::get($this, $type, $source, $message, $class, $data, (int) $row["id"]);
 		$exe->execute();
 	}
 

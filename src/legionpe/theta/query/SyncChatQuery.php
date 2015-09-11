@@ -16,7 +16,7 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
-use legionpe\theta\chat\ChatType;
+use legionpe\theta\chat\Hormone;
 use legionpe\theta\config\Settings;
 use legionpe\theta\utils\FireSyncChatQueryTask;
 use pocketmine\Server;
@@ -39,7 +39,7 @@ class SyncChatQuery extends AsyncQuery{
 		}
 	}
 	public function getQuery(){
-		return $this->lastId === null ? ("SELECT json,src,msg FROM chat WHERE (type=" . ChatType::MUTE_CHAT . ") AND unix_timestamp() - unix_timestamp(creation) <= 86400") : "SELECT id,unix_timestamp(creation)AS creation,src,msg,type,class,json FROM chat WHERE id>$this->lastId AND (class=0 OR class=$this->class)";
+		return $this->lastId === null ? ("SELECT json,src,msg FROM chat WHERE (type=" . Hormone::MUTE_CHAT . ") AND unix_timestamp() - unix_timestamp(creation) <= 86400") : "SELECT id,unix_timestamp(creation)AS creation,src,msg,type,class,json FROM chat WHERE id>$this->lastId AND (class=0 OR class=$this->class)";
 	}
 	public function getResultType(){
 		return self::TYPE_ALL;
@@ -64,7 +64,7 @@ class SyncChatQuery extends AsyncQuery{
 			$main->setInternalLastChatId($this->fetchedMaxId);
 			$result = $this->getResult()["result"];
 			foreach($result as $row){
-				$type = ChatType::get($main, ChatType::MUTE_CHAT, $result["src"], $result["msg"], Settings::$LOCALIZE_CLASS, json_decode($row["json"]));
+				$type = Hormone::get($main, Hormone::MUTE_CHAT, $result["src"], $result["msg"], Settings::$LOCALIZE_CLASS, json_decode($row["json"]));
 				$type->execute();
 			}
 		}elseif($result["resulttype"] === self::TYPE_ALL){

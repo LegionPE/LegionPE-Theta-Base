@@ -1,7 +1,7 @@
 <?php
 
 /*
- * LegionPE
+ * Theta
  *
  * Copyright (C) 2015 PEMapModder and contributors
  *
@@ -17,21 +17,20 @@ namespace legionpe\theta\chat;
 
 use legionpe\theta\lang\Phrases;
 
-class TeamDisbandPropaganda extends ChatType{
-	protected $tid;
+class ClassHormone extends Hormone{
+	protected $ip;
+	protected $port;
+	protected $symbol;
+	protected $local;
 	public function getType(){
-		return self::TEAM_DISBAND_PROPAGANDA;
+		return self::CLASS_CHAT;
 	}
 	public function execute(){
-		foreach($this->main->getSessions() as $ses){
-			if($ses->getTeamId() === $this->tid){
-				$ses->send(Phrases::CMD_TEAM_DISBANDED);
-				$ses->setLoginDatum("tid", -1);
-				$ses->setLoginDatum("teamname", null);
-				$ses->setLoginDatum("teamrank", 0);
-				$ses->setLoginDatum("teamjoin", 0);
-				$ses->setLoginDatum("teampts", 0);
-				$ses->recalculateNametag();
+		if(!$this->local){
+			foreach($this->main->getSessions() as $ses){
+				if($ses->isClassChatOn()){
+					$ses->sendMessage(Phrases::VAR_em . $this->src . Phrases::VAR_verbosemid . "/$this->ip:$this->port>" . Phrases::VAR_info . $this->msg);
+				}
 			}
 		}
 	}

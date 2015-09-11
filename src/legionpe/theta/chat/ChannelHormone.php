@@ -19,7 +19,7 @@ use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\Session;
 
-class ChannelChatType extends ChatType{
+class ChannelHormone extends Hormone{
 	protected $channel;
 	protected $fromClass;
 	protected $ign;

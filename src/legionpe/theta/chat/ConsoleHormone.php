@@ -17,12 +17,21 @@ namespace legionpe\theta\chat;
 
 use pocketmine\utils\TextFormat;
 
-class ServerBroadcastChatType extends ChatType{
+class ConsoleHormone extends Hormone{
+	/** @var string */
+	protected $ip;
+	/** @var int */
+	protected $port;
 	public function execute(){
-		$this->main->getServer()->broadcastMessage(TextFormat::LIGHT_PURPLE . "[Network] " . $this->msg);
-		$this->main->getLogger()->alert("[BROADCAST] $this->msg");
+		$this->main->getLogger()->alert($this->src . "@$this->ip:$this->port executed /console: " . TextFormat::YELLOW . $this->msg);
+		foreach($this->main->getSessions() as $ses){
+			if($ses->isAdmin()){
+				$ses->sendMessage($this->src . "@$this->ip:$this->port executed /console:");
+				$ses->sendMessage($this->msg);
+			}
+		}
 	}
 	public function getType(){
-		return self::SERVER_BROADCAST;
+		return self::CONSOLE_MESSAGE;
 	}
 }

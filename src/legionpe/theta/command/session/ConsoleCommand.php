@@ -16,7 +16,7 @@
 namespace legionpe\theta\command\session;
 
 use legionpe\theta\BasePlugin;
-use legionpe\theta\chat\ChatType;
+use legionpe\theta\chat\Hormone;
 use legionpe\theta\command\SessionCommand;
 use legionpe\theta\config\Settings;
 use legionpe\theta\Session;
@@ -35,7 +35,7 @@ class ConsoleCommand extends SessionCommand{
 			$msg = substr($msg, 1);
 			$local = false;
 		}
-		$type = ChatType::get($sender->getMain(), ChatType::CONSOLE_MESSAGE, $sender->getInGameName(), $msg, $local ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, ["ip" => Settings::$LOCALIZE_IP, "port" => Settings::$LOCALIZE_PORT]);
+		$type = Hormone::get($sender->getMain(), Hormone::CONSOLE_MESSAGE, $sender->getInGameName(), $msg, $local ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, ["ip" => Settings::$LOCALIZE_IP, "port" => Settings::$LOCALIZE_PORT]);
 		$type->push();
 		return true;
 	}

@@ -67,7 +67,7 @@ class SpamDetector{
 		foreach($badWords as $word){
 			if(($pos = stripos(str_replace("1", "i", $string), $word)) !== false or ($pos = stripos(str_replace("1", "l", $string), $word)) !== false){
 				$this->session->send(Phrases::CHAT_SWEAR_WARN, ["word" => $word]);
-				$type = ChatType::get($this->session->getMain(), ChatType::CONSOLE_MESSAGE, "SpamDetector",
+				$type = Hormone::get($this->session->getMain(), Hormone::CONSOLE_MESSAGE, "SpamDetector",
 					Phrases::VAR_notify2 . "Player {$this->session->getPlayer()->getName()}@" .
 					Settings::$LOCALIZE_IP . ":" . Settings::$LOCALIZE_PORT . " said: " .
 					substr($string, 0, $pos) .

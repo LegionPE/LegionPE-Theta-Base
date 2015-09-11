@@ -17,7 +17,7 @@ namespace legionpe\theta\chat;
 
 use legionpe\theta\lang\Phrases;
 
-class TeamChatType extends ChatType{
+class TeamHormone extends Hormone{
 	protected $tid;
 	protected $teamName;
 	protected $ign;

@@ -16,7 +16,7 @@
 namespace legionpe\theta\command\session\team;
 
 use legionpe\theta\BasePlugin;
-use legionpe\theta\chat\ChatType;
+use legionpe\theta\chat\Hormone;
 use legionpe\theta\command\SessionCommand;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
@@ -40,14 +40,14 @@ class TeamQuitCommand extends SessionCommand{
 					$sender->translate(Phrases::CMD_TEAM_QUIT_WARNING_NORMAL));
 		}
 		if($sender->getTeamRank() === 4){
-			$prop = ChatType::get($this->getMain(), ChatType::TEAM_DISBAND_PROPAGANDA, $sender->getInGameName(), "Team disbanded by owner /tq", Settings::CLASS_ALL, [
+			$prop = Hormone::get($this->getMain(), Hormone::TEAM_DISBAND_PROPAGANDA, $sender->getInGameName(), "Team disbanded by owner /tq", Settings::CLASS_ALL, [
 				"tid" => $sender->getTeamId()
 			]);
 			$prop->push();
 			new RawAsyncQuery($this->getMain(), "DELETE FROM teams WHERE tid=" . $sender->getTeamId());
 			return true;
 		}
-		$type = ChatType::get($this->getMain(), ChatType::TEAM_CHAT, "Network", "%tr%" . Phrases::CMD_TEAM_QUITTED, Settings::CLASS_ALL, [
+		$type = Hormone::get($this->getMain(), Hormone::TEAM_CHAT, "Network", "%tr%" . Phrases::CMD_TEAM_QUITTED, Settings::CLASS_ALL, [
 			"tid" => $sender->getTeamId(),
 			"teamName" => $sender->getTeamName(),
 			"ign" => "Network",

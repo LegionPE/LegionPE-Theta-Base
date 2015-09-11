@@ -16,8 +16,8 @@
 
 namespace legionpe\theta;
 
-use legionpe\theta\chat\ChatType;
-use legionpe\theta\chat\MuteChatType;
+use legionpe\theta\chat\Hormone;
+use legionpe\theta\chat\MuteHormone;
 use legionpe\theta\chat\SpamDetector;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
@@ -590,7 +590,7 @@ abstract class Session{
 					"teamName" => $this->getTeamName(),
 					"ign" => $this->getInGameName()
 				];
-				$type = ChatType::get($this->getMain(), ChatType::TEAM_CHAT, $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
+				$type = Hormone::get($this->getMain(), Hormone::TEAM_CHAT, $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
 				$type->push();
 				return false;
 			}
@@ -600,7 +600,7 @@ abstract class Session{
 					"fromClass" => Settings::$LOCALIZE_CLASS,
 					"ign" => $this->getInGameName()
 				];
-				$type = ChatType::get($this->getMain(), ChatType::CHANNEL_CHAT, $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
+				$type = Hormone::get($this->getMain(), Hormone::CHANNEL_CHAT, $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
 				$type->push();
 				return false;
 			}
@@ -682,7 +682,7 @@ abstract class Session{
 				$local = true;
 				break;
 		}
-		$type = ChatType::get($this->getMain(), ChatType::CLASS_CHAT, $this->getInGameName(), $msg, Settings::$LOCALIZE_CLASS, [
+		$type = Hormone::get($this->getMain(), Hormone::CLASS_CHAT, $this->getInGameName(), $msg, Settings::$LOCALIZE_CLASS, [
 			"ip" => Settings::$LOCALIZE_IP,
 			"port" => Settings::$LOCALIZE_PORT,
 			"symbol" => $symbol,
@@ -994,7 +994,7 @@ abstract class Session{
 		$subs[$channel] = $subLevel;
 		$this->setLoginDatum("channels", $subs);
 		new JoinChannelQuery($this->getMain(), $this->getUid(), $channel, $subLevel);
-		$type = ChatType::get($this->getMain(), ChatType::CHANNEL_CHAT, $this->getPlayer()->getName(), "%tr%" . Phrases::CMD_CHANNEL_JOINED_OTHER, Settings::CLASS_ALL, [
+		$type = Hormone::get($this->getMain(), Hormone::CHANNEL_CHAT, $this->getPlayer()->getName(), "%tr%" . Phrases::CMD_CHANNEL_JOINED_OTHER, Settings::CLASS_ALL, [
 			"channel" => $channel,
 			"fromClass" => Settings::$LOCALIZE_CLASS,
 			"ign" => $this->inGameName,
@@ -1021,7 +1021,7 @@ abstract class Session{
 			unset($subs[$caseName]);
 			$this->setLoginDatum("channels", $subs);
 			new PartChannelQuery($this->getMain(), $this->getUid(), $caseName);
-			$type = ChatType::get($this->getMain(), ChatType::CHANNEL_CHAT, $this->getPlayer()->getName(), "%tr%" . Phrases::CMD_CHANNEL_QUITTED, Settings::CLASS_ALL, [
+			$type = Hormone::get($this->getMain(), Hormone::CHANNEL_CHAT, $this->getPlayer()->getName(), "%tr%" . Phrases::CMD_CHANNEL_QUITTED, Settings::CLASS_ALL, [
 				"channel" => $channel,
 				"fromClass" => Settings::$LOCALIZE_CLASS,
 				"ign" => $this->inGameName,
@@ -1234,7 +1234,7 @@ abstract class Session{
 		$mute->since = time();
 		$mute->src = $src;
 		$this->getMain()->addMute($mute);
-		$type = MuteChatType::fromObject($this->getMain(), $mute);
+		$type = MuteHormone::fromObject($this->getMain(), $mute);
 		$type->push();
 		return $mute;
 	}

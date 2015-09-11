@@ -16,19 +16,24 @@
 namespace legionpe\theta\chat;
 
 use legionpe\theta\lang\Phrases;
-use legionpe\theta\query\ReloadFriendsQuery;
 use legionpe\theta\Session;
 
-class ReloadFriendsPropaganda extends ChatType{
-	protected $uid;
+/**
+ * Class PrivateMessageChatType
+ * @package legionpe\theta\chat
+ * @deprecated
+ */
+class PrivateMessageHormone extends Hormone{
+	protected $recipient;
 	public function getType(){
-		return self::RELOAD_FRIENDS_PROPAGANDA;
+		/** @noinspection PhpDeprecationInspection */
+		return self::PRIVATE_MESSAGE;
 	}
 	public function execute(){
-		$ses = $this->main->getSessionByUid($this->uid);
-		if($ses instanceof Session){
-			new ReloadFriendsQuery($this->main, $this->uid);
-			$ses->send(Phrases::CMD_FRIEND_PROPAGANDA, ["src" => $this->src]);
+		$session = $this->main->getSessionByUid($this->recipient);
+		if($session instanceof Session){
+			$session->getPlayer()->sendMessage("[$this->src => {$session->getInGameName()}] " . Phrases::VAR_info . $this->msg);
+			$this->consume();
 		}
 	}
 }

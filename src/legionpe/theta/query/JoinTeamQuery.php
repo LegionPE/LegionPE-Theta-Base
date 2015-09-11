@@ -16,7 +16,7 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
-use legionpe\theta\chat\ChatType;
+use legionpe\theta\chat\Hormone;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\Session;
@@ -85,7 +85,7 @@ class JoinTeamQuery extends AsyncQuery{
 						$joined = true;
 						break 2;
 					default:
-						$type = ChatType::get($main, ChatType::TEAM_CHAT, "Network", "%tr%" . Phrases::CMD_TEAM_REQUEST_RECEIVED, Settings::CLASS_ALL, [
+						$type = Hormone::get($main, Hormone::TEAM_CHAT, "Network", "%tr%" . Phrases::CMD_TEAM_REQUEST_RECEIVED, Settings::CLASS_ALL, [
 							"tid" => $this->tid,
 							"teamName" => $this->teamName,
 							"ign" => "Network",
@@ -100,7 +100,7 @@ class JoinTeamQuery extends AsyncQuery{
 		if(isset($joined, $ses)){
 			$ses->setLoginDatum("tid", $this->tid);
 			$ses->recalculateNametag();
-			$type = ChatType::get($main, ChatType::TEAM_CHAT, "Network", "%tr%" . Phrases::CMD_TEAM_JOINED, Settings::CLASS_ALL, [
+			$type = Hormone::get($main, Hormone::TEAM_CHAT, "Network", "%tr%" . Phrases::CMD_TEAM_JOINED, Settings::CLASS_ALL, [
 				"tid" => $this->tid,
 				"teamName" => $this->teamName,
 				"ign" => "Network",

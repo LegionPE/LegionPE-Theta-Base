@@ -15,27 +15,20 @@
 
 namespace legionpe\theta\chat;
 
-use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
+use legionpe\theta\query\ReloadFriendsQuery;
 use legionpe\theta\Session;
 
-class TeamJoinPropaganda extends ChatType{
+class ReloadFriendsHormone extends Hormone{
 	protected $uid;
-	protected $tid;
-	protected $teamName;
 	public function getType(){
-		return self::TEAM_JOIN_PROPAGANDA;
+		return self::RELOAD_FRIENDS_PROPAGANDA;
 	}
 	public function execute(){
 		$ses = $this->main->getSessionByUid($this->uid);
-		if(!($ses instanceof Session)){
-			return;
+		if($ses instanceof Session){
+			new ReloadFriendsQuery($this->main, $this->uid);
+			$ses->send(Phrases::CMD_FRIEND_PROPAGANDA, ["src" => $this->src]);
 		}
-		$ses->setLoginDatum("tid", $this->tid);
-		$ses->setLoginDatum("teamname", $this->teamName);
-		$ses->setLoginDatum("teamrank", Settings::TEAM_RANK_JUNIOR);
-		$ses->setLoginDatum("teamjointime", time());
-		$ses->setLoginDatum("teampts", 0);
-		$ses->send(Phrases::CMD_TEAM_INVITE_ACCEPTED_TARGET, ["teamname" => $this->teamName]);
 	}
 }

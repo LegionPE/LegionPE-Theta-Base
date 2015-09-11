@@ -19,7 +19,7 @@ use legionpe\theta\BasePlugin;
 use legionpe\theta\query\PushChatQuery;
 use legionpe\theta\query\RawAsyncQuery;
 
-abstract class ChatType{
+abstract class Hormone{
 	const SERVER_BROADCAST = 0;
 	const TEAM_CHAT = 1;
 	const CONSOLE_MESSAGE = 2;
@@ -58,32 +58,32 @@ abstract class ChatType{
 	 * @param int $class
 	 * @param array $data
 	 * @param int|null $rowId
-	 * @return ChatType
+	 * @return Hormone
 	 */
 	public static function get(BasePlugin $main, $id, $src, $msg, $class, $data, $rowId = null){
 		switch($id){
 			case self::SERVER_BROADCAST:
-				return new ServerBroadcastChatType($main, $src, $msg, $class, $data, $rowId);
+				return new ServerBroadcastHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::TEAM_CHAT:
-				return new TeamChatType($main, $src, $msg, $class, $data, $rowId);
+				return new TeamHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::CONSOLE_MESSAGE:
-				return new ConsoleChatType($main, $src, $msg, $class, $data, $rowId);
+				return new ConsoleHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::CHANNEL_CHAT:
-				return new ChannelChatType($main, $src, $msg, $class, $data, $rowId);
+				return new ChannelHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::MUTE_CHAT:
-				return new MuteChatType($main, $src, $msg, $class, $data, $rowId);
+				return new MuteHormone($main, $src, $msg, $class, $data, $rowId);
 			/** @noinspection PhpDeprecationInspection */
 			case self::PRIVATE_MESSAGE:
 				/** @noinspection PhpDeprecationInspection */
-				return new PrivateMessageChatType($main, $src, $msg, $class, $data, $rowId);
+				return new PrivateMessageHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::TEAM_JOIN_PROPAGANDA:
-				return new TeamJoinPropaganda($main, $src, $msg, $class, $data, $rowId);
+				return new TeamJoinHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::RELOAD_FRIENDS_PROPAGANDA:
-				return new ReloadFriendsPropaganda($main, $src, $msg, $class, $data, $rowId);
+				return new ReloadFriendsHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::CLASS_CHAT:
-				return new ClassChatType($main, $src, $msg, $class, $data, $rowId);
+				return new ClassHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::TEAM_DISBAND_PROPAGANDA:
-				return new TeamDisbandPropaganda($main, $src, $msg, $class, $data, $rowId);
+				return new TeamDisbandHormone($main, $src, $msg, $class, $data, $rowId);
 		}
 		return null;
 	}

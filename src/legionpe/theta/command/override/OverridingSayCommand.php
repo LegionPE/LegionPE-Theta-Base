@@ -16,7 +16,7 @@
 namespace legionpe\theta\command\override;
 
 use legionpe\theta\BasePlugin;
-use legionpe\theta\chat\ChatType;
+use legionpe\theta\chat\Hormone;
 use legionpe\theta\command\admin\ModeratorCommand;
 use legionpe\theta\config\Settings;
 use pocketmine\command\CommandSender;
@@ -35,7 +35,7 @@ class OverridingSayCommand extends ModeratorCommand{
 			$msg = substr($msg, 1);
 			$local = false;
 		}
-		$type = ChatType::get($this->getMain(), ChatType::SERVER_BROADCAST, $sender->getName(), $msg, $local ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, []);
+		$type = Hormone::get($this->getMain(), Hormone::SERVER_BROADCAST, $sender->getName(), $msg, $local ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, []);
 		$type->push();
 		return true;
 	}
