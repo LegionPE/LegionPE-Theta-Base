@@ -35,7 +35,7 @@ class TeamConfigCommand extends SessionCommand{
 	public function __construct(BasePlugin $main, $bit, $boolean, $humanPhrase, array $aliases){
 		$this->bit = $bit;
 		$this->humanPhrase = $humanPhrase;
-		$humanName = $this->getPlugin()->getLanguageManager()->get($humanPhrase, []);
+		$humanName = $main->getLanguageManager()->get($humanPhrase, []);
 		parent::__construct($main, $cmd = array_shift($aliases), "Toggle whether your team is $humanName", "/$cmd [on|off]", $aliases);
 	}
 	protected function run(array $args, Session $sender){

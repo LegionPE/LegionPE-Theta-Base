@@ -33,7 +33,7 @@ class TeamPropertyChangeCommand extends SessionCommand{
 	public function __construct(BasePlugin $main, $aliases, $humanPhrase, $column){
 		$this->humanPhrase = $humanPhrase;
 		$this->column = $column;
-		$humanName = $this->getPlugin()->getLanguageManager()->get($humanPhrase, []);
+		$humanName = $main->getLanguageManager()->get($humanPhrase, []);
 		parent::__construct($main, $cmd = array_shift($aliases), "Change your team $humanName", "/$cmd [new $humanName...] (use `|` to separate lines)", $aliases);
 	}
 	protected function run(array $args, Session $sender){

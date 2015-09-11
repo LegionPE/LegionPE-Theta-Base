@@ -104,8 +104,9 @@ abstract class BasePlugin extends PluginBase{
 		PvpKitInfo::init();
 	}
 	public function onEnable(){
-		ThetaCommand::registerAll($this, $this->getServer()->getCommandMap());
+		$this->langs = new LanguageManager($this);
 		$this->FastTransfer = $this->getServer()->getPluginManager()->getPlugin("FastTransfer");
+		ThetaCommand::registerAll($this, $this->getServer()->getCommandMap());
 		$class = $this->getBasicListenerClass();
 		$this->getServer()->getPluginManager()->registerEvents($this->listener = new $class($this), $this);
 		$class = $this->getSessionListenerClass();
@@ -123,9 +124,11 @@ abstract class BasePlugin extends PluginBase{
 		$this->faceSeeks = json_decode($this->getResourceContents("head.json"));
 		$this->badWords = json_decode($this->getResourceContents("words.json"));
 		$this->approvedDomains = json_decode($this->getResourceContents("approvedDomains.json"));
-		$this->langs = new LanguageManager($this);
-		$compileTime = (int) $this->getResourceContents("timestamp.LEGIONPE");
-		$this->getLogger()->alert("Enabled " . $this->getDescription()->getFullName() . " compiled at " . date("d/m/Y H:i:s (P)", $compileTime) . " (" . MUtils::time_secsToString(time() - $compileTime) . " ago). MyPID is " . \getmypid() . ".");
+		$buildInfo = json_decode($this->getResourceContents("build.json"));
+		$compileTime = $buildInfo->time;
+		$buildNumber = $buildInfo->buildNumber;
+		$buildAuthor = $buildInfo->buildAuthor;
+		$this->getLogger()->alert("Enabled " . $this->getDescription()->getFullName() . " Build $buildNumber compiled at " . date("d/m/Y H:i:s (P)", $compileTime) . " (" . MUtils::time_secsToString(time() - $compileTime) . " ago) by $buildAuthor. MyPID is " . \getmypid() . ".");
 	}
 	public function getResourceContents($path){
 		$handle = $this->getResource($path);

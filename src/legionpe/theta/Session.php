@@ -905,7 +905,7 @@ abstract class Session{
 	public function getTagEnabled(){
 		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_TAG_ON);
 	}
-	public function getStatsPublic(){
+	public function isStatsPublic(){
 		return (bool) ($this->getLoginDatum("config") & Settings::CONFIG_STATS_PUBLIC);
 	}
 	public function isTeamChannelOn(){

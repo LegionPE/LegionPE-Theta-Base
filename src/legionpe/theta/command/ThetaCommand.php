@@ -193,6 +193,11 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 	public function getPlugin(){
 		return $this->plugin;
 	}
+	/**
+	 * @param Session|CommandSender $sender
+	 * @param string|null $name
+	 * @return bool
+	 */
 	protected function notOnline($sender, $name = null){
 		if($sender instanceof Session){
 			if($name === null){

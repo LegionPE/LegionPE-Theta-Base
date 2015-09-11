@@ -313,7 +313,7 @@
 				"Co-Leader",
 				"Leader"
 			],
-			"properties": {
+			"property": {
 				"desc": "description",
 				"rule": "rules",
 				"req": "requirements"
@@ -394,6 +394,9 @@
 				"shops": {
 					"webhint": "%notify2%Go to %em%http://lgpe.co/s%notify2% to upgrade your kits!"
 				}
+			},
+			"cmd": {
+				"stats": "%info%%em%Kills%info%: %em2%%kills%\n%info%%em%Deaths%info%: %em2%%deaths%\n%info%%em%K/D Ratio%info%: %em2%%kd%\n%info%%em%Rank%info%: %em2%%rank%\n"
 			}
 		},
 		"hub": {
