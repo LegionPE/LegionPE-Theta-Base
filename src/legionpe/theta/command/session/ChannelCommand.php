@@ -36,7 +36,7 @@ class ChannelCommand extends SessionCommand{
 				default:
 					$sender->send(Phrases::CMD_CHANNEL_VIEW_OTHER, ["chan" => $sender->getCurrentChatState()]);
 			}
-			return $sender->translate(Phrases::CMD_CHANNEL_VIEW_SUBSCRIBING_TO, ["channels" => implode(", ", $sender->getChannelSubscriptions())]);
+			return $sender->translate(Phrases::CMD_CHANNEL_VIEW_SUBSCRIBING_TO_CHANNELS, ["channels" => implode(", ", $sender->getChannelSubscriptions())]);
 		}
 		$name = array_shift($args);
 		if(strtolower($name) === "local"){

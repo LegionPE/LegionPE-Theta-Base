@@ -62,7 +62,10 @@
 				"local": "%success%You are currently talking to %em%players on this local server%success%.",
 				"team": "%success%You are currently talking to %em%members of your team%success%.",
 				"other": "%success%You are currently talking to '%em%subscribers of the %em2%'%chan%'%em% channel%success%'.",
-				"subto": "%success%You are currently subscribing to %em%%channels%"
+				"subto": {
+					"norm": "%success%You are currently subscribing to %em%%channels%",
+					"none": "%success%You are currently not subscribing to any channels."
+				}
 			},
 			"set": {
 				"local": "%success%You are now talking to %em%players on this local server%success%.",

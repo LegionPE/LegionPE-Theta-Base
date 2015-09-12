@@ -67,7 +67,8 @@ class Phrases{
 	const CMD_CHANNEL_VIEW_LOCAL = "cmd.channel.view.local";
 	const CMD_CHANNEL_VIEW_TEAM = "cmd.channel.view.team";
 	const CMD_CHANNEL_VIEW_OTHER = "cmd.channel.view.other";
-	const CMD_CHANNEL_VIEW_SUBSCRIBING_TO = "cmd.channel.view.subto";
+	const CMD_CHANNEL_VIEW_SUBSCRIBING_TO_CHANNELS = "cmd.channel.view.subto.norm";
+	const CMD_CHANNEL_VIEW_SUBSCRIBING_TO_NONE = "cmd.channel.view.subto.none";
 	const CMD_CHANNEL_SET_LOCAL = "cmd.channel.set.local";
 	const CMD_CHANNEL_SET_TEAM = "cmd.channel.set.team";
 	const CMD_CHANNEL_SET_OTHER = "cmd.channel.set.other";
