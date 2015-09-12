@@ -296,6 +296,7 @@ abstract class BasePlugin extends PluginBase{
 			"tid" => -1,
 			"teamrank" => -1,
 			"teamjoin" => 0,
+			"teampts" => 0,
 			"ignorelist" => ",",
 			"iphist" => ",$ip,",
 			"isnew" => true,
