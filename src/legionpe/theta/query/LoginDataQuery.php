@@ -66,7 +66,7 @@ class LoginDataQuery extends AsyncQuery{
 		}else{
 			$row["channels"] = [];
 		}
-		$friendsString = explode(";", $result["friends"]);
+		$friendsString = array_filter(explode(";", $result["friends"]));
 		$friends = [
 			Friend::FRIEND_ENEMY => [],
 			Friend::FRIEND_ACQUAINTANCE => [],
@@ -78,6 +78,7 @@ class LoginDataQuery extends AsyncQuery{
 			list($friendUid, $type, $requested, $reqDir, $name) = explode(":", $friend);
 			$friends[(int) $type][(int) $friendUid] = new Friend($uid, $friendUid, $type, $requested, $reqDir, $name);
 		}
+		var_dump($friends);
 		$row["friends"] = $friends;
 		$row["isnew"] = false;
 		$r->close();

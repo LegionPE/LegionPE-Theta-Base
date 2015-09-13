@@ -78,7 +78,7 @@ class Friend{
 	}
 	public static function countFriends(\mysqli $db, $type, &$fulls, ...$uids){
 		$fulls = [];
-		$r = $db->query("SELECT (SELECT COUNT(*) FROM friends WHERE (smalluid=users.uid OR largeuid=users.uid) AND type=$type) AS cnt, rank FROM users WHERE " .
+		$r = $db->query("SELECT uid, (SELECT COUNT(*) FROM friends WHERE (smalluid=users.uid OR largeuid=users.uid) AND type=$type) AS cnt, rank FROM users WHERE " .
 			implode(" OR ", array_map(function($uid){
 				return "uid=$uid";
 			}, $uids)));
@@ -86,7 +86,6 @@ class Friend{
 			$uid = (int) $row["uid"];
 			$cnt = (int) $row["cnt"];
 			$rank = (int) $row["rank"];
-			$r->close();
 			if(($rank & Settings::RANK_IMPORTANCE_VIP) === Settings::RANK_IMPORTANCE_VIP){
 				if($type === self::FRIEND_ACQUAINTANCE or $type === self::FRIEND_GOOD_FRIEND){
 					if($cnt >= 12){
@@ -119,5 +118,6 @@ class Friend{
 				}
 			}
 		}
+		$r->close();
 	}
 }
