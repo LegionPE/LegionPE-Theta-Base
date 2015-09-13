@@ -148,9 +148,9 @@
 			},
 			"quit": {
 				"warning": {
-					"junior": "%warning%Are you sure to quit your team? If your team is closed, you need to be %em2%invited again%warning% to join back the team!",
-					"normal": "%warning%Are you sure to quit your team? You will become a %em%Junior-Member%warning% when you join the team again!\n%verbose%If your team is closed, you need to be %em2%invited again%verbosemid% to join back the team!",
-					"leader": "%warning%Are you sure to quit your team? As the %em%leader%warning% of your team, you will disband the whole team (%em2%deleting everything including all your team points%warning%) by quitting your team!"
+					"junior": "%warning%Are you sure to quit your team? The team points you earned for your team will be %error%deleted%warning%! If your team is closed, you need to be %em2%invited again%warning% to join back the team!",
+					"normal": "%warning%Are you sure to quit your team? The team points you earned for your team will be %error%deleted%warning%! You will become a %em%Junior-Member%warning% when you join the team again!\n%verbose%If your team is closed, you need to be %em2%invited again%verbosemid% to join back the team!",
+					"leader": "%warning%Are you sure to quit your team? The team points you earned for your team will be %error%deleted%warning%! As the %em%leader%warning% of your team, you will disband the whole team (%em2%deleting everything including all your team points%warning%) by quitting your team!"
 				},
 				"quitted": "%success%You have quitted your team."
 			},
@@ -194,6 +194,9 @@
 			},
 			"member": {
 				"result": "%info%%em%Leader%info%: %em2%%leader%\n%info%%em%Co-Leaders%info%: %em2%%coleaders%\n%info%%em%Senior Members%info%: %em2%%seniors%\n%info%%em%Members%info%: %em2%%members%\n%info%%em%Junior Members%info%: %em2%%juniors%\n"
+			},
+			"info": {
+				"result": "%info%Team %em%%name% %em2%(%memscnt% members)\n%info%Description: %em%%descr%\n%info%Requirements: %em%%req%\n"
 			},
 			"joined": "%notify%%name% joined your team!",
 			"quitted": "%notify%%name% quitted your team!",

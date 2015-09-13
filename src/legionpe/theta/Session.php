@@ -937,7 +937,6 @@ abstract class Session{
 		$this->setLoginDatum("lastwarn", time());
 	}
 	public function warn($id, $points, CommandSender $issuer, $msg){
-		/** @noinspection PhpDeprecationInspection */
 		new PreExecuteWarningQuery($this->getMain(), $this->getUid(), $this->getPlayer()->getClientId(), $id, $points, $issuer, $msg);
 	}
 	public function getTeamJoinTime(){

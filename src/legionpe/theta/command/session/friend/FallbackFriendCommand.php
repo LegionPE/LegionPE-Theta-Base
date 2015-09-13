@@ -29,7 +29,11 @@ class FallbackFriendCommand extends SessionCommand{
 	protected function run(array $args, Session $sender){
 		return implode("\n", [
 			"=== Usage: ===",
-			"/enemy, /norm, /acq, /gf, /bf: Set friends"
+			"/enemy, /norm, /acq, /gf, /bf: Set friends",
+			"Enemies cannot teleport-request away or to players 5 blocks near you.",
+			"Only Acquaintances (acq), Good Friends (gf) and Best Friends (bf) can view your stats if you set your stats to private.",
+			"Good Friends (gf) and Best Friends (bf) cannot attack each other unless they have Friendly Fire Activated (ffa).",
+			"Best Friends (bf) can teleport to each other or teleport each other to themselves without the other one accepting."
 		]); // TODO translate
 	}
 }

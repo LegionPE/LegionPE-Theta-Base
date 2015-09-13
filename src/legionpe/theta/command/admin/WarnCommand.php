@@ -62,7 +62,7 @@ class WarnCommand extends ModeratorCommand{
 	 * @param string $realname
 	 * @param int $id
 	 */
-	public function __construct(BasePlugin $plugin, array $aliases, $realname, $id){ // TODO register
+	public function __construct(BasePlugin $plugin, array $aliases, $realname, $id){ //
 		parent::__construct(
 			$plugin,
 			$cmd = "w" . array_shift($aliases),
