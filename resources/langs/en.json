@@ -85,7 +85,7 @@
 		"friend": {
 			"request": {
 				"alreadysent": "%error%You have already sent a %req% request to %target%.",
-				"accepted": "%success%You are now %current% with %target%.",
+				"accepted": "%success%You are now %cur% with %target%.",
 				"sent": "%success%%req% request to %target% sent.",
 				"acceptraise": "%success%You are now %cur% with %target%.\n%success%You have sent a %req% request to %target%.",
 				"raise": "%success%You have changed the request to %target% into a %req% request.",
