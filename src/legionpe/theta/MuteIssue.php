@@ -29,8 +29,8 @@ class MuteIssue{
 	public function sendToSession(Session $session){
 		$session->send(Phrases::WARNING_MUTED_NOTIFICATION, [
 			"length" => MUtils::time_secsToString($this->length),
-			"since" => date($session->translate("date.format"), $this->since),
-			"till" => date($session->translate("date.format"), $this->since + $this->length),
+			"since" => date($session->translate(Phrases::WORDS_DATE_FORMAT), $this->since),
+			"till" => date($session->translate(Phrases::WORDS_DATE_FORMAT), $this->since + $this->length),
 			"passed" => MUtils::time_secsToString(time() - $this->since),
 			"left" => MUtils::time_secsToString($this->since + $this->length - time()),
 		]);

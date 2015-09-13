@@ -32,11 +32,11 @@ class WarnCommand extends ModeratorCommand{
 	public static $IDS_TO_POINTS = [
 		self::MODS => 10,
 		self::SWEAR => 5,
-		self::CAPS => 4,
-		self::ADS => 7,
-		self::DISOBEY => 6,
+		self::CAPS => 3,
+		self::ADS => 6,
+		self::DISOBEY => 5,
 		self::IMPOSE => 6,
-		self::SPAM => 7,
+		self::SPAM => 4,
 		self::MISC => 5
 	];
 	/** @var string[] */

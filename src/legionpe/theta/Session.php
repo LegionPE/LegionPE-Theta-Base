@@ -143,7 +143,7 @@ abstract class Session{
 		$conseq = $this->getEffectiveConseq();
 		if($conseq->banLength > 0){
 			$left = MUtils::time_secsToString($conseq->banLength);
-			$this->getPlayer()->kick(TextFormat::RED . "You are banned.\nYou have accumulated " . TextFormat::DARK_PURPLE . $this->getWarningPoints() . TextFormat::RED . " warning points,\nand you still have " . TextFormat::BLUE . $left . TextFormat::RED . " before you are unbanned.\n" . TextFormat::AQUA . "Believe this to be a mistake? Email us at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu");
+			$this->getPlayer()->kick(TextFormat::RED . "You are banned.\nYou have accumulated " . TextFormat::DARK_PURPLE . $this->getWarningPoints() . TextFormat::RED . " warning points,\nand you still have " . TextFormat::BLUE . $left . TextFormat::RED . " before you are unbanned.\n" . TextFormat::AQUA . "Believe this to be a mistake? Email us at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu" . TextFormat::AQUA . " or visit our chatroom at " . TextFormat::DARK_PURPLE . "http://lgpe.co/chat");
 			return false;
 		}
 		$this->spamDetector = new SpamDetector($this);
@@ -226,7 +226,7 @@ abstract class Session{
 	public function login($method){
 		$this->state = self::STATE_PLAYING;
 		$this->postOnline();
-		if(false === stripos($this->getLoginDatum("hist"), "," . $this->getPlayer()->getAddress() . ",")){
+		if(strpos($this->getLoginDatum("iphist"), "," . $this->getPlayer()->getAddress() . ",") === false){
 			$this->addIp($this->getPlayer()->getAddress());
 		}
 		$this->send(Phrases::LOGIN_AUTH_SUCCESS, ["method" => $this->translate(self::$AUTH_METHODS_PHRASES[$method])]);
@@ -937,7 +937,7 @@ abstract class Session{
 		$this->setLoginDatum("lastwarn", time());
 	}
 	public function warn($id, $points, CommandSender $issuer, $msg){
-		new PreExecuteWarningQuery($this->getMain(), $this->getUid(), $this->getPlayer()->getClientId(), $id, $points, $issuer, $msg);
+		new PreExecuteWarningQuery($this->getMain(), $this->getUid(), $this->getPlayer()->getAddress(), $this->getPlayer()->getClientId(), $id, $points, $issuer, $msg);
 	}
 	public function getTeamJoinTime(){
 		return $this->getLoginDatum("teamjoin");
@@ -1232,7 +1232,6 @@ abstract class Session{
 		$mute->msg = $msg;
 		$mute->since = time();
 		$mute->src = $src;
-		$this->getMain()->addMute($mute);
 		$type = MuteHormone::fromObject($this->getMain(), $mute);
 		$type->push();
 		return $mute;

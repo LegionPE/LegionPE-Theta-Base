@@ -25,27 +25,32 @@ class ReportErrorTask extends AsyncTask{
 	private static $last1 = 0;
 	private static $last2 = 0;
 	private static $last3 = 0;
-	/** @var \Exception */
-	private $ex;
+	private $exMsg, $exFile, $exLine;
 	/** @var string */
 	private $when;
 	public function __construct(\Exception $ex, $when){
-		$this->ex = $ex;
+		$this->exMsg = $ex->getMessage();
+		$this->exFile = $ex->getFile();
+		$this->exLine = $ex->getLine();
 		$this->when = $when;
 	}
 	public function onRun(){
 		if(microtime(true) - self::$last0 < 60){
 			return;
 		}
-		Utils::getURL(Credentials::IRC_WEBHOOK . urlencode("ping-all !!! PEMapModder ping!"));
-		Utils::getURL(Credentials::IRC_WEBHOOK . urlencode("Exception caught: " . $this->ex->getMessage()));
-		Utils::getURL(Credentials::IRC_WEBHOOK . urlencode("In file: " . $this->ex->getFile() . "#" . $this->ex->getLine()));
-		Utils::getURL(Credentials::IRC_WEBHOOK . urlencode("Happened during: " . $this->when));
-		Utils::getURL(Credentials::IRC_WEBHOOK . urlencode("On the server below:"));
+		self::log("ping-all !!! PEMapModder ping!");
+		self::log("Exception caught: " . $this->exMsg);
+		self::log("In file: " . $this->exFile . "#" . $this->exLine);
+		self::log("Happened during: " . $this->when);
+		self::log("On the server below:");
 		Utils::getURL(Credentials::IRC_WEBHOOK_NOPREFIX . urlencode("BotsHateNames: status " . Settings::$LOCALIZE_IP . " " . Settings::$LOCALIZE_PORT));
 		self::$last0 = self::$last1;
 		self::$last1 = self::$last2;
 		self::$last2 = self::$last3;
 		self::$last3 = microtime(true);
+	}
+	public static function log($line){
+		echo $line, PHP_EOL;
+		Utils::getURL(Credentials::IRC_WEBHOOK . urlencode($line));
 	}
 }

@@ -31,26 +31,30 @@ class LoginDataQuery extends AsyncQuery{
 	public function __construct(BasePlugin $plugin, $sesId, $name, $ip, $clientId){
 		$this->class = Settings::$LOCALIZE_CLASS;
 		$this->sesId = $sesId;
-		$this->name = $this->esc($name);
-		$this->ip = $this->esc($ip);
-		$this->clientId = $clientId;
+		$this->name = $name;
+		$this->ip = $ip;
+		$this->clientId = (int) $clientId;
 		parent::__construct($plugin);
 	}
 	public function onPreQuery(\mysqli $mysql){
-		$r = $mysql->query("SELECT SUM(pts)AS sum FROM warnings_logs WHERE uid=(SELECT uid FROM users WHERE name=$this->name)or(SELECT COUNT(*)FROM iphist WHERE ip=$this->ip AND uid=warnings_logs.uid)>0 or (clientid=$this->clientId and clientid!=0)");
-		$this->totalWarnPts = $r->fetch_assoc()["sum"];
+		$r = $mysql->query("SELECT SUM(pts)AS sum FROM warnings_logs WHERE
+			uid=(SELECT uid FROM users WHERE name={$this->esc($this->name)}) or
+			ip={$this->esc($this->ip)} or
+			(clientid = $this->clientId and clientid != 0)");
+		$this->totalWarnPts = (int) $r->fetch_assoc()["sum"];
+		var_dump($this->totalWarnPts);
 		$r->close();
 	}
 	public function getQuery(){
 		// warning: keep the first 7 characters ALWAYS "SELECT "
-		return "SELECT uid,name,nicks,lastip,status,lastses,authuuid,coins,hash,oldhash,pwprefix,pwlen,registration,laston,ontime,config,(SELECT value FROM labels WHERE lid=users.lid)AS lbl,(SELECT approved FROM labels WHERE lid=users.lid)AS lblappr,lastgrind,rank,warnpts,lastwarn,tid,(SELECT name FROM teams WHERE tid=users.tid)as teamname,teamrank,teamjoin,teampts,ignorelist,email,emailkey,emailauth FROM users WHERE name=$this->name";
+		return "SELECT uid,name,nicks,lastip,status,lastses,authuuid,coins,hash,oldhash,pwprefix,pwlen,registration,laston,ontime,config,(SELECT value FROM labels WHERE lid=users.lid)AS lbl,(SELECT approved FROM labels WHERE lid=users.lid)AS lblappr,lastgrind,rank,warnpts,lastwarn,tid,(SELECT name FROM teams WHERE tid=users.tid)as teamname,teamrank,teamjoin,teampts,ignorelist,email,emailkey,emailauth FROM users WHERE name={$this->esc($this->name)}";
 	}
 	protected function onAssocFetched(\mysqli $mysql, array &$row){
 		$uid = $row["uid"];
 		/* group_concat must be done somewhere else because it ALWAYS returns a row. */
 		$r = $mysql->query("SELECT (SELECT group_concat(ip SEPARATOR ',') FROM iphist WHERE uid=$uid) as iphist, (SELECT group_concat(lang ORDER BY priority SEPARATOR ',') FROM langs WHERE uid=$uid) AS langs, (SELECT group_concat(CONCAT(channel, ':', sublv) SEPARATOR ',') FROM channels WHERE uid=$uid) as channels, (SELECT group_concat(CONCAT(IF(smalluid=$uid,largeuid, smalluid), ':', type, ':', requested, ':', direction, ':', (SELECT name FROM users WHERE uid=IF(smalluid=$uid,largeuid, smalluid))) SEPARATOR ';') FROM friends WHERE smalluid=$uid OR largeuid=$uid) AS friends");
 		$result = $r->fetch_assoc();
-		$row["iphist"] = isset($result["iphist"]) ? $result["iphist"] : ",";
+		$row["iphist"] = isset($result["iphist"]) ? ("," . $result["iphist"] . ",") : ",";
 		$row["langs"] = isset($result["langs"]) ? array_filter(explode(",", $result["langs"])) : [];
 		if(isset($result["channels"])){
 			$chanData = explode(",", $result["channels"]);

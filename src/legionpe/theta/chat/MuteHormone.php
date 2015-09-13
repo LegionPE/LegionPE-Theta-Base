@@ -17,6 +17,7 @@ namespace legionpe\theta\chat;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\MuteIssue;
+use legionpe\theta\utils\MUtils;
 
 class MuteHormone extends Hormone{
 	protected $since;
@@ -37,6 +38,10 @@ class MuteHormone extends Hormone{
 		return self::MUTE_CHAT;
 	}
 	public function execute(){
+		if(time() >= $this->since + $this->length){
+			return;
+		}
+		$this->main->getLogger()->notice("Muting user #$this->uid of IP address $this->ip (client ID $this->cid) for " . MUtils::time_secsToString(time() - $this->since - $this->length));
 		$issue = new MuteIssue;
 		$issue->since = $this->since;
 		$issue->length = $this->length;

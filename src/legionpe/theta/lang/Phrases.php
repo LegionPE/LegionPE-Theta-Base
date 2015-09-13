@@ -195,6 +195,7 @@ class Phrases{
 	const WORDS_TEAM_PROPERTY_RULES = "words.team.property.rule";
 	const WORDS_TEAM_PROPERTY_REQUIREMENTS = "words.team.property.req";
 	const WORDS_TEAM_CONFIG_OPEN = "words.team.config.open";
+	const WORDS_DATE_FORMAT = "words.date.format";
 
 	const KICK_TOO_LONG_ONLINE = "kick.toolong.online";
 	const KICK_TOO_LONG_LOGIN = "kick.toolong.login";

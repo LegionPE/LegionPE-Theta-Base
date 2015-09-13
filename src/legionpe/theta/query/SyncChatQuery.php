@@ -64,7 +64,7 @@ class SyncChatQuery extends AsyncQuery{
 			$main->setInternalLastChatId($this->fetchedMaxId);
 			$result = $this->getResult()["result"];
 			foreach($result as $row){
-				$type = Hormone::get($main, Hormone::MUTE_CHAT, $result["src"], $result["msg"], Settings::$LOCALIZE_CLASS, json_decode($row["json"]));
+				$type = Hormone::get($main, Hormone::MUTE_CHAT, $row["src"], $row["msg"], Settings::$LOCALIZE_CLASS, json_decode($row["json"]));
 				$type->execute();
 			}
 		}elseif($result["resulttype"] === self::TYPE_ALL){

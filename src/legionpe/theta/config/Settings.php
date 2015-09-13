@@ -143,8 +143,24 @@ abstract class Settings{
 	];
 	public static function getWarnPtsConseq(/** @noinspection PhpUnusedParameterInspection */
 		$pts, $origin = null){
-		// TODO define consequences
-		return new WarnPtsConseq(0, 0, $origin);
+		$ban = 0;
+		$mute = 0;
+		if($pts >= 20){
+			$ban = 604800;
+		}elseif($pts >= 16){
+			$ban = 86400 * 3;
+		}elseif($pts >= 12){
+			$ban = 86400;
+		}elseif($pts >= 10){
+			$mute = 3600;
+		}elseif($pts >= 8){
+			$mute = 1800;
+		}elseif($pts >= 5){
+			$mute = 900;
+		}elseif($pts >= 3){
+			$mute = 300;
+		}
+		return new WarnPtsConseq($mute, $ban, $origin);
 	}
 	public static function getGrindFactor(/** @noinspection PhpUnusedParameterInspection */
 		$rank){

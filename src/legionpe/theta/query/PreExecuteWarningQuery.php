@@ -16,6 +16,7 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
+use legionpe\theta\chat\MuteHormone;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\MuteIssue;
@@ -28,6 +29,8 @@ use pocketmine\utils\TextFormat;
 class PreExecuteWarningQuery extends NextIdQuery{
 	/** @var int */
 	private $uid;
+	/** @var string */
+	private $ip;
 	/** @var number */
 	private $clientId;
 	/** @var int */
@@ -40,8 +43,9 @@ class PreExecuteWarningQuery extends NextIdQuery{
 	private $msg;
 	/** @var int */
 	private $creation, $expiry;
-	public function __construct(BasePlugin $main, $uid, $clientId, $id, $points, CommandSender $issuer, $msg){
+	public function __construct(BasePlugin $main, $uid, $ip, $clientId, $id, $points, CommandSender $issuer, $msg){
 		$this->uid = $uid;
+		$this->ip = $ip;
 		$this->clientId = $clientId;
 		$this->id = $id;
 		$this->points = $points;
@@ -56,13 +60,13 @@ class PreExecuteWarningQuery extends NextIdQuery{
 		$id = $this->getId();
 		$main = BasePlugin::getInstance($server);
 		/** @var CommandSender $issuer */
-		$issuer = $main->fetchObject($id);
+		$issuer = $main->fetchObject($this->issuer);
 		if($id === -1){
 			$issuer->sendMessage("Failed to create warning");
 			$issuer = null; // release instance
 			return;
 		}
-		new LogWarningQuery($main, $id, $this->uid, $this->clientId, $issuer, $this->points, $this->msg, $this->creation, $this->expiry);
+		new LogWarningQuery($main, $id, $this->uid, $this->ip, $this->clientId, $issuer->getName(), $this->points, $this->msg, $this->creation, $this->expiry);
 		foreach($main->getSessions() as $ses){
 			if($ses->getUid() === $this->uid){
 				$ses->addWarningPoints($this->points);
@@ -77,7 +81,7 @@ class PreExecuteWarningQuery extends NextIdQuery{
 			$issuer->sendMessage(TextFormat::GREEN . "Warning points have been successfully issued to offline player.");
 		}
 	}
-	private function execWarnOn(CommandSender $issuer, Session $ses){
+	public function execWarnOn(CommandSender $issuer, Session $ses){
 		$msg = $ses->translate(Phrases::WARNING_RECEIVED_NOTIFICATION, [
 			"issuer" => $issuer->getName(),
 			"message" => $this->msg,
@@ -99,6 +103,7 @@ class PreExecuteWarningQuery extends NextIdQuery{
 			$mute->since = $this->creation;
 			$mute->src = $issuer->getName();
 			$ses->getPlayer()->sendMessage($msg);
+			MuteHormone::fromObject($ses->getMain(), $mute)->push();
 		}
 	}
 }
