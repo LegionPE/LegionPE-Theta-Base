@@ -20,7 +20,6 @@ use pocketmine\utils\TextFormat;
 class ServerBroadcastHormone extends Hormone{
 	public function execute(){
 		$this->main->getServer()->broadcastMessage(TextFormat::LIGHT_PURPLE . "[Network] " . $this->msg);
-		$this->main->getLogger()->alert("[BROADCAST] $this->msg");
 	}
 	public function getType(){
 		return self::SERVER_BROADCAST;

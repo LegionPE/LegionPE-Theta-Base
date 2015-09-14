@@ -17,7 +17,7 @@ namespace legionpe\theta\chat;
 
 use legionpe\theta\lang\Phrases;
 
-class ClassHormone extends Hormone{
+class ClassChatHormone extends Hormone{
 	protected $ip;
 	protected $port;
 	protected $symbol;
@@ -33,5 +33,6 @@ class ClassHormone extends Hormone{
 				}
 			}
 		}
+		$this->main->getLogger()->info("[ClassChat] <$this->src/$this->ip:$this->port> " . $this->msg);
 	}
 }

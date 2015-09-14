@@ -65,11 +65,11 @@ abstract class Hormone{
 			case self::SERVER_BROADCAST:
 				return new ServerBroadcastHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::TEAM_CHAT:
-				return new TeamHormone($main, $src, $msg, $class, $data, $rowId);
+				return new TeamMessageHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::CONSOLE_MESSAGE:
-				return new ConsoleHormone($main, $src, $msg, $class, $data, $rowId);
+				return new ConsoleReportHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::CHANNEL_CHAT:
-				return new ChannelHormone($main, $src, $msg, $class, $data, $rowId);
+				return new ChannelChatHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::MUTE_CHAT:
 				return new MuteHormone($main, $src, $msg, $class, $data, $rowId);
 			/** @noinspection PhpDeprecationInspection */
@@ -81,7 +81,7 @@ abstract class Hormone{
 			case self::RELOAD_FRIENDS_PROPAGANDA:
 				return new ReloadFriendsHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::CLASS_CHAT:
-				return new ClassHormone($main, $src, $msg, $class, $data, $rowId);
+				return new ClassChatHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::TEAM_DISBAND_PROPAGANDA:
 				return new TeamDisbandHormone($main, $src, $msg, $class, $data, $rowId);
 		}
