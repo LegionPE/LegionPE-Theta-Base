@@ -42,7 +42,6 @@ class LoginDataQuery extends AsyncQuery{
 			ip={$this->esc($this->ip)} or
 			(clientid = $this->clientId and clientid != 0)");
 		$this->totalWarnPts = (int) $r->fetch_assoc()["sum"];
-		var_dump($this->totalWarnPts);
 		$r->close();
 	}
 	public function getQuery(){
@@ -78,7 +77,6 @@ class LoginDataQuery extends AsyncQuery{
 			list($friendUid, $type, $requested, $reqDir, $name) = explode(":", $friend);
 			$friends[(int) $type][(int) $friendUid] = new Friend($uid, $friendUid, $type, $requested, $reqDir, $name);
 		}
-		var_dump($friends);
 		$row["friends"] = $friends;
 		$row["isnew"] = false;
 		$r->close();
