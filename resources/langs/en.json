@@ -402,7 +402,7 @@
 			"hinttext": "%notify2%Jump into the %em%void%notify2% to start fighting.",
 			"kit": {
 				"shops": {
-					"webhint": "%notify2%Go to %em%http://lgpe.co/s%notify2% to upgrade your kits!"
+					"webhint": "%notify2%Go to %em%www.legionpvp.eu/login/%notify2% to upgrade your kits!"
 				}
 			},
 			"cmd": {
