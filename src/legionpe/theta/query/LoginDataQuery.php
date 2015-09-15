@@ -62,6 +62,7 @@ class LoginDataQuery extends AsyncQuery{
 				list($key, $value) = explode(":", $chanDatum);
 				$channels[$key] = (int) $value;
 			}
+			$row["channels"] = $channels;
 		}else{
 			$row["channels"] = [];
 		}
