@@ -32,6 +32,7 @@ use legionpe\theta\queue\Queue;
 use legionpe\theta\utils\DbPingQuery;
 use legionpe\theta\utils\FireSyncChatQueryTask;
 use legionpe\theta\utils\MUtils;
+use legionpe\theta\utils\RandomBroadcastTask;
 use legionpe\theta\utils\ResendPlayersTask;
 use legionpe\theta\utils\RestartServerTask;
 use legionpe\theta\utils\SessionTickTask;
@@ -118,6 +119,7 @@ abstract class BasePlugin extends PluginBase{
 		$this->getServer()->getScheduler()->scheduleRepeatingTask($this->syncChatTask = new FireSyncChatQueryTask($this), 5);
 		$this->getServer()->getScheduler()->scheduleRepeatingTask(new DbPingQuery($this), 1200);
 		$this->getServer()->getScheduler()->scheduleDelayedTask(new RestartServerTask($this), 72000);
+		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new RandomBroadcastTask($this), 2400, 2400);
 		if(RESEND_ADD_PLAYER > 0){
 			$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new ResendPlayersTask($this), RESEND_ADD_PLAYER, RESEND_ADD_PLAYER);
 		}
