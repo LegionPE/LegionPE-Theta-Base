@@ -26,6 +26,9 @@ class RandomBroadcastQuery extends AsyncQuery{
 	public function getQuery(){
 		return "SELECT * FROM broadcasts WHERE id >= (SELECT FLOOR( MAX(id) * RAND()) FROM broadcasts) + 1 ORDER BY id LIMIT 1";
 	}
+	public function getExpectedColumns(){
+		return ["id" => self::COL_INT, "en" => self::COL_STRING];
+	}
 	public function onCompletion(Server $server){
 		$result = $this->getResult()["result"];
 		if(!is_array($result)){
