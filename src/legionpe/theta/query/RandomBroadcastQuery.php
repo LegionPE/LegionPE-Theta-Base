@@ -34,23 +34,18 @@ class RandomBroadcastQuery extends AsyncQuery{
 		if(!is_array($result)){
 			return;
 		}
-		$codes = [];
-		$Phrases = new \ReflectionClass(Phrases::class);
-		foreach($Phrases->getConstants() as $name => $value){
-			if(substr($name, 0, 4) === "VAR_"){
-				$codes[substr($name, 4)] = $value;
-			}
-		}
-		foreach($result as &$string){
-			foreach($Phrases as $code => $replace){
-				$string = str_replace("%$code%", $replace, $string);
+		foreach($result as &$value){
+			foreach((new \ReflectionClass(Phrases::class))->getConstants() as $name => $color){
+				if(substr($name, 0, 4) === "VAR_"){
+					$value = str_replace("%" . substr($name, 4) . "%", $color, $value);
+				}
 			}
 		}
 		foreach(BasePlugin::getInstance($server)->getSessions() as $ses){
 			$langs = $ses->getLangs();
 			foreach($langs as $lang){
 				if(isset($result[$lang])){
-					$ses->getPlayer()->sendTip(Phrases::VAR_notify . $result[$lang]);
+					$ses->getPlayer()->sendMessage(Phrases::VAR_notify . $result[$lang]);
 				}
 			}
 		}
