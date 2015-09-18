@@ -48,6 +48,6 @@ class TeamRankChangeCommand extends SessionCommand{
 		}
 		$name = array_shift($args);
 		new TeamRankChangeQuery($this->getMain(), $this->promote, $name, $sender);
-		return false;
+		return true;
 	}
 }
