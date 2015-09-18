@@ -31,13 +31,13 @@ class Purchase{
 	/** @var int */
 	private $expiry;
 	public function __construct($pid, $uid, $class, $id, $amplitude, $count, $expiry){
-		$this->pid = $pid;
-		$this->uid = $uid;
-		$this->class = $class;
-		$this->id = $id;
-		$this->amplitude = $amplitude;
-		$this->count = $count;
-		$this->expiry = $expiry;
+		$this->pid = (int) $pid;
+		$this->uid = (int) $uid;
+		$this->class = (int) $class;
+		$this->id = (int) $id;
+		$this->amplitude = (int) $amplitude;
+		$this->count = (int) $count;
+		$this->expiry = (int) $expiry;
 	}
 	/**
 	 * @return int

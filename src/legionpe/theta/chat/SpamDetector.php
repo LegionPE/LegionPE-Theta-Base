@@ -35,6 +35,7 @@ class SpamDetector{
 		if(!$this->detectBadWords($message)){
 			return false;
 		}
+		$this->detectCaps($message);
 		$this->detectAds($message);
 		if(count($this->chatLog) < 5){
 			return true;
@@ -48,7 +49,7 @@ class SpamDetector{
 			return false;
 		}
 		$cpm = $lengthSum / (microtime(true) - $this->chatLog[0]->time) * 60;
-		if($cpm > 250){
+		if($cpm > 350){
 			$this->session->send(Phrases::CHAT_BLOCKED_TOO_FAST, ["cpm" => $cpm]);
 			return false;
 		}
@@ -79,6 +80,17 @@ class SpamDetector{
 			}
 		}
 		return true;
+	}
+	public function detectCaps(&$string){
+		if(strtoupper($string) === $string and strtolower($string) !== $string){
+			$string = strtolower($string);
+			$type = Hormone::get($this->session->getMain(), Hormone::CONSOLE_MESSAGE, "SpamDetector",
+				Phrases::VAR_notify2 . "Player {$this->session->getPlayer()->getName()}@" .
+				Settings::$LOCALIZE_IP . ":" . Settings::$LOCALIZE_PORT . " said: " .
+				$string . " (automatically de-capitalized)",
+				Settings::CLASS_ALL, ["ip" => Settings::$LOCALIZE_IP, "port" => Settings::$LOCALIZE_PORT]);
+			$type->push();
+		}
 	}
 	public function detectAds(&$string){
 		$string = preg_replace_callback('%([0-9]{1,3}\.){3}[0-9]{1,3}%i', function ($match){

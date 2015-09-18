@@ -33,7 +33,7 @@ class PrimedTNTParticle extends Particle{
 		parent::__construct($v->x, $v->y, $v->z);
 		$this->name = $name;
 		$this->delay = $delay;
-		$this->eid = Entity::$entityCount;
+		$this->eid = Entity::$entityCount++;
 	}
 	public function encode(){
 		if($this->exploded){
