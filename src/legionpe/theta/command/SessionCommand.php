@@ -82,7 +82,7 @@ abstract class SessionCommand extends ThetaCommand{
 			return false;
 		}
 		if(!$this->checkPerm($session, $msg)){
-			$sender->sendMessage(Phrases::VAR_error . ($msg === null ? $session->translate(Phrases::CMD_ERR_NO_PERM) : $msg));
+			$session->sendMessage(Phrases::VAR_error . ($msg === null ? $session->translate(Phrases::CMD_ERR_NO_PERM) : $msg));
 			return false;
 		}
 		return true;

@@ -40,7 +40,7 @@ class ListTeamMemberQuery extends AsyncQuery{
 		];
 	}
 	public function getQuery(){
-		return "SELECT teamrank, nicks FROM users WHERE tid=(SELECT tid FROM teams WHERE name={$this->esc($this->name)}) ORDER BY teamrank DESC, teamjoin ASC)";
+		return "SELECT teamrank, nicks FROM users WHERE tid=(SELECT tid FROM teams WHERE name={$this->esc($this->name)}) ORDER BY teamrank DESC, teamjoin ASC";
 	}
 	public function onCompletion(Server $server){
 		$main = BasePlugin::getInstance($server);
