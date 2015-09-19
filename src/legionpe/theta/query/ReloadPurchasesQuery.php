@@ -28,10 +28,10 @@ class ReloadPurchasesQuery extends AsyncQuery{
 	/** @var bool */
 	private $msg;
 	public function __construct(BasePlugin $main, $uid, $class, $msg = true){
-		parent::__construct($main);
 		$this->uid = $uid;
 		$this->class = $class;
 		$this->msg = $msg;
+		parent::__construct($main);
 	}
 	public function getResultType(){
 		return self::TYPE_ALL;

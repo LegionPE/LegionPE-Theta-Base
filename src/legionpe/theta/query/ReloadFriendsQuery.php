@@ -31,7 +31,7 @@ class ReloadFriendsQuery extends AsyncQuery{
 		return self::TYPE_ALL;
 	}
 	public function getQuery(){
-		return "SELECT IF(smalluid=$this->uid, largeuid, smalluid)AS uid, type,requested,direction,(SELECT name FROM users WHERE uid=IF(friends.smalluid=$this->uid, friends.largeuid, friends.smalluid)) FROM friends WHERE smalluid=$this->uid OR largeuid=$this->uid";
+		return "SELECT IF(smalluid=$this->uid, largeuid, smalluid)AS uid, type,requested,direction,(SELECT name FROM users WHERE uid=IF(friends.smalluid=$this->uid, friends.largeuid, friends.smalluid))AS name FROM friends WHERE smalluid=$this->uid OR largeuid=$this->uid";
 	}
 	public function getExpectedColumns(){
 		return [

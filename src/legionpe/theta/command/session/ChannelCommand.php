@@ -39,10 +39,10 @@ class ChannelCommand extends SessionCommand{
 			return $sender->translate(Phrases::CMD_CHANNEL_VIEW_SUBSCRIBING_TO_CHANNELS, ["channels" => implode(", ", $sender->getChannelSubscriptions())]);
 		}
 		$name = array_shift($args);
-		if(strtolower($name) === "local"){
+		if(strtolower($name) === "local" or strtolower($name) === "g" or strtolower($name) === "l"){
 			$sender->setCurrentChatState(Session::CHANNEL_LOCAL);
 			return $sender->translate(Phrases::CMD_CHANNEL_SET_LOCAL);
-		}elseif(strtolower($name) === "team"){
+		}elseif(strtolower($name) === "team" or strtolower($name) === "t"){
 			if($sender->getTeamId() === -1){
 				return $sender->translate(Phrases::CMD_TEAM_ERR_NOT_IN_TEAM);
 			}
