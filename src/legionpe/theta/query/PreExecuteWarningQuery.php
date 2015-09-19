@@ -53,7 +53,7 @@ class PreExecuteWarningQuery extends NextIdQuery{
 		$this->msg = $msg;
 //		$this->expiry = ($this->creation = time()) + $duration;
 		$this->creation = time();
-		$this->expiry = PHP_INT_MAX;
+		$this->expiry = $this->creation + 1e+8;
 		parent::__construct($main, self::WARNING);
 	}
 	public function onCompletion(Server $server){
