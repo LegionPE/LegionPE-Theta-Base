@@ -41,7 +41,7 @@ class LogWarningQuery extends AsyncQuery{
 		parent::__construct($plugin);
 	}
 	public function getQuery(){
-		return "INSERT INTO warnings_logs(wid,uid,ip,clientid,issuer,pts,msg,creation,expiry,agent)VALUES($this->wid,$this->uid,{$this->esc($this->ip)}$this->clientId,{$this->esc($this->issuerName)},$this->points,{$this->esc($this->msg)},$this->creation,$this->expiry,'eu.legionpvp.theta.mysqli')";
+		return "INSERT INTO warnings_logs(wid,uid,ip,clientid,issuer,pts,msg,creation,expiry,agent)VALUES($this->wid,$this->uid,{$this->esc($this->ip)},$this->clientId,{$this->esc($this->issuerName)},$this->points,{$this->esc($this->msg)},$this->creation,$this->expiry,'eu.legionpvp.theta.mysqli')";
 	}
 	public function getResultType(){
 		return self::TYPE_RAW;
