@@ -30,7 +30,7 @@ class TeamListQuery extends AsyncQuery{
 		return self::TYPE_ALL;
 	}
 	public function getQuery(){
-		return "SELECT name, points + (SELECT SUM(teampts) FROM users WHERE tid=teams.tid) AS total_points FROM teams ORDER BY total_points LIMIT 5";
+		return "SELECT name, points + (SELECT SUM(teampts) FROM users WHERE tid=teams.tid) AS total_points FROM teams ORDER BY total_points DESC LIMIT 5";
 	}
 	public function getExpectedColumns(){
 		return [

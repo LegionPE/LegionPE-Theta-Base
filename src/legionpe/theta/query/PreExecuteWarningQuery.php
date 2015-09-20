@@ -71,7 +71,7 @@ class PreExecuteWarningQuery extends NextIdQuery{
 			if($ses->getUid() === $this->uid){
 				$ses->addWarningPoints($this->points);
 				$done = true;
-				$issuer->sendMessage("Warning points have been successfully issued to player.");
+				$issuer->sendMessage("$this->points warning points have been successfully issued to player {$ses->getPlayer()->getName()}.");
 				$this->execWarnOn($issuer, $ses);
 				break;
 			}
