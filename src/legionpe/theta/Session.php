@@ -1123,7 +1123,7 @@ abstract class Session{
 					}elseif(count($fulls) > 0){
 						return Friend::RET_OTHER_FULL;
 					}
-					new RawAsyncQuery($this->getMain(), "UPDATE friends SET type=$type, requested=$NOT_FRIEND, direciton=$NIL $condition");
+					new RawAsyncQuery($this->getMain(), "UPDATE friends SET type=$type, requested=$NOT_FRIEND, direction=$NIL $condition");
 					return Friend::RET_REQUEST_CANCELLED_AND_REDUCED;
 				}
 			}
