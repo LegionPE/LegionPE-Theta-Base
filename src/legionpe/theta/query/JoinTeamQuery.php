@@ -99,6 +99,9 @@ class JoinTeamQuery extends AsyncQuery{
 		}
 		if(isset($joined, $ses)){
 			$ses->setLoginDatum("tid", $this->tid);
+			$ses->setLoginDatum("teamjoin", time());
+			$ses->setLoginDatum("teampts", 0);
+			$ses->setLoginDatum("teamrank", 0);
 			$ses->recalculateNametag();
 			$type = Hormone::get($main, Hormone::TEAM_CHAT, "Network", "%tr%" . Phrases::CMD_TEAM_JOINED, Settings::CLASS_ALL, [
 				"tid" => $this->tid,
