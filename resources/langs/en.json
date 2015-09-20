@@ -196,7 +196,7 @@
 				"result": "%info%%em%Leader%info%: %em2%%leader%\n%info%%em%Co-Leaders%info%: %em2%%coleaders%\n%info%%em%Senior Members%info%: %em2%%seniors%\n%info%%em%Members%info%: %em2%%members%\n%info%%em%Junior Members%info%: %em2%%juniors%\n"
 			},
 			"info": {
-				"result": "%info%Team %em%%name% %em2%(%memscnt% members)\n%info%Description: %em%%descr%\n%info%Requirements: %em%%req%\n%em3%===PvP===\n%em%%pvp_kills% %em2%kills, %em%%pvp_deaths% %em2%deaths%info%, %em2%K/D%info%=%em%%pvp_kd%"
+				"result": "%info%Team %em%%name% %em2%(%memscnt% members, totally %points% points)\n%info%Description: %em%%descr%\n%info%Requirements: %em%%req%\n%em3%===PvP===\n%em%%pvp_kills% %em2%kills, %em%%pvp_deaths% %em2%deaths%info%, %em2%K/D%info%=%em%%pvp_kd%"
 			},
 			"joined": "%notify%%name% joined your team!",
 			"quitted": "%notify%%name% quitted your team!",
