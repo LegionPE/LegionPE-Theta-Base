@@ -34,7 +34,7 @@ class TeamInfoQuery extends AsyncQuery{
 		return self::TYPE_ASSOC;
 	}
 	public function getQuery(){
-		return "SELECT teams.name AS name, teams.descr AS descr, teams.rules AS rules, teams.req AS req, SUM(users.teampts) + team.points AS points, SUM(pvp_kills) AS pvp_kills, SUM(pvp_deaths) AS pvp_deaths, AVG(pvp_maxstreak) AS pvp_avgstreak, COUNT(users.tid) AS memscnt FROM teams INNER JOIN users ON teams.tid=users.tid WHERE teams.name={$this->esc($this->name)}";
+		return "SELECT teams.name AS name, teams.descr AS descr, teams.rules AS rules, teams.req AS req, SUM(users.teampts) + teams.points AS points, SUM(pvp_kills) AS pvp_kills, SUM(pvp_deaths) AS pvp_deaths, AVG(pvp_maxstreak) AS pvp_avgstreak, COUNT(users.tid) AS memscnt FROM teams INNER JOIN users ON teams.tid=users.tid WHERE teams.name={$this->esc($this->name)}";
 	}
 	public function getExpectedColumns(){
 		return [
