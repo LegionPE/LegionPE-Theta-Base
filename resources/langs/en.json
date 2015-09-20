@@ -107,7 +107,7 @@
 			},
 			"set": {
 				"true": "%info%Friendly Fire has been activated. Do %em2%/ffa off%info% to turn off.",
-				"false": "%info%Friendly Fire has been deactivated. Do %em2%/ffa off%info% to turn on."
+				"false": "%info%Friendly Fire has been deactivated. Do %em2%/ffa on%info% to turn on."
 			}
 		},
 		"gc": {

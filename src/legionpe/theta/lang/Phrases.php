@@ -95,7 +95,7 @@ class Phrases{
 
 	const CMD_FFA_CHECK_TRUE = "cmd.ffa.check.true";
 	const CMD_FFA_CHECK_FALSE = "cmd.ffa.check.false";
-	const CMD_FFA_SET_TRUE = "cmd.ffa.set.false";
+	const CMD_FFA_SET_TRUE = "cmd.ffa.set.true";
 	const CMD_FFA_SET_FALSE = "cmd.ffa.set.false";
 
 	const CMD_GRIND_COIN_CANNOT_START = "cmd.gc.cannotstart";
