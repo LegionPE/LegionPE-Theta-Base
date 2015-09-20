@@ -67,7 +67,7 @@ class ListTeamMemberQuery extends AsyncQuery{
 		foreach($result["result"] as $row){
 			$nicks = trim($row["nicks"], ",");
 			$nick = explode(", ", $nicks)[0];
-			$mems[$row["teamrank"]] = $nick;
+			$mems[$row["teamrank"]][] = $nick;
 		}
 		$sender->send(Phrases::CMD_TEAM_MEMBER_RESULT, [
 			"leader" => implode(", ", $mems[Settings::TEAM_RANK_LEADER]),
