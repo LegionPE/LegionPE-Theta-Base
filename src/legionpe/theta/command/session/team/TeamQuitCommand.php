@@ -43,7 +43,8 @@ class TeamQuitCommand extends SessionCommand{
 			$prop = Hormone::get($this->getMain(), Hormone::TEAM_DISBAND_PROPAGANDA, $sender->getInGameName(), "Team disbanded by owner /tq", Settings::CLASS_ALL, [
 				"tid" => $sender->getTeamId()
 			]);
-			$prop->push();
+			$prop->release();
+			new RawAsyncQuery($this->getMain(), "UPDATE users SET tid=-1,teamrank=0,teamjoin=0,teampts=0 WHERE tid={$sender->getTeamId()}");
 			new RawAsyncQuery($this->getMain(), "DELETE FROM teams WHERE tid=" . $sender->getTeamId());
 			return true;
 		}
@@ -56,7 +57,7 @@ class TeamQuitCommand extends SessionCommand{
 				"teamname" => $sender->getTeamName(),
 			]
 		]);
-		$type->push();
+		$type->release();
 		$sender->setLoginDatum("tid", -1);
 		$sender->setLoginDatum("teamname", null);
 		$sender->setLoginDatum("teamrank", 0);

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * LegionPE Theta
+ * LegionPE
  *
  * Copyright (C) 2015 PEMapModder and contributors
  *
@@ -13,30 +13,27 @@
  * @author PEMapModder
  */
 
-namespace legionpe\theta\command\session;
+namespace legionpe\theta\command\session\team;
 
 use legionpe\theta\BasePlugin;
-use legionpe\theta\chat\Hormone;
 use legionpe\theta\command\SessionCommand;
 use legionpe\theta\config\Settings;
+use legionpe\theta\lang\Phrases;
+use legionpe\theta\query\TeamKickQuery;
 use legionpe\theta\Session;
 
-class ConsoleCommand extends SessionCommand{
+class TeamKickCommand extends SessionCommand{
 	public function __construct(BasePlugin $main){
-		parent::__construct($main, "console", "Send a message to console", "/console <message ...>", ["cs"]);
+		parent::__construct($main, "tkick", "Kick a player from the team", "/tk <full name> [message]", ["tk"]);
 	}
 	protected function run(array $args, Session $sender){
 		if(!isset($args[0])){
 			return false;
 		}
-		$msg = implode(" ", $args);
-		$local = true;
-		if(substr($msg, 0, 1) === "."){
-			$msg = substr($msg, 1);
-			$local = false;
+		if($sender->getTeamRank() < Settings::TEAM_RANK_COLEAD){
+			return $sender->translate(Phrases::CMD_TEAM_KICK_COLEAD);
 		}
-		$type = Hormone::get($sender->getMain(), Hormone::CONSOLE_MESSAGE, $sender->getInGameName(), $msg, $local ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, ["ip" => Settings::$LOCALIZE_IP, "port" => Settings::$LOCALIZE_PORT]);
-		$type->release();
+		new TeamKickQuery($this->getMain(), $sender, array_shift($args), implode(" ", $args));
 		return true;
 	}
 }

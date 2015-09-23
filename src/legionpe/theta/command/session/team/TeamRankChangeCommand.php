@@ -33,7 +33,7 @@ class TeamRankChangeCommand extends SessionCommand{
 	 */
 	public function __construct(BasePlugin $main, $promote){
 		$this->promote = $promote;
-		$this->humanName = $promote ? "promote" : "demoet";
+		$this->humanName = $promote ? "promote" : "demote";
 		parent::__construct($main, $name = $promote ? "tprom" : "tdem", ucfirst($this->humanName) . " a team member", "/$name <full name>");
 	}
 	protected function run(array $args, Session $sender){

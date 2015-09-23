@@ -75,7 +75,7 @@ class SpamDetector{
 					Phrases::VAR_em . substr($string, $pos, strlen($word)) . Phrases::VAR_notify2 .
 					substr($string, $pos + strlen($word)),
 					Settings::CLASS_ALL, ["ip" => Settings::$LOCALIZE_IP, "port" => Settings::$LOCALIZE_PORT]);
-				$type->push();
+				$type->release();
 				return false;
 			}
 		}
@@ -89,7 +89,7 @@ class SpamDetector{
 				Settings::$LOCALIZE_IP . ":" . Settings::$LOCALIZE_PORT . " said: " .
 				$string . " (automatically de-capitalized)",
 				Settings::CLASS_ALL, ["ip" => Settings::$LOCALIZE_IP, "port" => Settings::$LOCALIZE_PORT]);
-			$type->push();
+			$type->release();
 		}
 	}
 	public function detectAds(&$string){

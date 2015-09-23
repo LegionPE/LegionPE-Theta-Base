@@ -72,11 +72,11 @@ class SetFriendQuery extends NameToUidQuery{
 			$type = Hormone::get($main, Hormone::RELOAD_FRIENDS_PROPAGANDA, $ses->getPlayer()->getName(), "$result", Settings::CLASS_ALL, [
 				"uid" => $targetUid
 			]);
-			$type->push();
+			$type->release();
 			$type = Hormone::get($main, Hormone::RELOAD_FRIENDS_PROPAGANDA, $this->name, "$result", Settings::CLASS_ALL, [
 				"uid" => $this->senderUid
 			]);
-			$type->push();
+			$type->release();
 		}
 		$ses->send(self::$RESPONSES[$result], [
 			"from" => $ses->getInGameName(),

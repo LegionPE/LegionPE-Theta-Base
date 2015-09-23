@@ -154,6 +154,11 @@
 				},
 				"quitted": "%success%You have quitted your team."
 			},
+			"kick": {
+				"colead": "%error%You must be a Leader/Co-Leader to kick a player from your team!",
+				"notlow": "%error%You can only kick team members with lower rank than you!",
+				"done": "%success%Player %target% has been kicked out of your team."
+			},
 			"invite": {
 				"notsenior": "%error%You must be in a team and be a %em%Senior-Member%error%, a %em%Leader%error% or a %em%Co-Leader%error% to invite a player!",
 				"noplayer": "%error%No player with scuh name is ever registered on our network.",
@@ -200,9 +205,10 @@
 			},
 			"joined": "%notify%%name% joined your team!",
 			"quitted": "%notify%%name% quitted your team!",
-			"invited": "%notify%You have been invited into Team %team%!",
-			"requested": "%notify%%name% sent a request to join your team!",
+			"invited": "%notify2%You have been invited into Team %team%!",
+			"requested": "%notify2%%name% sent a request to join your team!",
 			"disbanded": "%notify2%%bold%Your team has been %em%%italic%disbanded!",
+			"kicked": "%notify2%You have been %italic%kicked out of your team %reset%%notify2%by %em%%src%%notify2%! %info%Reason:\n%verbosemid%%msg%",
 			"ranks": [
 				"Junior-Member",
 				"Member",

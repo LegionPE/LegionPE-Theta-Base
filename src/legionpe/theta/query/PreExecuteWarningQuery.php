@@ -103,7 +103,7 @@ class PreExecuteWarningQuery extends NextIdQuery{
 			$mute->since = $this->creation;
 			$mute->src = $issuer->getName();
 			$ses->getPlayer()->sendMessage($msg);
-			MuteHormone::fromObject($ses->getMain(), $mute)->push();
+			MuteHormone::fromObject($ses->getMain(), $mute)->release();
 		}
 	}
 }

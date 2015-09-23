@@ -91,7 +91,7 @@ class JoinTeamQuery extends AsyncQuery{
 							"ign" => "Network",
 							"data" => ["name" => $this->playerName]
 						]);
-						$type->push();
+						$type->release();
 						$ses->send(Phrases::CMD_TEAM_JOIN_REQUESTED, $data);
 						break 2;
 				}
@@ -109,7 +109,7 @@ class JoinTeamQuery extends AsyncQuery{
 				"ign" => "Network",
 				"data" => $data
 			]);
-			$type->push();
+			$type->release();
 		}
 	}
 }

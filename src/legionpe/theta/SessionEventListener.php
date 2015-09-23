@@ -26,6 +26,7 @@ use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\inventory\InventoryOpenEvent;
 use pocketmine\event\inventory\InventoryPickupArrowEvent;
 use pocketmine\event\inventory\InventoryPickupItemEvent;
+use pocketmine\event\inventory\InventoryTransactionEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerCommandPreprocessEvent;
@@ -38,6 +39,7 @@ use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
+use pocketmine\inventory\PlayerInventory;
 use pocketmine\Player;
 
 class SessionEventListener implements Listener{
@@ -212,6 +214,25 @@ class SessionEventListener implements Listener{
 		}
 		if($session->onPickupArrow($event) === false){
 			$event->setCancelled();
+		}
+	}
+	public function onTransaction(InventoryTransactionEvent $event){
+		foreach($event->getTransaction()->getInventories() as $inv){
+			if($inv instanceof PlayerInventory){
+				$player = $inv->getHolder();
+				if(!($player instanceof Player)){
+					return;
+				}
+				$session = $this->main->getSession($player);
+				if($session === null){
+					$event->setCancelled();
+					return;
+				}
+				if($session->onTransaction($event) === false){
+					$event->setCancelled();
+				}
+				return;
+			}
 		}
 	}
 	public function onChat(PlayerChatEvent $event){

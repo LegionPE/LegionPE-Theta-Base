@@ -39,6 +39,7 @@ use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\inventory\InventoryOpenEvent;
 use pocketmine\event\inventory\InventoryPickupArrowEvent;
 use pocketmine\event\inventory\InventoryPickupItemEvent;
+use pocketmine\event\inventory\InventoryTransactionEvent;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\player\PlayerCommandPreprocessEvent;
 use pocketmine\event\player\PlayerDeathEvent;
@@ -49,6 +50,7 @@ use pocketmine\event\player\PlayerItemHeldEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
 use pocketmine\event\TextContainer;
+use pocketmine\inventory\ChestInventory;
 use pocketmine\level\particle\TerrainParticle;
 use pocketmine\level\sound\FizzSound;
 use pocketmine\Player;
@@ -279,7 +281,9 @@ abstract class Session{
 		$att->setPermission("fasttransfer.command.transfer", $this->isModerator());
 	}
 	public function send($phrase, array $vars = []){
-		$this->getPlayer()->sendMessage($this->translate($phrase, $vars));
+		if($this->getPlayer()->isOnline()){
+			$this->getPlayer()->sendMessage($this->translate($phrase, $vars));
+		}
 	}
 	public function translate($phrase, array $vars = []){
 		return $this->getMain()->getLanguageManager()->get($phrase, $vars, ...$this->getLangs());
@@ -591,7 +595,7 @@ abstract class Session{
 					"ign" => $this->getInGameName()
 				];
 				$type = Hormone::get($this->getMain(), Hormone::TEAM_CHAT, $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
-				$type->push();
+				$type->release();
 				return false;
 			}
 			if($this->currentChatState !== self::CHANNEL_LOCAL){
@@ -601,7 +605,7 @@ abstract class Session{
 					"ign" => $this->getInGameName()
 				];
 				$type = Hormone::get($this->getMain(), Hormone::CHANNEL_CHAT, $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
-				$type->push();
+				$type->release();
 				return false;
 			}
 			$this->onChat($message, $isLocal ? self::CHAT_NORMAL_LOCAL : self::CHAT_NORMAL_CLASS);
@@ -688,7 +692,7 @@ abstract class Session{
 			"symbol" => $symbol,
 			"local" => $local
 		]);
-		$type->push();
+		$type->release();
 		if($local){
 			foreach($this->getMain()->getSessions() as $ses){
 				if($ses->isLocalChatOn()){
@@ -795,6 +799,22 @@ abstract class Session{
 	public function onPickupArrow(/** @noinspection PhpUnusedParameterInspection */
 		InventoryPickupArrowEvent $event){
 		if(!$this->isPlaying()){
+			return false;
+		}
+		return true;
+	}
+	public function onTransaction(InventoryTransactionEvent $event){
+		if(!$this->isPlaying()){
+			/** @var ChestInventory|null $chest */
+			$chest = null;
+			foreach($event->getTransaction()->getInventories() as $inv){
+				if($inv instanceof ChestInventory){
+					$chest = $inv;
+				}
+			}
+			if($chest !== null){
+				$chest->close($this->getPlayer());
+			}
 			return false;
 		}
 		return true;
@@ -1005,7 +1025,7 @@ abstract class Session{
 				"channel" => $channel
 			]
 		]);
-		$type->push();
+		$type->release();
 		return true;
 	}
 	public function getChannelSubscriptions(){
@@ -1032,7 +1052,7 @@ abstract class Session{
 					"channel" => $channel
 				]
 			]);
-			$type->push();
+			$type->release();
 		}
 	}
 	/**
@@ -1233,7 +1253,7 @@ abstract class Session{
 		$mute->since = time();
 		$mute->src = $src;
 		$type = MuteHormone::fromObject($this->getMain(), $mute);
-		$type->push();
+		$type->release();
 		return $mute;
 	}
 	public static function hash($password, $uid){

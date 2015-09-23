@@ -127,6 +127,9 @@ class Phrases{
 	const CMD_TEAM_QUIT_WARNING_NORMAL = "cmd.team.quit.warning.normal";
 	const CMD_TEAM_QUIT_WARNING_LEADER = "cmd.team.quit.warning.leader";
 	const CMD_TEAM_QUIT_QUITTED = "cmd.team.quit.quitted";
+	const CMD_TEAM_KICK_COLEAD = "cmd.team.kick.colead";
+	const CMD_TEAM_KICK_LOW_TO_HIGH = "cmd.team.kick.notlow";
+	const CMD_TEAM_KICK_SUCCESS = "cmd.team.kick.done";
 	const CMD_TEAM_INVITE_NOT_SENIOR = "cmd.team.invite.notsenior";
 	const CMD_TEAM_INVITE_NO_PLAYER = "cmd.team.invite.noplayer";
 	const CMD_TEAM_INVITE_TARGET_IN_TEAM = "cmd.team.invite.targetinteam";
@@ -158,6 +161,7 @@ class Phrases{
 	const CMD_TEAM_INVITED = "cmd.team.invited";
 	const CMD_TEAM_REQUEST_RECEIVED = "cmd.team.requested";
 	const CMD_TEAM_DISBANDED = "cmd.team.disbanded";
+	const CMD_TEAM_KICKED = "cmd.team.kicked";
 	const CMD_TEAM_RANKS = "cmd.team.ranks";
 
 	const CMD_TPR_TO_FAIL_ENEMY_TARGET = "cmd.tpreq.to.fail.enemy.target";

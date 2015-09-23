@@ -33,6 +33,7 @@ class FallbackTeamCommand extends SessionCommand{
 				"$em/tc <team name>:$em2 Create a new team" : "",
 			"$em/tj <team name>:$em2 Join an opened team or accept the invitation into the team.",
 			"$em/tq:$em2 Quit a team, or disband if you are owner.",
+			"$em/tk:$em2 Kick a player from your team.",
 			"$em/tinv <player full name>:$em2 Invite a player into your team.",
 			"$em/tprom <player full name>:$em2 Promote a member in your team.",
 			"$em/tdem <player full name>:$em2 Demote a member in your team.",

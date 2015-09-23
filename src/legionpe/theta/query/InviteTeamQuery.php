@@ -107,13 +107,13 @@ class InviteTeamQuery extends AsyncQuery{
 			"tid" => $this->tid,
 			"teamName" => $this->teamName
 		]);
-		$type->push();
+		$type->release();
 		$type = Hormone::get($main, Hormone::TEAM_CHAT, "Network", "%tr%" . Phrases::CMD_TEAM_JOINED, Settings::CLASS_ALL, [
 			"tid" => $this->tid,
 			"teamName" => $this->teamName,
 			"ign" => "Network",
 			"data" => ["teamname" => $this->teamName, "name" => $this->targetName]
 		]);
-		$type->push();
+		$type->release();
 	}
 }

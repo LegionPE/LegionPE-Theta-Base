@@ -40,6 +40,7 @@ use legionpe\theta\command\session\team\TeamCreateCommand;
 use legionpe\theta\command\session\team\TeamInfoCommand;
 use legionpe\theta\command\session\team\TeamInviteCommand;
 use legionpe\theta\command\session\team\TeamJoinCommand;
+use legionpe\theta\command\session\team\TeamKickCommand;
 use legionpe\theta\command\session\team\TeamListCommand;
 use legionpe\theta\command\session\team\TeamMemberCommand;
 use legionpe\theta\command\session\team\TeamPropertyChangeCommand;
@@ -139,6 +140,7 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			new TeamInviteCommand($main),
 			new TeamJoinCommand($main),
 			new TeamQuitCommand($main),
+			new TeamKickCommand($main),
 			new TeamRankChangeCommand($main, true),
 			new TeamRankChangeCommand($main, false),
 			new TeamPropertyChangeCommand($main, ["tdesc", "tdescr"], Phrases::WORDS_TEAM_PROPERTY_DESCRIPTION, "descr"),

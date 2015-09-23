@@ -36,7 +36,7 @@ class OverridingSayCommand extends ModeratorCommand{
 			$local = false;
 		}
 		$type = Hormone::get($this->getMain(), Hormone::SERVER_BROADCAST, $sender->getName(), $msg, $local ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, []);
-		$type->push();
+		$type->release();
 		return true;
 	}
 }

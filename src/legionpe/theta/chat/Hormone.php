@@ -31,6 +31,7 @@ abstract class Hormone{
 	const RELOAD_FRIENDS_PROPAGANDA = 7;
 	const CLASS_CHAT = 8;
 	const TEAM_DISBAND_PROPAGANDA = 9;
+	const TEAM_KICK_PROPAGANDA = 10;
 	/** @var BasePlugin */
 	protected $src;
 	protected $msg;
@@ -87,8 +88,8 @@ abstract class Hormone{
 		}
 		return null;
 	}
-	public function push(){
-		$this->onPush();
+	public function release(){
+		$this->onRelease();
 		new PushChatQuery($this->main, $this->src, $this->msg, $this->getType(), $this->class, $this->_classData);
 	}
 	public function consume(){
@@ -98,7 +99,7 @@ abstract class Hormone{
 		}
 		return false;
 	}
-	protected function onPush(){
+	protected function onRelease(){
 	}
 	public abstract function getType();
 	public abstract function execute();
