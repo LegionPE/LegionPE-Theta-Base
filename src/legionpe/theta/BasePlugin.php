@@ -312,6 +312,8 @@ abstract class BasePlugin extends PluginBase{
 			],
 			"langs" => [],
 			"purchases" => [],
+			"channels" => [],
+			"kitrowsarray" => []
 		];
 	}
 	public abstract function query_world();
