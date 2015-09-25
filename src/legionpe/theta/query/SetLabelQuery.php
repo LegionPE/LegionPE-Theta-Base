@@ -36,7 +36,7 @@ class SetLabelQuery extends AsyncQuery{
 	public function onCompletion(Server $server){
 		$ses = BasePlugin::getInstance($server)->getSessionByUid($this->uid);
 		if($ses instanceof Session){
-			$ses->recalculateNametag();
+			$ses->recalculateNameTag();
 		}
 	}
 }

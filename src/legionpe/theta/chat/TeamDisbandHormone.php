@@ -31,7 +31,7 @@ class TeamDisbandHormone extends Hormone{
 				$ses->setLoginDatum("teamrank", 0);
 				$ses->setLoginDatum("teamjoin", 0);
 				$ses->setLoginDatum("teampts", 0);
-				$ses->recalculateNametag();
+				$ses->recalculateNameTag();
 			}
 		}
 	}

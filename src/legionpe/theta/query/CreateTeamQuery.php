@@ -55,7 +55,7 @@ class CreateTeamQuery extends NextIdQuery{
 					$ses->setLoginDatum("teamrank", Settings::TEAM_RANK_LEADER);
 					$ses->setLoginDatum("teamjointime", time());
 					$ses->setLoginDatum("teampts", 0);
-					$ses->recalculateNametag();
+					$ses->recalculateNameTag();
 				}else{
 					$ses->send($result["error"]);
 				}

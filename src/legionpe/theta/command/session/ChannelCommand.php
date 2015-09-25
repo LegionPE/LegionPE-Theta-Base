@@ -22,7 +22,7 @@ use legionpe\theta\Session;
 
 class ChannelCommand extends SessionCommand{
 	public function __construct(BasePlugin $main){
-		parent::__construct($main, "channel", "Choose or view your current channel", "/ch local|team|<channel name> " . Phrases::VAR_em . "OR" . Phrases::VAR_info . " /ch quit <channel name>", ["ch", "chan"]);
+		parent::__construct($main, "channel", "Choose or view your current channel", "/ch local|team|<channel name>" . Phrases::VAR_em . " OR " . Phrases::VAR_info . "/ch quit <channel name>", ["ch", "chan"]);
 	}
 	protected function run(array $args, Session $sender){
 		if(!isset($args[0])){

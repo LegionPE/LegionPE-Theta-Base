@@ -375,7 +375,7 @@
 			"death": {
 				"generic": "%error%You died!",
 				"killed": "%error%You were %action% by %killer%!",
-				"lava": "%error%You tried to swin in lava to escape from %killer%!",
+				"lava": "%error%You tried to swim in lava to escape from %killer%!",
 				"fall": {
 					"generic": "%error%You were %em%%action% to a deadly fall%error% by %killer%!",
 					"ladder": "%error%You were %em%%action% to a deadly fall%error% off %em2%a ladder%error% by %killer%!",
@@ -407,7 +407,7 @@
 			"killinfo": "%verbose%Your%em% %ord% %verbosemid%kill - the%em2% %streakord% %verbosemid% in a row.\n%verbose%Your coins + %em%%added%%verbosemid% => %em2%%coins%",
 			"deathinfo": "%verbose%This is your%em% %ord% %verbosemid%death! Watch out!",
 			"invinc": {
-				"left": "%em%%left% %notify2%second(s) of invicibility left",
+				"left": "%em%%left% %notify2%second(s) of invincibility left",
 				"off": "%notify2%You are no longer invincible."
 			},
 			"hinttext": "%notify2%Jump into the %em%void%notify2% to start fighting.",

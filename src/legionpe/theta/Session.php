@@ -236,7 +236,7 @@ abstract class Session{
 				"class" => $this->translate(Settings::$CLASSES_NAMES_PHRASES[Settings::$LOCALIZE_CLASS]),
 				"ip" => Settings::$LOCALIZE_IP, "port" => (string) Settings::$LOCALIZE_PORT]
 		);
-		$this->recalculateNametag();
+		$this->recalculateNameTag();
 		$this->setMaintainedPopup();
 		foreach($this->getMain()->getServer()->getOnlinePlayers() as $other){
 			if(isset($this->invisibleFrom[$other->getId()])){
@@ -320,7 +320,7 @@ abstract class Session{
 		return $this->isPlaying();
 	}
 
-	public function recalculateNametag(){
+	public function recalculateNameTag(){
 		$this->setInGameName($plain = $this->calculatePlainName());
 		$this->getPlayer()->setDisplayName($plain);
 		$this->getPlayer()->setNameTag($tag = $this->calculateNameTag());
@@ -846,7 +846,7 @@ abstract class Session{
 	 * @param int $amplitude
 	 * @return int
 	 */
-	public function incrLoginDatum($key, $amplitude = 1){
+	public function incrementLoginDatum($key, $amplitude = 1){
 		$this->loginData[$key] += $amplitude;
 		return $this->loginData[$key];
 	}
@@ -966,7 +966,7 @@ abstract class Session{
 		return $this->getLoginDatum("teampts");
 	}
 	public function grantTeamPoints($points = 1){
-		$this->incrLoginDatum("teampts", $points);
+		$this->incrementLoginDatum("teampts", $points);
 	}
 	public function takeTeamPoints($points = 1){
 		$pts = $this->getTeamPoints();
@@ -998,9 +998,9 @@ abstract class Session{
 		return isset($this->loginData["isnew"]) and $this->loginData["isnew"] === true;
 	}
 	public function isOnChannel($channel, &$subLevel = null){
-		$chans = array_change_key_case($this->getLoginDatum("channels"), CASE_LOWER);
-		if(isset($chans[$channel = strtolower($channel)])){
-			$subLevel = $chans[$channel];
+		$channels = array_change_key_case($this->getLoginDatum("channels"), CASE_LOWER);
+		if(isset($channels[$channel = strtolower($channel)])){
+			$subLevel = $channels[$channel];
 			return true;
 		}
 		return false;
@@ -1033,8 +1033,8 @@ abstract class Session{
 	}
 	public function partChannel($channel){
 		$subs = $this->getChannelSubscriptions();
-		$lowerChans = array_keys(array_change_key_case($subs, CASE_LOWER));
-		$pos = array_search(strtolower($channel), $lowerChans);
+		$lowerChannels = array_keys(array_change_key_case($subs, CASE_LOWER));
+		$pos = array_search(strtolower($channel), $lowerChannels);
 		if($pos !== false){
 			$caseName = array_keys($subs)[$pos];
 			unset($subs[$caseName]);
