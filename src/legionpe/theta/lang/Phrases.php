@@ -92,6 +92,9 @@ class Phrases{
 	const CMD_FRIEND_REQUEST_REJECTED = "cmd.friend.request.rejected";
 	const CMD_FRIEND_REQUEST_REJECTED_AND_LOWER_SENT = "cmd.friend.request.rejectsend";
 	const CMD_FRIEND_REQUEST_REJECTED_AND_REDUCED = "cmd.friend.request.rejectreduce";
+	const CMD_FRIEND_SAME_UID = "cmd.friend.self";
+	const CMD_FRIEND_FULL_OTHER = "cmd.friend.full.other";
+	const CMD_FRIEND_FULL_SELF = "cmd.friend.full.self";
 
 	const CMD_FFA_CHECK_TRUE = "cmd.ffa.check.true";
 	const CMD_FFA_CHECK_FALSE = "cmd.ffa.check.false";

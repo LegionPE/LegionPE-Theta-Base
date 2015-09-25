@@ -98,7 +98,12 @@
 			},
 			"reduced": "%success%You have set %target% as %cur%.",
 			"nochange": "%error%You are already %cur% with %target%!",
-			"propaganda": "%notify%Your friend status with %em%%src%%notify% has been edited. Type %em2%/fl%notify% to check."
+			"self": "%error%You can't sent a friend request to yourself!",
+			"full": {
+				"other": "%em%%target%%error%'s %type% list is already %em2%full%error%!",
+				"self": "%error%Your %type% list is already %em2%full%error%!"
+			},
+			"propaganda": "%notify%Friend/enemy status/request between you and %em%%src%%notify% has been updated. Type %em2%/fl%notify% to check."
 		},
 		"ffa": {
 			"check": {
