@@ -15,7 +15,7 @@
 
 namespace legionpe\theta\config;
 
-class WarnPtsConseq{
+class WarnPtsConsequence{
 	public $origin;
 	public $muteSecs;
 	public $banLength;

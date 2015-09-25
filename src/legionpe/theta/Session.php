@@ -142,17 +142,17 @@ abstract class Session{
 		}
 	}
 	protected function init(){
-		$conseq = $this->getEffectiveConseq();
-		if($conseq->banLength > 0){
-			$left = MUtils::time_secsToString($conseq->banLength);
+		$consequence = $this->getEffectiveConsequence();
+		if($consequence->banLength > 0){
+			$left = MUtils::time_secsToString($consequence->banLength);
 			$this->getPlayer()->kick(TextFormat::RED . "You are banned.\nYou have accumulated " . TextFormat::DARK_PURPLE . $this->getWarningPoints() . TextFormat::RED . " warning points,\nand you still have " . TextFormat::BLUE . $left . TextFormat::RED . " before you are unbanned.\n" . TextFormat::AQUA . "Believe this to be a mistake? Email us at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu" . TextFormat::AQUA . " or visit our chatroom at " . TextFormat::DARK_PURPLE . "http://lgpe.co/chat");
 			return false;
 		}
 		$this->spamDetector = new SpamDetector($this);
 		return true;
 	}
-	public function getEffectiveConseq(){
-		return Settings::getWarnPtsConseq($this->getWarningPoints(), $this->getLastWarnTime());
+	public function getEffectiveConsequence(){
+		return Settings::getWarnPtsConsequence($this->getWarningPoints(), $this->getLastWarnTime());
 	}
 	public function getWarningPoints(){
 		return $this->getLoginDatum("warnpts");
@@ -434,7 +434,7 @@ abstract class Session{
 	}
 	public function isModerator($includeTrial = true){
 		$rank = $this->getRank();
-		return ($rank & Settings::RANK_PERM_MOD) === Settings::RANK_PERM_MOD and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
+		return ($rank & Settings::RANK_PERM_MOD) === Settings::RANK_PERM_MOD and ($includeTrial or ($rank & Settings::RANK_PRECISION_TRIAL) === 0);
 	}
 	public function isDonator(){
 		return (bool) ($this->getRank() & Settings::RANK_IMPORTANCE_DONATOR);
@@ -444,7 +444,7 @@ abstract class Session{
 	}
 	public function isAdmin($includeTrial = true){
 		$rank = $this->getRank();
-		return ($rank & Settings::RANK_PERM_ADMIN) === Settings::RANK_PERM_ADMIN and ($includeTrial or ($rank & Settings::RANK_PREC_TRIAL) === 0);
+		return ($rank & Settings::RANK_PERM_ADMIN) === Settings::RANK_PERM_ADMIN and ($includeTrial or ($rank & Settings::RANK_PRECISION_TRIAL) === 0);
 	}
 	public function getTeamName(){
 		return $this->getLoginDatum("teamname");

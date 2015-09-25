@@ -34,7 +34,7 @@ class TeamJoinHormone extends Hormone{
 		$ses->setLoginDatum("tid", $this->tid);
 		$ses->setLoginDatum("teamname", $this->teamName);
 		$ses->setLoginDatum("teamrank", Settings::TEAM_RANK_JUNIOR);
-		$ses->setLoginDatum("teamjointime", time());
+		$ses->setLoginDatum("teamjoin", time());
 		$ses->setLoginDatum("teampts", 0);
 		$ses->send(Phrases::CMD_TEAM_INVITE_ACCEPTED_TARGET, ["teamname" => $this->teamName]);
 	}

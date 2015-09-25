@@ -51,7 +51,7 @@ class WarnCommand extends ModeratorCommand{
 		self::MISC => ""
 	];
 	/** @var string */
-	private $realname;
+	private $realName;
 	/** @var int */
 	private $id;
 	/** @var int */
@@ -70,7 +70,7 @@ class WarnCommand extends ModeratorCommand{
 			"/$cmd <player> [points = " . ($this->points = self::$IDS_TO_POINTS[$id]) . "] [message...]",
 			$aliases
 		);
-		$this->realname = $realname;
+		$this->realName = $realname;
 		$this->id = $id;
 	}
 	public function execute(CommandSender $sender, $commandLabel, array $args){

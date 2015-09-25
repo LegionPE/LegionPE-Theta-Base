@@ -32,10 +32,10 @@ class BaseListener implements Listener{
 	public function __construct(BasePlugin $main){
 		$this->main = $main;
 		foreach($main->getServer()->getOnlinePlayers() as $player){
-			$this->priv_onLogin($player);
+			$this->private_onLogin($player);
 		}
 	}
-	private function priv_onLogin(Player $player){
+	private function private_onLogin(Player $player){
 		/** @var string|LoginDataQuery $LoginQuery */
 		$LoginQuery = $this->main->getLoginQueryImpl();
 		/** @noinspection PhpDeprecationInspection */
@@ -58,7 +58,7 @@ class BaseListener implements Listener{
 		}
 	}
 	public function onLogin(PlayerLoginEvent $event){
-		$this->priv_onLogin($event->getPlayer());
+		$this->private_onLogin($event->getPlayer());
 	}
 	public function onQueryRegen(QueryRegenerateEvent $event){
 		$event->setWorld($this->main->query_world());

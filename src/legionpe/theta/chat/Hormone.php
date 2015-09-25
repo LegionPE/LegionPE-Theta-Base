@@ -85,6 +85,8 @@ abstract class Hormone{
 				return new ClassChatHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::TEAM_DISBAND_PROPAGANDA:
 				return new TeamDisbandHormone($main, $src, $msg, $class, $data, $rowId);
+			case self::TEAM_KICK_PROPAGANDA:
+				return new TeamKickHormone($main, $src, $msg, $class, $data, $rowId);
 		}
 		return null;
 	}

@@ -49,7 +49,7 @@ class ListTeamMemberQuery extends AsyncQuery{
 		if(!$sender->getPlayer()->isOnline()){
 			return;
 		}
-		$mems = [
+		$members = [
 			Settings::TEAM_RANK_LEADER => [],
 			Settings::TEAM_RANK_COLEAD => [],
 			Settings::TEAM_RANK_SENIOR => [],
@@ -67,14 +67,14 @@ class ListTeamMemberQuery extends AsyncQuery{
 		foreach($result["result"] as $row){
 			$nicks = trim($row["nicks"], "|");
 			$nick = explode("|", $nicks)[0];
-			$mems[$row["teamrank"]][] = $nick;
+			$members[$row["teamrank"]][] = $nick;
 		}
 		$sender->send(Phrases::CMD_TEAM_MEMBER_RESULT, [
-			"leader" => implode(", ", $mems[Settings::TEAM_RANK_LEADER]),
-			"coleaders" => implode(", ", $mems[Settings::TEAM_RANK_COLEAD]),
-			"seniors" => implode(", ", $mems[Settings::TEAM_RANK_SENIOR]),
-			"members" => implode(", ", $mems[Settings::TEAM_RANK_MEMBER]),
-			"juniors" => implode(", ", $mems[Settings::TEAM_RANK_JUNIOR]),
+			"leader" => implode(", ", $members[Settings::TEAM_RANK_LEADER]),
+			"coleaders" => implode(", ", $members[Settings::TEAM_RANK_COLEAD]),
+			"seniors" => implode(", ", $members[Settings::TEAM_RANK_SENIOR]),
+			"members" => implode(", ", $members[Settings::TEAM_RANK_MEMBER]),
+			"juniors" => implode(", ", $members[Settings::TEAM_RANK_JUNIOR]),
 		]);
 	}
 }

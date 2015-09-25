@@ -24,7 +24,7 @@ class PrivateNoticeCommand extends ModeratorCommand{
 	public function __construct(BasePlugin $main){
 		parent::__construct($main, "pn", "Send a private notice to a player", "/pn <player> <message ...>");
 	}
-	public function hasPermsision(Session $session){
+	public function hasPermission(Session $session){
 		return $session->isAdmin();
 	}
 	public function execute(CommandSender $sender, $commandLabel, array $args){

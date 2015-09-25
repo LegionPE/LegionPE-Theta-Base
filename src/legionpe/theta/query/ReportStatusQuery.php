@@ -34,8 +34,8 @@ class ReportStatusQuery extends AsyncQuery{
 		parent::__construct($plugin);
 	}
 	public function onPreQuery(\mysqli $mysql){
-		$myid = Settings::$LOCALIZE_ID;
-		$mysql->query("UPDATE server_status SET last_online=unix_timestamp(),online_players=$this->players WHERE server_id=$myid;");
+		$myId = Settings::$LOCALIZE_ID;
+		$mysql->query("UPDATE server_status SET last_online=unix_timestamp(),online_players=$this->players WHERE server_id=$myId;");
 	}
 	public function getQuery(){
 		return "SELECT SUM(online_players)AS online,SUM(max_players)AS max,COUNT(*)AS servers, (SELECT SUM(online_players)FROM server_status WHERE class=$this->class AND unix_timestamp()-last_online<5)AS class_online, (SELECT SUM(max_players)FROM server_status WHERE class=$this->class AND unix_timestamp()-last_online<5)AS class_max, (SELECT COUNT(*)FROM server_status WHERE class=$this->class AND unix_timestamp()-last_online<5)AS class_servers FROM server_status WHERE unix_timestamp()-last_online<5";

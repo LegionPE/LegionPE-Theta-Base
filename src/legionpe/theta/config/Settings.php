@@ -55,9 +55,9 @@ abstract class Settings{
 	/** Permission to execute raw PHP code by `/eval` */
 	const RANK_PERM_DEV = 0x0800; // 13 , 1101
 	const RANK_SECTOR_PERMISSION = 0x00F0;
-	const RANK_PREC_STD = 0x0000;
-	const RANK_PREC_TRIAL = 0x1000; // 16
-	const RANK_PREC_HEAD = 0x2000; // 48
+	const RANK_PRECISION_STD = 0x0000;
+	const RANK_PRECISION_TRIAL = 0x1000; // 16
+	const RANK_PRECISION_HEAD = 0x2000; // 48
 	const RANK_SECTOR_PRECISION = 0x3000; // 112
 	const RANK_DECOR_YOUTUBER = 0x4000; // 240
 	const RANK_SECTOR_DECOR = 0xC000; // 256
@@ -141,7 +141,7 @@ abstract class Settings{
 		self::CLASS_CLASSICAL => Phrases::CLASS_CLASSIC_PVP,
 		self::CLASS_SHOPS => Phrases::CLASS_SHOPS,
 	];
-	public static function getWarnPtsConseq(/** @noinspection PhpUnusedParameterInspection */
+	public static function getWarnPtsConsequence(/** @noinspection PhpUnusedParameterInspection */
 		$pts, $origin = null){
 		$ban = 0;
 		$mute = 0;
@@ -160,7 +160,7 @@ abstract class Settings{
 		}elseif($pts >= 3){
 			$mute = 300;
 		}
-		return new WarnPtsConseq($mute, $ban, $origin);
+		return new WarnPtsConsequence($mute, $ban, $origin);
 	}
 	public static function getGrindFactor(/** @noinspection PhpUnusedParameterInspection */
 		$rank){

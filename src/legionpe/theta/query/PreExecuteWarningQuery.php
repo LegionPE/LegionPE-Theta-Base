@@ -88,17 +88,17 @@ class PreExecuteWarningQuery extends NextIdQuery{
 			"points" => $this->points,
 			"totalpoints" => $ses->getWarningPoints()
 		]);
-		$conseq = Settings::getWarnPtsConseq($ses->getWarningPoints(), $this->creation);
-		if($conseq->banLength){
-			$msg .= $ses->translate(Phrases::WARNING_BANNED_NOTIFICATION, ["length" => MUtils::time_secsToString($conseq->banLength)]);
+		$consequence = Settings::getWarnPtsConsequence($ses->getWarningPoints(), $this->creation);
+		if($consequence->banLength){
+			$msg .= $ses->translate(Phrases::WARNING_BANNED_NOTIFICATION, ["length" => MUtils::time_secsToString($consequence->banLength)]);
 			$msg = "\n" . $msg;
 			$ses->getPlayer()->kick($msg, false);
-		}elseif($conseq->muteSecs){
+		}elseif($consequence->muteSecs){
 			$mute = new MuteIssue;
 			$mute->cid = $this->clientId;
 			$mute->ip = $ses->getPlayer()->getAddress();
 			$mute->uid = $this->uid;
-			$mute->length = $conseq->muteSecs;
+			$mute->length = $consequence->muteSecs;
 			$mute->msg = $this->msg;
 			$mute->since = $this->creation;
 			$mute->src = $issuer->getName();

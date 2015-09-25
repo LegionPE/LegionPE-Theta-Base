@@ -166,7 +166,7 @@
 			},
 			"invite": {
 				"notsenior": "%error%You must be in a team and be a %em%Senior-Member%error%, a %em%Leader%error% or a %em%Co-Leader%error% to invite a player!",
-				"noplayer": "%error%No player with scuh name is ever registered on our network.",
+				"noplayer": "%error%No player with such name is ever registered on our network.",
 				"targetinteam": "%warning%The target player is already in a team, but you can still invite him.",
 				"accepttargetinteam": "%error%The target player is already in a team. You can't accept his invitation.",
 				"alreadysent": "%error%Your team has already invited the target player.",

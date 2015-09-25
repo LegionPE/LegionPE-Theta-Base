@@ -22,7 +22,7 @@ use legionpe\theta\Session;
 
 class AltServerCommand extends SessionCommand{
 	public function __construct(BasePlugin $main){
-		parent::__construct($main, "alt", "Join another server of the same gametype", "/alt", []);
+		parent::__construct($main, "alt", "Join another server of the same game type", "/alt", []);
 	}
 	protected function run(array $args, Session $sender){
 		if(!$sender->confirmAlt){

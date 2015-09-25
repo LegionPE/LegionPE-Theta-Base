@@ -19,14 +19,14 @@ use legionpe\theta\BasePlugin;
 
 class IncrementWarningPointsQuery extends AsyncQuery{
 	/** @var int */
-	private $warnpts, $uid;
-	public function __construct(BasePlugin $main, $warnpts, $uid){
-		$this->warnpts = $warnpts;
+	private $warnPts, $uid;
+	public function __construct(BasePlugin $main, $warnPts, $uid){
+		$this->warnPts = $warnPts;
 		$this->uid = $uid;
 		parent::__construct($main);
 	}
 	public function getQuery(){
-		return "UPDATE users SET warnpts=warnpts+($this->warnpts) WHERE uid=$this->uid";
+		return "UPDATE users SET warnpts=warnpts+($this->warnPts) WHERE uid=$this->uid";
 	}
 	public function getResultType(){
 		return self::TYPE_RAW;

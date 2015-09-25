@@ -17,7 +17,7 @@ namespace legionpe\theta\lang;
 
 class Phrase{
 	private $name;
-	private $impls = [];
+	private $values = [];
 	public function __construct($name){
 		$this->name = $name;
 	}
@@ -29,7 +29,7 @@ class Phrase{
 				}
 			}
 		}
-		$this->impls[$lang] = $impl;
+		$this->values[$lang] = $impl;
 	}
 	/**
 	 * @param array $vars
@@ -38,8 +38,8 @@ class Phrase{
 	 */
 	public function get(array $vars, array $fallbackList){
 		foreach($fallbackList as $lang){
-			if(isset($this->impls[$lang])){
-				$impl = $this->impls[$lang];
+			if(isset($this->values[$lang])){
+				$impl = $this->values[$lang];
 				return is_string($impl) ?
 					str_replace(array_map(function ($name){
 						return "%$name%";
@@ -50,6 +50,6 @@ class Phrase{
 		return $this->name;
 	}
 	public function getImplementations(){
-		return $this->impls;
+		return $this->values;
 	}
 }
