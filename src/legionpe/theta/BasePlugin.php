@@ -351,8 +351,7 @@ abstract class BasePlugin extends PluginBase{
 		$this->classMaxPlayers = $classMax;
 		$append = $this->getServerNameAppend();
 		$info = $this->getServer()->getQueryInformation();
-		$info->setMaxPlayerCount($classMax);
-		$info->setPlayerCount($classTotal);
+		$this->getBaseListener()->onQueryRegen($info);
 		$this->getServer()->getNetwork()->setName(
 			TextFormat::BOLD . TextFormat::AQUA . "LegionPE " .
 			TextFormat::BOLD . TextFormat::GREEN . Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS] .
