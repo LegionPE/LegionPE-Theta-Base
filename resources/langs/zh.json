@@ -1,1 +1,433 @@
-{ 	"meta": { 		"short": "en", 		"english": "English", 		"local": "English", 		"authors": [ 			"PEMapModder" 		], 		"version": "1.0", 		"releng": "1.0" 	}, 	"chat": { 		"blocked": { 			"pass": "%warning%Do NOT share your password with ANYONE. Sharing your password might result in a ban.", 			"toofast": "%warning%LegionPE is not a place for typing speed testing. Type slower.", 			"toofreq": "%warning%Don't try to dominate our chat screens!", 			"tooshort": "%warning%Every line you type takes up one line in the chat screen of other players. Don't you think you are wasting their screen space? %em%Stop spamming." 		}, 		"broadcasts": [ 			"%notify%bold%Donate to get awesome perks at %reset%http:\/\/lgpe.co\/d", 			"%notify%bold%Download our Android app at %reset%http:\/\/lgpe.co\/and", 			"%notify%bold%Follow us on Twitter! %em%%italic%@LegionPE", 			"%notify%bold%Earn coins by playing the games, and spend coins at the shops at each game!" 		], 		"format": { 			"team": "%em1%TEAM%symbol%}%source%%symbol%>%msg%" 		}, 		"inbox": { 			"start": "%verbose%=== You have received %em%%count%%verbosemid% new messages ===", 			"end": "%verbose%=== End of new messages ===" 		}, 		"spam": { 			"swear": { 				"warn": "%warning%The word %em%%word%%warning% is detected as offensive!" 			} 		} 	}, 	"cmd": { 		"error": { 			"noperm": { 				"normal": "%error%You don't have permission to use this command.", 				"donate": "%error%Please donate to use this command." 			}, 			"wronguse": "%error%Usage: %usage%", 			"absplayer": { 				"unknwon": "%error%That player is not online on this server.", 				"named": "%error%The player \"%player%\" is not online on this server." 			}, 			"donator": "%warning%Please upgrade your account to at least Donator to use this command.", 			"vip": "%warning%Please upgrade your account to at least VIP to use this command.", 			"staff": "%warning%This command is only available to staff members.", 			"loading": "%wait%Loading. Please wait...", 			"notfound": "%error%Player %em%%name%%error% not found! Please type the %em2%full%error% (but upper/lower case doesn't matter) name of the player." 		}, 		"alt": { 			"warning": "%warning%Are you sure to teleport to another server? %notify%Do /alt again to confirm.", 			"success": "%success%You are going to be transferred to %em%%ip%:%port%", 			"wait": "%error%No alternate server available! Please wait for a few seconds and try again." 		}, 		"channel": { 			"view": { 				"local": "%success%You are currently talking to %em%players on this local server%success%.", 				"team": "%success%You are currently talking to %em%members of your team%success%.", 				"other": "%success%You are currently talking to '%em%subscribers of the %em2%'%chan%'%em% channel%success%'.", 				"subto": { 					"norm": "%success%You are currently subscribing to %em%%channels%", 					"none": "%success%You are currently not subscribing to any channels." 				} 			}, 			"set": { 				"local": "%success%You are now talking to %em%players on this local server%success%.", 				"team": "%success%You are now talking to %em%members of your team%success%.", 				"other": "%success%You are now talking to '%em%subscribers of the %em2%'%chan%'%em% channel%success%'." 			}, 			"quit": { 				"notsub": "%warning%You are not on that channel!", 				"success": "%success%You have left the channel." 			}, 			"joined": { 				"self": "%success%You have joined channel '%em%%channel%%success%'", 				"other": "%verbose%%em%%player%%verbosemid%@%ip%:%port% joined channel %em2%%channel%." 			}, 			"quitted": "%verbose%%em%%player%%verbosemid%@%ip%:%port% quitted channel %em2%%channel%." 		}, 		"friend": { 			"request": { 				"alreadysent": "%error%You have already sent a %req% request to %target%.", 				"accepted": "%success%You are now %cur% with %target%.", 				"sent": "%success%%req% request to %target% sent.", 				"acceptraise": "%success%You are now %cur% with %target%.\n%success%You have sent a %req% request to %target%.", 				"raise": "%success%You have changed the request to %target% into a %req% request.", 				"reduce": "%success%You have reduced the request to %target% into a %req% request.", 				"cancel": "%success%You have cancelled the request to %target%.", 				"rejected": "%success%You have rejected the request from %target%.", 				"rejectsend": "%success%You have rejected the request from %target%.\n%success%You have sent a %req% request to %target%.", 				"rejectreduce": "%success%You have rejected the request from %target%.\n%success%You have set %target% as %cur%.", 				"cancelreduce": "%success%You have cancelled the request to %target%.\n%success%You have set %target% as %cur%." 			}, 			"reduced": "%success%You have set %target% as %cur%.", 			"nochange": "%error%You are already %cur% with %target%!", 			"self": "%error%You can't sent a friend request to yourself!", 			"full": { 				"other": "%em%%target%%error%'s %type% list is already %em2%full%error%!", 				"self": "%error%Your %type% list is already %em2%full%error%!" 			}, 			"propaganda": "%notify%Friend/enemy status/request between you and %em%%src%%notify% has been updated. Type %em2%/fl%notify% to check." 		}, 		"ffa": { 			"check": { 				"true": "%info%Friendly Fire is %em%Activated%info%. Do %em2%/ffa off%info% to turn off.", 				"false": "%info%Friendly Fire is %em%Not Activated%info%. Do %em2%/ffa on%info% to turn on." 			}, 			"set": { 				"true": "%info%Friendly Fire has been activated. Do %em2%/ffa off%info% to turn off.", 				"false": "%info%Friendly Fire has been deactivated. Do %em2%/ffa on%info% to turn on." 			} 		}, 		"gc": { 			"cannotstart": "%error%You need to wait for %time% more before you can start coin grinding again!", 			"reqconfirm": "%info%The coins you receive in the coming %length% will be multiplied by %amplitude% times.\n%notify%Execute this command again to activate coins grinding.", 			"started": "%success%You have activated coins grinding.", 			"advice": "%warning%Note: The advised alias for this command is %em%\/cg." 		}, 		"lbl": { 			"view": "%success%You are using\/attempting to use tag %em%%label%%success%, which is %em2%%state%", 			"approving": "%error%The desired label is still awaiting for approval from admins.", 			"changed": "%success%Your label has been changed!" 		}, 		"pm": { 			"remindquery": "%notify%Reminder: Use \/q next time if you want to %em%talk in chat directly%notify% instead of %em2%typing \/w every time%notify%." 		}, 		"pn": { 			"recipient": "%notify%You have received a private notice from a staff member:\n%msg%" 		}, 		"team": { 			"err": { 				"alreadyinteam": "%error%You are already in a team!", 				"notinteam": "%error%You are not in a team!", 				"diffteam": "%error%You are in different teams!", 				"unknownteam": "%error%Team \"%name%\" not found!" 			}, 			"create": { 				"invalidname": "%error%The team name has to be %em%at least 5 characters long%error%, with %em2%all%error% characters being %em2%alphabets, numbers, hyphens (-) or underscores (_)%error%!", 				"alreadyexists": "%error%A team of this name already exists!", 				"success": "%success%New team has been successfully created." 			}, 			"loading": "%wait%Please wait patiently while we are processing your request.", 			"join": { 				"alreadysent": "%error%You have already sent a join request to Team %em%%teamname%.", 				"joined": "%success%You have joined Team %em%%teamname%!", 				"accepted": "%success%You have accepted the join invitation from Team %em%%teamname%!", 				"requested": "%info%A join request has been sent to Team %em%%teamname%." 			}, 			"quit": { 				"warning": { 					"junior": "%warning%Are you sure to quit your team? The team points you earned for your team will be %error%deleted%warning%! If your team is closed, you need to be %em2%invited again%warning% to join back the team!", 					"normal": "%warning%Are you sure to quit your team? The team points you earned for your team will be %error%deleted%warning%! You will become a %em%Junior-Member%warning% when you join the team again!\n%verbose%If your team is closed, you need to be %em2%invited again%verbosemid% to join back the team!", 					"leader": "%warning%Are you sure to quit your team? The team points you earned for your team will be %error%deleted%warning%! As the %em%leader%warning% of your team, you will disband the whole team (%em2%deleting everything including all your team points%warning%) by quitting your team!" 				}, 				"quitted": "%success%You have quitted your team." 			}, 			"kick": { 				"colead": "%error%You must be a Leader/Co-Leader to kick a player from your team!", 				"notlow": "%error%You can only kick team members with lower rank than you!", 				"done": "%success%Player %target% has been kicked out of your team." 			}, 			"invite": { 				"notsenior": "%error%You must be in a team and be a %em%Senior-Member%error%, a %em%Leader%error% or a %em%Co-Leader%error% to invite a player!", 				"noplayer": "%error%No player with such name is ever registered on our network.", 				"targetinteam": "%warning%The target player is already in a team, but you can still invite him.", 				"accepttargetinteam": "%error%The target player is already in a team. You can't accept his invitation.", 				"alreadysent": "%error%Your team has already invited the target player.", 				"sameteam": "%error%The target user is already in your team!", 				"accepted": { 					"sender": "%success%You have accepted %em%%name%%success% into your team!", 					"target": "%notify%Your team join invitation to %em%%teamname%%notify% has been accepted!" 				}, 				"sent": "%success%%name% has been invited into your team." 			}, 			"rankchange": { 				"senior": "%error%You need to be at least a %em%Senior Member% in your team to promote/demote team members.", 				"promco": "%error%There can only be one team leader!", 				"demjunior": "%error%You cannot demote a junior member!", 				"leader": "%error%A team leader cannot be promoted/demoted!", 				"tohigh": "%error%You can only promote/demote players of lower rank than you!", 				"promoted": "%success%You have promoted %em%%name%%success% to a %em2%%newrank%!", 				"demoted": "%success%You have demoted %em%%name%%success% to a %em2%%newrank%!" 			}, 			"property": { 				"check": "%info%Your team %type% is:\n%em%%value%", 				"change": "%success%Your team %type% has been changed to:\n%em%%value%", 				"colead": "%error%You must be at least a %em%Co-Leader%error% to change your team %type%!" 			}, 			"config": { 				"check": { 					"true": "%info%Your team is %type%.", 					"false": "%info%Your team is %em%not%info% %type%." 				}, 				"change": { 					"true": "%info%Your team is now %type%.", 					"false": "%info%Your team is %em%no longer%info% %type%." 				}, 				"colead": "%error%You must be at least a %em%Co-Leader%error% to change your team %type%!" 			}, 			"member": { 				"result": "%info%%em%Leader%info%: %em2%%leader%\n%info%%em%Co-Leaders%info%: %em2%%coleaders%\n%info%%em%Senior Members%info%: %em2%%seniors%\n%info%%em%Members%info%: %em2%%members%\n%info%%em%Junior Members%info%: %em2%%juniors%\n" 			}, 			"info": { 				"result": "%info%Team %em%%name% %em2%(%memscnt% members, totally %points% points)\n%info%Description: %em%%descr%\n%info%Requirements: %em%%req%\n%em3%===PvP===\n%em%%pvp_kills% %em2%kills, %em%%pvp_deaths% %em2%deaths%info%, %em2%K/D%info%=%em%%pvp_kd%" 			}, 			"joined": "%notify%%name% joined your team!", 			"quitted": "%notify%%name% quitted your team!", 			"invited": "%notify2%You have been invited into Team %team%!", 			"requested": "%notify2%%name% sent a request to join your team!", 			"disbanded": "%notify2%%bold%Your team has been %em%%italic%disbanded!", 			"kicked": "%notify2%You have been %italic%kicked out of your team %reset%%notify2%by %em%%src%%notify2%! %info%Reason:\n%verbosemid%%msg%", 			"ranks": [ 				"Junior-Member", 				"Member", 				"Senior-Member", 				"Co-Leader", 				"Leader" 			] 		}, 		"tpreq": { 			"to": { 				"fail": { 					"enemy": { 						"target": "%error%You cannot send a teleport request to your enemy (%em%%to%%error%)!" 					}, 					"dup": "%error%You have already sent a request to teleport to %em%%to%%error%.", 					"spawn": "%error%You can't teleport to someone at spawn!" 				}, 				"sent": "%success%Sent a request to teleport to %em%%to%", 				"received": "%em%%from%%notify% sent a request to teleport to you! Do %em2%/tpa %from%%notify% to accept.", 				"accepted": "%success%Accepted request to teleport you to %em%%to%%success%. Teleportation will start in a few seconds. Hold the handrail!", 				"beaccepted": "%notify%Request to teleport %em%%from%%notify% to you has been accepted. Teleportation will take place in a few seconds. Don't stand near a cliff!", 				"bf": { 					"from": "%success%You are going to be teleported to your best friend, %em%%to%%success%, in a few seconds. Got your souvenir ready?", 					"to": "%notify%Your best friend, %em%%from%%notify%, is going to teleport to you. Make a banner to welcome him!" 				} 			}, 			"here": { 				"fail": { 					"enemy": { 						"target": "%error%Don't teleport your enemy (%em%%to%%error%) to you!" 					}, 					"dup": "%error%You have already sent a request to teleport %em%%to%%error% to you.", 					"spawn": "%error%You can't teleport someone from spawn!" 				}, 				"sent": "%success%Sent a request to teleport %em%%to% to you.", 				"received": "%em%%from%%notify% sent a request to teleport you to him/her! Do %em2%/tp %from%%notify% to accept.", 				"accepted": "%success%Accepted request to teleport %em%%to%%success% to you. Teleportation will start in a few seconds. Don't stand near a cliff!", 				"beaccepted": "%notify%Request to teleport %em%%from%%notify% to you has been accepted. Teleportation will take place in a few seconds. Hold the handrail!", 				"bf": { 					"from": "%success%Your best friend, %em%%to%%success%, is going to teleport to you in a few seconds. Make a banner to welcome him!", 					"to": "%notify%You are going to be teleport to your best friend, %em%%from%%notify%. Got your souvenir ready?" 				} 			}, 			"proceed": { 				"fail": { 					"offline": "%em%%from%%error% left the server before teleportation takes place.", 					"enemynearby": "%error%Could not teleport %em%%from%%error% to %em2%%to%%error% - enemy of %em%%from%%error%/%em2%%to%%error%, %em3%%enemy%%error% is nearby!" 				} 			} 		}, 		"transfer": { 			"err": { 				"noservers": "%error%No servers for %class% have available slots." 			}, 			"success": "%success%Transferring you to %em%%ip%%success%:%em2%%port%%success% (%class% server)..." 		}, 		"version": { 			"msg": "%info%This server uses %em%%pmversion%%info% with %em2%%thetaversion%%info% by %em3%%thetaauthor%%info%. You are using %em%%lang% translation v%langversion%%info% by %em2%%langauthor%%info%." 		} 	}, 	"login": { 		"auth": { 			"success": "%success%You have been authenticated by %em%%method%", 			"whereami": "%info%You are playing on %em2%%class% %em%(%ip%:%port%)", 			"firstjoin": { 				"hub": "%em%Walk into a portal%info% or %em2%Choose an item in your inventory%info% to join a game.\n%info%You can also type %em3%\/help%info% in chat to check for available commands." 			}, 			"method": { 				"transfer": "transferring", 				"uuid": "matching last UUID", 				"ip": { 					"last": "matching last IP", 					"hist": "matching an IP in the IP history" 				}, 				"pass": "entering password", 				"register": "registering a new account" 			} 		}, 		"knownas": "%notify%You are now known as:\n%tag%", 		"pass": { 			"prompt": "%notify%Please login by typing your password into chat.", 			"mismatch": "%info%If you didn't register this account, please choose a new name.\n%warning%The password you typed in isn't the one you registered with.\n%warning%You have %chances% left." 		}, 		"register": { 			"prompt": "%info%Welcome to %bold%Legion PE%reset%!\n%notify%Please register by typing your password %em%directly into chat.\n%warning%You are disallowed from mentioning your password in chat, so remember not to use a common word as your password.", 			"retype": "%notify%Great! Now please type the password %em2%again%notify% to confirm it.", 			"success": "%notify%Thanks for registering! You can use this password to login at anywhere on our network.\n%verbose%Remember %bold%%em%never%reset%%verbosemid% to share your password to %em2%anybody%verbosemid%. Not even staff members.", 			"mismatch": "%error%The two passwords aren't the same!\nLet's start all over again.\n%notify%Please type a password you like %em%directly%notify% into chat." 		}, 		"popup": { 			"login": "%notify2%Please login by typing your password directly into chat.", 			"register": "%notify2%Please register by typing your password directly into chat." 		} 	}, 	"warning": { 		"notification": { 			"main": "\n%notify2%%bold%~~~~~~~~~~ ATTENTION ~~~~~~~~~~\n%em%%issuer%%warning% sent you a warning!\n%verbose%Message:\n%em2%%message%\n%notify%This warning carries %em3%%points%%notify% warning points.\n%info%You now have %em%%totalpoints%%info% warning points in total.", 			"muted": "\n%error%You have been muted by %em2%%issuer% %em3%%passed%%error% before. The mute ends in %em%%left%.\n%verbose%Email %em2%support@legionpvp.eu%verbosemid% if you believe that this is a mistake.", 			"banned": "\n%error%You will be banned for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake." 		} 	}, 	"kick": { 		"toolong": { 			"online": "\nYou have been online for more than 90 minutes. Take a rest! I bet your device must be pretty hot.", 			"login": "\nHave you registered here using this username?\nPlease choose another username if you don't." 		}, 		"serverstop": "\n%notify2%Server restart. Please reconnect.\n%verbosemid%Sorry for the inconvenience." 	}, 	"words": { 		"date": { 			"format": "d\/m\/Y H:i:s (\\U\\T\\C P)" 		}, 		"local": { 			"class": { 				"name": { 					"hub": "Hub", 					"pvp": { 						"kit": "KitPvP", 						"classic": "Classic PvP" 					}, 					"parkour": "Parkour", 					"spleef": "Spleef", 					"infected": "Infected", 					"shops": "Shops" 				} 			} 		}, 		"friend": { 			"type": { 				"acquaintance": "acquaintance", 				"goodfriend": "good friend", 				"bestfriend": "best friend" 			} 		}, 		"team": { 			"ranks": [ 				"Junior Member", 				"Member", 				"Senior Member", 				"Co-Leader", 				"Leader" 			], 			"property": { 				"desc": "description", 				"rule": "rules", 				"req": "requirements" 			}, 			"config": { 				"open": "open" 			} 		} 	}, 	"kits": { 		"reloading": "%wait%Please wait while we are reloading your kits.", 		"reloaded": "%success%Your kits have been reloaded. Do /kill to activate (counts one death)." 	}, 	"game": { 		"pvp": { 			"death": { 				"generic": "%error%You died!", 				"killed": "%error%You were %action% by %killer%!", 				"lava": "%error%You tried to swim in lava to escape from %killer%!", 				"fall": { 					"generic": "%error%You were %em%%action% to a deadly fall%error% by %killer%!", 					"ladder": "%error%You were %em%%action% to a deadly fall%error% off %em2%a ladder%error% by %killer%!", 					"vine": "%error%You were %em%%action% to a deadly fall%error% off %em2%vines%error% by %killer%!" 				}, 				"stats": "%info%This is your %em%%deaths% death!" 			}, 			"kill": { 				"killed": "%success%You %action% %em%%victim%!", 				"lava": "%success%%em%%victim%%success% tried to swim in lava to escape from you!", 				"fall": { 					"generic": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall!", 					"ladder": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall%success% from a %em3%ladder!", 					"vine": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall%success% from a %em3%vine!" 				}, 				"stats": "%info%This is your %em%%kills%%success% kill!" 			}, 			"action": { 				"kill": "killed", 				"arrow": "shot", 				"snowball": "snowballed", 				"egg": "egged" 			}, 			"attack": { 				"friends": "%verbose%You may not attack your %type% (%em%%target%)!", 				"spawn": "%verbose%You may not attack players at spawn!", 				"ffahint": "%info%%ffa% activated friendly fire, so %source% can attack %target%." 			}, 			"killinfo": "%verbose%Your%em% %ord% %verbosemid%kill - the%em2% %streakord% %verbosemid% in a row.\n%verbose%Your coins + %em%%added%%verbosemid% => %em2%%coins%", 			"deathinfo": "%verbose%This is your%em% %ord% %verbosemid%death! Watch out!", 			"invinc": { 				"left": "%em%%left% %notify2%second(s) of invincibility left", 				"off": "%notify2%You are no longer invincible." 			}, 			"hinttext": "%notify2%Jump into the %em%void%notify2% to start fighting.", 			"kit": { 				"shops": { 					"webhint": "%notify2%Go to %em%www.legionpvp.eu/login/%notify2% to upgrade your kits!" 				} 			}, 			"cmd": { 				"stats": { 					"std": "%info%%em%Kills%info%: %em2%%kills%\n%info%%em%Deaths%info%: %em2%%deaths%\n%info%%em%K/D Ratio%info%: %em2%%kd%\n%info%%em%Rank%info%: %em2%%rank%\n", 					"private": "%error%%name% limited the access of his stats to his acquaintances! Do %em%/acq %plainname%%error% to send an acquaintance request." 				} 			} 		}, 		"hub": { 			"feather": { 				"tut": "%bold%Tap feather in hotbar to adjust sprinting." 			} 		} 	} }
+{
+	"meta": {
+		"short": "zh",
+		"english": "Chinese",
+		"local": "中文",
+		"authors": [
+			"PEMapModder",
+			"ST_David"
+		],
+		"version": "1.0",
+		"releng": "1.0"
+	},
+	"chat": {
+		"blocked": {
+			"pass": "%warning%Do NOT share your password with ANYONE. Sharing your password might result in a ban.",
+			"toofast": "%warning%LegionPE is not a place for typing speed testing. Type slower.",
+			"toofreq": "%warning%Don't try to dominate our chat screens!",
+			"tooshort": "%warning%Every line you type takes up one line in the chat screen of other players. Don't you think you are wasting their screen space? %em%Stop spamming."
+		},
+		"broadcasts": [
+			"%notify%bold%Donate to get awesome perks at %reset%http:\/\/lgpe.co\/d",
+			"%notify%bold%Download our Android app at %reset%http:\/\/lgpe.co\/and",
+			"%notify%bold%Follow us on Twitter! %em%%italic%@LegionPE",
+			"%notify%bold%Earn coins by playing the games, and spend coins at the shops at each game!"
+		],
+		"format": {
+			"team": "%em1%TEAM%symbol%}%source%%symbol%>%msg%"
+		},
+		"inbox": {
+			"start": "%verbose%=== You have received %em%%count%%verbosemid% new messages ===",
+			"end": "%verbose%=== End of new messages ==="
+		},
+		"spam": {
+			"swear": {
+				"warn": "%warning%The word %em%%word%%warning% is detected as offensive!"
+			}
+		}
+	},
+	"cmd": {
+		"error": {
+			"noperm": {
+				"normal": "%error%You don't have permission to use this command.",
+				"donate": "%error%Please donate to use this command."
+			},
+			"wronguse": "%error%Usage: %usage%",
+			"absplayer": {
+				"unknwon": "%error%That player is not online on this server.",
+				"named": "%error%The player \"%player%\" is not online on this server."
+			},
+			"donator": "%warning%Please upgrade your account to at least Donator to use this command.",
+			"vip": "%warning%Please upgrade your account to at least VIP to use this command.",
+			"staff": "%warning%This command is only available to staff members.",
+			"loading": "%wait%Loading. Please wait...",
+			"notfound": "%error%Player %em%%name%%error% not found! Please type the %em2%full%error% (but upper/lower case doesn't matter) name of the player."
+		},
+		"alt": {
+			"warning": "%warning%Are you sure to teleport to another server? %notify%Do /alt again to confirm.",
+			"success": "%success%You are going to be transferred to %em%%ip%:%port%",
+			"wait": "%error%No alternate server available! Please wait for a few seconds and try again."
+		},
+		"channel": {
+			"view": {
+				"local": "%success%You are currently talking to %em%players on this local server%success%.",
+				"team": "%success%You are currently talking to %em%members of your team%success%.",
+				"other": "%success%You are currently talking to '%em%subscribers of the %em2%'%chan%'%em% channel%success%'.",
+				"subto": {
+					"norm": "%success%You are currently subscribing to %em%%channels%",
+					"none": "%success%You are currently not subscribing to any channels."
+				}
+			},
+			"set": {
+				"local": "%success%You are now talking to %em%players on this local server%success%.",
+				"team": "%success%You are now talking to %em%members of your team%success%.",
+				"other": "%success%You are now talking to '%em%subscribers of the %em2%'%chan%'%em% channel%success%'."
+			},
+			"quit": {
+				"notsub": "%warning%You are not on that channel!",
+				"success": "%success%You have left the channel."
+			},
+			"joined": {
+				"self": "%success%You have joined channel '%em%%channel%%success%'",
+				"other": "%verbose%%em%%player%%verbosemid%@%ip%:%port% joined channel %em2%%channel%."
+			},
+			"quitted": "%verbose%%em%%player%%verbosemid%@%ip%:%port% quitted channel %em2%%channel%."
+		},
+		"friend": {
+			"request": {
+				"alreadysent": "%error%You have already sent a %req% request to %target%.",
+				"accepted": "%success%You are now %cur% with %target%.",
+				"sent": "%success%%req% request to %target% sent.",
+				"acceptraise": "%success%You are now %cur% with %target%.\n%success%You have sent a %req% request to %target%.",
+				"raise": "%success%You have changed the request to %target% into a %req% request.",
+				"reduce": "%success%You have reduced the request to %target% into a %req% request.",
+				"cancel": "%success%You have cancelled the request to %target%.",
+				"rejected": "%success%You have rejected the request from %target%.",
+				"rejectsend": "%success%You have rejected the request from %target%.\n%success%You have sent a %req% request to %target%.",
+				"rejectreduce": "%success%You have rejected the request from %target%.\n%success%You have set %target% as %cur%.",
+				"cancelreduce": "%success%You have cancelled the request to %target%.\n%success%You have set %target% as %cur%."
+			},
+			"reduced": "%success%You have set %target% as %cur%.",
+			"nochange": "%error%You are already %cur% with %target%!",
+			"self": "%error%You can't sent a friend request to yourself!",
+			"full": {
+				"other": "%em%%target%%error%'s %type% list is already %em2%full%error%!",
+				"self": "%error%Your %type% list is already %em2%full%error%!"
+			},
+			"propaganda": "%notify%Friend/enemy status/request between you and %em%%src%%notify% has been updated. Type %em2%/fl%notify% to check."
+		},
+		"ffa": {
+			"check": {
+				"true": "%info%Friendly Fire is %em%Activated%info%. Do %em2%/ffa off%info% to turn off.",
+				"false": "%info%Friendly Fire is %em%Not Activated%info%. Do %em2%/ffa on%info% to turn on."
+			},
+			"set": {
+				"true": "%info%Friendly Fire has been activated. Do %em2%/ffa off%info% to turn off.",
+				"false": "%info%Friendly Fire has been deactivated. Do %em2%/ffa on%info% to turn on."
+			}
+		},
+		"gc": {
+			"cannotstart": "%error%You need to wait for %time% more before you can start coin grinding again!",
+			"reqconfirm": "%info%The coins you receive in the coming %length% will be multiplied by %amplitude% times.\n%notify%Execute this command again to activate coins grinding.",
+			"started": "%success%You have activated coins grinding.",
+			"advice": "%warning%Note: The advised alias for this command is %em%\/cg."
+		},
+		"lbl": {
+			"view": "%success%You are using\/attempting to use tag %em%%label%%success%, which is %em2%%state%",
+			"approving": "%error%The desired label is still awaiting for approval from admins.",
+			"changed": "%success%Your label has been changed!"
+		},
+		"pm": {
+			"remindquery": "%notify%Reminder: Use \/q next time if you want to %em%talk in chat directly%notify% instead of %em2%typing \/w every time%notify%."
+		},
+		"pn": {
+			"recipient": "%notify%You have received a private notice from a staff member:\n%msg%"
+		},
+		"team": {
+			"err": {
+				"alreadyinteam": "%error%You are already in a team!",
+				"notinteam": "%error%You are not in a team!",
+				"diffteam": "%error%You are in different teams!",
+				"unknownteam": "%error%Team \"%name%\" not found!"
+			},
+			"create": {
+				"invalidname": "%error%The team name has to be %em%at least 5 characters long%error%, with %em2%all%error% characters being %em2%alphabets, numbers, hyphens (-) or underscores (_)%error%!",
+				"alreadyexists": "%error%A team of this name already exists!",
+				"success": "%success%New team has been successfully created."
+			},
+			"loading": "%wait%Please wait patiently while we are processing your request.",
+			"join": {
+				"alreadysent": "%error%You have already sent a join request to Team %em%%teamname%.",
+				"joined": "%success%You have joined Team %em%%teamname%!",
+				"accepted": "%success%You have accepted the join invitation from Team %em%%teamname%!",
+				"requested": "%info%A join request has been sent to Team %em%%teamname%."
+			},
+			"quit": {
+				"warning": {
+					"junior": "%warning%Are you sure to quit your team? The team points you earned for your team will be %error%deleted%warning%! If your team is closed, you need to be %em2%invited again%warning% to join back the team!",
+					"normal": "%warning%Are you sure to quit your team? The team points you earned for your team will be %error%deleted%warning%! You will become a %em%Junior-Member%warning% when you join the team again!\n%verbose%If your team is closed, you need to be %em2%invited again%verbosemid% to join back the team!",
+					"leader": "%warning%Are you sure to quit your team? The team points you earned for your team will be %error%deleted%warning%! As the %em%leader%warning% of your team, you will disband the whole team (%em2%deleting everything including all your team points%warning%) by quitting your team!"
+				},
+				"quitted": "%success%You have quitted your team."
+			},
+			"kick": {
+				"colead": "%error%You must be a Leader/Co-Leader to kick a player from your team!",
+				"notlow": "%error%You can only kick team members with lower rank than you!",
+				"done": "%success%Player %target% has been kicked out of your team."
+			},
+			"invite": {
+				"notsenior": "%error%You must be in a team and be a %em%Senior-Member%error%, a %em%Leader%error% or a %em%Co-Leader%error% to invite a player!",
+				"noplayer": "%error%No player with such name is ever registered on our network.",
+				"targetinteam": "%warning%The target player is already in a team, but you can still invite him.",
+				"accepttargetinteam": "%error%The target player is already in a team. You can't accept his invitation.",
+				"alreadysent": "%error%Your team has already invited the target player.",
+				"sameteam": "%error%The target user is already in your team!",
+				"accepted": {
+					"sender": "%success%You have accepted %em%%name%%success% into your team!",
+					"target": "%notify%Your team join invitation to %em%%teamname%%notify% has been accepted!"
+				},
+				"sent": "%success%%name% has been invited into your team."
+			},
+			"rankchange": {
+				"senior": "%error%You need to be at least a %em%Senior Member% in your team to promote/demote team members.",
+				"promco": "%error%There can only be one team leader!",
+				"demjunior": "%error%You cannot demote a junior member!",
+				"leader": "%error%A team leader cannot be promoted/demoted!",
+				"tohigh": "%error%You can only promote/demote players of lower rank than you!",
+				"promoted": "%success%You have promoted %em%%name%%success% to a %em2%%newrank%!",
+				"demoted": "%success%You have demoted %em%%name%%success% to a %em2%%newrank%!"
+			},
+			"property": {
+				"check": "%info%Your team %type% is:\n%em%%value%",
+				"change": "%success%Your team %type% has been changed to:\n%em%%value%",
+				"colead": "%error%You must be at least a %em%Co-Leader%error% to change your team %type%!"
+			},
+			"config": {
+				"check": {
+					"true": "%info%Your team is %type%.",
+					"false": "%info%Your team is %em%not%info% %type%."
+				},
+				"change": {
+					"true": "%info%Your team is now %type%.",
+					"false": "%info%Your team is %em%no longer%info% %type%."
+				},
+				"colead": "%error%You must be at least a %em%Co-Leader%error% to change your team %type%!"
+			},
+			"member": {
+				"result": "%info%%em%Leader%info%: %em2%%leader%\n%info%%em%Co-Leaders%info%: %em2%%coleaders%\n%info%%em%Senior Members%info%: %em2%%seniors%\n%info%%em%Members%info%: %em2%%members%\n%info%%em%Junior Members%info%: %em2%%juniors%\n"
+			},
+			"info": {
+				"result": "%info%Team %em%%name% %em2%(%memscnt% members, totally %points% points)\n%info%Description: %em%%descr%\n%info%Requirements: %em%%req%\n%em3%===PvP===\n%em%%pvp_kills% %em2%kills, %em%%pvp_deaths% %em2%deaths%info%, %em2%K/D%info%=%em%%pvp_kd%"
+			},
+			"joined": "%notify%%name% joined your team!",
+			"quitted": "%notify%%name% quitted your team!",
+			"invited": "%notify2%You have been invited into Team %team%!",
+			"requested": "%notify2%%name% sent a request to join your team!",
+			"disbanded": "%notify2%%bold%Your team has been %em%%italic%disbanded!",
+			"kicked": "%notify2%You have been %italic%kicked out of your team %reset%%notify2%by %em%%src%%notify2%! %info%Reason:\n%verbosemid%%msg%",
+			"ranks": [
+				"Junior-Member",
+				"Member",
+				"Senior-Member",
+				"Co-Leader",
+				"Leader"
+			]
+		},
+		"tpreq": {
+			"to": {
+				"fail": {
+					"enemy": {
+						"target": "%error%You cannot send a teleport request to your enemy (%em%%to%%error%)!"
+					},
+					"dup": "%error%You have already sent a request to teleport to %em%%to%%error%.",
+					"spawn": "%error%You can't teleport to someone at spawn!"
+				},
+				"sent": "%success%Sent a request to teleport to %em%%to%",
+				"received": "%em%%from%%notify% sent a request to teleport to you! Do %em2%/tpa %from%%notify% to accept.",
+				"accepted": "%success%Accepted request to teleport you to %em%%to%%success%. Teleportation will start in a few seconds. Hold the handrail!",
+				"beaccepted": "%notify%Request to teleport %em%%from%%notify% to you has been accepted. Teleportation will take place in a few seconds. Don't stand near a cliff!",
+				"bf": {
+					"from": "%success%You are going to be teleported to your best friend, %em%%to%%success%, in a few seconds. Got your souvenir ready?",
+					"to": "%notify%Your best friend, %em%%from%%notify%, is going to teleport to you. Make a banner to welcome him!"
+				}
+			},
+			"here": {
+				"fail": {
+					"enemy": {
+						"target": "%error%Don't teleport your enemy (%em%%to%%error%) to you!"
+					},
+					"dup": "%error%You have already sent a request to teleport %em%%to%%error% to you.",
+					"spawn": "%error%You can't teleport someone from spawn!"
+				},
+				"sent": "%success%Sent a request to teleport %em%%to% to you.",
+				"received": "%em%%from%%notify% sent a request to teleport you to him/her! Do %em2%/tp %from%%notify% to accept.",
+				"accepted": "%success%Accepted request to teleport %em%%to%%success% to you. Teleportation will start in a few seconds. Don't stand near a cliff!",
+				"beaccepted": "%notify%Request to teleport %em%%from%%notify% to you has been accepted. Teleportation will take place in a few seconds. Hold the handrail!",
+				"bf": {
+					"from": "%success%Your best friend, %em%%to%%success%, is going to teleport to you in a few seconds. Make a banner to welcome him!",
+					"to": "%notify%You are going to be teleport to your best friend, %em%%from%%notify%. Got your souvenir ready?"
+				}
+			},
+			"proceed": {
+				"fail": {
+					"offline": "%em%%from%%error% left the server before teleportation takes place.",
+					"enemynearby": "%error%Could not teleport %em%%from%%error% to %em2%%to%%error% - enemy of %em%%from%%error%/%em2%%to%%error%, %em3%%enemy%%error% is nearby!"
+				}
+			}
+		},
+		"transfer": {
+			"err": {
+				"noservers": "%error%No servers for %class% have available slots."
+			},
+			"success": "%success%Transferring you to %em%%ip%%success%:%em2%%port%%success% (%class% server)..."
+		},
+		"version": {
+			"msg": "%info%This server uses %em%%pmversion%%info% with %em2%%thetaversion%%info% by %em3%%thetaauthor%%info%. You are using %em%%lang% translation v%langversion%%info% by %em2%%langauthor%%info%."
+		}
+	},
+	"login": {
+		"auth": {
+			"success": "%success%You have been authenticated by %em%%method%",
+			"whereami": "%info%You are playing on %em2%%class% %em%(%ip%:%port%)",
+			"firstjoin": {
+				"hub": "%em%Walk into a portal%info% or %em2%Choose an item in your inventory%info% to join a game.\n%info%You can also type %em3%\/help%info% in chat to check for available commands."
+			},
+			"method": {
+				"transfer": "transferring",
+				"uuid": "matching last UUID",
+				"ip": {
+					"last": "matching last IP",
+					"hist": "matching an IP in the IP history"
+				},
+				"pass": "entering password",
+				"register": "registering a new account"
+			}
+		},
+		"knownas": "%notify%You are now known as:\n%tag%",
+		"pass": {
+			"prompt": "%notify%Please login by typing your password into chat.",
+			"mismatch": "%info%If you didn't register this account, please choose a new name.\n%warning%The password you typed in isn't the one you registered with.\n%warning%You have %chances% left."
+		},
+		"register": {
+			"prompt": "%info%Welcome to %bold%Legion PE%reset%!\n%notify%Please register by typing your password %em%directly into chat.\n%warning%You are disallowed from mentioning your password in chat, so remember not to use a common word as your password.",
+			"retype": "%notify%Great! Now please type the password %em2%again%notify% to confirm it.",
+			"success": "%notify%Thanks for registering! You can use this password to login at anywhere on our network.\n%verbose%Remember %bold%%em%never%reset%%verbosemid% to share your password to %em2%anybody%verbosemid%. Not even staff members.",
+			"mismatch": "%error%The two passwords aren't the same!\nLet's start all over again.\n%notify%Please type a password you like %em%directly%notify% into chat."
+		},
+		"popup": {
+			"login": "%notify2%Please login by typing your password directly into chat.",
+			"register": "%notify2%Please register by typing your password directly into chat."
+		}
+	},
+	"warning": {
+		"notification": {
+			"main": "\n%notify2%%bold%~~~~~~~~~~ ATTENTION ~~~~~~~~~~\n%em%%issuer%%warning% sent you a warning!\n%verbose%Message:\n%em2%%message%\n%notify%This warning carries %em3%%points%%notify% warning points.\n%info%You now have %em%%totalpoints%%info% warning points in total.",
+			"muted": "\n%error%You have been muted by %em2%%issuer% %em3%%passed%%error% before. The mute ends in %em%%left%.\n%verbose%Email %em2%support@legionpvp.eu%verbosemid% if you believe that this is a mistake.",
+			"banned": "\n%error%You will be banned for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake."
+		}
+	},
+	"kick": {
+		"toolong": {
+			"online": "\nYou have been online for more than 90 minutes. Take a rest! I bet your device must be pretty hot.",
+			"login": "\nHave you registered here using this username?\nPlease choose another username if you don't."
+		},
+		"serverstop": "\n%notify2%Server restart. Please reconnect.\n%verbosemid%Sorry for the inconvenience."
+	},
+	"words": {
+		"date": {
+			"format": "d\/m\/Y H:i:s (\\U\\T\\C P)"
+		},
+		"local": {
+			"class": {
+				"name": {
+					"hub": "Hub",
+					"pvp": {
+						"kit": "KitPvP",
+						"classic": "Classic PvP"
+					},
+					"parkour": "Parkour",
+					"spleef": "Spleef",
+					"infected": "Infected",
+					"shops": "Shops"
+				}
+			}
+		},
+		"friend": {
+			"type": {
+				"acquaintance": "acquaintance",
+				"goodfriend": "good friend",
+				"bestfriend": "best friend"
+			}
+		},
+		"team": {
+			"ranks": [
+				"Junior Member",
+				"Member",
+				"Senior Member",
+				"Co-Leader",
+				"Leader"
+			],
+			"property": {
+				"desc": "description",
+				"rule": "rules",
+				"req": "requirements"
+			},
+			"config": {
+				"open": "open"
+			}
+		}
+	},
+	"kits": {
+		"reloading": "%wait%Please wait while we are reloading your kits.",
+		"reloaded": "%success%Your kits have been reloaded. Do /kill to activate (counts one death)."
+	},
+	"game": {
+		"pvp": {
+			"death": {
+				"generic": "%error%You died!",
+				"killed": "%error%You were %action% by %killer%!",
+				"lava": "%error%You tried to swim in lava to escape from %killer%!",
+				"fall": {
+					"generic": "%error%You were %em%%action% to a deadly fall%error% by %killer%!",
+					"ladder": "%error%You were %em%%action% to a deadly fall%error% off %em2%a ladder%error% by %killer%!",
+					"vine": "%error%You were %em%%action% to a deadly fall%error% off %em2%vines%error% by %killer%!"
+				},
+				"stats": "%info%This is your %em%%deaths% death!"
+			},
+			"kill": {
+				"killed": "%success%You %action% %em%%victim%!",
+				"lava": "%success%%em%%victim%%success% tried to swim in lava to escape from you!",
+				"fall": {
+					"generic": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall!",
+					"ladder": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall%success% from a %em3%ladder!",
+					"vine": "%success%You %action% %em2%%victim%%success% to a %em%deadly fall%success% from a %em3%vine!"
+				},
+				"stats": "%info%This is your %em%%kills%%success% kill!"
+			},
+			"action": {
+				"kill": "killed",
+				"arrow": "shot",
+				"snowball": "snowballed",
+				"egg": "egged"
+			},
+			"attack": {
+				"friends": "%verbose%You may not attack your %type% (%em%%target%)!",
+				"spawn": "%verbose%You may not attack players at spawn!",
+				"ffahint": "%info%%ffa% activated friendly fire, so %source% can attack %target%."
+			},
+			"killinfo": "%verbose%Your%em% %ord% %verbosemid%kill - the%em2% %streakord% %verbosemid% in a row.\n%verbose%Your coins + %em%%added%%verbosemid% => %em2%%coins%",
+			"deathinfo": "%verbose%This is your%em% %ord% %verbosemid%death! Watch out!",
+			"invinc": {
+				"left": "%em%%left% %notify2%second(s) of invincibility left",
+				"off": "%notify2%You are no longer invincible."
+			},
+			"hinttext": "%notify2%Jump into the %em%void%notify2% to start fighting.",
+			"kit": {
+				"shops": {
+					"webhint": "%notify2%Go to %em%www.legionpvp.eu/login/%notify2% to upgrade your kits!"
+				}
+			},
+			"cmd": {
+				"stats": {
+					"std": "%info%%em%Kills%info%: %em2%%kills%\n%info%%em%Deaths%info%: %em2%%deaths%\n%info%%em%K/D Ratio%info%: %em2%%kd%\n%info%%em%Rank%info%: %em2%%rank%\n",
+					"private": "%error%%name% limited the access of his stats to his acquaintances! Do %em%/acq %plainname%%error% to send an acquaintance request."
+				}
+			}
+		},
+		"hub": {
+			"feather": {
+				"tut": "%bold%Tap feather in hotbar to adjust sprinting."
+			}
+		}
+	}
+}
