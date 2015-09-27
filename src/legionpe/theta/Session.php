@@ -684,14 +684,6 @@ abstract class Session{
 					return false;
 				}
 			}
-			$target = $this->getQueryTarget();
-			if($target !== null){
-				fwrite($this->getMain()->pmLog, "|from:{$this->getPlayer()->getName()}|to:{$target->getPlayer()->getName()}|msg:$msg|" . PHP_EOL);
-				$arrows = Phrases::VAR_info . "[" . $this->getPlayer()->getName() . " > " . $target->getPlayer()->getName() . "] " . Phrases::VAR_info . $msg;
-				$target->getPlayer()->sendMessage($arrows);
-				$this->getPlayer()->sendMessage($arrows);
-				return false;
-			}
 			$this->setQueryTargetUid(null);
 			$firstChar = substr($event->getMessage(), 0, 1);
 			if($firstChar === "\\"){
@@ -711,6 +703,14 @@ abstract class Session{
 				}
 				$event->setMessage($cmd . $postCmd);
 				return true;
+			}
+			$target = $this->getQueryTarget();
+			if($target !== null){
+				fwrite($this->getMain()->pmLog, "|from:{$this->getPlayer()->getName()}|to:{$target->getPlayer()->getName()}|msg:$msg|" . PHP_EOL);
+				$arrows = Phrases::VAR_info . "[" . $this->getPlayer()->getName() . " > " . $target->getPlayer()->getName() . "] " . Phrases::VAR_info . $msg;
+				$target->getPlayer()->sendMessage($arrows);
+				$this->getPlayer()->sendMessage($arrows);
+				return false;
 			}
 			$isLocal = $firstChar !== ".";
 			if(!$isLocal){

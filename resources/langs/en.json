@@ -137,7 +137,7 @@
 		},
 		"q$doc": "@since 1.1",
 		"q": {
-			"success": "%success%You are now talking to %em%%target%%success%.",
+			"success": "%success%You are now talking to %em%%target%%success%. Type %em2%/q%success% to return to normal.",
 			"cancelled": "%success%You are now talking normally."
 		},
 		"restart": {
