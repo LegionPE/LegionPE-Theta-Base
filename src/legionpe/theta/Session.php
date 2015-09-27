@@ -706,7 +706,7 @@ abstract class Session{
 				$event->setMessage($cmd . $postCmd);
 				return true;
 			}
-			$isLocal = $firstChar === ".";
+			$isLocal = $firstChar !== ".";
 			if(!$isLocal){
 				$event->setMessage(substr($event->getMessage(), 1));
 			}
