@@ -125,6 +125,8 @@ abstract class Session{
 	private $state = self::STATE_LOADING;
 	/** @var bool */
 	public $confirmGrind = false, $confirmQuitTeam = false, $confirmAlt = false;
+	/** @var int|null */
+	public $queryTarget = null;
 	private $invisibleFrom = [];
 	/** @var string|TextContainer|null */
 	private $tmpHash = null, $curPopup = null;
@@ -490,128 +492,6 @@ abstract class Session{
 	public function isDeveloper(){
 		return $this->getRank() & Settings::RANK_PERM_DEV;
 	}
-	public function onCmd(PlayerCommandPreprocessEvent $event){
-		if($this->isRegistering()){
-			$event->setCancelled();
-			$len = strlen($event->getMessage());
-			$event->setMessage($hash = self::hash($event->getMessage(), $this->getUid()));
-			if($this->state === self::STATE_REGISTERING_FIRST){
-				$this->tmpHash = $hash;
-				$this->sendCurlyLines();
-				$this->send(Phrases::LOGIN_REGISTER_RETYPE);
-				$this->state = self::STATE_REGISTERING_SECOND;
-			}elseif($this->state === self::STATE_REGISTERING_SECOND){
-				$this->sendCurlyLines();
-				if($this->tmpHash === $hash){
-					$this->sendCurlyLines();
-					$this->setLoginDatum("hash", $hash);
-					$this->setLoginDatum("pwprefix", "~");
-					$this->setLoginDatum("pwlen", $len);
-					$this->state = self::STATE_PLAYING;
-					$this->sendFirstJoinMessages();
-					$this->login(self::AUTH_REG);
-					$this->send(Phrases::LOGIN_REGISTER_SUCCESS);
-					$this->saveData(Settings::STATUS_ONLINE);
-				}else{
-					$this->send(Phrases::LOGIN_REGISTER_MISMATCH);
-					$this->tmpHash = null;
-					$this->state = self::STATE_REGISTERING_FIRST;
-				}
-			}
-			return false;
-		}elseif($this->isLoggingIn()){
-			$msg = $event->getMessage();
-			$hash = self::hash($msg, $this->getUid());
-			$oldHash = self::oldHash($msg);
-			$len = strlen($msg);
-			$event->setMessage($hash);
-			$this->sendCurlyLines();
-			if($hash === $this->getPasswordHash()){
-				$this->login(self::AUTH_PASS);
-			}elseif($this->isPortingOldPassword() and $oldHash === $this->getPasswordOldHash()){
-				$this->setLoginDatum("pwprefix", "~");
-				$this->setLoginDatum("pwlen", $len);
-				$this->setLoginDatum("hash", $hash);
-				$this->setLoginDatum("oldhash", "");
-				$this->login(self::AUTH_PASS);
-				new UpdateHashesQuery($this->getMain(), $this->getUid(), $hash);
-			}else{
-				$this->state++;
-				$chances = "chance";
-				MUtils::word_quantitize($chances, 5 - $this->getStatePrecise());
-				$this->send(Phrases::LOGIN_PASS_MISMATCH, ["chances" => $chances]);
-				if($this->getStatePrecise() === 5){
-					$this->getPlayer()->kick("Failure to login within 5 attempts");
-					return false;
-				}
-			}
-			return false;
-		}else{
-			$event->setMessage(TextFormat::clean($event->getMessage()));
-			$msg = $event->getMessage();
-			$len = $this->getLoginDatum("pwlen");
-			$msgLen = strlen($msg);
-			for($i = 0; $i < $msgLen; $i++){
-				$substr = substr($msg, $i, $len);
-				if(strlen($substr) < $len){
-					break;
-				}
-				if($this->getPasswordHash() === $this->hash($substr, $this->getUid())){
-					$this->send(Phrases::CHAT_BLOCKED_PASS);
-					return false;
-				}
-			}
-			$firstChar = substr($event->getMessage(), 0, 1);
-			if($firstChar === "\\"){
-				$event->setMessage("/" . substr($event->getMessage(), 1));
-			}
-			if($firstChar === "/"){
-				$msg = $event->getMessage();
-				if(strpos($msg, " ") === false){
-					$cmd = $msg;
-					$postCmd = "";
-				}else{
-					$cmd = strtolower(strstr($msg, " ", true));
-					$postCmd = strstr($msg, " ");
-				}
-				if($cmd === "/w"){
-					$cmd = "/tell";
-				}
-				$event->setMessage($cmd . $postCmd);
-				return true;
-			}
-			$isLocal = $firstChar !== ".";
-			if(!$isLocal){
-				$event->setMessage(substr($event->getMessage(), 1));
-			}
-			$message = trim($event->getMessage());
-			if(!$this->spamDetector->censor($message)){
-				return false;
-			}
-			if($this->currentChatState === self::CHANNEL_TEAM){
-				$data = [
-					"tid" => $this->getTeamId(),
-					"teamName" => $this->getTeamName(),
-					"ign" => $this->getInGameName()
-				];
-				$type = Hormone::get($this->getMain(), Hormone::TEAM_CHAT, $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
-				$type->release();
-				return false;
-			}
-			if($this->currentChatState !== self::CHANNEL_LOCAL){
-				$data = [
-					"channel" => $this->currentChatState,
-					"fromClass" => Settings::$LOCALIZE_CLASS,
-					"ign" => $this->getInGameName()
-				];
-				$type = Hormone::get($this->getMain(), Hormone::CHANNEL_CHAT, $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
-				$type->release();
-				return false;
-			}
-			$this->onChat($message, $isLocal ? self::CHAT_NORMAL_LOCAL : self::CHAT_NORMAL_CLASS);
-			return false;
-		}
-	}
 	public function getUid(){
 		return $this->getLoginDatum("uid");
 	}
@@ -727,6 +607,136 @@ abstract class Session{
 	}
 	public function isOwner(){
 		return ($this->getRank() & Settings::RANK_PERM_OWNER) === Settings::RANK_PERM_OWNER;
+	}
+	public function onCmd(PlayerCommandPreprocessEvent $event){
+		if($this->isRegistering()){
+			$event->setCancelled();
+			$len = strlen($event->getMessage());
+			$event->setMessage($hash = self::hash($event->getMessage(), $this->getUid()));
+			if($this->state === self::STATE_REGISTERING_FIRST){
+				$this->tmpHash = $hash;
+				$this->sendCurlyLines();
+				$this->send(Phrases::LOGIN_REGISTER_RETYPE);
+				$this->state = self::STATE_REGISTERING_SECOND;
+			}elseif($this->state === self::STATE_REGISTERING_SECOND){
+				$this->sendCurlyLines();
+				if($this->tmpHash === $hash){
+					$this->sendCurlyLines();
+					$this->setLoginDatum("hash", $hash);
+					$this->setLoginDatum("pwprefix", "~");
+					$this->setLoginDatum("pwlen", $len);
+					$this->state = self::STATE_PLAYING;
+					$this->sendFirstJoinMessages();
+					$this->login(self::AUTH_REG);
+					$this->send(Phrases::LOGIN_REGISTER_SUCCESS);
+					$this->saveData(Settings::STATUS_ONLINE);
+				}else{
+					$this->send(Phrases::LOGIN_REGISTER_MISMATCH);
+					$this->tmpHash = null;
+					$this->state = self::STATE_REGISTERING_FIRST;
+				}
+			}
+			return false;
+		}elseif($this->isLoggingIn()){
+			$msg = $event->getMessage();
+			$hash = self::hash($msg, $this->getUid());
+			$oldHash = self::oldHash($msg);
+			$len = strlen($msg);
+			$event->setMessage($hash);
+			$this->sendCurlyLines();
+			if($hash === $this->getPasswordHash()){
+				$this->login(self::AUTH_PASS);
+			}elseif($this->isPortingOldPassword() and $oldHash === $this->getPasswordOldHash()){
+				$this->setLoginDatum("pwprefix", "~");
+				$this->setLoginDatum("pwlen", $len);
+				$this->setLoginDatum("hash", $hash);
+				$this->setLoginDatum("oldhash", "");
+				$this->login(self::AUTH_PASS);
+				new UpdateHashesQuery($this->getMain(), $this->getUid(), $hash);
+			}else{
+				$this->state++;
+				$chances = "chance";
+				MUtils::word_quantitize($chances, 5 - $this->getStatePrecise());
+				$this->send(Phrases::LOGIN_PASS_MISMATCH, ["chances" => $chances]);
+				if($this->getStatePrecise() === 5){
+					$this->getPlayer()->kick("Failure to login within 5 attempts");
+					return false;
+				}
+			}
+			return false;
+		}else{
+			$event->setMessage(TextFormat::clean($event->getMessage()));
+			$msg = $event->getMessage();
+			$len = $this->getLoginDatum("pwlen");
+			$msgLen = strlen($msg);
+			for($i = 0; $i < $msgLen; $i++){
+				$substr = substr($msg, $i, $len);
+				if(strlen($substr) < $len){
+					break;
+				}
+				if($this->getPasswordHash() === $this->hash($substr, $this->getUid())){
+					$this->send(Phrases::CHAT_BLOCKED_PASS);
+					return false;
+				}
+			}
+			$target = $this->getQueryTarget();
+			if($target !== null){
+				$target->getPlayer()->sendMessage(Phrases::VAR_info . "[" . $this->getPlayer()->getName() . " > " . $target->getPlayer()
+						->getName() . "] " . Phrases::VAR_info . $msg);
+				fwrite($this->getMain()->pmLog, "|from:{$this->getPlayer()->getName()}|to:{$target->getPlayer()->getName()}|msg:$msg|" . PHP_EOL);
+				return false;
+			}
+			$this->setQueryTargetUid(null);
+			$firstChar = substr($event->getMessage(), 0, 1);
+			if($firstChar === "\\"){
+				$event->setMessage("/" . substr($event->getMessage(), 1));
+			}
+			if($firstChar === "/"){
+				$msg = $event->getMessage();
+				if(strpos($msg, " ") === false){
+					$cmd = $msg;
+					$postCmd = "";
+				}else{
+					$cmd = strtolower(strstr($msg, " ", true));
+					$postCmd = strstr($msg, " ");
+				}
+				if($cmd === "/w"){
+					$cmd = "/tell";
+				}
+				$event->setMessage($cmd . $postCmd);
+				return true;
+			}
+			$isLocal = $firstChar === ".";
+			if(!$isLocal){
+				$event->setMessage(substr($event->getMessage(), 1));
+			}
+			$message = trim($event->getMessage());
+			if(!$this->spamDetector->censor($message)){
+				return false;
+			}
+			if($this->currentChatState === self::CHANNEL_TEAM){
+				$data = [
+					"tid" => $this->getTeamId(),
+					"teamName" => $this->getTeamName(),
+					"ign" => $this->getInGameName()
+				];
+				$type = Hormone::get($this->getMain(), Hormone::TEAM_CHAT, $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
+				$type->release();
+				return false;
+			}
+			if($this->currentChatState !== self::CHANNEL_LOCAL){
+				$data = [
+					"channel" => $this->currentChatState,
+					"fromClass" => Settings::$LOCALIZE_CLASS,
+					"ign" => $this->getInGameName()
+				];
+				$type = Hormone::get($this->getMain(), Hormone::CHANNEL_CHAT, $this->getPlayer()->getDisplayName(), $message, $isLocal ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, $data);
+				$type->release();
+				return false;
+			}
+			$this->onChat($message, $isLocal ? self::CHAT_NORMAL_LOCAL : self::CHAT_NORMAL_CLASS);
+			return false;
+		}
 	}
 	public function onDamage(/** @noinspection PhpUnusedParameterInspection */
 		EntityDamageEvent $event){
@@ -957,6 +967,7 @@ abstract class Session{
 		$this->setLoginDatum("lastwarn", time());
 	}
 	public function warn($id, $points, CommandSender $issuer, $msg){
+		/** @noinspection PhpDeprecationInspection */
 		new PreExecuteWarningQuery($this->getMain(), $this->getUid(), $this->getPlayer()->getAddress(), $this->getPlayer()->getClientId(), $id, $points, $issuer, $msg);
 	}
 	public function getTeamJoinTime(){
@@ -1272,5 +1283,20 @@ abstract class Session{
 	public function reloadKits(){
 	}
 	public function reloadKitsCallback(){
+	}
+	/**
+	 * @return Session|null
+	 */
+	public function getQueryTarget(){
+		if($this->queryTarget === null){
+			return null;
+		}
+		return $this->getMain()->getSessionByUid($this->queryTarget);
+	}
+	/**
+	 * @param int|null $uid
+	 */
+	public function setQueryTargetUid($uid){
+		$this->queryTarget = $uid;
 	}
 }

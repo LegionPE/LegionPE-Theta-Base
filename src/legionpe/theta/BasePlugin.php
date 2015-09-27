@@ -71,6 +71,8 @@ abstract class BasePlugin extends PluginBase{
 	/** @var Session[] */
 	private $sessions = [];
 	private $totalPlayers, $maxPlayers, $classTotalPlayers, $classMaxPlayers, $servers, $classServers;
+	/** @var resource */
+	public $pmLog;
 	/** @var string */
 	private $altIp = "0.0.0.0";
 	/** @var int */
@@ -83,6 +85,8 @@ abstract class BasePlugin extends PluginBase{
 	private $nextStoreId = 1;
 	/** @var MuteIssue[] */
 	private $mutes = [];
+	/** @var int */
+	private $restartTime;
 
 	// PluginManager-level stuff
 	/**
@@ -119,10 +123,14 @@ abstract class BasePlugin extends PluginBase{
 		$this->getServer()->getScheduler()->scheduleRepeatingTask($this->syncChatTask = new FireSyncChatQueryTask($this), 5);
 		$this->getServer()->getScheduler()->scheduleRepeatingTask(new DbPingQuery($this), 1200);
 		$this->getServer()->getScheduler()->scheduleDelayedTask(new RestartServerTask($this), 72000);
+		$this->restartTime = $this->getServer()->getTick() + 72000;
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new RandomBroadcastTask($this), 2400, 2400);
 		if(RESEND_ADD_PLAYER > 0){
 			$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new ResendPlayersTask($this), RESEND_ADD_PLAYER, RESEND_ADD_PLAYER);
 		}
+		/** @noinspection PhpUsageOfSilenceOperatorInspection */
+		@touch($this->getDataFolder() . "privmsg.log");
+		$this->pmLog = fopen($this->getDataFolder() . "privmsg.log", "at");
 		$this->faceSeeks = json_decode($this->getResourceContents("head.json"));
 		$this->badWords = json_decode($this->getResourceContents("words.json"));
 		$this->approvedDomains = json_decode($this->getResourceContents("approvedDomains.json"));
@@ -143,6 +151,8 @@ abstract class BasePlugin extends PluginBase{
 			$this->sesList->onQuit(new PlayerQuitEvent($player, ""));
 		}
 		new CloseServerQuery($this);
+		/** @noinspection PhpUsageOfSilenceOperatorInspection */
+		@fclose($this->pmLog);
 		$this->getLogger()->alert("PID: " . \getmypid());
 	}
 	public function evaluate($code){
@@ -457,5 +467,11 @@ abstract class BasePlugin extends PluginBase{
 	 */
 	public function getDb(){
 		return $this->db;
+	}
+	/**
+	 * @return int
+	 */
+	public function getRestartTime(){
+		return $this->restartTime;
 	}
 }

@@ -114,6 +114,11 @@ class Phrases{
 
 	const CMD_PRIV_NOTICE_RECIPIENT = "cmd.pn.recipient";
 
+	const CMD_QUERY_SUCCESS = "cmd.q.success";
+	const CMD_QUERY_CANCELLED = "cmd.q.cancelled";
+
+	const CMD_RESTART_RESPONSE = "cmd.restart.response";
+
 	const CMD_TEAM_ERR_ALREADY_IN_TEAM = "cmd.team.err.alreadyinteam";
 	const CMD_TEAM_ERR_NOT_IN_TEAM = "cmd.team.err.notinteam";
 	const CMD_TEAM_ERR_DIFFERENT_TEAM = "cmd.team.err.diffteam";
@@ -263,6 +268,15 @@ class Phrases{
 
 	const PVP_CMD_STATS = "game.pvp.cmd.stats.std";
 	const PVP_CMD_STATS_PRIVATE = "game.pvp.cmd.stats.private";
+	const PVP_CMD_ONE_VS_ONE_INVITED = "game.pvp.cmd.onevsone.invited";
+	const PVP_CMD_ONE_VS_ONE_BE_INVITED = "game.pvp.cmd.onevsone.beinvited";
+	const PVP_CMD_ONE_VS_ONE_ALREADY_OCCUPIED = "game.pvp.cmd.onevsone.occupied";
+	const PVP_CMD_ONE_VS_ONE_CANCELLED = "game.pvp.cmd.onevsone.cancelled";
+	const PVP_CMD_ONE_VS_ONE_NOT_SENT = "game.pvp.cmd.onevsone.notsent";
+	const PVP_CMD_ONE_VS_ONE_OTHER_QUIT = "game.pvp.cmd.onevsone.otherquit";
+	const PVP_CMD_ONE_VS_ONE_ANNOUNCE = "game.pvp.cmd.onevsone.announce";
+	const PVP_CMD_ONE_VS_ONE_WIN_EXTRA = "game.pvp.cmd.onevsone.winextra";
+	const PVP_CMD_ONE_VS_ONE_PREPARING = "game.pvp.cmd.onevsone.preparing";
 
 	const PVP_KIT_SHOPS_WEB_HINT = "game.pvp.kit.shops.webhint";
 

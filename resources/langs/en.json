@@ -6,7 +6,7 @@
 		"authors": [
 			"PEMapModder"
 		],
-		"version": "1.0",
+		"version": "1.1",
 		"releng": "1.0"
 	},
 	"chat": {
@@ -127,10 +127,20 @@
 			"changed": "%success%Your label has been changed!"
 		},
 		"pm": {
-			"remindquery": "%notify%Reminder: Use \/q next time if you want to %em%talk in chat directly%notify% instead of %em2%typing \/w every time%notify%."
+			"remindquery$doc": "@since 1.1",
+			"remindquery": "%notify%[NEW!!!] Reminder: Use \/q next time if you want to %em%talk in chat directly%notify% instead of %em2%typing \/w every time%notify%."
 		},
 		"pn": {
 			"recipient": "%notify%You have received a private notice from a staff member:\n%msg%"
+		},
+		"q$doc": "@since 1.1",
+		"q": {
+			"success": "%success%You are now talking to %em%%target%%success%.",
+			"cancelled": "%success%You are now talking normally."
+		},
+		"restart": {
+			"response$doc": "@since 1.1",
+			"response": "%em%%time% %info%left before server restart"
 		},
 		"team": {
 			"err": {
@@ -413,13 +423,26 @@
 			"hinttext": "%notify2%Jump into the %em%void%notify2% to start fighting.",
 			"kit": {
 				"shops": {
-					"webhint": "%notify2%Go to %em%www.legionpvp.eu/login/%notify2% to upgrade your kits!"
+					"webhint$doc": "@since 1.1",
+					"webhint": "%notify2%Go to %em%http://lgpe.co/s%notify2% to upgrade your kits!"
 				}
 			},
 			"cmd": {
 				"stats": {
 					"std": "%info%%em%Kills%info%: %em2%%kills%\n%info%%em%Deaths%info%: %em2%%deaths%\n%info%%em%K/D Ratio%info%: %em2%%kd%\n%info%%em%Rank%info%: %em2%%rank%\n",
 					"private": "%error%%name% limited the access of his stats to his acquaintances! Do %em%/acq %plainname%%error% to send an acquaintance request."
+				},
+				"onevsone$doc": "@since 1.1",
+				"onevsone": {
+					"invited": "%success%You have successfully sent a 1v1 challenge to %em%%guest%%success%.\n%verbose%If this challenge is not accepted in 30 seconds, it will be automatically cancelled.",
+					"beinvited": "%notify%You have received a 1v1 challenge from %em%%host%! Type %em2%/1v1 %realname%%notify% to accept.\n%verbose%The challenge will expire in 30 seconds if you don't accept it.",
+					"occupied": "%error%A 1v1 match is already running on this server!",
+					"cancelled": "%success%Cancelled 1v1 challenge to %em%%target%.",
+					"notsent": "%error%You had never sent a 1v1 request to %em%%target%!",
+					"otherquit": "%notify%%other% left the server, so the match is terminated!",
+					"announce": "%verbose%%em%%winner%%verbosemid% won %em2%%loser%%verbosemid% in a 1v1 match!",
+					"winextra": "%notify%You have received %em%%coins%%notify% extra coins and %em2%%points%%notify% extra team points for winning a 1v1 match!",
+					"preparing": "%notify%The 1v1 match between %em%%host%%notify% and %em2%%host%%notify% will start in %em%10%notify% seconds!"
 				}
 			}
 		},

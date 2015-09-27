@@ -34,6 +34,7 @@ use legionpe\theta\command\session\friend\FriendListCommand;
 use legionpe\theta\command\session\friend\SetFriendCommand;
 use legionpe\theta\command\session\GrindCoinCommand;
 use legionpe\theta\command\session\LabelCommand;
+use legionpe\theta\command\session\QueryCommand;
 use legionpe\theta\command\session\team\FallbackTeamCommand;
 use legionpe\theta\command\session\team\TeamConfigCommand;
 use legionpe\theta\command\session\team\TeamCreateCommand;
@@ -129,6 +130,8 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			new TransferCommand($main, ["classic", "cls"], "Classic PvP", Settings::CLASS_CLASSICAL),
 			new TransferCommand($main, ["hub", "spawn", "quit", "home", "back", "lobby"], "Hub", Settings::CLASS_HUB),
 			new OverridingSayCommand($main),
+			new QueryCommand($main),
+			new RestartCommand($main),
 			new FallbackFriendCommand($main),
 			new SetFriendCommand($main, Friend::FRIEND_ENEMY),
 			new SetFriendCommand($main, Friend::FRIEND_NOT_FRIEND),

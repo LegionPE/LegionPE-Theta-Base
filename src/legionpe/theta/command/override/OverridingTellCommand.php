@@ -23,11 +23,6 @@ use legionpe\theta\Session;
 class OverridingTellCommand extends SessionCommand{
 	public function __construct(BasePlugin $main){
 		parent::__construct($main, "tell", "Send a private message to another player", "/w <player> <message>", ["w", "msg", "pm"]);
-		touch($main->getDataFolder() . "privmsg.log");
-		$this->pmLog = fopen($main->getDataFolder() . "privmsg.log", "at");
-	}
-	public function __destruct(){
-		fclose($this->pmLog);
 	}
 	protected function run(array $args, Session $sender){
 		$sender->send(Phrases::CMD_PRIV_MSG_REMIND_QUERY);
@@ -43,7 +38,7 @@ class OverridingTellCommand extends SessionCommand{
 			return true;
 		}
 		$target->getPlayer()->sendMessage($msg = Phrases::VAR_info . "[" . $sender->getPlayer()->getName() . " > " . $target->getPlayer()->getName() . "] " . Phrases::VAR_info . $message);
-		fwrite($this->pmLog, "|from:{$sender->getPlayer()->getName()}|to:{$target->getPlayer()->getName()}|msg:$message|" . PHP_EOL);
+		fwrite($this->getMain()->pmLog, "|from:{$sender->getPlayer()->getName()}|to:{$target->getPlayer()->getName()}|msg:$message|" . PHP_EOL);
 		return $msg;
 	}
 }
