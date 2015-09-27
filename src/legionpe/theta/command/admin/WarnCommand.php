@@ -91,9 +91,9 @@ class WarnCommand extends ModeratorCommand{
 		$points = $this->points;
 		$msg = self::$IDS_TO_MESSAGES[$this->id];
 		if($sender instanceof Player){
-			$ses = $this->getSession($sender);
-			if($ses instanceof Session){
-				if(!$ses->isAdmin()){
+			$session = $this->getSession($sender);
+			if($session instanceof Session){
+				if(!$session->isAdmin()){
 					$notAdmin = true;
 				}
 			}
