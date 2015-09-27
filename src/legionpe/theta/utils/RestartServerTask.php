@@ -20,12 +20,20 @@ use legionpe\theta\lang\Phrases;
 use pocketmine\scheduler\PluginTask;
 
 class RestartServerTask extends PluginTask{
+	private $counter = 13;
 	public function onRun($currentTick){
 		/** @var BasePlugin $owner */
 		$owner = $this->getOwner();
-		foreach($owner->getSessions() as $ses){
-			$ses->getPlayer()->kick($ses->translate(Phrases::KICK_SERVER_STOP), false);
+		$this->counter--;
+		if($this->counter > 0){
+			foreach($owner->getSessions() as $ses){
+				$ses->send(Phrases::CMD_RESTART_WARN, ["minutes" => 5 * $this->counter]);
+			}
+		}else{
+			foreach($owner->getSessions() as $ses){
+				$ses->getPlayer()->kick($ses->translate(Phrases::KICK_SERVER_STOP), false);
+			}
+			$owner->getServer()->shutdown();
 		}
-		$owner->getServer()->shutdown();
 	}
 }

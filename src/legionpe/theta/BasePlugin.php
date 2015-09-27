@@ -122,7 +122,7 @@ abstract class BasePlugin extends PluginBase{
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new SessionTickTask($this), 1, 10);
 		$this->getServer()->getScheduler()->scheduleRepeatingTask($this->syncChatTask = new FireSyncChatQueryTask($this), 5);
 		$this->getServer()->getScheduler()->scheduleRepeatingTask(new DbPingQuery($this), 1200);
-		$this->getServer()->getScheduler()->scheduleDelayedTask(new RestartServerTask($this), 72000);
+		$this->getServer()->getScheduler()->scheduleRepeatingTask(new RestartServerTask($this), 6000);
 		$this->restartTime = $this->getServer()->getTick() + 72000;
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new RandomBroadcastTask($this), 2400, 2400);
 		if(RESEND_ADD_PLAYER > 0){

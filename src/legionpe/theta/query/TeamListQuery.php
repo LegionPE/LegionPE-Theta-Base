@@ -16,6 +16,7 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
+use legionpe\theta\lang\Phrases;
 use legionpe\theta\Session;
 use pocketmine\Server;
 
@@ -50,7 +51,11 @@ class TeamListQuery extends AsyncQuery{
 		}
 		foreach($r["result"] as $i => $row){
 			$num = $i + 1;
-			$sender->getPlayer()->sendMessage("#$num) " . $row["name"] . " (" . $row["total_points"] . " points)"); // TODO translate
+			$sender->send(Phrases::CMD_TEAM_LIST_LINE, [
+				"i" => $num,
+				"team" => $row["name"],
+				"points" => (int) $row["total_points"]
+			]);
 		}
 	}
 }

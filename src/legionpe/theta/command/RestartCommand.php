@@ -29,7 +29,7 @@ class RestartCommand extends ThetaCommand{
 	public function execute(CommandSender $sender, $commandLabel, array $args){
 		$leftTicks = $this->getMain()->getServer()->getTick() - $this->getMain()->getRestartTime();
 		$leftSecs = $leftTicks / 20;
-		$string = MUtils::time_secsToString($leftSecs);
+		$string = MUtils::time_secsToString((int) $leftSecs);
 		if($sender instanceof Player and ($ses = $this->getSession($sender)) instanceof Session){
 			$ses->translate(Phrases::CMD_RESTART_RESPONSE, ["time" => $string]);
 		}else{

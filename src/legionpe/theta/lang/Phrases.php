@@ -119,6 +119,7 @@ class Phrases{
 	const CMD_QUERY_CANCELLED = "cmd.q.cancelled";
 
 	const CMD_RESTART_RESPONSE = "cmd.restart.response";
+	const CMD_RESTART_WARN = "cmd.restart.warn";
 
 	const CMD_TEAM_ERR_ALREADY_IN_TEAM = "cmd.team.err.alreadyinteam";
 	const CMD_TEAM_ERR_NOT_IN_TEAM = "cmd.team.err.notinteam";
@@ -164,6 +165,7 @@ class Phrases{
 	const CMD_TEAM_CONFIG_VALUE_CHANGED_FALSE = "cmd.team.config.change.false";
 	const CMD_TEAM_CONFIG_NEED_CO_LEADER = "cmd.team.config.colead";
 	const CMD_TEAM_MEMBER_RESULT = "cmd.team.member.result";
+	const CMD_TEAM_LIST_LINE = "cmd.team.list.line";
 	const CMD_TEAM_INFO_RESULT = "cmd.team.info.result";
 	const CMD_TEAM_JOINED = "cmd.team.joined";
 	const CMD_TEAM_QUITTED = "cmd.team.quitted";

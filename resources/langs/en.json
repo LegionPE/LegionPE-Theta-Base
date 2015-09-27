@@ -6,8 +6,8 @@
 		"authors": [
 			"PEMapModder"
 		],
-		"version": "1.2",
-		"releng": "1.2"
+		"version": "1.3",
+		"releng": "1.3"
 	},
 	"chat": {
 		"blocked": {
@@ -142,7 +142,9 @@
 		},
 		"restart": {
 			"response$doc": "@since 1.1",
-			"response": "%em%%time% %info%left before server restart"
+			"response": "%em%%time% %info%left before server restart",
+			"warn$doc": "@since 1.3",
+			"warn": "%warning%Server is restarting in %minutes% minutes."
 		},
 		"team": {
 			"err": {
@@ -216,6 +218,10 @@
 			},
 			"member": {
 				"result": "%info%%em%Leader%info%: %em2%%leader%\n%info%%em%Co-Leaders%info%: %em2%%coleaders%\n%info%%em%Senior Members%info%: %em2%%seniors%\n%info%%em%Members%info%: %em2%%members%\n%info%%em%Junior Members%info%: %em2%%juniors%\n"
+			},
+			"list": {
+				"line$doc": "@since 1.3",
+				"line": "%info%#%i%) %em%%team%%info% (%em2%%points%%info% points)"
 			},
 			"info": {
 				"result": "%info%Team %em%%name% %em2%(%memscnt% members, totally %points% points)\n%info%Description: %em%%descr%\n%info%Requirements: %em%%req%\n%em3%===PvP===\n%em%%pvp_kills% %em2%kills, %em%%pvp_deaths% %em2%deaths%info%, %em2%K/D%info%=%em%%pvp_kd%"

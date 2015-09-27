@@ -63,8 +63,8 @@ class BaseListener implements Listener{
 	public function onQueryRegen(QueryRegenerateEvent $event){
 		$event->setWorld($this->main->query_world());
 		$this->main->getPlayersCount($total, $max, $classTotal, $classMax);
-		$event->setPlayerCount($total);
-		$event->setMaxPlayerCount($max);
+		$event->setPlayerCount($classTotal);
+		$event->setMaxPlayerCount($classMax);
 		$event->setPlayerList([]);
 		$event->setServerName(TextFormat::clean($this->main->getServer()->getNetwork()->getName()));
 		$extra = $event->getExtraData();

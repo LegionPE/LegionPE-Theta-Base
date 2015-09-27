@@ -18,6 +18,7 @@ namespace legionpe\theta\command\admin;
 use legionpe\theta\BasePlugin;
 use legionpe\theta\Session;
 use pocketmine\command\CommandSender;
+use pocketmine\Player;
 
 class WarnCommand extends ModeratorCommand{
 	const MODS = 0;
@@ -89,7 +90,15 @@ class WarnCommand extends ModeratorCommand{
 		}
 		$points = $this->points;
 		$msg = self::$IDS_TO_MESSAGES[$this->id];
-		if(isset($args[0])){
+		if($sender instanceof Player){
+			$ses = $this->getSession($sender);
+			if($ses instanceof Session){
+				if(!$ses->isAdmin()){
+					$notAdmin = true;
+				}
+			}
+		}
+		if(!isset($notAdmin) and isset($args[0])){
 			$points = (int) array_shift($args);
 			if(isset($args[0])){
 				$msg = implode(" ", $args);
