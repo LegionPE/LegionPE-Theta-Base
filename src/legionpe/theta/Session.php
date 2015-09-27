@@ -329,11 +329,13 @@ abstract class Session{
 		$this->getPlayer()->sendTip($this->translate(Phrases::LOGIN_KNOWN_AS, ["tag" => $tag]));
 	}
 	public function calculatePlainName($nameColor = TextFormat::WHITE){
+		$tag = "";
+		if(!$this->isPlaying()){
+			$tag .= TextFormat::DARK_RED . "{UA}";
+		}
 		$rank = $this->calculateRank();
 		if($rank !== ""){
-			$tag = Phrases::VAR_symbol . "{" . $rank . Phrases::VAR_symbol . "}";
-		}else{
-			$tag = "";
+			$tag .= Phrases::VAR_symbol . "{" . $rank . Phrases::VAR_symbol . "}";
 		}
 		$lbl = $this->getLabelInUse();
 		if($lbl !== ""){
@@ -347,6 +349,9 @@ abstract class Session{
 	}
 	public function calculateNameTag($nameColor = TextFormat::WHITE){
 		$tag = "";
+		if(!$this->isPlaying()){
+			$tag .= TextFormat::DARK_RED . "{Unauthenticated}\n";
+		}
 		$teamname = $this->getTeamName();
 		if($teamname){
 			$tag .= TextFormat::DARK_AQUA . "Team " . TextFormat::GOLD . $teamname;
