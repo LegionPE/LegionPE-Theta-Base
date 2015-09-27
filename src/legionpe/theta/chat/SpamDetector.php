@@ -32,6 +32,10 @@ class SpamDetector{
 		if(count($this->chatLog) > 5){
 			array_shift($this->chatLog);
 		}
+		if(strlen($message) !== mb_strlen($message, "UTF-8")){
+			$this->session->send(Phrases::CHAT_BLOCKED_MULTIBYTE);
+			return false;
+		}
 		if(!$this->detectBadWords($message)){
 			return false;
 		}

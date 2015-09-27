@@ -6,15 +6,17 @@
 		"authors": [
 			"PEMapModder"
 		],
-		"version": "1.1",
-		"releng": "1.0"
+		"version": "1.2",
+		"releng": "1.2"
 	},
 	"chat": {
 		"blocked": {
 			"pass": "%warning%Do NOT share your password with ANYONE. Sharing your password might result in a ban.",
 			"toofast": "%warning%LegionPE is not a place for typing speed testing. Type slower.",
 			"toofreq": "%warning%Don't try to dominate our chat screens!",
-			"tooshort": "%warning%Every line you type takes up one line in the chat screen of other players. Don't you think you are wasting their screen space? %em%Stop spamming."
+			"tooshort": "%warning%Every line you type takes up one line in the chat screen of other players. Don't you think you are wasting their screen space? %em%Stop spamming.",
+			"multibyte$doc": "@since 1.2",
+			"multibyte": "%warning%Please chat in English!"
 		},
 		"broadcasts": [
 			"%notify%bold%Donate to get awesome perks at %reset%http:\/\/lgpe.co\/d",
