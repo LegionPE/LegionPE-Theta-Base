@@ -45,7 +45,7 @@
 			},
 			"wronguse": "%error%Usage: %usage%",
 			"absplayer": {
-				"unknwon": "%error%That player is not online on this server.",
+				"unknown": "%error%That player is not online on this server.",
 				"named": "%error%The player \"%player%\" is not online on this server."
 			},
 			"donator": "%warning%Please upgrade your account to at least Donator to use this command.",
