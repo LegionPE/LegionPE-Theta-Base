@@ -36,7 +36,7 @@ class QueryCommand extends SessionCommand{
 		if($target === null){
 			return $this->notOnline($sender, $name);
 		}
-		$sender->queryTarget = $target->getUid();
+		$sender->setQueryTargetUid($target->getUid());
 		return $sender->translate(Phrases::CMD_QUERY_SUCCESS, ["target" => $target->getInGameName()]);
 	}
 }

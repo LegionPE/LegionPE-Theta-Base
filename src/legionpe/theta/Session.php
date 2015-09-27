@@ -681,9 +681,10 @@ abstract class Session{
 			}
 			$target = $this->getQueryTarget();
 			if($target !== null){
-				$target->getPlayer()->sendMessage(Phrases::VAR_info . "[" . $this->getPlayer()->getName() . " > " . $target->getPlayer()
-						->getName() . "] " . Phrases::VAR_info . $msg);
 				fwrite($this->getMain()->pmLog, "|from:{$this->getPlayer()->getName()}|to:{$target->getPlayer()->getName()}|msg:$msg|" . PHP_EOL);
+				$arrows = Phrases::VAR_info . "[" . $this->getPlayer()->getName() . " > " . $target->getPlayer()->getName() . "] " . Phrases::VAR_info . $msg;
+				$target->getPlayer()->sendMessage($arrows);
+				$this->getPlayer()->sendMessage($arrows);
 				return false;
 			}
 			$this->setQueryTargetUid(null);
