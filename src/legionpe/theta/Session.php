@@ -684,7 +684,6 @@ abstract class Session{
 					return false;
 				}
 			}
-			$this->setQueryTargetUid(null);
 			$firstChar = substr($event->getMessage(), 0, 1);
 			if($firstChar === "\\"){
 				$event->setMessage("/" . substr($event->getMessage(), 1));
@@ -712,6 +711,7 @@ abstract class Session{
 				$this->getPlayer()->sendMessage($arrows);
 				return false;
 			}
+			$this->setQueryTargetUid(null);
 			$isLocal = $firstChar !== ".";
 			if(!$isLocal){
 				$event->setMessage(substr($event->getMessage(), 1));
