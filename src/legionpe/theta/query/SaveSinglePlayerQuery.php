@@ -50,7 +50,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 			"lastip" => $session->getPlayer()->getAddress(),
 			"status" => $status,
 			"lastses" => Settings::$LOCALIZE_CLASS,
-			"authuuid" => $session->getPlayer()->getUniqueId(),
+			"authuuid" => $session->getPlayer()->getClientSecret(),
 			"coins" => ["v" => $coins, "noupdate" => true],
 			"hash" => ["v" => $session->getPasswordHash(), "noupdate" => !$session->doHashSaves],
 			"pwprefix" => ["v" => $session->getPasswordPrefix(), "noupdate" => true],
@@ -107,7 +107,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 	public function onPreQuery(\mysqli $db){
 		$db->query($q = $this->getUpdateQuery());
 		if($db->error){
-			echo $db->error . "\n";
+			echo "Error query - " . $q . "\n" . $db->error . "\n";
 		}
 	}
 	public function getQuery(){
@@ -124,7 +124,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 		];
 	}
 	public function reportDebug(){
-		return false;
+		return true;
 	}
 	public function onCompletion(Server $server){
 		$main = BasePlugin::getInstance($server);

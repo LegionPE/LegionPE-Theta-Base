@@ -183,7 +183,7 @@ abstract class Session{
 	}
 	private function prepareLogin(){
 		$status = $this->getLoginDatum("status");
-		if($status === Settings::STATUS_TRANSFERRING and $this->getPlayer()->getUniqueId() === $this->getLoginDatum("authuuid")){
+		if($status === Settings::STATUS_TRANSFERRING and $this->getPlayer()->getClientSecret() === $this->getLoginDatum("authuuid")){
 			$this->login(self::AUTH_TRANSFER);
 			return;
 		}
@@ -191,7 +191,7 @@ abstract class Session{
 			$this->state = self::STATE_REGISTERING;
 		}else{
 			$method = $this->getAuthSettings();
-			if($method === Settings::CONFIG_AUTH_UUID and $this->getPlayer()->getUniqueId() === $this->getLoginDatum("authuuid")){
+			if($method === Settings::CONFIG_AUTH_UUID and $this->getPlayer()->getClientSecret() === $this->getLoginDatum("authuuid")){
 				$this->login(self::AUTH_UUID);
 				return;
 			}

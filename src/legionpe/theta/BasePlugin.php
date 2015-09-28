@@ -292,7 +292,7 @@ abstract class BasePlugin extends PluginBase{
 			"lastip" => "",
 			"status" => Settings::STATUS_OFFLINE,
 			"lastses" => Settings::$LOCALIZE_CLASS,
-			"authuuid" => $player->getUniqueId(),
+			"authuuid" => $player->getClientSecret(),
 			"coins" => 0.0,
 			"hash" => str_repeat("0", 128),
 			"pwprefix" => "\0",
