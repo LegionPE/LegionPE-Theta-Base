@@ -124,7 +124,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 		];
 	}
 	public function reportDebug(){
-		return true;
+		return false;
 	}
 	public function onCompletion(Server $server){
 		$main = BasePlugin::getInstance($server);
