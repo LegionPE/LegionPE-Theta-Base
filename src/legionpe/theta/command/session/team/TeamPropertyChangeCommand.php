@@ -44,7 +44,7 @@ class TeamPropertyChangeCommand extends SessionCommand{
 			new TeamPropertyResponseQuery($this->getPlugin(), $sender, $sender->getTeamId(), $this->column, $this->humanPhrase);
 			return true;
 		}
-		if($sender->getTeamRank() >= Settings::TEAM_RANK_COLEAD){
+		if($sender->getTeamRank() < Settings::TEAM_RANK_COLEAD){
 			return $sender->translate(Phrases::CMD_TEAM_PROPERTY_NEED_CO_LEADER, [
 				"type" => $sender->translate($this->humanPhrase)
 			]);

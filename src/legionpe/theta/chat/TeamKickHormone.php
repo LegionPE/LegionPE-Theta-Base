@@ -18,7 +18,7 @@ namespace legionpe\theta\chat;
 use legionpe\theta\lang\Phrases;
 
 class TeamKickHormone extends Hormone{
-	private $uid;
+	protected $uid;
 	public function getType(){
 		return self::TEAM_KICK_PROPAGANDA;
 	}
