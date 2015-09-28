@@ -112,7 +112,7 @@ abstract class Session{
 	/** @var mixed[] */
 	private $loginData;
 	/** @var string */
-	private $inGameName = null;
+	private $inGameName = "";
 	/** @var int */
 	private $joinTime;
 	/** @var float */
@@ -142,6 +142,7 @@ abstract class Session{
 		if($this->init() === false){
 			throw new \Exception;
 		}
+		$this->recalculateNameTag();
 	}
 	protected function init(){
 		$consequence = $this->getEffectiveConsequence();
