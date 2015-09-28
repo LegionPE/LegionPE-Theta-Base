@@ -22,7 +22,7 @@ class InitDbQuery extends AsyncQuery{
 		$myId = Settings::$LOCALIZE_ID;
 		$myIp = $this->esc(Settings::$LOCALIZE_IP);
 		$myPort = Settings::$LOCALIZE_PORT;
-		$myClass = Settings::$LOCALIZE_CLASS;
+		$myClass = Settings::$LOCALIZE_CLASS | (Settings::$SYSTEM_IS_TEST ? 0x80 : 0);
 		$myPid = $this->esc(getmypid());
 		$maxPlayers = Settings::$SYSTEM_MAX_PLAYERS;
 		return "INSERT INTO server_status (server_id, ip, port, class, last_online, mypid, online_players, max_players) VALUES ($myId, $myIp, $myPort, $myClass, unix_timestamp(), $myPid, 0, $maxPlayers) ON DUPLICATE KEY UPDATE ip = VALUES(ip), port = $myPort, class = $myClass, last_online = unix_timestamp(), mypid = $myPid, online_players = 0, max_players = $maxPlayers";

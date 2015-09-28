@@ -50,4 +50,7 @@ class RandomBroadcastQuery extends AsyncQuery{
 			}
 		}
 	}
+	public function reportDebug(){
+		return false;
+	}
 }
