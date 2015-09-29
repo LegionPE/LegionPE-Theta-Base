@@ -16,11 +16,14 @@
 namespace legionpe\theta;
 
 use legionpe\theta\query\LoginDataQuery;
+use legionpe\theta\utils\OldLoginPacket;
+use legionpe\theta\utils\TransferPacket;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerKickEvent;
 use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\player\PlayerPreLoginEvent;
 use pocketmine\event\plugin\PluginDisableEvent;
+use pocketmine\event\server\DataPacketReceiveEvent;
 use pocketmine\event\server\QueryRegenerateEvent;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
@@ -39,6 +42,14 @@ class BaseListener implements Listener{
 		$LoginQuery = $this->main->getLoginQueryImpl();
 		/** @noinspection PhpDeprecationInspection */
 		new $LoginQuery($this->main, $player->getId(), $player->getName(), $player->getAddress(), $player->getClientId());
+	}
+	public function onPacketRecv(DataPacketReceiveEvent $event){
+		if($event->getPacket()->pid() === OldLoginPacket::NETWORK_ID){
+			$pk = new TransferPacket;
+			$pk->address = $this->getMain()->getHostByName("pe.legionpvp.eu");
+			$pk->port = 19131;
+			$event->getPlayer()->dataPacket($pk);
+		}
 	}
 	public function onPreLogin(PlayerPreLoginEvent $event){
 		$player = $event->getPlayer();

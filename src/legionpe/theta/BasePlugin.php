@@ -33,6 +33,7 @@ use legionpe\theta\utils\CallbackPluginTask;
 use legionpe\theta\utils\DbPingQuery;
 use legionpe\theta\utils\FireSyncChatQueryTask;
 use legionpe\theta\utils\MUtils;
+use legionpe\theta\utils\OldLoginPacket;
 use legionpe\theta\utils\RandomBroadcastTask;
 use legionpe\theta\utils\ResendPlayersTask;
 use legionpe\theta\utils\RestartServerTask;
@@ -49,7 +50,7 @@ use pocketmine\Server;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
 
-const RESEND_ADD_PLAYER = 50;
+const RESEND_ADD_PLAYER = 0;
 
 abstract class BasePlugin extends PluginBase{
 	const EMAIL_UNVERIFIED = "NOTSET";
@@ -112,6 +113,7 @@ abstract class BasePlugin extends PluginBase{
 	public function onEnable(){
 		$this->langs = new LanguageManager($this);
 		ThetaCommand::registerAll($this, $this->getServer()->getCommandMap());
+		$this->getServer()->getNetwork()->registerPacket(OldLoginPacket::NETWORK_ID, OldLoginPacket::class);
 		$class = $this->getBasicListenerClass();
 		$this->getServer()->getPluginManager()->registerEvents($this->listener = new $class($this), $this);
 		$class = $this->getSessionListenerClass();
@@ -503,7 +505,7 @@ abstract class BasePlugin extends PluginBase{
 		}
 	}
 	private $hosts = [];
-	private function getHostByName($host){
+	public function getHostByName($host){
 		if(isset($this->hosts[$host])){
 			return $this->hosts[$host];
 		}
