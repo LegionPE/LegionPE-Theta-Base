@@ -20,9 +20,10 @@ use pocketmine\entity\Human;
 use pocketmine\item\Item;
 use pocketmine\math\Vector3;
 use pocketmine\network\protocol\AddPlayerPacket;
-use pocketmine\network\protocol\PlayerArmorEquipmentPacket;
 use pocketmine\network\protocol\SetEntityDataPacket;
 use pocketmine\Player;
+
+//use pocketmine\network\protocol\PlayerArmorEquipmentPacket;
 
 class HumanParticle extends Vector3{
 	/** @var int */
@@ -83,14 +84,14 @@ class HumanParticle extends Vector3{
 		$this->setDataProperty(Human::DATA_PLAYER_BED_POSITION, Entity::DATA_TYPE_POS, [0, 0, 0]);
 	}
 	public function sendArmor(){
-		$aep = new PlayerArmorEquipmentPacket;
-		$aep->eid = $this->eid();
-		$aep->slots = [];
-		$aep->slots[0] = ($this->helmetId === 0) ? 255 : $this->helmetId;
-		$aep->slots[1] = ($this->chestplateId === 0) ? 255 : $this->chestplateId;
-		$aep->slots[2] = ($this->leggingsId === 0) ? 255 : $this->leggingsId;
-		$aep->slots[3] = ($this->bootsId === 0) ? 255 : $this->bootsId;
-		$this->player->dataPacket($aep);
+//		$aep = new PlayerArmorEquipmentPacket;
+//		$aep->eid = $this->eid();
+//		$aep->slots = [];
+//		$aep->slots[0] = ($this->helmetId === 0) ? 255 : $this->helmetId;
+//		$aep->slots[1] = ($this->chestplateId === 0) ? 255 : $this->chestplateId;
+//		$aep->slots[2] = ($this->leggingsId === 0) ? 255 : $this->leggingsId;
+//		$aep->slots[3] = ($this->bootsId === 0) ? 255 : $this->bootsId;
+//		$this->player->dataPacket($aep);
 	}
 	public function setName($name){
 		$this->setDataProperty(Entity::DATA_NAMETAG, Entity::DATA_TYPE_STRING, $name);

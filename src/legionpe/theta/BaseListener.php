@@ -16,7 +16,6 @@
 namespace legionpe\theta;
 
 use legionpe\theta\query\LoginDataQuery;
-use pocketmine\event\level\ChunkLoadEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerKickEvent;
 use pocketmine\event\player\PlayerLoginEvent;
@@ -85,14 +84,14 @@ class BaseListener implements Listener{
 			}
 		}
 	}
-	public function onLoadChunk(ChunkLoadEvent $event){
-		for($i = 0; $i < 16; $i++){
-			for($j = 0; $j < 16; $j++){
-				$event->getChunk()->setBiomeColor($i, $j, 141 + mt_rand(-8, 8), 179 + mt_rand(-8, 8), 96 + mt_rand(-8, 8));
-				$event->getChunk()->setChanged(true);
-			}
-		}
-	}
+//	public function onLoadChunk(ChunkLoadEvent $event){
+//		for($i = 0; $i < 16; $i++){
+//			for($j = 0; $j < 16; $j++){
+//				$event->getChunk()->setBiomeColor($i, $j, 141 + mt_rand(-8, 8), 179 + mt_rand(-8, 8), 96 + mt_rand(-8, 8));
+//				$event->getChunk()->setChanged(true);
+//			}
+//		}
+//	}
 	public function onDisable(PluginDisableEvent $event){
 		if($event->getPlugin() === $this->main){
 			foreach($this->main->getServer()->getOnlinePlayers() as $player){

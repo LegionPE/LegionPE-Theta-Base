@@ -281,7 +281,6 @@ abstract class Session{
 		$att->setPermission("pocketmine.command.timings", $this->isAdmin());
 		$att->setPermission("pocketmine.command.spawnpoint", false);
 		$att->setPermission("pocketmine.command.setworldspawn", $this->isAdmin());
-		$att->setPermission("fasttransfer.command.transfer", $this->isModerator());
 	}
 	public function send($phrase, array $vars = []){
 		if($this->getPlayer()->isOnline()){

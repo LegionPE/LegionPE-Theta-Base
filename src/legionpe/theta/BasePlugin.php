@@ -29,6 +29,7 @@ use legionpe\theta\query\NewUserQuery;
 use legionpe\theta\query\SaveSinglePlayerQuery;
 use legionpe\theta\query\TransferServerQuery;
 use legionpe\theta\queue\Queue;
+use legionpe\theta\utils\CallbackPluginTask;
 use legionpe\theta\utils\DbPingQuery;
 use legionpe\theta\utils\FireSyncChatQueryTask;
 use legionpe\theta\utils\MUtils;
@@ -37,14 +38,15 @@ use legionpe\theta\utils\ResendPlayersTask;
 use legionpe\theta\utils\RestartServerTask;
 use legionpe\theta\utils\SessionTickTask;
 use legionpe\theta\utils\SyncStatusTask;
+use legionpe\theta\utils\TransferPacket;
 use libtheta\info\pvp\PvpKitInfo;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\Player;
+use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
-use shoghicp\FastTransfer\FastTransfer;
 
 const RESEND_ADD_PLAYER = 50;
 
@@ -54,8 +56,6 @@ abstract class BasePlugin extends PluginBase{
 	private static $CLASS = null;
 	/** @var SessionEventListener */
 	protected $sesList;
-	/** @var FastTransfer */
-	private $FastTransfer;
 	/** @var BaseListener */
 	private $listener;
 	/** @var LanguageManager */
@@ -110,7 +110,6 @@ abstract class BasePlugin extends PluginBase{
 	}
 	public function onEnable(){
 		$this->langs = new LanguageManager($this);
-		$this->FastTransfer = $this->getServer()->getPluginManager()->getPlugin("FastTransfer");
 		ThetaCommand::registerAll($this, $this->getServer()->getCommandMap());
 		$class = $this->getBasicListenerClass();
 		$this->getServer()->getPluginManager()->registerEvents($this->listener = new $class($this), $this);
@@ -125,6 +124,12 @@ abstract class BasePlugin extends PluginBase{
 		$this->getServer()->getScheduler()->scheduleRepeatingTask(new RestartServerTask($this), 6000);
 		$this->restartTime = $this->getServer()->getTick() + 72000;
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new RandomBroadcastTask($this), 2400, 2400);
+		$this->getServer()->getScheduler()->scheduleDelayedTask(new CallbackPluginTask($this, function (){
+			$plugin = $this->getServer()->getPluginManager()->getPlugin("FastTransfer");
+			if($plugin instanceof Plugin and $plugin->isEnabled()){
+				$this->getServer()->getPluginManager()->disablePlugin($plugin);
+			}
+		}), 2);
 		if(RESEND_ADD_PLAYER > 0){
 			$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new ResendPlayersTask($this), RESEND_ADD_PLAYER, RESEND_ADD_PLAYER);
 		}
@@ -218,7 +223,10 @@ abstract class BasePlugin extends PluginBase{
 		if($save and ($session = $this->getSession($player)) instanceof Session){
 			$session->saveData(Settings::STATUS_TRANSFERRING);
 		}
-		$this->FastTransfer->transferPlayer($player, $ip, $port, $msg);
+		if(!empty($msg)){
+			$player->sendMessage($msg);
+		}
+		$this->transferPlayer0($player, $ip, $port);
 	}
 	public function getSession($player){
 		if(is_string($player)){
@@ -473,5 +481,25 @@ abstract class BasePlugin extends PluginBase{
 	 */
 	public function getRestartTime(){
 		return $this->restartTime;
+	}
+	private function transferPlayer0(Player $player, $ip, $port){
+		$sp = new TransferPacket;
+		$sp->address = $this->getHostByName($ip);
+		$sp->port = $port;
+		$player->dataPacket($sp);
+		$ses = $this->getSession($player);
+		if($ses !== null){
+			$ses->setMaintainedPopup();
+		}
+		$this->getServer()->removeOnlinePlayer($player);
+		$this->getServer()->removePlayer($player);
+		$this->getServer()->removePlayerListData($player->getUniqueId());
+	}
+	private $hosts = [];
+	private function getHostByName($host){
+		if(isset($this->hosts[$host])){
+			return $this->hosts[$host];
+		}
+		return $this->hosts[$host] = gethostbyname($host);
 	}
 }
