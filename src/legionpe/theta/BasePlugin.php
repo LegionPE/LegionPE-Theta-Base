@@ -41,12 +41,15 @@ use legionpe\theta\utils\SyncStatusTask;
 use legionpe\theta\utils\TransferPacket;
 use libtheta\info\pvp\PvpKitInfo;
 use pocketmine\event\player\PlayerQuitEvent;
+use pocketmine\network\RakLibInterface;
 use pocketmine\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
+use raklib\RakLib;
+use raklib\server\RakLibServer;
 
 const RESEND_ADD_PLAYER = 50;
 
@@ -487,13 +490,18 @@ abstract class BasePlugin extends PluginBase{
 		$sp->address = $this->getHostByName($ip);
 		$sp->port = $port;
 		$player->dataPacket($sp);
-		$ses = $this->getSession($player);
-		if($ses !== null){
-			$ses->setMaintainedPopup();
+		$interfaces = $this->getServer()->getNetwork()->getInterfaces();
+		foreach($interfaces as $interface){
+			if($interface instanceof RakLibInterface){
+				$class = new \ReflectionClass(RakLibInterface::class);
+				$prop = $class->getProperty("rakLib");
+				$prop->setAccessible(true);
+				/** @var RakLibServer $value */
+				$value = $prop->getValue($interface);
+				$identifier = $player->getAddress() . ":" . $player->getPort();
+				$value->pushMainToThreadPacket(RakLib::PACKET_CLOSE_SESSION . chr(strlen($identifier)) . $identifier);
+			}
 		}
-		$this->getServer()->removeOnlinePlayer($player);
-		$this->getServer()->removePlayer($player);
-		$this->getServer()->removePlayerListData($player->getUniqueId());
 	}
 	private $hosts = [];
 	private function getHostByName($host){
