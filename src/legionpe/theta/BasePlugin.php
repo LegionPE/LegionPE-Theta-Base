@@ -48,8 +48,6 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
-use raklib\RakLib;
-use raklib\server\RakLibServer;
 
 const RESEND_ADD_PLAYER = 50;
 
@@ -493,13 +491,14 @@ abstract class BasePlugin extends PluginBase{
 		$interfaces = $this->getServer()->getNetwork()->getInterfaces();
 		foreach($interfaces as $interface){
 			if($interface instanceof RakLibInterface){
-				$class = new \ReflectionClass(RakLibInterface::class);
-				$prop = $class->getProperty("rakLib");
-				$prop->setAccessible(true);
-				/** @var RakLibServer $value */
-				$value = $prop->getValue($interface);
+//				$class = new \ReflectionClass(RakLibInterface::class);
+//				$prop = $class->getProperty("rakLib");
+//				$prop->setAccessible(true);
+//				/** @var RakLibServer $value */
+//				$value = $prop->getValue($interface);
 				$identifier = $player->getAddress() . ":" . $player->getPort();
-				$value->pushMainToThreadPacket(RakLib::PACKET_CLOSE_SESSION . chr(strlen($identifier)) . $identifier);
+//				$value->pushMainToThreadPacket(RakLib::PACKET_CLOSE_SESSION . chr(strlen($identifier)) . $identifier);
+				$interface->closeSession($identifier, "transferring");
 			}
 		}
 	}
