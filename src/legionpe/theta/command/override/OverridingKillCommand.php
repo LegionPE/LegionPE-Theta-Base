@@ -26,6 +26,7 @@ use pocketmine\event\entity\EntityDamageEvent;
 
 class OverridingKillCommand extends SessionCommand{
 	protected function run(array $args, Session $sender){
-		$sender->getPlayer()->attack($sender->getPlayer()->getHealth(), new EntityDamageEvent($sender->getPlayer(), EntityDamageEvent::CAUSE_SUICIDE, 20000));
+		$sender->getPlayer()->setLastDamageCause(new EntityDamageEvent($sender->getPlayer(), EntityDamageEvent::CAUSE_SUICIDE, $sender->getPlayer()->getHealth()));
+		$sender->getPlayer()->kill();
 	}
 }
