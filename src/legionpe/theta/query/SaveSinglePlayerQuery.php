@@ -50,7 +50,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 			"lastip" => $session->getPlayer()->getAddress(),
 			"status" => $status,
 			"lastses" => Settings::$LOCALIZE_CLASS,
-			"authuuid" => $session->getPlayer()->getClientSecret(),
+			"authuuid" => ["v" => $session->getPlayer()->getClientSecret(), "bin" => true],
 			"coins" => ["v" => $coins, "noupdate" => true],
 			"hash" => ["v" => $session->getPasswordHash(), "noupdate" => !$session->doHashSaves],
 			"pwprefix" => ["v" => $session->getPasswordPrefix(), "noupdate" => true],
