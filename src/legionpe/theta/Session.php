@@ -184,7 +184,7 @@ abstract class Session{
 	}
 	private function prepareLogin(){
 		$status = $this->getLoginDatum("status");
-		if($status === Settings::STATUS_TRANSFERRING and $this->getPlayer()->getClientSecret() === $this->getLoginDatum("authuuid")){
+		if($status === Settings::STATUS_TRANSFERRING and $this->getPlayer()->getClientSecret() === $this->getLoginDatum("authuuid") and (time() - $this->getLastOnline() < 30)){
 			$this->login(self::AUTH_TRANSFER);
 			return;
 		}

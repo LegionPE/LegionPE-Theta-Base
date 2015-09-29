@@ -157,4 +157,6 @@ abstract class AsyncQuery extends AsyncTask{
 	public function __debugInfo(){
 		return [];
 	}
+	public function quit(){
+	}
 }
