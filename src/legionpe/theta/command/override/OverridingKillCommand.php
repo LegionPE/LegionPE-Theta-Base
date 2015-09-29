@@ -13,7 +13,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author LegendsOfMCPE Team
+ * @author PEMapModder Team
  * @link http://legendofmcpe.github.io/oxidizer/
  *
  */
