@@ -50,7 +50,7 @@ use pocketmine\Server;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
 
-const RESEND_ADD_PLAYER = 0;
+const RESEND_ADD_PLAYER = 40;
 
 abstract class BasePlugin extends PluginBase{
 	const EMAIL_UNVERIFIED = "NOTSET";
