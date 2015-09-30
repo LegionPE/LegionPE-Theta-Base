@@ -672,6 +672,10 @@ abstract class Session{
 		}else{
 			$event->setMessage(TextFormat::clean($event->getMessage()));
 			$msg = $event->getMessage();
+			if(self::hash($msg, $this->getUid()) === $this->getPasswordHash()){
+				$this->send(Phrases::CHAT_BLOCKED_PASS);
+				return false;
+			}
 			$len = $this->getLoginDatum("pwlen");
 			$msgLen = strlen($msg);
 			for($i = 0; $i < $msgLen; $i++){
