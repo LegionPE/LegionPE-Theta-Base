@@ -380,14 +380,14 @@ abstract class Session{
 		if($rank & 0x2000){
 			$prefix .= "Head ";
 		}
-		if($rank & 0x0800){
-			return $prefix . "Dev";
-		}
 		if($rank & 0x0080){
 			return $prefix . "HeadOfStaff";
 		}
 		if($rank & 0x0040){
 			return $prefix . "Owner";
+		}
+		if($rank & 0x0800){
+			return $prefix . "Dev";
 		}
 		if($rank & 0x0020){
 			return $prefix . "Admin";
