@@ -20,7 +20,7 @@ use legionpe\theta\command\SessionCommand;
 use legionpe\theta\query\TeleportServerPlayerQuery;
 use legionpe\theta\Session;
 
-class TeleportServerPlayerCommand extends SessionCommand{
+class ServerTeleportPlayerCommand extends SessionCommand{
 	public function __construct(BasePlugin $main){
 		parent::__construct($main, "stp", "Teleport to player on another server", "/stp <full name>");
 	}
@@ -29,7 +29,7 @@ class TeleportServerPlayerCommand extends SessionCommand{
 		if($user === null){
 			return false;
 		}
-		new TeleportServerPlayerQuery($user, $user, $sender);
+		new TeleportServerPlayerQuery($this->getMain(), $user, $sender);
 		return true;
 	}
 	protected function checkPerm(Session $session, &$msg = null){
