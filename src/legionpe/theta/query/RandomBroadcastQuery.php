@@ -44,7 +44,7 @@ class RandomBroadcastQuery extends AsyncQuery{
 		foreach(BasePlugin::getInstance($server)->getSessions() as $ses){
 			$langs = $ses->getLangs();
 			foreach($langs as $lang){
-				if(isset($result[$lang])){
+				if(isset($result[$lang]) and strlen($result[$lang]) > 0 and $result[$lang] !== "NULL"){
 					$ses->getPlayer()->sendMessage(Phrases::VAR_notify . $result[$lang]);
 				}
 			}

@@ -375,7 +375,7 @@ abstract class BasePlugin extends PluginBase{
 		$this->getBaseListener()->onQueryRegen($info);
 		$this->getServer()->getNetwork()->setName(
 			TextFormat::BOLD . TextFormat::AQUA . "LegionPE " .
-			TextFormat::BOLD . TextFormat::GREEN . Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS] .
+			TextFormat::BOLD . TextFormat::GREEN . ((Settings::$LOCALIZE_CLASS === Settings::CLASS_HUB) ? "Theta" : Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS]) .
 			(($append === null) ? "" : (TextFormat::RESET . TextFormat::GRAY . " - " . TextFormat::RESET . $append))
 		);
 	}
