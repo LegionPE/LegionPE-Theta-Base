@@ -6,8 +6,8 @@
 		"authors": [
 			"PEMapModder"
 		],
-		"version": "1.3",
-		"releng": "1.3"
+		"version": "1.4",
+		"releng": "1.4"
 	},
 	"chat": {
 		"blocked": {
@@ -295,7 +295,8 @@
 	"login": {
 		"auth": {
 			"success": "%success%You have been authenticated by %em%%method%",
-			"whereami": "%info%You are playing on %em2%%class% %em%(%ip%:%port%)",
+			"whereami$doc": "@since 1.4",
+			"whereami": "%info%You are playing on %em2%%class% %em%(%ip%:%port%)\n%notify%Add this server into your server list directly to reduce the chance of crashing!",
 			"firstjoin": {
 				"hub": "%em%Walk into a portal%info% or %em2%Choose an item in your inventory%info% to join a game.\n%info%You can also type %em3%\/help%info% in chat to check for available commands."
 			},
@@ -431,7 +432,7 @@
 			"hinttext": "%notify2%Jump into the %em%void%notify2% to start fighting.",
 			"kit": {
 				"shops": {
-					"webhint$doc": "@since 1.1",
+					"webhint$doc": "@since 1.4",
 					"webhint": "%notify2%Go to %em%www.lgpe.co/s%notify2% to upgrade your kits!"
 				}
 			},
