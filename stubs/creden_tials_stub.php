@@ -27,7 +27,7 @@ class Credentials{
 	const MYSQL_PORT = 3306;
 	const IRC_WEBHOOK = "http://n.tkte.ch/h/****/***********?payload=%7BLegionPE+Error%21%7D+";
 	const IRC_WEBHOOK_NOPREFIX = "http://n.tkte.ch/h/****/***********?payload=";
-	const IRC_WEBHOOK_NOARGS = "http://n.tkte.ch/h/****/***********";
+	const IRC_WEBHOOK_STATUS = "http://n.tkte.ch/h/****/***********?payload=";
 	const REPO_TOKEN = "****GitHub OAuth Access Token****";
 	/**
 	 * @return \mysqli

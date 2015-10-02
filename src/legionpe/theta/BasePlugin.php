@@ -41,7 +41,9 @@ use legionpe\theta\utils\SessionTickTask;
 use legionpe\theta\utils\SyncStatusTask;
 use legionpe\theta\utils\TransferPacket;
 use libtheta\info\pvp\PvpKitInfo;
+use pocketmine\command\defaults\TimingsCommand;
 use pocketmine\event\player\PlayerQuitEvent;
+use pocketmine\event\TimingsHandler;
 use pocketmine\network\RakLibInterface;
 use pocketmine\Player;
 use pocketmine\plugin\Plugin;
@@ -49,6 +51,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
 use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
+use pocketmine\utils\Utils;
 
 const RESEND_ADD_PLAYER = 40;
 
@@ -146,6 +149,9 @@ abstract class BasePlugin extends PluginBase{
 		$compileTime = $buildInfo->time;
 		$buildNumber = $buildInfo->buildNumber;
 		$buildAuthor = $buildInfo->buildAuthor;
+		Utils::getURL(Credentials::IRC_WEBHOOK_STATUS . urlencode("[Status] [" . Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS] . "] Server at " . Settings::$LOCALIZE_IP . ":" . Settings::$LOCALIZE_PORT . " started."), 3);
+		$this->getServer()->getPluginManager()->setUseTimings(true);
+		TimingsHandler::reload();
 		$this->getLogger()->alert("Enabled " . $this->getDescription()->getFullName() . " Build $buildNumber compiled at " . date("d/m/Y H:i:s (P)", $compileTime) . " (" . MUtils::time_secsToString(time() - $compileTime) . " ago) by $buildAuthor. MyPID is " . \getmypid() . ".");
 	}
 	public function getResourceContents($path){
@@ -161,7 +167,36 @@ abstract class BasePlugin extends PluginBase{
 		new CloseServerQuery($this);
 		/** @noinspection PhpUsageOfSilenceOperatorInspection */
 		@fclose($this->pmLog);
+		$url = $this->pasteTimings();
+		Utils::getURL(Credentials::IRC_WEBHOOK_STATUS . urlencode("[Status] [" . Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS] . "] Server at " . Settings::$LOCALIZE_IP . ":" . Settings::$LOCALIZE_PORT . " stopped. PID is " . \getmypid() . ". Timings result can be viewed at $url"), 3);
 		$this->getLogger()->alert("PID: " . \getmypid());
+	}
+	private function pasteTimings(){
+		$sampleTime = microtime(true) - TimingsCommand::$timingStart;
+		$stream = fopen("php://temp", "r+b");
+		TimingsHandler::printTimings($stream);
+		fwrite($stream, "Sample time " . round($sampleTime * 1000000000) . " (" . $sampleTime . "s)" . PHP_EOL);
+		fseek($stream, 0);
+		$data = ["syntax" => "text", "poster" => "LegionPE", "content" => stream_get_contents($stream)];
+		$ch = curl_init("http://paste.ubuntu.com/");
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
+		curl_setopt($ch, CURLOPT_FRESH_CONNECT, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_AUTOREFERER, false);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
+		curl_setopt($ch, CURLOPT_HEADER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, ["User-Agent: LegionPE " . $this->getDescription()->getVersion()]);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$data = curl_exec($ch);
+		curl_close($ch);
+		if(preg_match('#^Location: http://paste\\.ubuntu\\.com/([0-9]{1,})/#m', $data, $matches) == 0){
+			return "about:blank";
+		}
+		fclose($stream);
+		return "http://timings.aikar.co/?url=$matches[1]";
 	}
 	public function evaluate($code){
 		eval($code);
