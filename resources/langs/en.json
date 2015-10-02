@@ -432,7 +432,7 @@
 			"kit": {
 				"shops": {
 					"webhint$doc": "@since 1.1",
-					"webhint": "%notify2%Go to %em%http://lgpe.co/s%notify2% to upgrade your kits!"
+					"webhint": "%notify2%Go to %em%www.lgpe.co/s%notify2% to upgrade your kits!"
 				}
 			},
 			"cmd": {
