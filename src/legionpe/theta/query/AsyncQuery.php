@@ -15,9 +15,9 @@
 
 namespace legionpe\theta\query;
 
-use legionpe\theta\BasePlugin;
 use legionpe\theta\config\Settings;
 use legionpe\theta\credentials\Credentials;
+use pocketmine\plugin\Plugin;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\utils\Utils;
 
@@ -40,7 +40,7 @@ abstract class AsyncQuery extends AsyncTask{
 		self::COL_INT => 0,
 		self::COL_FLOAT => 0.0,
 	];
-	public function __construct(BasePlugin $plugin){
+	public function __construct(Plugin $plugin){
 		if($this->getResultType() !== self::TYPE_RAW and $this->getExpectedColumns() === null){
 			echo "Fatal: Plugin error. ", static::class . " must override getExpectedColumns(), but it didn't. Committing suicide.";
 			sleep(604800);
