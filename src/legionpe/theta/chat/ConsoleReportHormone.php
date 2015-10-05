@@ -48,6 +48,7 @@ class ConsoleReportHormone extends Hormone{
 			"text" => TextFormat::clean($message),
 			"icon_url" => Credentials::LEGIONPE_ICON_URL,
 			"username" => $this->src,
+			"channel" => $this->src === "SpamDetector" ? "#spam" : "#support"
 		])));
 	}
 }
