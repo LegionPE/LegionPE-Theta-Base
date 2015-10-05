@@ -545,8 +545,8 @@ abstract class Session{
 			return;
 		}
 		$msg = $this->getChatColor() . preg_replace_callback('/@([A-Za-z0-9_]{1,})/', function ($match){
-				if(($player = $this->getMain()->getServer()->getPlayer($match[1])) !== null){
-					return TextFormat::DARK_AQUA . TextFormat::ITALIC . $player->getName() . TextFormat::RESET . $this->getChatColor();
+				if(($session = $this->getMain()->getSession($match[1])) !== null){
+					return TextFormat::DARK_AQUA . TextFormat::ITALIC . $session->getInGameName() . TextFormat::RESET . $this->getChatColor();
 				}
 				return TextFormat::ITALIC . TextFormat::GRAY . $match[0] . TextFormat::RESET . $this->getChatColor();
 			}, $msg);
