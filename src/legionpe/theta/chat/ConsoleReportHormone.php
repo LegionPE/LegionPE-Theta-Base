@@ -15,6 +15,8 @@
 
 namespace legionpe\theta\chat;
 
+use legionpe\theta\credentials\Credentials;
+use legionpe\theta\utils\PostUrlTask;
 use pocketmine\utils\TextFormat;
 
 class ConsoleReportHormone extends Hormone{
@@ -33,5 +35,14 @@ class ConsoleReportHormone extends Hormone{
 	}
 	public function getType(){
 		return self::CONSOLE_MESSAGE;
+	}
+	public function onPostRelease($rowId){
+		$this->main->getServer()->getScheduler()->scheduleAsyncTask(new PostUrlTask(Credentials::SLACK_WEBHOOK, json_encode([
+			"text" => implode("\n", [
+				"@channel: $this->src @ `$this->ip:$this->port` executed /console. Message `#$rowId``:",
+				$this->msg,
+			]),
+			"icon_url" => Credentials::LEGIONPE_ICON_URL
+		])));
 	}
 }

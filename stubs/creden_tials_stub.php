@@ -29,6 +29,8 @@ class Credentials{
 	const IRC_WEBHOOK_NOPREFIX = "http://n.tkte.ch/h/****/***********?payload=";
 	const IRC_WEBHOOK_STATUS = "http://n.tkte.ch/h/****/***********?payload=";
 	const REPO_TOKEN = "****GitHub OAuth Access Token****";
+	const SLACK_WEBHOOK = "https://hooks.slack.com/services/****/****/****";
+	const LEGIONPE_ICON_URL = "https://avatars0.githubusercontent.com/u/13588793?v=3&s=200";
 	/**
 	 * @return \mysqli
 	 */

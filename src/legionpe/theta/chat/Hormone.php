@@ -92,7 +92,7 @@ abstract class Hormone{
 	}
 	public function release(){
 		$this->onRelease();
-		new PushChatQuery($this->main, $this->src, $this->msg, $this->getType(), $this->class, $this->_classData);
+		new PushChatQuery($this->main, $this->src, $this->msg, $this->getType(), $this->class, $this->_classData, $this);
 	}
 	public function consume(){
 		if(is_int($this->rowId)){
@@ -105,4 +105,6 @@ abstract class Hormone{
 	}
 	public abstract function getType();
 	public abstract function execute();
+	public function onPostRelease($rowId){
+	}
 }
