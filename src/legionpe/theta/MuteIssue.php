@@ -33,6 +33,7 @@ class MuteIssue{
 			"till" => date($session->translate(Phrases::WORDS_DATE_FORMAT), $this->since + $this->length),
 			"passed" => MUtils::time_secsToString(time() - $this->since),
 			"left" => MUtils::time_secsToString($this->since + $this->length - time()),
+			"issuer" => $this->src
 		]);
 	}
 }

@@ -168,7 +168,7 @@ abstract class BasePlugin extends PluginBase{
 		/** @noinspection PhpUsageOfSilenceOperatorInspection */
 		@fclose($this->pmLog);
 		$url = $this->pasteTimings();
-		Utils::getURL(Credentials::IRC_WEBHOOK_STATUS . urlencode("[Status] [" . Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS] . "] {$this->getDescription()->getFullName()} at " . Settings::$LOCALIZE_IP . ":" . Settings::$LOCALIZE_PORT . " stopped. PID is " . \getmypid() . ". Timings result can be viewed at $url"), 3);
+		Utils::getURL(Credentials::IRC_WEBHOOK_STATUS . urlencode("[Status] [" . Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS] . "] Server at " . Settings::$LOCALIZE_IP . ":" . Settings::$LOCALIZE_PORT . " (PID " . \getmypid() . ") stopped. Timings: $url"), 3);
 		$this->getLogger()->alert("PID: " . \getmypid());
 	}
 	private function pasteTimings(){

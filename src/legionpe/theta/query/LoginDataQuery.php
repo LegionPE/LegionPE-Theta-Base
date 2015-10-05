@@ -27,6 +27,7 @@ class LoginDataQuery extends AsyncQuery{
 	public $sesId;
 	public $name;
 	public $totalWarnPts;
+	public $lastWarnTime;
 	private $class;
 	public function __construct(BasePlugin $plugin, $sesId, $name, $ip, $clientId){
 		$this->class = Settings::$LOCALIZE_CLASS;
@@ -37,12 +38,14 @@ class LoginDataQuery extends AsyncQuery{
 		parent::__construct($plugin);
 	}
 	public function onPreQuery(\mysqli $mysql){
-		$r = $mysql->query("SELECT SUM(pts)AS sum FROM warnings_logs WHERE
+		$r = $mysql->query("SELECT SUM(pts)AS sum, MAX(creation) AS lastwarn FROM warnings_logs WHERE
 			uid=(SELECT uid FROM users WHERE name={$this->esc($this->name)}) or
 			ip={$this->esc($this->ip)} or
 			(clientid = $this->clientId and clientid != 0)");
-		$this->totalWarnPts = (int) $r->fetch_assoc()["sum"];
+		$row = $r->fetch_assoc();
 		$r->close();
+		$this->totalWarnPts = (int) $row["sum"];
+		$this->lastWarnTime = (int) $row["lastwarn"];
 	}
 	public function getQuery(){
 		// warning: keep the first 7 characters ALWAYS "SELECT "
@@ -168,7 +171,7 @@ class LoginDataQuery extends AsyncQuery{
 		}
 		/** @var int $resulttype */
 		if($resulttype === AsyncQuery::TYPE_RAW){
-			$main->getLogger()->notice("New account pending to register: {$this->name}");
+			$main->getLogger()->notice("New account pending to register: $this->name");
 			$loginData = null;
 		}else{
 			/** @var mixed[] $result */
@@ -183,12 +186,12 @@ class LoginDataQuery extends AsyncQuery{
 				}else{
 					$main->getAltServer($ip, $port);
 					if($ip !== "0.0.0.0"){
-						$main->getLogger()->notice($player->getName() . " is transferred to $ip:$port");
-						$main->transfer($player, $ip, $port, "This server is full.", false);
+						$main->getLogger()->notice($player->getName() . " is transferred to $ip:$port. Feature suppressed in 0.12.1");
+//						$main->transfer($player, $ip, $port, "This server is full.", false);
 					}
 				}
 			}
-			$consequence = Settings::getWarnPtsConsequence($this->totalWarnPts, $loginData["lastwarn"]);
+			$consequence = Settings::getWarnPtsConsequence($this->totalWarnPts, $this->lastWarnTime);
 			if($consequence->banLength > 0){
 				$player->kick(TextFormat::RED . "You are banned.\nYou have accumulated " . TextFormat::DARK_PURPLE . $this->totalWarnPts . TextFormat::RED . " warning points,\nand you still have " . TextFormat::BLUE . MUtils::time_secsToString($consequence->banLength) . TextFormat::RED . " before you are unbanned.\n" . TextFormat::AQUA . "Believe this to be a mistake? Contact us with email at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu");
 				return;
