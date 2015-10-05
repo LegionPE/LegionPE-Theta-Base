@@ -42,7 +42,8 @@ class ConsoleReportHormone extends Hormone{
 				"@channel: $this->src @ `$this->ip:$this->port` executed /console. Message `#$rowId``:",
 				$this->msg,
 			]),
-			"icon_url" => Credentials::LEGIONPE_ICON_URL
+			"icon_url" => Credentials::LEGIONPE_ICON_URL,
+			"username" => $this->src
 		])));
 	}
 }
