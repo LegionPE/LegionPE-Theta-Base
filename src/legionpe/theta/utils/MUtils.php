@@ -17,6 +17,7 @@ namespace legionpe\theta\utils;
 
 use pocketmine\entity\Projectile;
 use pocketmine\math\Vector3;
+use pocketmine\utils\TextFormat;
 
 class MUtils{
 	public static function word_quantitize(&$word, $count){
@@ -180,5 +181,134 @@ class MUtils{
 			}
 		}
 		return $return;
+	}
+
+	public static function toMd($string){
+		if(!\is_array($string)){
+			$string = TextFormat::tokenize($string);
+		}
+		$newString = "";
+		$tokens = 0;
+		$close = "";
+		foreach($string as $token){
+			switch($token){
+				case TextFormat::BOLD:
+					$newString .= $close . "**";
+					$close = "**";
+					++$tokens;
+					break;
+				case TextFormat::OBFUSCATED:
+					$newString .= $close . "~~";
+					$close = "~~";
+					++$tokens;
+					break;
+				case TextFormat::ITALIC:
+					$newString .= $close . "_";
+					$close = "_";
+					++$tokens;
+					break;
+				case TextFormat::UNDERLINE:
+					$newString .= $close;
+					$close = "";
+					++$tokens;
+					break;
+				case TextFormat::STRIKETHROUGH:
+					$newString .= $close . "~~";
+					$close = "~~";
+					++$tokens;
+					break;
+				case TextFormat::RESET:
+					$newString .= $close;
+					$close = "";
+					$tokens = 0;
+					break;
+
+				//Colors
+				case TextFormat::BLACK:
+					$newString .= $close . "`";
+					$close = "`";
+					++$tokens;
+					break;
+				case TextFormat::DARK_BLUE:
+					$newString .= $close . "`";
+					$close = "`";
+					++$tokens;
+					break;
+				case TextFormat::DARK_GREEN:
+					$newString .= $close . "`";
+					$close = "`";
+					++$tokens;
+					break;
+				case TextFormat::DARK_AQUA:
+					$newString .= $close . "`";
+					$close = "`";
+					++$tokens;
+					break;
+				case TextFormat::DARK_RED:
+					$newString .= $close . "`";
+					$close = "`";
+					++$tokens;
+					break;
+				case TextFormat::DARK_PURPLE:
+					$newString .= $close . "`";
+					$close = "`";
+					++$tokens;
+					break;
+				case TextFormat::GOLD:
+					$newString .= $close . "`";
+					$close = "`";
+					++$tokens;
+					break;
+				case TextFormat::GRAY:
+					$newString .= $close . "`";
+					$close = "`";
+					++$tokens;
+					break;
+				case TextFormat::DARK_GRAY:
+					$newString .= $close . "`";
+					$close = "`";
+					++$tokens;
+					break;
+				case TextFormat::BLUE:
+					$newString .= $close . "`";
+					$close = "`";
+					++$tokens;
+					break;
+				case TextFormat::GREEN:
+					$newString .= $close . "`";
+					$close = "`";
+					++$tokens;
+					break;
+				case TextFormat::AQUA:
+					$newString .= $close . "`";
+					$close = "`";
+					++$tokens;
+					break;
+				case TextFormat::RED:
+					$newString .= $close . "`";
+					$close = "`";
+					++$tokens;
+					break;
+				case TextFormat::LIGHT_PURPLE:
+					$newString .= $close . "`";
+					$close = "`";
+					++$tokens;
+					break;
+				case TextFormat::YELLOW:
+					$newString .= $close . "`";
+					$close = "`";
+					break;
+				case TextFormat::WHITE:
+					$newString .= $close;
+					$close = "";
+					++$tokens;
+					break;
+				default:
+					$newString .= $token;
+					break;
+			}
+		}
+
+		return $newString;
 	}
 }
