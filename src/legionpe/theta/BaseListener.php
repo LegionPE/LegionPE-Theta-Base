@@ -52,6 +52,7 @@ class BaseListener implements Listener{
 		}
 	}
 	public function onPreLogin(PlayerPreLoginEvent $event){
+		$this->getMain()->newJoins++;
 		$player = $event->getPlayer();
 		foreach($this->main->getServer()->getOnlinePlayers() as $other){
 			if($other === $player or strtolower($other->getName()) !== strtolower($player->getName())){

@@ -92,6 +92,8 @@ abstract class BasePlugin extends PluginBase{
 	private $mutes = [];
 	/** @var int */
 	private $restartTime;
+	/** @var int */
+	public $newJoins = 0;
 
 	// PluginManager-level stuff
 	/**

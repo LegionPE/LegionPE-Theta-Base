@@ -26,16 +26,19 @@ class ReportStatusQuery extends AsyncQuery{
 	private $myIp, $altIp = null;
 	/** @var int */
 	private $myPort, $altPort = null;
+	private $newJoins;
 	public function __construct(BasePlugin $plugin){
 		$this->players = count($plugin->getServer()->getOnlinePlayers());
 		$this->class = Settings::$LOCALIZE_CLASS;
 		$this->myIp = Settings::$LOCALIZE_IP;
 		$this->myPort = Settings::$LOCALIZE_PORT;
+		$this->newJoins = $plugin->newJoins;
+		$plugin->newJoins = 0;
 		parent::__construct($plugin);
 	}
 	public function onPreQuery(\mysqli $mysql){
 		$myId = Settings::$LOCALIZE_ID;
-		$mysql->query("UPDATE server_status SET last_online=unix_timestamp(),online_players=$this->players WHERE server_id=$myId;");
+		$mysql->query("UPDATE server_status SET last_online=unix_timestamp(),online_players=$this->players, totaljoins=totaljoins+$this->newJoins WHERE server_id=$myId;");
 	}
 	public function getQuery(){
 		return "SELECT SUM(online_players)AS online,SUM(max_players)AS max,COUNT(*)AS servers, (SELECT SUM(online_players)FROM server_status WHERE class=$this->class AND unix_timestamp()-last_online<5)AS class_online, (SELECT SUM(max_players)FROM server_status WHERE class=$this->class AND unix_timestamp()-last_online<5)AS class_max, (SELECT COUNT(*)FROM server_status WHERE class=$this->class AND unix_timestamp()-last_online<5)AS class_servers FROM server_status WHERE unix_timestamp()-last_online<5";
