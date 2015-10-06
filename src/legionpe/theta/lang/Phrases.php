@@ -27,6 +27,7 @@ class Phrases{
 
 	const LOGIN_AUTH_SUCCESS = "login.auth.success";
 	const LOGIN_AUTH_WHEREAMI = "login.auth.whereami";
+	const LOGIN_AUTH_NOTICE = "login.auth.notice";
 	const LOGIN_KNOWN_AS = "login.knownas";
 	const LOGIN_PASS_PROMPT = "login.pass.prompt";
 	const LOGIN_PASS_MISMATCH = "login.pass.mismatch";
