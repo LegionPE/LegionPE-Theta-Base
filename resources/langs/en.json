@@ -455,6 +455,9 @@
 					"winextra": "%notify%You have received %em%%coins%%notify% extra coins and %em2%%points%%notify% extra team points for winning a 1v1 match!",
 					"preparing": "%notify%The 1v1 match between %em%%host%%notify% and %em2%%host%%notify% will start in %em%10%notify% seconds!"
 				}
+			},
+			"pvplog": {
+				"popup": "%notify%You are currently in combat mode.\n%verbose%You will lose %penalty% coins if you quit the server while in combat mode.\n%verbose%Combat mode ending in %time% seconds."
 			}
 		},
 		"hub": {

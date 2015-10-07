@@ -912,7 +912,7 @@ abstract class Session{
 		return $this->getLoginDatum("lastgrind");
 	}
 	public function setCoins($coins){
-		$this->setLoginDatum("coins", $coins);
+		$this->setLoginDatum("coins", max(0, $coins));
 	}
 	public function getCoins(){
 		return $this->getLoginDatum("coins");
@@ -1251,6 +1251,7 @@ abstract class Session{
 	}
 	public function halfSecondTick(){
 		if($this->curPopup !== null){
+			$this->sendMaintainedPopup();
 			$this->getPlayer()->sendPopup($this->curPopup);
 		}
 		if(time() - $this->joinTime > Settings::KICK_PLAYER_TOO_LONG_ONLINE){
@@ -1310,5 +1311,8 @@ abstract class Session{
 	 */
 	public function setQueryTargetUid($uid){
 		$this->queryTarget = $uid;
+	}
+	protected function sendMaintainedPopup(){
+		$this->getPlayer()->sendPopup($this->curPopup);
 	}
 }

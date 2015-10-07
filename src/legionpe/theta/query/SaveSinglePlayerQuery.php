@@ -28,6 +28,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 	/** @var string $data serialization of getColumns */
 	private $data;
 	private $coinsDelta;
+	private $ontime;
 	public function __construct(BasePlugin $plugin, Session $session, $status){
 		$data = $this->getColumns($session, $status);
 		$this->uid = $session->getUid();
@@ -42,6 +43,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 	protected function getColumns(Session $session, $status){
 		$coins = $session->getCoins();
 		$this->coinsDelta = $session->getAndUpdateCoinsDelta();
+		$this->ontime = $session->getAndUpdateOntime();
 		$skin = $session->getCurrentFaceSkin();
 		return [
 			"uid" => ["v" => $session->getUid(), "noupdate" => true],
@@ -49,6 +51,8 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 			"nicks" => "|" . implode("|", $session->getNicks()) . "|",
 			"lastip" => $session->getPlayer()->getAddress(),
 			"status" => $status,
+			"status_ip" => Settings::$LOCALIZE_IP,
+			"status_port" => Settings::$LOCALIZE_PORT,
 			"lastses" => Settings::$LOCALIZE_CLASS,
 			"authuuid" => ["v" => $session->getPlayer()->getClientSecret(), "bin" => true],
 			"coins" => ["v" => $coins, "noupdate" => true],
@@ -57,7 +61,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 			"pwlen" => ["v" => $session->getPasswordLength(), "noupdate" => true],
 			"registration" => ["v" => $session->getRegisterTime(), "noupdate" => true],
 			"laston" => time(),
-			"ontime" => (int) $session->getAndUpdateOntime(),
+			"ontime" => ["v" => $this->ontime, "noupdate" => true],
 			"config" => $session->getAllSettings(),
 			"skin1" => ["v" => substr($skin, 0, 128), "bin" => true],
 			"skin2" => ["v" => substr($skin, 128, 128), "bin" => true],
@@ -102,7 +106,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 		return $this->queryFinalProcess(substr($query, 0, -1));
 	}
 	protected function queryFinalProcess($query){
-		return $query . ",coins=coins+$this->coinsDelta";
+		return $query . ",coins=coins+$this->coinsDelta,ontime=ontime+$this->ontime";
 	}
 	public function onPreQuery(\mysqli $db){
 		$db->query($q = $this->getUpdateQuery());

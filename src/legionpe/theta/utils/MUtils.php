@@ -182,7 +182,6 @@ class MUtils{
 		}
 		return $return;
 	}
-
 	public static function toMd($string){
 		if(!\is_array($string)){
 			$string = TextFormat::tokenize($string);
@@ -311,4 +310,105 @@ class MUtils{
 
 		return $newString;
 	}
+
+	private static $characterWidths = [
+		4, 2, 5, 6, 6, 6, 6, 3, 5, 5, 5, 6, 2, 6, 2, 6,
+		6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 2, 2, 5, 6, 5, 6,
+		7, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 6, 6, 6, 6, 6,
+		6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 4, 6, 6,
+		6, 6, 6, 6, 6, 5, 6, 6, 2, 6, 5, 3, 6, 6, 6, 6,
+		6, 6, 6, 4, 6, 6, 6, 6, 6, 6, 5, 2, 5, 7
+	];
+
+	const CHAT_WINDOW_WIDTH = 240;
+	const CHAT_STRING_LENGTH = 119;
+	const ALIGN_LEFT = 0;
+	const ALIGN_CENTER = 1;
+	const ALIGN_RIGHT = 2;
+
+	private static $allowedChars = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_abcdefghijklmnopqrstuvwxyz{|}~";
+
+	private static $allowedCharsArray = [];
+
+	public static function init(){
+		self::$allowedCharsArray = [];
+		$len = strlen(self::$allowedChars);
+		for($i = 0; $i < $len; ++$i){
+			self::$allowedCharsArray[self::$allowedChars{$i}] = self::$characterWidths[$i];
+		}
+	}
+	public static function wrap($text){
+		$result = "";
+		$len = strlen($text);
+		$lineWidth = 0;
+		$lineLength = 0;
+
+		for($i = 0; $i < $len; ++$i){
+			$char = $text{$i};
+
+			if($char === "\n"){
+				$lineLength = 0;
+				$lineWidth = 0;
+			}elseif(isset(self::$allowedCharsArray[$char])){
+				$width = self::$allowedCharsArray[$char];
+
+				if($lineLength + 1 > self::CHAT_STRING_LENGTH or $lineWidth + $width > self::CHAT_WINDOW_WIDTH){
+					$result .= "\n";
+					$lineLength = 0;
+					$lineWidth = 0;
+				}
+
+				++$lineLength;
+				$lineWidth += $width;
+			}else{
+				return $text;
+			}
+
+			$result .= $char;
+		}
+
+		return $result;
+	}
+	public static function getLength($text){
+		$length = 0;
+		for($i = 0; $i < strlen($text); $i++){
+			$char = $text{$i};
+			if(isset(self::$allowedCharsArray[$char])){
+				$length += self::$allowedCharsArray[$char];
+			}else{
+				$length += 8;
+			}
+		}
+		return $length;
+	}
+	/**
+	 * @param string $text
+	 * @param string $char
+	 * @param int $mode
+	 * @param bool $array
+	 * @return array|string
+	 */
+	public static function align($text, $char = " ", $mode = self::ALIGN_CENTER, $array = false){
+		$lengths = [];
+		$lines = explode("\n", $text);
+		foreach($lines as $i => $line){
+			$lengths[$i] = self::getLength($line);
+		}
+		$paddingLength = self::getLength($char);
+		foreach($lines as $i => &$line){
+			$deficit = $lengths[$i];
+			$need = round($deficit / $paddingLength);
+			if($mode === self::ALIGN_LEFT){
+				$line .= str_repeat(" ", $need);
+			}elseif($mode === self::ALIGN_RIGHT){
+				$line = str_repeat(" ", $need) . $line;
+			}else{
+				$need /= 2;
+				$line = str_repeat(" ", (int) $need) . $line . str_repeat(" ", ceil($need));
+			}
+		}
+		return $array ? $lines : implode("\n", $lines);
+	}
 }
+
+MUtils::init();

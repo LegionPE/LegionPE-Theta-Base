@@ -281,6 +281,7 @@ class Phrases{
 	const PVP_CMD_ONE_VS_ONE_ANNOUNCE = "game.pvp.cmd.onevsone.announce";
 	const PVP_CMD_ONE_VS_ONE_WIN_EXTRA = "game.pvp.cmd.onevsone.winextra";
 	const PVP_CMD_ONE_VS_ONE_PREPARING = "game.pvp.cmd.onevsone.preparing";
+	const PVP_CMD_PVP_LOG_POPUP = "game.pvp.pvplog.popup";
 
 	const PVP_KIT_SHOPS_WEB_HINT = "game.pvp.kit.shops.webhint";
 
