@@ -37,6 +37,6 @@ class ConsoleCommand extends SessionCommand{
 		}
 		$type = Hormone::get($sender->getMain(), Hormone::CONSOLE_MESSAGE, $sender->getInGameName(), $msg, $local ? Settings::$LOCALIZE_CLASS : Settings::CLASS_ALL, ["ip" => Settings::$LOCALIZE_IP, "port" => Settings::$LOCALIZE_PORT]);
 		$type->release();
-		return true;
+		return "Message sent to every staff member.";
 	}
 }

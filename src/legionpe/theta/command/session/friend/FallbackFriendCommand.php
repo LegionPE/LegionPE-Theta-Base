@@ -34,6 +34,6 @@ class FallbackFriendCommand extends SessionCommand{
 			"Only Acquaintances (acq), Good Friends (gf) and Best Friends (bf) can view your stats if you set your stats to private.",
 			"Good Friends (gf) and Best Friends (bf) cannot attack each other unless they have Friendly Fire Activated (ffa).",
 			"Best Friends (bf) can teleport to each other or teleport each other to themselves without the other one accepting."
-		]); // TODO translate
+		]);
 	}
 }
