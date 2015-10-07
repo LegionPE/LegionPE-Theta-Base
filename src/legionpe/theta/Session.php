@@ -1250,10 +1250,7 @@ abstract class Session{
 		return $output;
 	}
 	public function halfSecondTick(){
-		if($this->curPopup !== null){
-			$this->sendMaintainedPopup();
-			$this->getPlayer()->sendPopup($this->curPopup);
-		}
+		$this->sendMaintainedPopup();
 		if(time() - $this->joinTime > Settings::KICK_PLAYER_TOO_LONG_ONLINE){
 			$this->getPlayer()->kick($this->translate(Phrases::KICK_TOO_LONG_ONLINE));
 		}
@@ -1313,6 +1310,8 @@ abstract class Session{
 		$this->queryTarget = $uid;
 	}
 	protected function sendMaintainedPopup(){
-		$this->getPlayer()->sendPopup($this->curPopup);
+		if($this->curPopup !== null){
+			$this->getPlayer()->sendPopup($this->curPopup);
+		}
 	}
 }
