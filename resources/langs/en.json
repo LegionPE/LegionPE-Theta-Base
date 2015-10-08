@@ -6,8 +6,8 @@
 		"authors": [
 			"PEMapModder"
 		],
-		"version": "1.5",
-		"releng": "1.5"
+		"version": "2.0",
+		"releng": "2.0"
 	},
 	"chat": {
 		"blocked": {
@@ -463,6 +463,14 @@
 		"hub": {
 			"feather": {
 				"tut": "%bold%Tap feather in hotbar to adjust sprinting."
+			}
+		},
+		"match$1": "@since 2.0",
+		"match": {
+			"whatisthis": "%verbose%This is match #%em%%match%.",
+			"terms": {
+				"player": "player",
+				"spectator": "spectator"
 			}
 		}
 	}

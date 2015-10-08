@@ -253,7 +253,7 @@ abstract class Session{
 		$att->setPermission("pocketmine.broadcast.user", true);
 		$att->setPermission("pocketmine.whitelist", false);
 		$att->setPermission("pocketmine.command.ban.player", false);
-		$att->setPermission("pocketmine.command.ban.ip", $this->isModerator());
+		$att->setPermission("pocketmine.command.ban.ip", $this->isAdmin());
 		$att->setPermission("pocketmine.command.unban", false);
 		$att->setPermission("pocketmine.command.op", false);
 		$att->setPermission("pocketmine.command.save", false);

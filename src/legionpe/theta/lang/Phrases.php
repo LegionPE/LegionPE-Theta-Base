@@ -287,6 +287,10 @@ class Phrases{
 
 	const HUB_FEATHER_TUT = "game.hub.feather.tut";
 
+	const MATCH_WHATISTHIS = "game.match.whatisthis";
+	const MATCH_TERMS_PLAYER = "game.match.terms.player";
+	const MATCH_TERMS_SPECTATOR = "game.match.terms.spectator";
+
 	// constant variables
 	const VAR_wait = TextFormat::RED . "… ";
 	const VAR_success = TextFormat::DARK_GREEN;
