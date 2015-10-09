@@ -27,7 +27,7 @@ class TeamInfoQuery extends AsyncQuery{
 	private $name;
 	public function __construct(Session $sender, $name){
 		$this->sender = $sender->getMain()->storeObject($sender);
-		$this->name = $name;
+		$this->name = (string) $name;
 		parent::__construct($sender->getMain());
 	}
 	public function getResultType(){
