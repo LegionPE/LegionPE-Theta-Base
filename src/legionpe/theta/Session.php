@@ -148,7 +148,7 @@ abstract class Session{
 		$consequence = $this->getEffectiveConsequence();
 		if($consequence->banLength > 0){
 			$left = MUtils::time_secsToString($consequence->banLength);
-			$this->getPlayer()->kick(TextFormat::RED . "You are banned.\nYou have accumulated " . TextFormat::DARK_PURPLE . $this->getWarningPoints() . TextFormat::RED . " warning points,\nand you still have " . TextFormat::BLUE . $left . TextFormat::RED . " before you are unbanned.\n" . TextFormat::AQUA . "Believe this to be a mistake? Email us at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu" . TextFormat::AQUA . " or visit our chatroom at " . TextFormat::DARK_PURPLE . "http://lgpe.co/chat");
+			$this->getPlayer()->kick(TextFormat::RED . "You are banned. You have accumulated " . TextFormat::DARK_PURPLE . $this->getWarningPoints() . TextFormat::RED . " warning points, and you still have " . TextFormat::BLUE . $left . TextFormat::RED . " before you are unbanned. " . TextFormat::AQUA . "Believe this to be a mistake? Email us at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu" . TextFormat::AQUA . " or visit our chatroom at " . TextFormat::DARK_PURPLE . "http://lgpe.co/chat");
 			return false;
 		}
 		$this->spamDetector = new SpamDetector($this);

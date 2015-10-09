@@ -193,7 +193,7 @@ class LoginDataQuery extends AsyncQuery{
 			}
 			$consequence = Settings::getWarnPtsConsequence($this->totalWarnPts, $this->lastWarnTime);
 			if($consequence->banLength > 0){
-				$player->kick(TextFormat::RED . "You are banned.\nYou have accumulated " . TextFormat::DARK_PURPLE . $this->totalWarnPts . TextFormat::RED . " warning points,\nand you still have " . TextFormat::BLUE . MUtils::time_secsToString($consequence->banLength) . TextFormat::RED . " before you are unbanned.\n" . TextFormat::AQUA . "Believe this to be a mistake? Contact us with email at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu");
+				$player->kick(TextFormat::RED . "You are banned. You have accumulated " . TextFormat::DARK_PURPLE . $this->totalWarnPts . TextFormat::RED . " warning points, and you still have " . TextFormat::BLUE . MUtils::time_secsToString($consequence->banLength) . TextFormat::RED . " before you are unbanned." . TextFormat::AQUA . "Believe this to be a mistake? Contact us with email at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu");
 				return;
 			}
 		}

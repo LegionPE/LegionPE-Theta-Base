@@ -333,15 +333,15 @@
 		"notification": {
 			"main": "\n%notify2%%bold%~~~~~~~~~~ ATTENTION ~~~~~~~~~~\n%em%%issuer%%warning% sent you a warning!\n%verbose%Message:\n%em2%%message%\n%notify%This warning carries %em3%%points%%notify% warning points.\n%info%You now have %em%%totalpoints%%info% warning points in total.",
 			"muted": "\n%error%You have been muted by %em2%%issuer% %em3%%passed%%error% before. The mute ends in %em%%left%.\n%verbose%Email %em2%support@legionpvp.eu%verbosemid% if you believe that this is a mistake.",
-			"banned": "\n%error%You will be banned for %length%\n%info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake."
+			"banned": "%error%You will be banned for %length%. %info%Send an email to %em2%support@legionpvp.eu%info% if you believe that this is a mistake."
 		}
 	},
 	"kick": {
 		"toolong": {
-			"online": "\nYou have been online for more than 90 minutes. Take a rest! I bet your device must be pretty hot.",
-			"login": "\nHave you registered here using this username?\nPlease choose another username if you don't."
+			"online": "You have been online for more than 90 minutes. Take a rest! I bet your device must be pretty hot.",
+			"login": "Have you registered here using this username?\nPlease choose another username if you don't."
 		},
-		"serverstop": "\n%notify2%Server restart. Please reconnect.\n%verbosemid%Sorry for the inconvenience."
+		"serverstop": "%notify2%Server restart. Please reconnect. %verbosemid%Sorry for the inconvenience."
 	},
 	"words": {
 		"date": {
