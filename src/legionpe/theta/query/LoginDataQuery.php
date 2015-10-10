@@ -41,7 +41,7 @@ class LoginDataQuery extends AsyncQuery{
 		$r = $mysql->query("SELECT SUM(pts)AS sum, MAX(creation) AS lastwarn FROM warnings_logs WHERE
 			uid=(SELECT uid FROM users WHERE name={$this->esc($this->name)}) or
 			ip={$this->esc($this->ip)} or
-			(clientid = $this->clientId and clientid != 0)");
+			(clientid = $this->clientId and clientid != -1)");
 		$row = $r->fetch_assoc();
 		$r->close();
 		$this->totalWarnPts = (int) $row["sum"];
@@ -162,6 +162,11 @@ class LoginDataQuery extends AsyncQuery{
 			$main->getLogger()->notice("Player of $this->sesId quitted the server before data were fetched.");
 			return;
 		}
+		$consequence = Settings::getWarnPtsConsequence($this->totalWarnPts, $this->lastWarnTime);
+		if($consequence->banLength > 0){
+			$player->kick(TextFormat::RED . "You are banned. You have accumulated " . TextFormat::DARK_PURPLE . $this->totalWarnPts . TextFormat::RED . " warning points, and you still have " . TextFormat::BLUE . MUtils::time_secsToString($consequence->banLength) . TextFormat::RED . " before you are unbanned." . TextFormat::AQUA . "Believe this to be a mistake? Contact us with email at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu");
+			return;
+		}
 		/** @var bool $success */
 		/** @var string $query */
 		extract($this->getResult());
@@ -190,11 +195,6 @@ class LoginDataQuery extends AsyncQuery{
 //						$main->transfer($player, $ip, $port, "This server is full.", false);
 					}
 				}
-			}
-			$consequence = Settings::getWarnPtsConsequence($this->totalWarnPts, $this->lastWarnTime);
-			if($consequence->banLength > 0){
-				$player->kick(TextFormat::RED . "You are banned. You have accumulated " . TextFormat::DARK_PURPLE . $this->totalWarnPts . TextFormat::RED . " warning points, and you still have " . TextFormat::BLUE . MUtils::time_secsToString($consequence->banLength) . TextFormat::RED . " before you are unbanned." . TextFormat::AQUA . "Believe this to be a mistake? Contact us with email at " . TextFormat::DARK_PURPLE . "support@legionpvp.eu");
-				return;
 			}
 		}
 		$main->newSession($player, $loginData);
