@@ -42,7 +42,7 @@ class TransferCommand extends SessionCommand{
 		if(Settings::$LOCALIZE_CLASS === $this->class){
 			return TextFormat::RED . "You are already in $this->human!";
 		}
-		$this->getPlugin()->transferGame($sender->getPlayer(), $this->class);
+		$this->getPlugin()->transferGame($sender->getPlayer(), $this->class, !$sender->isDonator());
 		return TextFormat::AQUA . "Finding an available " . MUtils::word_addSingularArticle($this->human) . " server for you...";
 	}
 }
