@@ -74,12 +74,12 @@ class PreExecuteWarningQuery extends NextIdQuery{
 				$done = true;
 				$issuer->sendMessage("$this->points warning points have been successfully issued to player {$ses->getPlayer()->getName()}.");
 				$this->execWarnOn($issuer, $ses);
+				Hormone::get($main, Hormone::CONSOLE_MESSAGE, "(Auto){$issuer->getName()}", "Issued $this->points warning points to player {$ses->getPlayer()->getName()}: $this->msg", Settings::CLASS_ALL, [
+					"ip" => Settings::$LOCALIZE_IP,
+					"port" => Settings::$LOCALIZE_PORT
+				])->release();
 				break;
 			}
-			Hormone::get($main, Hormone::CONSOLE_MESSAGE, "(Auto){$issuer->getName()}", "Issued $this->points warning points to player {$ses->getPlayer()->getName()}: $this->msg", Settings::CLASS_ALL, [
-				"ip" => Settings::$LOCALIZE_IP,
-				"port" => Settings::$LOCALIZE_PORT
-			])->release();
 		}
 		if(!isset($done)){ // you think leaving the game can keep you away from trouble?
 			new IncrementWarningPointsQuery($main, $this->points, $this->uid);
