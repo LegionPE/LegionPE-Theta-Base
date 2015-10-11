@@ -32,6 +32,7 @@ abstract class Hormone{
 	const CLASS_CHAT = 8;
 	const TEAM_DISBAND_PROPAGANDA = 9;
 	const TEAM_KICK_PROPAGANDA = 10;
+	const STOP_SERVER_HORMONE = 11;
 	/** @var BasePlugin */
 	protected $src;
 	protected $msg;
@@ -87,6 +88,8 @@ abstract class Hormone{
 				return new TeamDisbandHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::TEAM_KICK_PROPAGANDA:
 				return new TeamKickHormone($main, $src, $msg, $class, $data, $rowId);
+			case self::STOP_SERVER_HORMONE:
+				return new StopServerHormone($main, $src, $msg, $class, $data, $rowId);
 		}
 		return null;
 	}

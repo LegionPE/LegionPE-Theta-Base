@@ -33,14 +33,14 @@ class NextIdQuery extends AsyncQuery{
 		parent::__construct($plugin);
 	}
 	public function onPreQuery(\mysqli $mysqli){
-		$mysqli->query("LOCK TABLES ids WRITE");
+		$mysqli->begin_transaction();
 	}
 	public function getQuery(){
-		return "SELECT value+1 AS id FROM ids WHERE name='$this->name'";
+		return "SELECT value+1 AS id FROM ids WHERE name='$this->name' FOR UPDATE";
 	}
 	public function onPostQuery(\mysqli $mysqli){
 		$mysqli->query("UPDATE ids SET value=value+1 WHERE name='$this->name'");
-		$mysqli->query("UNLOCK TABLES");
+		$mysqli->commit();
 	}
 	public function getResultType(){
 		return self::TYPE_ASSOC;
