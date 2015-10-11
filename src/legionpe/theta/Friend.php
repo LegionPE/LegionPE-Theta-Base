@@ -112,7 +112,7 @@ class Friend{
 						$fulls[$uid] = true;
 					}
 				}elseif($type === self::FRIEND_BEST_FRIEND){
-					if($cnt >= 2){
+					if($cnt >= 1){
 						$fulls[$uid] = true;
 					}
 				}
