@@ -298,7 +298,7 @@
 			"whereami$doc": "@since 1.4",
 			"whereami": "%info%You are playing on %em2%%class% %em%(%ip%:%port%)\n%notify%Add this server into your server list directly to reduce the chance of crashing!",
 			"notice$doc": "@since 1.5",
-			"notice": "%notify2%Vote on our %em%webpage %em2%lgpe.co/vote %em%everyday%notify2% to get more coins!",
+			"notice": "%notify2%Vote on our %em%webpage %em2%lgpe.co/vote %em%everyday%notify2% to get more coins!\n%notify2%Buy a rank for exclusive features & items. www.legionpvp.eu/shop",
 			"firstjoin": {
 				"hub": "%em%Walk into a portal%info% or %em2%Choose an item in your inventory%info% to join a game.\n%info%You can also type %em3%\/help%info% in chat to check for available commands."
 			},
