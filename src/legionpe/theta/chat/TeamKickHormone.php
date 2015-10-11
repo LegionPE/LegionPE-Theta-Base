@@ -26,7 +26,7 @@ class TeamKickHormone extends Hormone{
 		foreach($this->main->getSessions() as $ses){
 			if($ses->getUid() === $this->uid){
 				$ses->setLoginDatum("tid", -1);
-				$ses->setLoginDatum("teamname", null);
+				$ses->setLoginDatum("teamname", "");
 				$ses->setLoginDatum("teamrank", 0);
 				$ses->setLoginDatum("teamjoin", 0);
 				$ses->setLoginDatum("teampts", 0);

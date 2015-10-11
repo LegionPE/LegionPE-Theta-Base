@@ -53,8 +53,6 @@ use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Utils;
 
-const RESEND_ADD_PLAYER = 40;
-
 abstract class BasePlugin extends PluginBase{
 	const EMAIL_UNVERIFIED = "NOTSET";
 	private static $NAME = null;
@@ -138,8 +136,10 @@ abstract class BasePlugin extends PluginBase{
 				$this->getServer()->getPluginManager()->disablePlugin($plugin);
 			}
 		}), 2);
-		if(RESEND_ADD_PLAYER > 0){
-			$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new ResendPlayersTask($this), RESEND_ADD_PLAYER, RESEND_ADD_PLAYER);
+
+		$RESEND_ADD_PLAYER = $this->getResendAddPlayerFreq();
+		if($RESEND_ADD_PLAYER > 0){
+			$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new ResendPlayersTask($this), $RESEND_ADD_PLAYER, $RESEND_ADD_PLAYER);
 		}
 		/** @noinspection PhpUsageOfSilenceOperatorInspection */
 		@touch($this->getDataFolder() . "privmsg.log");
@@ -393,6 +393,9 @@ abstract class BasePlugin extends PluginBase{
 	 */
 	protected function getServerNameAppend(){
 		return null;
+	}
+	protected function getResendAddPlayerFreq(){
+		return 40;
 	}
 
 	// base-internal utils functions

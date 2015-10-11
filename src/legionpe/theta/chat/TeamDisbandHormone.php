@@ -27,7 +27,7 @@ class TeamDisbandHormone extends Hormone{
 			if($ses->getTeamId() === $this->tid){
 				$ses->send(Phrases::CMD_TEAM_DISBANDED);
 				$ses->setLoginDatum("tid", -1);
-				$ses->setLoginDatum("teamname", null);
+				$ses->setLoginDatum("teamname", "");
 				$ses->setLoginDatum("teamrank", 0);
 				$ses->setLoginDatum("teamjoin", 0);
 				$ses->setLoginDatum("teampts", 0);

@@ -26,7 +26,7 @@ class ListTeamMemberQuery extends AsyncQuery{
 	private $name;
 	private $sender;
 	public function __construct(BasePlugin $main, $name, Session $sender){
-		$this->name = $name;
+		$this->name = (string) $name;
 		$this->sender = $main->storeObject($sender);
 		parent::__construct($main);
 	}
