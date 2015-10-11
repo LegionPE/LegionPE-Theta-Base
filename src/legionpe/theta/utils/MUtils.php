@@ -79,8 +79,13 @@ class MUtils{
 		if($secs === 0){
 			return "0 s";
 		}
+		$days = 0;
 		$hours = 0;
 		$minutes = 0;
+		while($secs >= 86400){
+			$days++;
+			$secs -= 86400;
+		}
 		while($secs >= 3600){
 			$hours++;
 			$secs -= 3600;
@@ -90,6 +95,11 @@ class MUtils{
 			$secs -= 60;
 		}
 		$time = "";
+		if($days > 1){
+			$time .= "$days days ";
+		}elseif($days === 1){
+			$time .= "1 day ";
+		}
 		if($hours > 0){
 			$time .= "$hours hr ";
 		}
