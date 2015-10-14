@@ -234,6 +234,7 @@ class Phrases{
 	const CLASS_INFECTED = "words.local.class.name.infected";
 	const CLASS_CLASSIC_PVP = "words.local.class.name.pvp.classic";
 	const CLASS_SHOPS = "words.local.class.name.shops";
+	const CLASS_CASTLE_WARS = "words.local.class.name.castlewars";
 
 	const FRIEND_ACQUAINTANCE = "words.friend.type.acquaintance";
 	const FRIEND_GOOD_FRIEND = "words.friend.type.goodfriend";

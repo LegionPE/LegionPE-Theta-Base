@@ -34,6 +34,7 @@ abstract class Settings{
 	const CLASS_INFECTED = 5;
 	const CLASS_CLASSICAL = 6;
 	const CLASS_SHOPS = 7;
+	const CLASS_CASTLE_WARS = 8;
 	const RANK_IMPORTANCE_DEFAULT = 0x0000;
 	const RANK_IMPORTANCE_TESTER = 0x0001;
 	const RANK_IMPORTANCE_DONATOR = 0x0004;
@@ -119,7 +120,8 @@ abstract class Settings{
 		"spleef" => self::CLASS_SPLEEF,
 		"infected" => self::CLASS_INFECTED,
 		"classical" => self::CLASS_CLASSICAL,
-		"shops" => self::CLASS_SHOPS
+		"shops" => self::CLASS_SHOPS,
+		"castlewars" => self::CLASS_CASTLE_WARS,
 	];
 	/** @var string[] */
 	public static $CLASSES_NAMES = [
@@ -129,7 +131,8 @@ abstract class Settings{
 		self::CLASS_SPLEEF => "Spleef",
 		self::CLASS_INFECTED => "Infected",
 		self::CLASS_CLASSICAL => "Classic PvP",
-		self::CLASS_SHOPS => "Shops"
+		self::CLASS_SHOPS => "Shops",
+		self::CLASS_CASTLE_WARS => "Castle Wars",
 	];
 	/** @var string[] */
 	public static $CLASSES_NAMES_PHRASES = [
@@ -140,6 +143,7 @@ abstract class Settings{
 		self::CLASS_INFECTED => Phrases::CLASS_INFECTED,
 		self::CLASS_CLASSICAL => Phrases::CLASS_CLASSIC_PVP,
 		self::CLASS_SHOPS => Phrases::CLASS_SHOPS,
+		self::CLASS_CASTLE_WARS => Phrases::CLASS_CASTLE_WARS,
 	];
 	public static function getWarnPtsConsequence(/** @noinspection PhpUnusedParameterInspection */
 		$pts, $origin = null){
@@ -244,6 +248,7 @@ $array = [
 	"classical" => Settings::CLASS_CLASSICAL,
 	"shop" => Settings::CLASS_SHOPS,
 	"shops" => Settings::CLASS_SHOPS,
+	"castlewars" => Settings::CLASS_CASTLE_WARS,
 ];
 if(!isset($array[$config->getNested("localize.class")])){
 	throw new \RuntimeException("Invalid class: " . var_export($config->getNested("localize.class"), true));
