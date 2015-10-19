@@ -525,6 +525,9 @@ abstract class Session{
 	public function getStatePrecise(){
 		return $this->state & 0x0F;
 	}
+	public function getState(){
+		return $this->state;
+	}
 	public function getTeamId(){
 		return $this->getLoginDatum("tid");
 	}
