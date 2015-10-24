@@ -91,6 +91,8 @@ abstract class Hormone{
 				return new TeamKickHormone($main, $src, $msg, $class, $data, $rowId);
 			case self::STOP_SERVER_HORMONE:
 				return new StopServerHormone($main, $src, $msg, $class, $data, $rowId);
+			case self::TEAM_RANK_CHANGE_HORMONE:
+				return new TeamRankChangeHormone($main, $src, $msg, $class, $data, $rowId);
 		}
 		return null;
 	}
