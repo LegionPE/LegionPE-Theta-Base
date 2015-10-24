@@ -100,7 +100,7 @@ abstract class Hormone{
 		$this->onRelease();
 		new PushChatQuery($this->main, $this->src, $this->msg, $this->getType(), $this->class, $this->_classData, $this);
 	}
-	public function consume(){
+	public function denature(){
 		if(is_int($this->rowId)){
 			new RawAsyncQuery($this->main, "DELETE FROM chat WHERE id=$this->rowId");
 			return true;

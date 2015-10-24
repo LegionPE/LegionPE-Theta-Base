@@ -28,7 +28,7 @@ class ConsoleReportHormone extends Hormone{
 	public function execute(){
 		$this->main->getLogger()->alert($this->src . "/$this->ip:$this->port /cs: " . TextFormat::YELLOW . $this->msg);
 		foreach($this->main->getSessions() as $ses){
-			if($ses->isAdmin()){
+			if($ses->isModerator()){
 				$ses->sendMessage($this->src . "/$this->ip:$this->port /cs:");
 				$ses->sendMessage($this->msg);
 			}

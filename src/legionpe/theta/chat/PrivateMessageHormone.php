@@ -33,7 +33,7 @@ class PrivateMessageHormone extends Hormone{
 		$session = $this->main->getSessionByUid($this->recipient);
 		if($session instanceof Session){
 			$session->getPlayer()->sendMessage("[$this->src => {$session->getInGameName()}] " . Phrases::VAR_info . $this->msg);
-			$this->consume();
+			$this->denature();
 		}
 	}
 }

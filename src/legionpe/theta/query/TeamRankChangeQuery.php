@@ -96,9 +96,10 @@ class TeamRankChangeQuery extends AsyncQuery{
 			]);
 		}
 		$hormone = Hormone::get($main, Hormone::TEAM_RANK_CHANGE_HORMONE, $sender->getInGameName(), "", Settings::CLASS_ALL, [
-			"uid" => $result["uid"],
+			"uid" => (int) $result["uid"],
 			"newRank" => $teamrank
 		]);
 		$hormone->release();
+		new RawAsyncQuery($main, "UPDATE users SET teamrank=$teamrank WHERE uid=" . $result["uid"]);
 	}
 }
