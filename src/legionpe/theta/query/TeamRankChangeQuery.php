@@ -16,6 +16,7 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
+use legionpe\theta\chat\Hormone;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\Session;
@@ -48,6 +49,7 @@ class TeamRankChangeQuery extends AsyncQuery{
 	}
 	public function onCompletion(Server $server){
 		$main = BasePlugin::getInstance($server);
+		/** @var Session $sender */
 		$sender = $main->fetchObject($this->sender);
 		$result = $this->getResult();
 		if($sender->getPlayer() === null){
@@ -93,5 +95,10 @@ class TeamRankChangeQuery extends AsyncQuery{
 				"newrank" => $sender->translate(Phrases::WORDS_TEAM_RANKS)[$teamrank]
 			]);
 		}
+		$hormone = Hormone::get($main, Hormone::TEAM_RANK_CHANGE_HORMONE, $sender->getInGameName(), "", Settings::CLASS_ALL, [
+			"uid" => $result["uid"],
+			"newRank" => $teamrank
+		]);
+		$hormone->release();
 	}
 }

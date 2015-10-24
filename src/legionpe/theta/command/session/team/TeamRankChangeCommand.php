@@ -47,6 +47,9 @@ class TeamRankChangeCommand extends SessionCommand{
 			return $sender->translate(Phrases::CMD_TEAM_RANK_CHANGE_NEED_SENIOR);
 		}
 		$name = array_shift($args);
+		if(strtolower($sender->getPlayer()->getName()) === strtolower($name)){
+			return false;
+		}
 		new TeamRankChangeQuery($this->getMain(), $this->promote, $name, $sender);
 		return true;
 	}

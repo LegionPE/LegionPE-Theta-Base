@@ -33,6 +33,7 @@ abstract class Hormone{
 	const TEAM_DISBAND_PROPAGANDA = 9;
 	const TEAM_KICK_PROPAGANDA = 10;
 	const STOP_SERVER_HORMONE = 11;
+	const TEAM_RANK_CHANGE_HORMONE = 12;
 	/** @var BasePlugin */
 	protected $src;
 	protected $msg;
