@@ -20,7 +20,6 @@ use legionpe\theta\command\SessionCommand;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\query\TeamConfigChangeQuery;
-use legionpe\theta\query\TeamConfigFetchQuery;
 use legionpe\theta\Session;
 
 /**
@@ -32,32 +31,23 @@ class TeamConfigCommand extends SessionCommand{
 	private $bit;
 	/** @var string */
 	private $humanPhrase;
+	/** @var bool */
+	private $boolean;
 	public function __construct(BasePlugin $main, $bit, $boolean, $humanPhrase, array $aliases){
 		$this->bit = $bit;
 		$this->humanPhrase = $humanPhrase;
 		$humanName = $main->getLanguageManager()->get($humanPhrase, []);
 		parent::__construct($main, $cmd = array_shift($aliases), "Toggle whether your team is $humanName", "/$cmd [on|off]", $aliases);
+		$this->boolean = $boolean;
 	}
 	protected function run(array $args, Session $sender){
 		if($sender->getTeamId() === -1){
 			return $sender->translate(Phrases::CMD_TEAM_ERR_NOT_IN_TEAM);
 		}
-		if(isset($args[0])){
-			$arg = array_shift($args);
-			if($arg === "on"){
-				$boolean = true;
-			}elseif($arg === "off"){
-				$boolean = false;
-			}
-		}
-		if(!isset($boolean)){
-			new TeamConfigFetchQuery($this->getPlugin(), $sender, $sender->getTeamId(), $this->bit, $this->humanPhrase);
-			return true;
-		}
 		if($sender->getTeamId() < Settings::TEAM_RANK_COLEAD){
 			return $sender->translate(Phrases::CMD_TEAM_CONFIG_NEED_CO_LEADER, ["type" => $sender->translate($this->humanPhrase)]);
 		}
-		new TeamConfigChangeQuery($this->getPlugin(), $sender, $sender->getTeamId(), $this->bit, $boolean, $this->humanPhrase);
+		new TeamConfigChangeQuery($this->getPlugin(), $sender, $sender->getTeamId(), $this->bit, $this->boolean, $this->humanPhrase);
 		return true;
 	}
 }
