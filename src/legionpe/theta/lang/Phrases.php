@@ -43,7 +43,6 @@ class Phrases{
 	const CHAT_BLOCKED_TOO_FREQUENT = "chat.blocked.toofreq";
 	const CHAT_BLOCKED_TOO_SHORT = "chat.blocked.tooshort";
 	const CHAT_BLOCKED_MULTIBYTE = "chat.blocked.multibyte";
-	const CHAT_BROADCASTS_ARRAY = "chat.broadcasts";
 	const CHAT_FORMAT_TEAM = "chat.format.team";
 	const CHAT_FORMAT_CHANNEL = "chat.format.channel";
 	const CHAT_FORMAT_LOCAL = "chat.format.local";
@@ -126,6 +125,7 @@ class Phrases{
 	const CMD_TEAM_ERR_NOT_IN_TEAM = "cmd.team.err.notinteam";
 	const CMD_TEAM_ERR_DIFFERENT_TEAM = "cmd.team.err.diffteam";
 	const CMD_TEAM_ERR_NO_SUCH_TEAM = "cmd.team.err.unknownteam";
+	const CMD_TEAM_ERR_FULL = "cmd.team.err.full";
 	const CMD_TEAM_CREATE_INVALID_NAME = "cmd.team.create.invalidname";
 	const CMD_TEAM_CREATE_ALREADY_EXISTS = "cmd.team.create.alreadyexists";
 	const CMD_TEAM_CREATE_SUCCESS = "cmd.team.create.success";

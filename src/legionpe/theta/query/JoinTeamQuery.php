@@ -60,6 +60,15 @@ class JoinTeamQuery extends AsyncQuery{
 		}
 		if($this->type === self::REQUEST_FROM_USER){
 			throw new \RuntimeException(Phrases::VAR_error . "You have already sent a request to join the team.");
+		}elseif($this->type === self::REQUEST_FROM_TEAM or $this->type === self::DIRECT_JOIN){
+			$query = $db->query("SELECT (SELECT COUNT(*) FROM users WHERE tid=teams.tid) AS members,slots FROM teams WHERE tid=$this->tid");
+			$row = $query->fetch_assoc();
+			$query->close();
+			$members = (int) $row["members"];
+			$slots = (int) $row["slots"];
+			if($members >= $slots){
+				throw new \RuntimeException(Phrases::CMD_TEAM_ERR_FULL);
+			}
 		}
 	}
 	public function getQuery(){
@@ -68,34 +77,39 @@ class JoinTeamQuery extends AsyncQuery{
 	}
 	public function onCompletion(Server $server){
 		$main = BasePlugin::getInstance($server);
+		$result = $this->getResult();
+		$ses = $main->getSessionByUid($this->uid);
+		if(!($ses instanceof Session)){
+			return;
+		}
+		if($result["success"] === false){
+			$ses->send($result["error"]);
+			return;
+		}
 		$data = ["teamname" => $this->teamName];
-		foreach($main->getSessions() as $ses){
-			if($ses->getUid() === $this->uid){
-				$data["name"] = $ses->getPlayer()->getName();
-				switch($this->type){
-					case self::REQUEST_FROM_USER:
-						$ses->send(Phrases::CMD_TEAM_JOIN_ALREADY_REQUESTED, $data);
-						break 2;
-					case self::REQUEST_FROM_TEAM:
-						$ses->send(Phrases::CMD_TEAM_JOIN_ACCEPTED, $data);
-						$joined = true;
-						break 2;
-					case self::DIRECT_JOIN:
-						$ses->send(Phrases::CMD_TEAM_JOIN_DIRECTLY_JOINED, $data);
-						$joined = true;
-						break 2;
-					default:
-						$type = Hormone::get($main, Hormone::TEAM_CHAT, "Network", "%tr%" . Phrases::CMD_TEAM_REQUEST_RECEIVED, Settings::CLASS_ALL, [
-							"tid" => $this->tid,
-							"teamName" => $this->teamName,
-							"ign" => "Network",
-							"data" => ["name" => $this->playerName]
-						]);
-						$type->release();
-						$ses->send(Phrases::CMD_TEAM_JOIN_REQUESTED, $data);
-						break 2;
-				}
-			}
+		$data["name"] = $ses->getPlayer()->getName();
+		switch($this->type){
+			case self::REQUEST_FROM_USER:
+				$ses->send(Phrases::CMD_TEAM_JOIN_ALREADY_REQUESTED, $data);
+				break;
+			case self::REQUEST_FROM_TEAM:
+				$ses->send(Phrases::CMD_TEAM_JOIN_ACCEPTED, $data);
+				$joined = true;
+				break;
+			case self::DIRECT_JOIN:
+				$ses->send(Phrases::CMD_TEAM_JOIN_DIRECTLY_JOINED, $data);
+				$joined = true;
+				break;
+			default:
+				$type = Hormone::get($main, Hormone::TEAM_CHAT, "Network", "%tr%" . Phrases::CMD_TEAM_REQUEST_RECEIVED, Settings::CLASS_ALL, [
+					"tid" => $this->tid,
+					"teamName" => $this->teamName,
+					"ign" => "Network",
+					"data" => ["name" => $this->playerName]
+				]);
+				$type->release();
+				$ses->send(Phrases::CMD_TEAM_JOIN_REQUESTED, $data);
+				break;
 		}
 		if(isset($joined, $ses)){
 			$ses->setLoginDatum("tid", $this->tid);

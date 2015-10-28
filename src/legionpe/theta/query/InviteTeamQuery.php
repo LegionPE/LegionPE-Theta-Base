@@ -61,6 +61,16 @@ class InviteTeamQuery extends AsyncQuery{
 			throw new \RuntimeException(Phrases::CMD_TEAM_INVITE_NO_PLAYER);
 		}
 		$this->type = (int) $row["type"];
+		if($this->type === JoinTeamQuery::REQUEST_FROM_USER){
+			$query = $db->query("SELECT (SELECT COUNT(*) FROM users WHERE tid=teams.tid) AS members,slots FROM teams WHERE tid=$this->tid");
+			$row = $query->fetch_assoc();
+			$query->close();
+			$members = (int) $row["members"];
+			$slots = (int) $row["slots"];
+			if($members >= $slots){
+				throw new \RuntimeException(Phrases::CMD_TEAM_ERR_FULL);
+			}
+		}
 		if($this->type === JoinTeamQuery::REQUEST_FROM_TEAM){
 			throw new \RuntimeException(Phrases::CMD_TEAM_INVITE_ALREADY_SENT);
 		}

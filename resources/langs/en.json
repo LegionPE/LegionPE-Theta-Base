@@ -6,8 +6,8 @@
 		"authors": [
 			"PEMapModder"
 		],
-		"version": "2.0",
-		"releng": "2.0"
+		"version": "2.1",
+		"releng": "2.1"
 	},
 	"chat": {
 		"blocked": {
@@ -151,7 +151,9 @@
 				"alreadyinteam": "%error%You are already in a team!",
 				"notinteam": "%error%You are not in a team!",
 				"diffteam": "%error%You are in different teams!",
-				"unknownteam": "%error%Team \"%name%\" not found!"
+				"unknownteam": "%error%Team \"%name%\" not found!",
+				"full$doc": "@since 2.1",
+				"full": "%error%The team is already full!"
 			},
 			"create": {
 				"invalidname": "%error%The team name has to be %em%at least 5 characters long%error%, with %em2%all%error% characters being %em2%alphabets, numbers, hyphens (-) or underscores (_)%error%!",
@@ -466,7 +468,7 @@
 				"tut": "%bold%Tap feather in hotbar to adjust sprinting."
 			}
 		},
-		"match$1": "@since 2.0",
+		"match$doc": "@since 2.0",
 		"match": {
 			"whatisthis": "%verbose%This is match #%em%%match%.",
 			"terms": {

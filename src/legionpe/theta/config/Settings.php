@@ -216,6 +216,10 @@ abstract class Settings{
 	public static function isLocalChat($from, $to){
 		return $from->distanceSquared($to) <= 1600;
 	}
+
+	public static function getMaxTeamMembers(){
+		return 20;
+	}
 }
 
 $config = new Config("legionpe.yml", Config::YAML, [
