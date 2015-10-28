@@ -16,6 +16,7 @@
 namespace legionpe\theta\query;
 
 use legionpe\theta\BasePlugin;
+use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
 use pocketmine\Server;
 
@@ -39,6 +40,13 @@ class RandomBroadcastQuery extends AsyncQuery{
 				if(substr($name, 0, 4) === "VAR_"){
 					$value = str_replace("%" . substr($name, 4) . "%", $color, $value);
 				}
+				$value = str_replace([
+					"%ip%",
+					"%port%",
+				], [
+					Settings::$LOCALIZE_IP,
+					Settings::$LOCALIZE_PORT,
+				], $value);
 			}
 		}
 		foreach(BasePlugin::getInstance($server)->getSessions() as $ses){
