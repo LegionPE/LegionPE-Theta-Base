@@ -289,6 +289,9 @@ class Phrases{
 	const HUB_FEATHER_TUT = "game.hub.feather.tut";
 
 	const MATCH_WHATISTHIS = "game.match.whatisthis";
+	const MATCH_TIME_BEFORE_CLOSE = "game.match.time.beforeclose";
+	const MATCH_TIME_BEFORE_START = "game.match.time.beforestart";
+
 	const MATCH_TERMS_PLAYER = "game.match.terms.player";
 	const MATCH_TERMS_SPECTATOR = "game.match.terms.spectator";
 

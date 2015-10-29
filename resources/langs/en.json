@@ -6,8 +6,8 @@
 		"authors": [
 			"PEMapModder"
 		],
-		"version": "2.1",
-		"releng": "2.1"
+		"version": "2.2",
+		"releng": "2.2"
 	},
 	"chat": {
 		"blocked": {
@@ -460,7 +460,7 @@
 				}
 			},
 			"pvplog": {
-				"popup": "%notify%You are currently in combat mode.\n%verbose%You will lose %penalty% coins if you quit the server while in combat mode.\n%verbose%Combat mode ending in %time% seconds."
+				"popup": "%notify%You are currently in combat mode.\nYou will lose %penalty% coins if you quit the server while in combat mode.\nCombat mode ending in %time% seconds."
 			}
 		},
 		"hub": {
@@ -471,6 +471,11 @@
 		"match$doc": "@since 2.0",
 		"match": {
 			"whatisthis": "%verbose%This is match #%em%%match%.",
+			"time$doc": "@since 2.2",
+			"time": {
+				"beforeclose": "%info%The match will be closed from player joins in %em%%secs% seconds%info%.",
+				"beforestart": "%em%%secs%%info% seconds before match starts!"
+			},
 			"terms": {
 				"player": "player",
 				"spectator": "spectator"

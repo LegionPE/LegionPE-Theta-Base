@@ -402,7 +402,7 @@ abstract class Session{
 		}
 		$suffix = "";
 		if($rank & 1){
-			$suffix = TextFormat::LIGHT_PURPLE . "+";
+			$suffix = TextFormat::WHITE . "+";
 		}
 		if(($rank & 0x000C) === 0x000C){
 			return TextFormat::GOLD . "VIP$suffix";
