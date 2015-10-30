@@ -395,7 +395,7 @@ abstract class BasePlugin extends PluginBase{
 		return null;
 	}
 	protected function getResendAddPlayerFreq(){
-		return 40;
+		return 80;
 	}
 
 	// base-internal utils functions
