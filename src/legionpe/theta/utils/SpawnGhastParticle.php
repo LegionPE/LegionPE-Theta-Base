@@ -43,7 +43,7 @@ class SpawnGhastParticle extends Particle{
 			Entity::DATA_NAMETAG => [Entity::DATA_TYPE_STRING, Phrases::VAR_warning . "BIG BROTHER'S " . Phrases::VAR_em . "PHANTOM" . Phrases::VAR_warning . " IS WATCHING YOU!"],
 			Entity::DATA_SHOW_NAMETAG => [Entity::DATA_TYPE_BYTE, 1],
 			Entity::DATA_SILENT => [Entity::DATA_TYPE_BYTE, 0],
-			Entity::DATA_NO_AI => [Entity::DATA_TYPE_BYTE, 1],
+			Entity::DATA_NO_AI => [Entity::DATA_TYPE_BYTE, 0],
 		];
 		return $pk;
 	}
