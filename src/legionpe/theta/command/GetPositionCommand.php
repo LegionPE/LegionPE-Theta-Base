@@ -46,7 +46,7 @@ class GetPositionCommand extends ThetaCommand{
 				$ses->send(Phrases::CMD_ERR_NO_PERM);
 				return true;
 			}
-			$sender->sendMessage(TextFormat::DARK_AQUA . $sender->getName() . TextFormat::GREEN . " is at " . TextFormat::DARK_PURPLE . "$sender->x, $sender->y, $sender->z @ {$sender->getLevel()->getName()}");
+			$sender->sendMessage(TextFormat::DARK_AQUA . $sender->getName() . TextFormat::GREEN . " is at " . TextFormat::DARK_PURPLE . "($sender->x, $sender->y, $sender->z) ($sender->yaw, $sender->pitch) @ {$sender->getLevel()->getName()}");
 		}
 		return true;
 	}
