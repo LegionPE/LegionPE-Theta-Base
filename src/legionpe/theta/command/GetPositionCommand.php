@@ -36,7 +36,7 @@ class GetPositionCommand extends ThetaCommand{
 			if(!(($player = $this->getPlugin()->getServer()->getPlayer($arg)) instanceof Player)){
 				return $this->notOnline($sender);
 			}
-			$sender->sendMessage(TextFormat::DARK_AQUA . $player->getName() . TextFormat::GREEN . " is at " . TextFormat::DARK_PURPLE . "$player->x, $player->y, $player->z @ {$player->getLevel()->getName()}");
+			$sender->sendMessage(TextFormat::DARK_AQUA . $player->getName() . TextFormat::GREEN . " is at " . TextFormat::DARK_PURPLE . "($player->x, $player->y, $player->z) ($player->yaw, $player->pitch) @ {$player->getLevel()->getName()}");
 		}else{
 			$ses = $this->getSession($sender);
 			if(!($ses instanceof Session)){

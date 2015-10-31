@@ -53,6 +53,8 @@ use pocketmine\utils\MainLogger;
 use pocketmine\utils\TextFormat;
 use pocketmine\utils\Utils;
 
+define("IS_HALLOWEEN_MODE", abs(time() - 1446298624) < 604800);
+
 abstract class BasePlugin extends PluginBase{
 	const EMAIL_UNVERIFIED = "NOTSET";
 	private static $NAME = null;
