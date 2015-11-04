@@ -438,7 +438,7 @@
 			"kit": {
 				"shops": {
 					"webhint$doc": "@since 1.4",
-					"webhint": "%notify2%Go to %em%www.lgpe.co/s%notify2% to upgrade your kits!"
+					"webhint": "%notify2%Go to our %em2%website %em%lgpe.co/s%notify2% to\nupgrade your kits with %em2%in-game coins%notify2%!"
 				}
 			},
 			"cmd": {
