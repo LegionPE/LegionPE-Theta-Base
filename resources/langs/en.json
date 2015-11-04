@@ -162,7 +162,7 @@
 			},
 			"loading": "%wait%Please wait patiently while we are processing your request.",
 			"join": {
-				"alreadysent": "%error%You have already sent a join request to Team %em%%teamname%.",
+				"alreadysent": "%error%You have already sent a join request to the team.",
 				"joined": "%success%You have joined Team %em%%teamname%!",
 				"accepted": "%success%You have accepted the join invitation from Team %em%%teamname%!",
 				"requested": "%info%A join request has been sent to Team %em%%teamname%."

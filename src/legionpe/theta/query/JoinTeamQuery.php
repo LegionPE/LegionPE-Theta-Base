@@ -48,7 +48,7 @@ class JoinTeamQuery extends AsyncQuery{
 		$checkFirst = $result->fetch_assoc();
 		$result->close();
 		if(!is_array($checkFirst)){
-			throw new \RuntimeException(Phrases::VAR_error . "Team does not exist");
+			throw new \RuntimeException(Phrases::CMD_TEAM_ERR_NO_SUCH_TEAM);
 		}
 		$this->tid = (int) $checkFirst["tid"];
 		$this->type = (int) $checkFirst["type"];
@@ -59,7 +59,7 @@ class JoinTeamQuery extends AsyncQuery{
 			throw new \RuntimeException(Phrases::CMD_TEAM_JOIN_DIRECTLY_JOINED);
 		}
 		if($this->type === self::REQUEST_FROM_USER){
-			throw new \RuntimeException(Phrases::VAR_error . "You have already sent a request to join the team.");
+			throw new \RuntimeException(Phrases::CMD_TEAM_JOIN_ALREADY_REQUESTED);
 		}elseif($this->type === self::REQUEST_FROM_TEAM or $this->type === self::DIRECT_JOIN){
 			$query = $db->query("SELECT (SELECT COUNT(*) FROM users WHERE tid=teams.tid) AS members,slots FROM teams WHERE tid=$this->tid");
 			$row = $query->fetch_assoc();
