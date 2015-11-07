@@ -38,7 +38,7 @@ class ConsoleReportHormone extends Hormone{
 		return self::CONSOLE_MESSAGE;
 	}
 	public function onPostRelease($rowId){
-		if($this->src === "{BOT}CapsDetector"){
+		if($this->src === "{BOT}CapsDetector" or $this->src === "{BOT}SwearDetector"){
 			return;
 		}
 		$message = implode("\n", [
