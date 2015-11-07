@@ -32,12 +32,11 @@ class SpamDetector{
 		/** @var ChatLogEntry $log */
 		foreach(array_reverse($this->chatLog) as $log){
 			if(strtolower($log->message) !== strtolower($message)){
-				$ok = true;
 				break;
 			}
 			$i++;
 		}
-		if(!isset($ok) or $i >= 2){
+		if($i >= 2){
 			$this->session->send(Phrases::CHAT_BLOCKED_REPEATED);
 			return false;
 		}
