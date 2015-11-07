@@ -35,13 +35,14 @@ class TeleportServerPlayerQuery extends AsyncQuery{
 	}
 	public function getExpectedColumns(){
 		return [
+			"offtime" => self::COL_INT,
 			"status" => self::COL_INT,
 			"status_ip" => self::COL_STRING,
-			"status_port" => self::COL_INT
+			"status_port" => self::COL_INT,
 		];
 	}
 	public function getQuery(){
-		return "SELECT status,status_ip,status_port FROM users WHERE name={$this->esc($this->name)}";
+		return "SELECT unix_timestamp()-laston AS offtime,status,status_ip,status_port FROM users WHERE name={$this->esc($this->name)}";
 	}
 	public function onCompletion(Server $server){
 		$main = BasePlugin::getInstance($server);
@@ -51,7 +52,8 @@ class TeleportServerPlayerQuery extends AsyncQuery{
 			$result = $this->getResult();
 			if($result["resulttype"] === self::TYPE_ASSOC){
 				$result = $result["result"];
-				if($result["status"] === Settings::STATUS_ONLINE){
+				$offtime = $result["offtime"];
+				if($result["status"] === Settings::STATUS_ONLINE and $offtime < 15){
 					$main->transfer($sender->getPlayer(), $result["status_ip"], $result["status_port"], "");
 				}
 			}

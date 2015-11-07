@@ -38,17 +38,21 @@ class ConsoleReportHormone extends Hormone{
 		return self::CONSOLE_MESSAGE;
 	}
 	public function onPostRelease($rowId){
+		if($this->src === "{BOT}CapsDetector"){
+			return;
+		}
 		$message = implode("\n", [
 			"$this->src @ `$this->ip:$this->port` executed /console. Message `#$rowId``:",
 			MUtils::toMd($this->msg),
 		]);
+		$isBot = substr($this->src, 0, 5) === "{BOT}";
 		$this->main->getServer()->getScheduler()->scheduleAsyncTask(new PostUrlTask(Credentials::SLACK_WEBHOOK, json_encode([
 //			"text" => $message,
 //			"fallback" => TextFormat::clean($message),
 			"text" => TextFormat::clean($message),
 			"icon_url" => Credentials::LEGIONPE_ICON_URL,
-			"username" => $this->src,
-			"channel" => $this->src === "SpamDetector" ? "#spam" : "#support"
+			"username" => $isBot ? substr($this->src, 5) : $this->src,
+			"channel" => $isBot ? "#spam" : "#support"
 		])));
 	}
 }

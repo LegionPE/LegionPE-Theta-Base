@@ -28,6 +28,19 @@ class SpamDetector{
 		$this->session = $session;
 	}
 	public function censor(&$message){
+		$i = 0;
+		/** @var ChatLogEntry $log */
+		foreach(array_reverse($this->chatLog) as $log){
+			if(strtolower($log->message) !== strtolower($message)){
+				$ok = true;
+				break;
+			}
+			$i++;
+		}
+		if(!isset($ok) or $i >= 2){
+			$this->session->send(Phrases::CHAT_BLOCKED_REPEATED);
+			return false;
+		}
 		$this->chatLog[] = new ChatLogEntry($message);
 		if(count($this->chatLog) > 5){
 			array_shift($this->chatLog);
@@ -72,7 +85,7 @@ class SpamDetector{
 		foreach($badWords as $word){
 			if(($pos = stripos(str_replace("1", "i", $string), $word)) !== false or ($pos = stripos(str_replace("1", "l", $string), $word)) !== false){
 				$this->session->send(Phrases::CHAT_SWEAR_WARN, ["word" => $word]);
-				$type = Hormone::get($this->session->getMain(), Hormone::CONSOLE_MESSAGE, "SpamDetector",
+				$type = Hormone::get($this->session->getMain(), Hormone::CONSOLE_MESSAGE, "{BOT}SwearDetector",
 					Phrases::VAR_notify2 . "Player {$this->session->getPlayer()->getName()}@" .
 					Settings::$LOCALIZE_IP . ":" . Settings::$LOCALIZE_PORT . " said: " .
 					substr($string, 0, $pos) .
@@ -88,7 +101,7 @@ class SpamDetector{
 	public function detectCaps(&$string){
 		if(strtoupper($string) === $string and strtolower($string) !== $string){
 			$string = strtolower($string);
-			$type = Hormone::get($this->session->getMain(), Hormone::CONSOLE_MESSAGE, "SpamDetector",
+			$type = Hormone::get($this->session->getMain(), Hormone::CONSOLE_MESSAGE, "{BOT}CapsDetector",
 				Phrases::VAR_notify2 . "Player {$this->session->getPlayer()->getName()}@" .
 				Settings::$LOCALIZE_IP . ":" . Settings::$LOCALIZE_PORT . " said: " .
 				$string . " (automatically de-capitalized)",
@@ -100,8 +113,7 @@ class SpamDetector{
 		$string = preg_replace_callback('%([0-9]{1,3}\.){3}[0-9]{1,3}%i', function ($match){
 			return str_repeat("-", strlen($match[0]));
 		}, $string);
-		$string = str_replace([".lbsg.net", ".leet.cc"], "--------", $string);
-		$string = preg_replace_callback('%(http[s]?://)?(([A-Za-z0-9\-]+\.){2,}([A-Za-z0-9\-]{1,3}))%', function ($match){
+		$string = preg_replace_callback('%(http[s]?://)?(([a-z0-9\-]+\.){2,}([a-z]{2,3}))%i', function ($match){
 			if(strlen($match[1]) > 6){
 				return $match[0];
 			}
@@ -111,5 +123,6 @@ class SpamDetector{
 			}
 			return str_repeat("-", strlen($match[0]));
 		}, $string);
+		$string = str_replace([".lbsg.net", ".leet.cc"], "--------", $string);
 	}
 }

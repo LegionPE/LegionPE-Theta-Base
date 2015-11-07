@@ -43,6 +43,7 @@ class Phrases{
 	const CHAT_BLOCKED_TOO_FREQUENT = "chat.blocked.toofreq";
 	const CHAT_BLOCKED_TOO_SHORT = "chat.blocked.tooshort";
 	const CHAT_BLOCKED_MULTIBYTE = "chat.blocked.multibyte";
+	const CHAT_BLOCKED_REPEATED = "chat.blocked.repeated";
 	const CHAT_FORMAT_TEAM = "chat.format.team";
 	const CHAT_FORMAT_CHANNEL = "chat.format.channel";
 	const CHAT_FORMAT_LOCAL = "chat.format.local";
