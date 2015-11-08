@@ -68,10 +68,8 @@ abstract class AsyncQuery extends AsyncTask{
 		$this->onPostQuery($mysql);
 		if($result === false){
 			$this->setResult(["success" => false, "query" => $query, "error" => $mysql->error]);
-			if(/* Settings::$SYSTEM_IS_TEST and */
-			$this->reportError()
-			){
-				echo "Error executing query: $query", PHP_EOL, $mysql->error, PHP_EOL;
+			if($this->reportError()){
+				echo "Error executing query (" . get_class($this) . "): $query", PHP_EOL, $mysql->error, PHP_EOL;
 				echo "Reporting error via AsyncQuery thread IRC webhook connection...", PHP_EOL;
 				Utils::getURL(Credentials::IRC_WEBHOOK . urlencode("Failed to execute MySQL query: \"$query\" - Error: $mysql->error - PEMapModder: <-------"), 3);
 			}
