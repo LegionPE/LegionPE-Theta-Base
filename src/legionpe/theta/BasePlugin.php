@@ -498,7 +498,7 @@ abstract class BasePlugin extends PluginBase{
 	}
 
 	/**
-	 * @param object $object
+	 * @param object|array $object
 	 * @return int
 	 */
 	public function storeObject($object){

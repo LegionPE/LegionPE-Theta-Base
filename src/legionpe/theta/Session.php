@@ -133,6 +133,7 @@ abstract class Session{
 	/** @var int half seconds until #postOnline */
 	private $postOnlineTimeout = Settings::POST_ONLINE_FREQUENCY;
 	public $doHashSaves = false;
+
 	public function __construct(Player $player, $loginData){
 		$this->player = $player;
 		$this->loginData = $loginData;
@@ -618,6 +619,7 @@ abstract class Session{
 	public function isOwner(){
 		return ($this->getRank() & Settings::RANK_PERM_OWNER) === Settings::RANK_PERM_OWNER;
 	}
+
 	public function onCmd(PlayerCommandPreprocessEvent $event){
 		if($this->isRegistering()){
 			$event->setCancelled();
@@ -861,6 +863,7 @@ abstract class Session{
 	public function onQuit(){
 		$this->saveData();
 	}
+
 	public function saveData($newStatus = Settings::STATUS_OFFLINE){
 		if($this->state === self::STATE_PLAYING){ // don't save if not registered/logged in or transferring
 			$this->getMain()->saveSessionData($this, $newStatus);
@@ -982,6 +985,9 @@ abstract class Session{
 		$this->setLoginDatum("lastwarn", time());
 	}
 	public function warn($id, $points, CommandSender $issuer, $msg){
+		if(time() - $this->getLastWarnTime() < 10){
+			$issuer->sendMessage("User has been warned in the past 10 seconds!");
+		}
 		/** @noinspection PhpDeprecationInspection */
 		new PreExecuteWarningQuery($this->getMain(), $this->getUid(), $this->getPlayer()->getAddress(), $this->getPlayer()->getClientId(), $id, $points, $issuer, $msg);
 	}
