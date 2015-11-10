@@ -20,7 +20,7 @@ use legionpe\theta\lang\Phrases;
 use pocketmine\scheduler\PluginTask;
 
 class RestartServerTask extends PluginTask{
-	private $counter = 13;
+	private $counter = 19;
 	public function onRun($currentTick){
 		/** @var BasePlugin $owner */
 		$owner = $this->getOwner();

@@ -15,11 +15,16 @@
 
 namespace legionpe\theta\chat;
 
+use legionpe\theta\lang\Phrases;
+
 class StopServerHormone extends Hormone{
 	public function getType(){
 		return self::STOP_SERVER_HORMONE;
 	}
 	public function execute(){
+		foreach($this->main->getSessions() as $ses){
+			$ses->getPlayer()->kick($ses->translate(Phrases::KICK_SERVER_STOP), false);
+		}
 		$this->main->getServer()->shutdown();
 	}
 }
