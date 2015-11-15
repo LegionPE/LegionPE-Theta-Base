@@ -139,10 +139,10 @@ abstract class BasePlugin extends PluginBase{
 			}
 		}), 2);
 
-		$RESEND_ADD_PLAYER = $this->getResendAddPlayerFreq();
-		if($RESEND_ADD_PLAYER > 0){
-			$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new ResendPlayersTask($this), $RESEND_ADD_PLAYER, $RESEND_ADD_PLAYER);
-		}
+		// $RESEND_ADD_PLAYER = $this->getResendAddPlayerFreq();
+		// if($RESEND_ADD_PLAYER > 0){
+		//	  $this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new ResendPlayersTask($this), $RESEND_ADD_PLAYER, $RESEND_ADD_PLAYER);
+		// }
 		/** @noinspection PhpUsageOfSilenceOperatorInspection */
 		@touch($this->getDataFolder() . "privmsg.log");
 		$this->pmLog = fopen($this->getDataFolder() . "privmsg.log", "at");
