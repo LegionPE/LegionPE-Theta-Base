@@ -177,7 +177,8 @@ abstract class Session{
 		return $this->getPlayer()->getDisplayName();
 	}
 	public function onJoin(){
-		foreach($this->player->getLevel()->getChunkPlayers($this->player->getFloorX() >> 4, $this->player->getFloorZ() >> 4) as $other){
+		//foreach($this->player->getLevel()->getChunkPlayers($this->player->getFloorX() >> 4, $this->player->getFloorZ() >> 4) as $other){
+		foreach($this->player->getLevel()->getPlayers() as $other){
 //			$other->hidePlayer($this->player);
 			$this->invisibleFrom[$other->getId()] = true;
 		}
@@ -185,7 +186,7 @@ abstract class Session{
 	}
 	private function prepareLogin(){
 		$status = $this->getLoginDatum("status");
-		if($status === Settings::STATUS_TRANSFERRING and $this->getPlayer()->getClientSecret() === $this->getLoginDatum("authuuid") and (time() - $this->getLastOnline() < 30)){
+		if($status === Settings::STATUS_TRANSFERRING and $this->getPlayer()->getRawUniqueId() === $this->getLoginDatum("authuuid") and (time() - $this->getLastOnline() < 30)){
 			$this->login(self::AUTH_TRANSFER);
 			return;
 		}
@@ -193,7 +194,7 @@ abstract class Session{
 			$this->state = self::STATE_REGISTERING;
 		}else{
 			$method = $this->getAuthSettings();
-			if($method === Settings::CONFIG_AUTH_UUID and $this->getPlayer()->getClientSecret() === $this->getLoginDatum("authuuid")){
+			if($method === Settings::CONFIG_AUTH_UUID and $this->getPlayer()->getRawUniqueId() === $this->getLoginDatum("authuuid") and $this->getPlayer()->getAddress() === $this->getLoginDatum("lastip")){
 				$this->login(self::AUTH_UUID);
 				return;
 			}

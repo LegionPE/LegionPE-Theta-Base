@@ -57,7 +57,7 @@ class BaseListener implements Listener{
 				continue;
 			}
 			/** @noinspection PhpDeprecationInspection */
-			if($other->getClientSecret() === $player->getClientSecret()){
+			if($other->getRawUniqueId() === $player->getRawUniqueId()){
 				$other->close("You rejoined from the same IP with the same client and the same username.");
 			}else{
 				$event->setCancelled();

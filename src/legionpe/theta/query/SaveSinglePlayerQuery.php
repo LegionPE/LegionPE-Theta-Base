@@ -54,7 +54,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 			"status_ip" => Settings::$LOCALIZE_IP,
 			"status_port" => Settings::$LOCALIZE_PORT,
 			"lastses" => Settings::$LOCALIZE_CLASS,
-			"authuuid" => ["v" => $session->getPlayer()->getClientSecret(), "bin" => true],
+			"authuuid" => ["v" => $session->getPlayer()->getRawUniqueId(), "bin" => true],
 			"coins" => ["v" => $coins, "noupdate" => true],
 			"hash" => ["v" => $session->getPasswordHash(), "noupdate" => !$session->doHashSaves],
 			"pwprefix" => ["v" => $session->getPasswordPrefix(), "noupdate" => true],

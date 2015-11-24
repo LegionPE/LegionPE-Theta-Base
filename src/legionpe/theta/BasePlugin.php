@@ -342,7 +342,7 @@ abstract class BasePlugin extends PluginBase{
 			"lastip" => "",
 			"status" => Settings::STATUS_OFFLINE,
 			"lastses" => Settings::$LOCALIZE_CLASS,
-			"authuuid" => $player->getClientSecret(),
+			"authuuid" => $player->getRawUniqueId(),
 			"coins" => 0.0,
 			"hash" => str_repeat("0", 128),
 			"pwprefix" => "\0",
@@ -414,7 +414,7 @@ abstract class BasePlugin extends PluginBase{
 		$this->classMaxPlayers = $classMax;
 		$append = $this->getServerNameAppend();
 		$info = $this->getServer()->getQueryInformation();
-		$this->getBaseListener()->onQueryRegen($info);
+		// $this->getBaseListener()->onQueryRegen($info);
 		$this->getServer()->getNetwork()->setName(
 			TextFormat::BOLD . TextFormat::AQUA . "LegionPE " .
 			TextFormat::BOLD . TextFormat::GREEN . ((Settings::$LOCALIZE_CLASS === Settings::CLASS_HUB) ? "Theta" : Settings::$CLASSES_NAMES[Settings::$LOCALIZE_CLASS]) .

@@ -157,4 +157,14 @@ abstract class AsyncQuery extends AsyncTask{
 	}
 	public function quit(){
 	}
+	public function saveToThreadStore($identifier, $value){
+		global $store;
+		if(!$this->isGarbage()){
+			$store[$identifier] = $value;
+		}
+	}
+	public function getFromThreadStore($identifier){
+		global $store;
+		return $this->isGarbage() ? null : $store[$identifier];
+	}
 }
