@@ -80,6 +80,8 @@ abstract class BasePlugin extends PluginBase{
 	public $pmLog;
 	/** @var string */
 	private $altIp = "0.0.0.0";
+	/** @var \legionpe\theta\miscellaneous\walkingparticle\WalkingParticle[] */
+	public $walkingParticles = [];
 	/** @var int */
 	private $altPort = 0;
 	/** @var int */

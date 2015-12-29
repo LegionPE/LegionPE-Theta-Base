@@ -15,18 +15,20 @@
 
 namespace legionpe\theta\miscellaneous\walkingparticle;
 
-use pocketmine\event\player\PlayerMoveEvent;
+use legionpe\theta\BasePlugin;
+use legionpe\theta\Session;
 use pocketmine\level\particle\LavaDripParticle;
 use pocketmine\math\Vector3;
 
 class LavaDrippingWalkingParticle extends WalkingParticle{
-	public function __construct(){
+	public function __construct(BasePlugin $plugin, Session $session){
+		parent::__construct($plugin, $session);
 		$this->setName("Lava dripping");
 		$this->setColors(["orange", "red"]);
 	}
-	public function onMove(PlayerMoveEvent $event){
-		$player = $event->getPlayer();
-		$position = $event->getPlayer()->getPosition();
+	public function createParticles(){
+		$player = $this->getSession()->getPlayer();
+		$position = $player->getPosition();
 		for($i=0;$i<2;$i++){
 			$player->getLevel()->addParticle(new LavaDripParticle(new Vector3($position->getX() - 0.5 + mt_rand(1, 10) / 10, $position->getY() + 0.2, $position->getZ() - 0.5 + mt_rand(1, 10) / 10)));
 		}

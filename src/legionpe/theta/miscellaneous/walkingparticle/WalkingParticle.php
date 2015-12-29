@@ -15,15 +15,37 @@
 
 namespace legionpe\theta\miscellaneous\walkingparticle;
 
-use pocketmine\event\player\PlayerMoveEvent;
+use legionpe\theta\BasePlugin;
+use legionpe\theta\Session;
 
 abstract class WalkingParticle{
+	private static $nextId = 0;
+	/** @var BasePlugin */
+	private $plugin;
+	/** @var Session */
+	private $session;
+	/** @var int */
+	private $id;
 	/** @var string */
 	private $name;
 	/** @var string[] */
 	private $colors = [];
-	public abstract function onMove(PlayerMoveEvent $event);
+	public abstract function createParticles();
 
+	public function __construct(BasePlugin $plugin, Session $session){
+		$plugin->walkingParticles[$this->id = self::$nextId++] = $this;
+		$this->plugin = $plugin;
+		$this->session = $session;
+	}
+	public function __destruct(){
+		unset($this->plugin->walkingParticles[$this->id]);
+	}
+	/**
+	 * @return Session
+	 */
+	protected function getSession(){
+		return $this->session;
+	}
 	/**
 	 * @return string
 	 */
