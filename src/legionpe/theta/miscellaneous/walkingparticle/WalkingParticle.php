@@ -19,6 +19,8 @@ use legionpe\theta\BasePlugin;
 use legionpe\theta\Session;
 
 abstract class WalkingParticle{
+	CONST TYPE_LAVA_DRIP = 0, TYPE_CRITICAL = 1, TYPE_ENCHANTING_TABLE = 2, TYPE_FLAME = 3, TYPE_HEART = 4, TYPE_INK = 5, TYPE_RAINBOW = 6, TYPE_RAIN_SPLASH = 7, TYPE_TOWN_AURA = 8, TYPE_WALKING = 9;
+
 	private static $nextId = 0;
 	/** @var BasePlugin */
 	private $plugin;
@@ -26,6 +28,8 @@ abstract class WalkingParticle{
 	private $session;
 	/** @var int */
 	private $id;
+	/** @var int */
+	protected $tid;
 	/** @var string */
 	private $name;
 	/** @var string[] */
@@ -37,14 +41,20 @@ abstract class WalkingParticle{
 		$this->plugin = $plugin;
 		$this->session = $session;
 	}
-	public function __destruct(){
-		unset($this->plugin->walkingParticles[$this->id]);
-	}
 	/**
 	 * @return Session
 	 */
 	protected function getSession(){
 		return $this->session;
+	}
+	public function getTypeId(){
+		return $this->tid;
+	}
+	/**
+	 * @return int
+	 */
+	public function getId(){
+		return $this->id;
 	}
 	/**
 	 * @return string

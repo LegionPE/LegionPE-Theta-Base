@@ -40,6 +40,7 @@ use legionpe\theta\utils\RestartServerTask;
 use legionpe\theta\utils\SessionTickTask;
 use legionpe\theta\utils\SyncStatusTask;
 use legionpe\theta\utils\TransferPacket;
+use legionpe\theta\utils\WalkingParticlesTask;
 use libtheta\info\pvp\PvpKitInfo;
 use pocketmine\command\defaults\TimingsCommand;
 use pocketmine\event\player\PlayerQuitEvent;
@@ -134,6 +135,7 @@ abstract class BasePlugin extends PluginBase{
 		$this->getServer()->getScheduler()->scheduleRepeatingTask(new RestartServerTask($this), 6000);
 		$this->restartTime = $this->getServer()->getTick() + 72000;
 		$this->getServer()->getScheduler()->scheduleDelayedRepeatingTask(new RandomBroadcastTask($this), 2400, 2400);
+		$this->getServer()->getScheduler()->scheduleRepeatingTask(new WalkingParticlesTask($this), 5);
 		$this->getServer()->getScheduler()->scheduleDelayedTask(new CallbackPluginTask($this, function (){
 			$plugin = $this->getServer()->getPluginManager()->getPlugin("FastTransfer");
 			if($plugin instanceof Plugin and $plugin->isEnabled()){

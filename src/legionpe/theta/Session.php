@@ -28,6 +28,7 @@ use legionpe\theta\query\PreExecuteWarningQuery;
 use legionpe\theta\query\RawAsyncQuery;
 use legionpe\theta\query\UpdateHashesQuery;
 use legionpe\theta\utils\MUtils;
+use legionpe\theta\miscellaneous\walkingparticle\WalkingParticle;
 use pocketmine\block\Block;
 use pocketmine\command\CommandSender;
 use pocketmine\event\block\BlockBreakEvent;
@@ -109,6 +110,8 @@ abstract class Session{
 	public $currentChatState = self::CHANNEL_LOCAL;
 	/** @var Player */
 	private $player;
+	/** @var null|WalkingParticle */
+	private $walkingParticle = null;
 	/** @var mixed[] */
 	private $loginData;
 	/** @var string */
@@ -512,6 +515,12 @@ abstract class Session{
 	public function setLoginDatum($key, $datum){
 		$this->loginData[$key] = $datum;
 	}
+	public function setWalkingParticle(WalkingParticle $walkingparticle){
+		if($this->walkingParticle instanceof WalkingParticle){
+			unset($this->getMain()->walkingParticles[$walkingparticle->getId()]);
+		}
+		$this->walkingParticle = $walkingparticle;
+	}
 	private function sendFirstJoinMessages(){
 		$this->getMain()->sendFirstJoinMessages($this->getPlayer());
 	}
@@ -862,6 +871,9 @@ abstract class Session{
 		return true;
 	}
 	public function onQuit(){
+		if($this->walkingParticle instanceof WalkingParticle){
+			unset($this->getMain()->walkingParticles[$this->walkingParticle->getId()]);
+		}
 		$this->saveData();
 	}
 

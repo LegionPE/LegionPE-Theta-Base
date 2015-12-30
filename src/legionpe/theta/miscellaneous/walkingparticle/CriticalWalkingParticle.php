@@ -17,22 +17,22 @@ namespace legionpe\theta\miscellaneous\walkingparticle;
 
 use legionpe\theta\BasePlugin;
 use legionpe\theta\Session;
-use pocketmine\level\particle\LavaDripParticle;
+use pocketmine\level\particle\CriticalParticle;
 use pocketmine\math\Vector3;
 
-class LavaDrippingWalkingParticle extends WalkingParticle{
+class CriticalWalkingParticle extends WalkingParticle{
 	public function __construct(BasePlugin $plugin, Session $session){
 		parent::__construct($plugin, $session);
-		$this->setName("Lava dripping");
-		$this->setColors(["orange", "red"]);
-		$this->tid = self::TYPE_LAVA_DRIP;
+		$this->setName("Critical");
+		$this->setColors(["grey"]);
+		$this->tid = self::TYPE_CRITICAL;
 	}
 	public function createParticles(){
 		$player = $this->getSession()->getPlayer();
 		$position = $player->getPosition();
 		$level = $player->getLevel();
 		for($i=0;$i<2;$i++){
-			$level->addParticle(new LavaDripParticle(new Vector3($position->getX() - 0.5 + mt_rand(1, 10) / 10, $position->getY() + 0.2, $position->getZ() - 0.5 + mt_rand(1, 10) / 10)));
+			$level->addParticle(new CriticalParticle(new Vector3($position->getX() - 0.5 + mt_rand(1, 10) / 10, $position->getY() + 0.2, $position->getZ() - 0.5 + mt_rand(1, 10) / 10)));
 		}
 	}
 }
