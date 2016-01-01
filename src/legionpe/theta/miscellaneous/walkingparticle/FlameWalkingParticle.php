@@ -21,14 +21,15 @@ use pocketmine\level\particle\FlameParticle;
 use pocketmine\math\Vector3;
 
 class FlameWalkingParticle extends WalkingParticle{
-	public function __construct(BasePlugin $plugin, Session $session){
-		parent::__construct($plugin, $session);
+	public function __construct(Session $session){
+		parent::__construct($session);
 		$this->setName("Fire / flame");
 		$this->setColors(["orange"]);
 		$this->tid = self::TYPE_FLAME;
 	}
 	public function createParticles(){
 		$player = $this->getSession()->getPlayer();
+		if($player->speed instanceof Vector3 and $player->speed->lengthSquared() > 0) return;
 		$position = $player->getPosition();
 		$level = $player->getLevel();
 		for($i=0;$i<2;$i++){

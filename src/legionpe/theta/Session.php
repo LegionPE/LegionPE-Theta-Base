@@ -110,8 +110,8 @@ abstract class Session{
 	public $currentChatState = self::CHANNEL_LOCAL;
 	/** @var Player */
 	private $player;
-	/** @var null|WalkingParticle */
-	private $walkingParticle = null;
+	/** @var WalkingParticle[] */
+	public $walkingParticles = [];
 	/** @var mixed[] */
 	private $loginData;
 	/** @var string */
@@ -296,6 +296,15 @@ abstract class Session{
 	}
 	public function translate($phrase, array $vars = []){
 		return $this->getMain()->getLanguageManager()->get($phrase, $vars, ...$this->getLangs());
+	}
+	public function addWalkingParticle(WalkingParticle $particle){
+		$this->walkingParticles[$particle->getTypeId()] = $particle;
+	}
+	public function removeWalkingParticle(WalkingParticle $particle){
+		unset($this->walkingParticles[$particle->getTypeId()]);
+	}
+	public function clearWalkingParticles(){
+		$this->walkingParticles = [];
 	}
 	/**
 	 * @return BasePlugin

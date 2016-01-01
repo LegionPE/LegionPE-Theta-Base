@@ -21,14 +21,15 @@ use pocketmine\level\particle\HeartParticle;
 use pocketmine\math\Vector3;
 
 class HeartWalkingParticle extends WalkingParticle{
-	public function __construct(BasePlugin $plugin, Session $session){
-		parent::__construct($plugin, $session);
+	public function __construct(Session $session){
+		parent::__construct($session);
 		$this->setName("Heart");
 		$this->setColors(["red"]);
 		$this->tid = self::TYPE_HEART;
 	}
 	public function createParticles(){
 		$player = $this->getSession()->getPlayer();
+		if($player->speed instanceof Vector3 and $player->speed->lengthSquared() > 0) return;
 		$position = $player->getPosition();
 		$level = $player->getLevel();
 		for($i=0;$i<2;$i++){

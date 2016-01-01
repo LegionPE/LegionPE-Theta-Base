@@ -16,6 +16,7 @@
 namespace legionpe\theta\utils;
 
 use legionpe\theta\BasePlugin;
+use pocketmine\math\Vector3;
 use pocketmine\scheduler\PluginTask;
 
 class WalkingParticlesTask extends PluginTask{
@@ -26,8 +27,10 @@ class WalkingParticlesTask extends PluginTask{
 		$this->plugin = $plugin;
 	}
 	public function onRun($ticks){
-		foreach($this->plugin->walkingParticles as $walkingParticle){
-			$walkingParticle->createParticles();
+		foreach($this->plugin->getSessions() as $session){
+			foreach($session->walkingParticles as $walkingParticle){
+				$walkingParticle->createParticles();
+			}
 		}
 	}
 }

@@ -151,7 +151,7 @@ abstract class AsyncQuery extends AsyncTask{
 			return "'" . $this->getConn()->escape_string($str) . "'";
 		}
 		return (string) $str;
-	}
+
 	public function __debugInfo(){
 		return [];
 	}

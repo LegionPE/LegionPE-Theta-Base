@@ -21,14 +21,15 @@ use pocketmine\level\particle\EnchantmentTableParticle;
 use pocketmine\math\Vector3;
 
 class EnchantingWalkingParticle extends WalkingParticle{
-	public function __construct(BasePlugin $plugin, Session $session){
-		parent::__construct($plugin, $session);
+	public function __construct(Session $session){
+		parent::__construct($session);
 		$this->setName("Enchantment table");
 		$this->setColors(["white"]);
 		$this->tid = self::TYPE_ENCHANTING_TABLE;
 	}
 	public function createParticles(){
 		$player = $this->getSession()->getPlayer();
+		if($player->speed instanceof Vector3 and $player->speed->lengthSquared() > 0) return;
 		$position = $player->getPosition();
 		$level = $player->getLevel();
 		for($i=0;$i<2;$i++){

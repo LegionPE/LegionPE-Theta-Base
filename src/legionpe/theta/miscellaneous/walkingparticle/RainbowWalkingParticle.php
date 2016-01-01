@@ -24,14 +24,15 @@ use pocketmine\level\particle\SplashParticle;
 use pocketmine\math\Vector3;
 
 class RainbowWalkingParticle extends WalkingParticle{
-	public function __construct(BasePlugin $plugin, Session $session){
-		parent::__construct($plugin, $session);
+	public function __construct(Session $session){
+		parent::__construct($session);
 		$this->setName("Rainbow");
 		$this->setColors(["blue", "black", "grey", "red", "purle"]);
 		$this->tid = self::TYPE_RAINBOW;
 	}
 	public function createParticles(){
 		$player = $this->getSession()->getPlayer();
+		if($player->speed instanceof Vector3 and $player->speed->lengthSquared() > 0) return;
 		$position = $player->getPosition();
 		$level = $player->getLevel();
 		$level->addParticle(new SplashParticle(new Vector3($position->getX() - 0.5 + mt_rand(1, 10) / 10, $position->getY() + 0.2, $position->getZ() - 0.5 + mt_rand(1, 10) / 10)));

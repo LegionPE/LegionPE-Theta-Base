@@ -36,9 +36,7 @@ abstract class WalkingParticle{
 	private $colors = [];
 	public abstract function createParticles();
 
-	public function __construct(BasePlugin $plugin, Session $session){
-		$plugin->walkingParticles[$this->id = self::$nextId++] = $this;
-		$this->plugin = $plugin;
+	public function __construct(Session $session){
 		$this->session = $session;
 	}
 	/**
