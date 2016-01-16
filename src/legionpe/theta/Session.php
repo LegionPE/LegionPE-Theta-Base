@@ -100,6 +100,8 @@ abstract class Session{
 	const CHANNEL_SUB_VERBOSE = 0;
 	const CHANNEL_SUB_NORMAL = 1;
 	const CHANNEL_SUB_MENTION = 2;
+	const MODE_NORMAL = 0;
+	const MODE_SPECTATING = 1;
 	public static $TEAM_RANKS = [
 		"Junior-Member",
 		"Member",
@@ -110,6 +112,8 @@ abstract class Session{
 	public $currentChatState = self::CHANNEL_LOCAL;
 	/** @var Player */
 	private $player;
+	/** @var int */
+	private $mode = 0;
 	/** @var WalkingParticle[] */
 	public $walkingParticles = [];
 	/** @var mixed[] */
@@ -956,6 +960,28 @@ abstract class Session{
 		$result = $now - $this->ontimeSince;
 		$this->ontimeSince = $now;
 		return $result;
+	}
+	public function getMode(){
+		return $this->mode;
+	}
+	public function setMode($mode){
+		switch($mode){
+			case self::MODE_SPECTATING:
+				$onlinePlayers = $this->getMain()->getServer()->getOnlinePlayers();
+				foreach($onlinePlayers as $player){
+					$player->hidePlayer($this->getPlayer());
+				}
+				break;
+			case self::MODE_NORMAL:
+				if($this->mode === self::MODE_SPECTATING){
+					$onlinePlayers = $this->getMain()->getServer()->getOnlinePlayers();
+					foreach($onlinePlayers as $player){
+						$player->showPlayer($this->getPlayer());
+					}
+				}
+				break;
+		}
+		$this->mode = $mode;
 	}
 	public function getPasswordPrefix(){
 		return $this->getLoginDatum("pwprefix");
