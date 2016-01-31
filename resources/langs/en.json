@@ -372,6 +372,11 @@
 				"acquaintance": "acquaintance",
 				"goodfriend": "good friend",
 				"bestfriend": "best friend"
+			},
+			"dir": {
+				"in": "Inbox",
+				"out": "Outbox",
+				"now": "Friends"
 			}
 		},
 		"team": {

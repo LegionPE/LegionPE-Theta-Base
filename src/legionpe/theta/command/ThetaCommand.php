@@ -30,7 +30,6 @@ use legionpe\theta\command\session\ChannelCommand;
 use legionpe\theta\command\session\CoinsCommand;
 use legionpe\theta\command\session\ConsoleCommand;
 use legionpe\theta\command\session\DirectTeleportCommand;
-use legionpe\theta\command\session\friend\FallbackFriendCommand;
 use legionpe\theta\command\session\friend\FriendListCommand;
 use legionpe\theta\command\session\friend\SetFriendCommand;
 use legionpe\theta\command\session\GrindCoinCommand;
@@ -63,17 +62,19 @@ use pocketmine\utils\TextFormat;
 abstract class ThetaCommand extends Command implements PluginIdentifiableCommand{
 	/** @var BasePlugin */
 	private $plugin;
+
 	/**
 	 * @param BasePlugin $plugin
-	 * @param string $name
-	 * @param string $desc
-	 * @param string $usage
-	 * @param string[] $aliases
+	 * @param string     $name
+	 * @param string     $desc
+	 * @param string     $usage
+	 * @param string[]   $aliases
 	 */
 	public function __construct(BasePlugin $plugin, $name, $desc, $usage, $aliases = []){
 		parent::__construct($name, $desc, $usage, (array) $aliases);
 		$this->plugin = $plugin;
 	}
+
 	public static function registerAll(BasePlugin $main, CommandMap $map){
 		foreach(
 			[
@@ -103,7 +104,7 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 				"tp",
 				"reload",
 				"status",
-				"kill"
+				"kill",
 			] as $cmd){
 			self::unregisterCommand($map, $cmd);
 		}
@@ -135,12 +136,12 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			new OverridingSayCommand($main),
 			new QueryCommand($main),
 			new RestartCommand($main),
-			new FallbackFriendCommand($main),
-			new SetFriendCommand($main, Friend::FRIEND_ENEMY),
-			new SetFriendCommand($main, Friend::FRIEND_NOT_FRIEND),
-			new SetFriendCommand($main, Friend::FRIEND_ACQUAINTANCE),
-			new SetFriendCommand($main, Friend::FRIEND_GOOD_FRIEND),
-			new SetFriendCommand($main, Friend::FRIEND_BEST_FRIEND),
+//			new FallbackFriendCommand($main),
+//			new SetFriendCommand($main, Friend::FRIEND_ENEMY),
+			new SetFriendCommand($main, Friend::FRIEND_NOT_FRIEND, ["unfriend", "uf"]),
+//			new SetFriendCommand($main, Friend::FRIEND_ACQUAINTANCE),
+			new SetFriendCommand($main, Friend::FRIEND_GOOD_FRIEND, ["friend", "f"]),
+//			new SetFriendCommand($main, Friend::FRIEND_BEST_FRIEND),
 			new FriendListCommand($main),
 			new TeamCreateCommand($main),
 			new TeamInviteCommand($main),
@@ -168,6 +169,7 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			new WarnCommand($main, ["misc"], "miscellaneous warnings", WarnCommand::MISC),
 		]);
 	}
+
 	private static function unregisterCommand(CommandMap $map, $name){
 		$cmd = $map->getCommand($name);
 		if($cmd instanceof Command){
@@ -177,13 +179,16 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 		}
 		return false;
 	}
+
 	/**
 	 * Alias of {@link #getPlugin}
+	 *
 	 * @return BasePlugin
 	 */
 	public function getMain(){
 		return $this->plugin;
 	}
+
 	protected function sendUsage($sender){
 		if($sender instanceof Player){
 			if(($ses = $this->getSession($sender)) instanceof Session){
@@ -198,18 +203,22 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			$sender->sendMessage(TextFormat::RED . "Usage: " . $this->getUsage());
 		}
 	}
+
 	public function getSession($player){
 		return $this->getPlugin()->getSession($player);
 	}
+
 	/**
 	 * @return BasePlugin
 	 */
 	public function getPlugin(){
 		return $this->plugin;
 	}
+
 	/**
 	 * @param Session|CommandSender $sender
-	 * @param string|null $name
+	 * @param string|null           $name
+	 *
 	 * @return bool
 	 */
 	protected function notOnline($sender, $name = null){
@@ -235,11 +244,13 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 		}
 		return true;
 	}
+
 	/**
 	 * Broadcast a message to all moderators (including trial) on the server
+	 *
 	 * @param string $msg
-	 * @param bool $translate
-	 * @param array $args
+	 * @param bool   $translate
+	 * @param array  $args
 	 */
 	protected function broadcastModerator($msg, $translate = true, $args = []){
 		foreach($this->getPlugin()->getSessions() as $ses){

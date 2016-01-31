@@ -241,6 +241,10 @@ class Phrases{
 	const FRIEND_GOOD_FRIEND = "words.friend.type.goodfriend";
 	const FRIEND_BEST_FRIEND = "words.friend.type.bestfriend";
 
+	const FRIEND_DIR_IN = "words.friend.dir.in";
+	const FRIEND_DIR_OUT = "words.friend.dir.out";
+	const FRIEND_DIR_NOW = "words.friend.dir.now";
+
 	const PVP_DEATH_GENERIC = "game.pvp.death.generic";
 	const PVP_DEATH_KILLED = "game.pvp.death.killed";
 	const PVP_DEATH_LAVA = "game.pvp.death.lava";
