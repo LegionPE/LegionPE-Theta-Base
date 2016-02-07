@@ -298,7 +298,7 @@ class Phrases{
 
 	// constant variables
 	const VAR_wait = TextFormat::RED . "… ";
-	const VAR_success = TextFormat::DARK_GREEN;
+	const VAR_success = TextFormat::GREEN;
 	const VAR_info = TextFormat::WHITE;
 	const VAR_symbol = TextFormat::GRAY;
 	const VAR_verbose = "》 " . self::VAR_verbosemid;

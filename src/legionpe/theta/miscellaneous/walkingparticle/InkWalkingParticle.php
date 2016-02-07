@@ -29,7 +29,7 @@ class InkWalkingParticle extends WalkingParticle{
 	}
 	public function createParticles(){
 		$player = $this->getSession()->getPlayer();
-		if($player->speed instanceof Vector3 and $player->speed->lengthSquared() > 0) return;
+		//if($player->speed instanceof Vector3 and $player->speed->lengthSquared() > 0) return;
 		$position = $player->getPosition();
 		$level = $player->getLevel();
 		for($i=0;$i<2;$i++){

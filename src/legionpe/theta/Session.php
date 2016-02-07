@@ -114,6 +114,8 @@ abstract class Session{
 	private $player;
 	/** @var int */
 	private $mode = 0;
+	private $oldGamemode = 0;
+	private $oldPosition = null;
 	/** @var WalkingParticle[] */
 	public $walkingParticles = [];
 	/** @var mixed[] */
@@ -529,7 +531,7 @@ abstract class Session{
 		$this->loginData[$key] = $datum;
 	}
 	public function setWalkingParticle(WalkingParticle $walkingparticle){
-		if($this->walkingParticle instanceof WalkingParticle){
+		if($this->walkingParticles instanceof WalkingParticle){
 			unset($this->getMain()->walkingParticles[$walkingparticle->getId()]);
 		}
 		$this->walkingParticle = $walkingparticle;
@@ -780,6 +782,9 @@ abstract class Session{
 	}
 	public function onDamage(/** @noinspection PhpUnusedParameterInspection */
 		EntityDamageEvent $event){
+		if($this->mode === self::MODE_SPECTATING){
+			return false;
+		}
 		if(!$this->isPlaying()){
 			return false;
 		}
@@ -788,6 +793,9 @@ abstract class Session{
 			if($player instanceof Player){
 				$ses = $this->getMain()->getSession($player);
 				if($ses instanceof Session){
+					if($ses->mode === self::MODE_SPECTATING){
+						return false;
+					}
 					if(!$ses->isPlaying()){
 						return false;
 					}
@@ -884,9 +892,6 @@ abstract class Session{
 		return true;
 	}
 	public function onQuit(){
-		if($this->walkingParticle instanceof WalkingParticle){
-			unset($this->getMain()->walkingParticles[$this->walkingParticle->getId()]);
-		}
 		$this->saveData();
 	}
 
@@ -967,9 +972,15 @@ abstract class Session{
 	public function setMode($mode){
 		switch($mode){
 			case self::MODE_SPECTATING:
-				$onlinePlayers = $this->getMain()->getServer()->getOnlinePlayers();
-				foreach($onlinePlayers as $player){
-					$player->hidePlayer($this->getPlayer());
+				if($this->mode !== self::MODE_SPECTATING){
+					$onlinePlayers = $this->getMain()->getServer()->getOnlinePlayers();
+					foreach($onlinePlayers as $player){
+						$player->hidePlayer($this->getPlayer());
+					}
+					$this->oldGamemode = $this->getPlayer()->getGamemode();
+					$this->oldPosition = $this->getPlayer()->getPosition();
+					$this->getPlayer()->setGamemode(3);
+					if($this-$this->isVIP()) $this->sendMessage(TextFormat::GREEN . "You can use /tp to teleport to a player.");
 				}
 				break;
 			case self::MODE_NORMAL:
@@ -979,6 +990,8 @@ abstract class Session{
 						$player->showPlayer($this->getPlayer());
 					}
 				}
+				$this->getPlayer()->setGamemode($this->oldGamemode);
+				$this->getPlayer()->teleport($this->oldPosition);
 				break;
 		}
 		$this->mode = $mode;

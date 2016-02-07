@@ -32,7 +32,7 @@ class RainbowWalkingParticle extends WalkingParticle{
 	}
 	public function createParticles(){
 		$player = $this->getSession()->getPlayer();
-		if($player->speed instanceof Vector3 and $player->speed->lengthSquared() > 0) return;
+		//if($player->speed instanceof Vector3 and $player->speed->lengthSquared() > 0) return;
 		$position = $player->getPosition();
 		$level = $player->getLevel();
 		$level->addParticle(new SplashParticle(new Vector3($position->getX() - 0.5 + mt_rand(1, 10) / 10, $position->getY() + 0.2, $position->getZ() - 0.5 + mt_rand(1, 10) / 10)));

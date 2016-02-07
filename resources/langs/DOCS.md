@@ -8,7 +8,7 @@ There exists a list of precompiled format vars:
 | Name | Value |
 | ---: | :---- |
 | wait | TextFormat::RED + "… " |
-| success | TextFormat::DARK_GREEN |
+| success | TextFormat::GREEN |
 | info | TextFormat::WHITE |
 | symbol | TextFormat::GRAY |
 | verbose | "》 " + verbosemid |

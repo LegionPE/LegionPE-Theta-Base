@@ -36,6 +36,7 @@ use legionpe\theta\command\session\friend\SetFriendCommand;
 use legionpe\theta\command\session\GrindCoinCommand;
 use legionpe\theta\command\session\LabelCommand;
 use legionpe\theta\command\session\QueryCommand;
+use legionpe\theta\command\session\SpectatingCommand;
 use legionpe\theta\command\session\team\FallbackTeamCommand;
 use legionpe\theta\command\session\team\TeamConfigCommand;
 use legionpe\theta\command\session\team\TeamCreateCommand;
@@ -49,6 +50,7 @@ use legionpe\theta\command\session\team\TeamPropertyChangeCommand;
 use legionpe\theta\command\session\team\TeamQuitCommand;
 use legionpe\theta\command\session\team\TeamRankChangeCommand;
 use legionpe\theta\command\session\TransferCommand;
+use legionpe\theta\command\session\WalkingParticleCommand;
 use legionpe\theta\config\Settings;
 use legionpe\theta\Friend;
 use legionpe\theta\lang\Phrases;
@@ -166,6 +168,8 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			new WarnCommand($main, ["impose", "imp"], "staff imposing", WarnCommand::IMPOSE),
 			new WarnCommand($main, ["spam"], "spamming", WarnCommand::SPAM),
 			new WarnCommand($main, ["misc"], "miscellaneous warnings", WarnCommand::MISC),
+			new WalkingParticleCommand($main),
+			new SpectatingCommand($main)
 		]);
 	}
 	private static function unregisterCommand(CommandMap $map, $name){
