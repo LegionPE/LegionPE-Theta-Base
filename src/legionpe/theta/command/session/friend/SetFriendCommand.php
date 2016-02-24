@@ -39,12 +39,14 @@ class SetFriendCommand extends SessionCommand{
 	private $cmdName, $humanName;
 	/** @var int */
 	private $level;
-	public function __construct(BasePlugin $main, $level){
+
+	public function __construct(BasePlugin $main, $level, $aliases = []){
 		$this->level = $level;
 		$this->cmdName = self::$CMD_NAMES[$level];
 		$this->humanName = self::$HUMAN_NAMES[$level];
-		parent::__construct($main, $this->cmdName, "Set a player to be a $this->humanName", "/$this->cmdName <player>");
+		parent::__construct($main, $this->cmdName, "Set a player to be a $this->humanName", "/$this->cmdName <player>", $aliases);
 	}
+
 	protected function run(array $args, Session $sender){
 		if(!isset($args[0])){
 			return false;
