@@ -86,6 +86,9 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 		$inserts = [];
 		foreach($data as $column => $datum){
 			$cols[] = $column;
+			if($datum instanceof \Volatile){
+				$datum = (array) $datum;
+			}
 			if(!is_array($datum)){
 				$inserts[] = $this->esc($datum);
 			}elseif(!isset($datum["noinsert"])){
