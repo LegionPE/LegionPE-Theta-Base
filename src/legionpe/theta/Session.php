@@ -22,6 +22,7 @@ use legionpe\theta\chat\SpamDetector;
 use legionpe\theta\config\Settings;
 use legionpe\theta\lang\Phrases;
 use legionpe\theta\query\AddIpQuery;
+use legionpe\theta\query\GetWarningsQuery;
 use legionpe\theta\query\JoinChannelQuery;
 use legionpe\theta\query\PartChannelQuery;
 use legionpe\theta\query\PreExecuteWarningQuery;
@@ -187,6 +188,7 @@ abstract class Session{
 	}
 	public function onJoin(){
 		//foreach($this->player->getLevel()->getChunkPlayers($this->player->getFloorX() >> 4, $this->player->getFloorZ() >> 4) as $other){
+		new GetWarningsQuery($this->getMain(), $this);
 		foreach($this->player->getLevel()->getPlayers() as $other){
 //			$other->hidePlayer($this->player);
 			$this->invisibleFrom[$other->getId()] = true;
@@ -246,10 +248,10 @@ abstract class Session{
 			$this->addIp($this->getPlayer()->getAddress());
 		}
 		$this->send(Phrases::LOGIN_AUTH_SUCCESS, ["method" => $this->translate(self::$AUTH_METHODS_PHRASES[$method])]);
-		$this->send(Phrases::LOGIN_AUTH_WHEREAMI, [
+		/*$this->send(Phrases::LOGIN_AUTH_WHEREAMI, [
 				"class" => $this->translate(Settings::$CLASSES_NAMES_PHRASES[Settings::$LOCALIZE_CLASS]),
 				"ip" => Settings::$LOCALIZE_IP, "port" => (string) Settings::$LOCALIZE_PORT]
-		);
+		);*/
 		$this->recalculateNameTag();
 		$this->setMaintainedPopup();
 		foreach($this->getMain()->getServer()->getOnlinePlayers() as $other){
@@ -359,10 +361,10 @@ abstract class Session{
 		if($rank !== ""){
 			$tag .= Phrases::VAR_symbol . "{" . $rank . Phrases::VAR_symbol . "}";
 		}
-		$lbl = $this->getLabelInUse();
+		/*$lbl = $this->getLabelInUse();
 		if($lbl !== ""){
 			$tag .= Phrases::VAR_symbol . "[" . $lbl . Phrases::VAR_symbol . "]";
-		}
+		}*/
 		if(!$this->isEmailVerified()){
 //			$tag .= TextFormat::GRAY . "(UV)";
 		}
@@ -383,13 +385,10 @@ abstract class Session{
 		if($rank !== ""){
 			$tag .= $rank . "\n";
 		}
-		$lbl = $this->getLabelInUse();
+		/*$lbl = $this->getLabelInUse();
 		if($lbl !== ""){
 			$tag .= Phrases::VAR_symbol . "[" . $lbl . Phrases::VAR_symbol . "]";
-		}
-		if(!$this->isEmailVerified()){
-			$tag .= TextFormat::GRAY . "(UV)";
-		}
+		}*/
 		$tag .= $nameColor . $this->getPlayer()->getName();
 		return $tag;
 	}

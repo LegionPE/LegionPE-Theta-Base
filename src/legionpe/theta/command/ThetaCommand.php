@@ -16,6 +16,7 @@
 namespace legionpe\theta\command;
 
 use legionpe\theta\BasePlugin;
+use legionpe\theta\command\admin\BanCommand;
 use legionpe\theta\command\admin\PrivateNoticeCommand;
 use legionpe\theta\command\admin\ServerTeleportPlayerCommand;
 use legionpe\theta\command\admin\WarnCommand;
@@ -118,6 +119,7 @@ abstract class ThetaCommand extends Command implements PluginIdentifiableCommand
 			new OverridingTellCommand($main),
 			new PrivateNoticeCommand($main),
 			new OverridingVersionCommand($main),
+			new BanCommand($main),
 			new ConsoleCommand($main),
 			new DirectTeleportCommand($main),
 			new ServerTeleportPlayerCommand($main),

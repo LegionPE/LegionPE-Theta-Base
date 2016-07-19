@@ -55,6 +55,9 @@ class WalkingParticleCommand extends SessionCommand{
 				$sender->walkingParticles[] = $wp = new $class($sender);
 				return TextFormat::GREEN . $wp->getName() . " has been added to your current walking particles.";
 				break;
+			case "list":
+				return TextFormat::AQUA . "Available walking particles: " . WalkingParticle::getAllowedWalkingParticleNames($sender);
+				break;
 		}
 	}
 	protected function checkPerm(Session $session, &$msg = ""){

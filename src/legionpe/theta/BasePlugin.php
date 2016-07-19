@@ -415,7 +415,7 @@ abstract class BasePlugin extends PluginBase{
 		$this->classTotalPlayers = $classTotal;
 		$this->classMaxPlayers = $classMax;
 		$append = $this->getServerNameAppend();
-		$info = $this->getServer()->getQueryInformation();
+		//$info = $this->getServer()->getQueryInformation();
 		// $this->getBaseListener()->onQueryRegen($info);
 		$this->getServer()->getNetwork()->setName(
 			TextFormat::BOLD . TextFormat::AQUA . "LegionPE " .

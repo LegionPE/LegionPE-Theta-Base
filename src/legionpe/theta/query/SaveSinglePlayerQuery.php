@@ -32,7 +32,7 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 	public function __construct(BasePlugin $plugin, Session $session, $status){
 		$data = $this->getColumns($session, $status);
 		$this->uid = $session->getUid();
-		$this->data = $data;
+		$this->data = serialize($data);
 		parent::__construct($plugin);
 	}
 	/**
@@ -79,16 +79,13 @@ class SaveSinglePlayerQuery extends AsyncQuery{
 	public function getUpdateQuery(){
 		$query = "INSERT INTO" . " users(";
 		/** @var mixed[][] $data */
-		$data = $this->data;
+		$data = unserialize($this->data);
 		/** @var string[] $cols */
 		$cols = [];
 		/** @var string[] $inserts */
 		$inserts = [];
 		foreach($data as $column => $datum){
 			$cols[] = $column;
-			if($datum instanceof \Volatile){
-				$datum = (array) $datum;
-			}
 			if(!is_array($datum)){
 				$inserts[] = $this->esc($datum);
 			}elseif(!isset($datum["noinsert"])){

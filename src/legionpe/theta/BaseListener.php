@@ -70,7 +70,7 @@ class BaseListener implements Listener{
 		$this->private_onLogin($event->getPlayer());
 	}
 	public function onQueryRegen(QueryRegenerateEvent $event){
-		$event->setWorld($this->main->query_world());
+		/*$event->setWorld($this->main->query_world());
 		$this->main->getPlayersCount($total, $max, $classTotal, $classMax);
 		$event->setPlayerCount($classTotal);
 		$event->setMaxPlayerCount($classMax);
@@ -80,7 +80,10 @@ class BaseListener implements Listener{
 		$extra["class_numplayers"] = $classMax;
 		$extra["class_maxplayers"] = $classMax;
 		$this->addExtras($extra);
-		$event->setExtraData($extra);
+		$event->setExtraData($extra);*/
+		$event->setServerName("§aLegionPE Theta§7: §cClassic PvP (temp)");
+		$event->setPlayerCount(count($this->main->getServer()->getOnlinePlayers()));
+		$event->setMaxPlayerCount($this->main->getServer()->getMaxPlayers());
 	}
 	protected function addExtras(&$extra){
 	}
