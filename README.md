@@ -1,7 +1,7 @@
 LegionPE-Theta-Base
 ===
 
-[Follow us on Twitter: ](https://www.twitter.com/LegionPE)
+[Follow us on Twitter: @LegionPE](https://www.twitter.com/LegionPE)
 
 [![Join the chat at https://gitter.im/LegionPE/LegionPE-Theta-Base](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/LegionPE/LegionPE-Theta-Base?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 LegionPE open-source framework plugin: LegionPE Theta Base
