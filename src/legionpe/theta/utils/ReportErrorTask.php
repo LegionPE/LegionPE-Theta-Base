@@ -54,6 +54,11 @@ class ReportErrorTask extends AsyncTask{
 	public static function log($line){
 		echo $line, PHP_EOL;
 		Utils::getURL(Credentials::IRC_WEBHOOK_NOPREFIX . urlencode($line));
-		Utils::postURL(Credentials::SLACK_WEBHOOK, ["payload" => json_encode(["text" => $line, "icon_url" => Credentials::LEGIONPE_ICON_URL, "username" => "Server-".Settings::$LOCALIZE_ID.""])]);
+		Utils::postURL(Credentials::SLACK_WEBHOOK, ["payload" => json_encode([
+			"text" => $line,
+			"icon_url" => Credentials::LEGIONPE_ICON_URL,
+			"username" => "Server-".Settings::$LOCALIZE_ID."",
+			"channel" => "error"])
+			]);
 	}
 }
