@@ -41,8 +41,8 @@ class ReportErrorTask extends AsyncTask{
 		$message = "=== ERROR BEGIN ===".PHP_EOL;
 		$message .= "Exception: " . $this->exMsg.PHP_EOL;
 		$message .= "File: " . $this->exFile . "#" . $this->exLine.PHP_EOL;
-		$message .= "UNIX Timestamp: " . $this->when.PHP_EOL;
-		$message .= "Time: ".date("H:i:s", $this->when).PHP_EOL;
+		$message .= "When: " . $this->when.PHP_EOL;
+		$message .= "Time: ".date("H:i:s", time()).PHP_EOL;
 		$message .= "Server: ".Settings::$LOCALIZE_IP . " " . Settings::$LOCALIZE_PORT." (".Settings::$LOCALIZE_ID.")".PHP_EOL;
 		$message .= "=== END ERROR ===".PHP_EOL;
 		self::log($message);
@@ -54,11 +54,5 @@ class ReportErrorTask extends AsyncTask{
 	public static function log($line){
 		echo $line, PHP_EOL;
 		Utils::getURL(Credentials::IRC_WEBHOOK_NOPREFIX . urlencode($line));
-		Utils::postURL(Credentials::SLACK_WEBHOOK, ["payload" => json_encode([
-			"text" => $line,
-			"icon_url" => Credentials::LEGIONPE_ICON_URL,
-			"username" => "Server-".Settings::$LOCALIZE_ID."",
-			"channel" => "error"])
-			]);
 	}
 }
