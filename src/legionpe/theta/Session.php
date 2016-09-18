@@ -1047,9 +1047,11 @@ abstract class Session{
 	public function warn($id, $points, CommandSender $issuer, $msg){
 		if(time() - $this->getLastWarnTime() < 10){
 			$issuer->sendMessage("User has been warned in the past 10 seconds!");
+			return false;
 		}
 		/** @noinspection PhpDeprecationInspection */
 		new PreExecuteWarningQuery($this->getMain(), $this->getUid(), $this->getPlayer()->getAddress(), $this->getPlayer()->getClientId(), $id, $points, $issuer, $msg);
+		return true;
 	}
 	public function getTeamJoinTime(){
 		return $this->getLoginDatum("teamjoin");
