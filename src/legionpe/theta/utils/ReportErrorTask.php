@@ -38,12 +38,14 @@ class ReportErrorTask extends AsyncTask{
 		if(microtime(true) - self::$last0 < 60){
 			return;
 		}
-		self::log("ping-all !!! PEMapModder ping!");
-		self::log("Exception caught: " . $this->exMsg);
-		self::log("In file: " . $this->exFile . "#" . $this->exLine);
-		self::log("Happened during: " . $this->when);
-		self::log("On the server below:");
-		Utils::getURL(Credentials::IRC_WEBHOOK_NOPREFIX . urlencode("BotsHateNames: status " . Settings::$LOCALIZE_IP . " " . Settings::$LOCALIZE_PORT));
+		$lines = ["=== ERROR BEGIN ==="];
+		$lines[] = "Exception: " . $this->exMsg;
+		$lines[] = "File: " . $this->exFile . "#" . $this->exLine;
+		$lines[] = "When: " . $this->when;
+		$lines[] = "Time: ".date("H:i:s", time());
+		$lines[] = "Server: ".Settings::$LOCALIZE_IP . " " . Settings::$LOCALIZE_PORT." (".Settings::$LOCALIZE_ID.")";
+		$lines[] = "=== END ERROR ===";
+		foreach($lines as $line) self::log($line);
 		self::$last0 = self::$last1;
 		self::$last1 = self::$last2;
 		self::$last2 = self::$last3;
@@ -51,6 +53,6 @@ class ReportErrorTask extends AsyncTask{
 	}
 	public static function log($line){
 		echo $line, PHP_EOL;
-		Utils::getURL(Credentials::IRC_WEBHOOK . urlencode($line));
+		Utils::getURL(Credentials::IRC_WEBHOOK_NOPREFIX . urlencode($line));
 	}
 }
