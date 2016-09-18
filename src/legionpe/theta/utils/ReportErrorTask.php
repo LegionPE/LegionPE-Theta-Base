@@ -38,14 +38,14 @@ class ReportErrorTask extends AsyncTask{
 		if(microtime(true) - self::$last0 < 60){
 			return;
 		}
-		$message = "=== ERROR BEGIN ===".PHP_EOL;
-		$message .= "Exception: " . $this->exMsg.PHP_EOL;
-		$message .= "File: " . $this->exFile . "#" . $this->exLine.PHP_EOL;
-		$message .= "When: " . $this->when.PHP_EOL;
-		$message .= "Time: ".date("H:i:s", time()).PHP_EOL;
-		$message .= "Server: ".Settings::$LOCALIZE_IP . " " . Settings::$LOCALIZE_PORT." (".Settings::$LOCALIZE_ID.")".PHP_EOL;
-		$message .= "=== END ERROR ===".PHP_EOL;
-		self::log($message);
+		$lines = ["=== ERROR BEGIN ==="];
+		$lines[] = "Exception: " . $this->exMsg;
+		$lines[] = "File: " . $this->exFile . "#" . $this->exLine;
+		$lines[] = "When: " . $this->when;
+		$lines[] = "Time: ".date("H:i:s", time());
+		$lines[] = "Server: ".Settings::$LOCALIZE_IP . " " . Settings::$LOCALIZE_PORT." (".Settings::$LOCALIZE_ID.")";
+		$lines[] = "=== END ERROR ===";
+		foreach($lines as $line) self::log($line);
 		self::$last0 = self::$last1;
 		self::$last1 = self::$last2;
 		self::$last2 = self::$last3;
